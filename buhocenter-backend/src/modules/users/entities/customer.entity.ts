@@ -20,8 +20,16 @@ export class Customer extends BaseEntity {
 	@Column({ name: 'primer_apellido', type: 'varchar', length: 100, nullable: false })
 	lastName: string;
 
-	@Column({ name: 'fecha_nacimiento', nullable: false })
+
+	@Column({ name: 'fecha_nacimiento', nullable: true })
 	birthdate: Date;
+
+	@Column({ name: 'uid', type: 'text', nullable: true })
+	uid: string;
+
+	@Column({ name: 'token', type: 'varchar', length: 200,  nullable: true })
+	token: string;
+
 
 	@JoinColumn({ name: 'estatus_id' })
 	@ManyToOne(type => Status, status => status.customers)

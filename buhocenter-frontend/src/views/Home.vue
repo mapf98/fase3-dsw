@@ -1,18 +1,25 @@
 <template>
-  <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Buhocenter App"/>
+  <div class="about">
+    <h1>This is an home page</h1>
+    <h2>{{getStatusLogin}}</h2>
   </div>
 </template>
+<script lang="ts">
+  import { Component, Vue } from 'vue-property-decorator';
+  import AuthMethods from '@/store/auth-module/methods/auth-methods'
+  import { authModule } from "@/store/namespaces";
 
-<script>
-// @ is an alias to /src
-import HelloWorld from '@/modules/base-module/components/HelloWorld.vue'
+  @Component
+  export default class Home extends Vue {
 
-export default {
-  name: 'Home',
-  components: {
-    HelloWorld
+    get getStatusLogin(){
+      const token: string = this.getTokenGoogle;
+      if(token){
+        return "Estas logeado"
+      }
+      return "No estas logeado"
+    }
+
+    @authModule.Getter(AuthMethods.getters.GET_AUTH_TOKEN_GOOGLE) getTokenGoogle;
   }
-}
 </script>

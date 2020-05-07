@@ -8,7 +8,9 @@ export class Role extends BaseEntity {
 	@Column({ name: 'nombre', type: 'varchar', length: 100, nullable: false })
 	name: string;
 
-	@Column({ name: 'priority', type: 'integer', nullable: false })
+
+	@Column({ name: 'prioridad', type: 'integer', nullable: false })
+
 	priority: number;
 
 	@OneToOne(type => Customer, customer => customer.role)
