@@ -6,6 +6,7 @@ import {GmailDto} from '../dto/GmailDto.dto';
 import { Repository } from 'typeorm';
 import { Customer } from '../entities/customer.entity';
 import {ResponseAuth} from '../interfaces/ResponseAuth';
+import { STATUS, ROLE } from '../../../config/constants';
 
 
 @Injectable()
@@ -22,7 +23,7 @@ export class UsersService {
     }
 
     async validateRegisterGmail(data: GmailDto): Promise<ResponseAuth> {
-        const client: Customer =   await this.customerRepository.findOne({
+        const client: Customer = await this.customerRepository.findOne({
             where: {
                 uid: data.clientData.uid,
             },
@@ -35,16 +36,16 @@ export class UsersService {
             });
             clientSave = await this.customerRepository.save(newClient);
         } else {
-            clientSave = await  this.customerRepository.save({
+            clientSave = await this.customerRepository.save({
                 name: data.clientData.first_name,
                 lastName: data.clientData.last_name,
                 uid: data.clientData.uid,
                 token: data.token,
                 status: {
-                    id: 1,
+                    id: STATUS.ACTIVE.id,
                 },
                 role: {
-                    id: 1,
+                    id: ROLE.CUSTOMER.id,
                 },
             });
         }

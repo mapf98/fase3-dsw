@@ -10,7 +10,7 @@
         >
             <v-card class="elevation-12">
                 <v-card-title class="text-center">
-                        CLIENT LOGIN
+                        INICIO DE SESIÓN
                 </v-card-title>
                 <v-card-text>
                     <v-form>
@@ -44,8 +44,8 @@
 <script lang="ts">
     import { Component, Vue, Watch } from 'vue-property-decorator';
     import { Action, Getter, State } from 'vuex-class';
-    import AuthMethods from '@/store/auth-module/methods/auth-methods'
-    import { authModule } from "@/store/namespaces";
+    import AuthMethods from '../../../store/auth-module/methods/auth-methods';
+    import { authModule } from "../../../store/namespaces";
 
     @Component
     export default class Login extends Vue {

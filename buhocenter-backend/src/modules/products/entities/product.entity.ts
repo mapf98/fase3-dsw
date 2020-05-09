@@ -4,27 +4,27 @@ import { Status } from '../../app/entities/status.entity';
 import { Provider } from './provider.entity';
 import { Brand } from './brand.entity';
 import { ProductDimension } from './product-dimension.entity';
-import { ProductRating } from '../../social-intractions/entities/product-rating.entity';
+import { ProductRating } from './product-rating.entity';
 import { ProductCatalogue } from './product-catalogue.entity';
 import { ProductCategory } from './product-category.entity';
 import { ProductOffer } from './product-offer.entity';
 import { ProductCart } from './product-cart.entity';
 import { ProductInventory } from './product-inventory.entity';
 import { ProductPhoto } from './product-photo.entity';
-import { ProductQuestion } from 'src/modules/social-intractions/entities/product-question.entity';
+import { ProductQuestion } from './product-question.entity';
 
 @Entity({ name: 'producto' }) 
 export class Product extends BaseEntity {
-	@Column({ name: 'nombre', type: 'varchar', length: 100, nullable: false })
+	@Column({ name: 'nombre', type: 'text', nullable: false })
 	name: string;
 
-	@Column({ name: 'descripcion', type: 'varchar', length: 500, nullable: false })
+	@Column({ name: 'descripcion', type: 'text', nullable: false })
 	description: string;
 
-	@Column({ name: 'precio', type: 'integer', nullable: false })
+	@Column({ name: 'precio', type: 'decimal', nullable: false })
 	price: number;	
 
-	@Column({ name: 'precio_envio', type: 'integer', nullable: false })
+	@Column({ name: 'precio_envio', type: 'decimal', nullable: false })
 	shippingPrice: number;	
 
 	@JoinColumn({ name: 'estatus_id' })
@@ -44,9 +44,6 @@ export class Product extends BaseEntity {
 
 	@OneToMany(type => ProductRating, productRatings => productRatings.product)
 	productRatings: ProductRating[];
-
-	@OneToMany(type => ProductCatalogue, productCatalogues => productCatalogues.product)
-	productCatalogues: ProductCatalogue[];
 
 	@OneToMany(type => ProductCategory, productCategories => productCategories.product)
 	productCategories: ProductCategory[];

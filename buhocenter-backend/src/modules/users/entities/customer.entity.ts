@@ -2,13 +2,13 @@ import { Entity,Column,ManyToOne, JoinColumn, OneToMany, OneToOne } from 'typeor
 import { BaseEntity } from '../../app/entities/base-entity';
 import { Status } from '../../app/entities/status.entity';
 import { Role } from './role.entity';
-import { ProductRating } from '../../social-intractions/entities/product-rating.entity';
-import { ServiceQuestion } from '../../social-intractions/entities/service-question.entity';
+import { ProductRating } from '../../products/entities/product-rating.entity';
+import { ServiceQuestion } from '../../products/entities/service-question.entity';
 import { Cart } from '../../products/entities/cart.entity';
-import { ServiceRating } from '../../social-intractions/entities/service-rating.entity';
+import { ServiceRating } from '../../products/entities/service-rating.entity';
 import { Notification } from '../../notifications/entities/notification.entity';
 import { Platform } from '../../platform-management/entities/platform.entity';
-import { ProductQuestion } from '../../social-intractions/entities/product-question.entity';
+import { ProductQuestion } from '../../products/entities/product-question.entity';
 import { Address } from './address.entity';
 
 @Entity({ name: 'cliente' }) 
@@ -19,7 +19,6 @@ export class Customer extends BaseEntity {
 
 	@Column({ name: 'primer_apellido', type: 'varchar', length: 100, nullable: false })
 	lastName: string;
-
 
 	@Column({ name: 'fecha_nacimiento', nullable: true })
 	birthdate: Date;
@@ -36,7 +35,7 @@ export class Customer extends BaseEntity {
 	status: Status;
 
 	@JoinColumn({ name: 'rol_id' })
-	@OneToOne(type => Role, role => role.customer)
+	@ManyToOne(type => Role, role => role.customer)
 	role: Role;
 
 	@OneToMany(type => Address, addresses => addresses.customer)

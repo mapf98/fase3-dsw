@@ -12,6 +12,10 @@ import { ProductInventory } from './product-inventory.entity';
 import { ProductOffer } from './product-offer.entity';
 import { ProductPhoto } from './product-photo.entity';
 import { Product } from './product.entity';
+import { ProductRating } from './product-rating.entity';
+import { ProductQuestion } from './product-question.entity';
+import { ServiceRating } from './service-rating.entity';
+import { ServiceQuestion } from './service-question.entity';
 import { Provider } from './provider.entity';
 import { ServiceCart } from './service-cart.entity';
 import { ServiceCatalogue } from './service-catalogue.entity';
@@ -33,11 +37,15 @@ export const productEntities = [
     ProductInventory,
     ProductOffer,
     ProductPhoto,
+    ProductRating,
+    ProductQuestion,
     Product,
     Provider,
     ServiceCart,
     ServiceCatalogue,
     ServiceCategory,
     ServiceOffer,
+    ServiceRating,
+    ServiceQuestion,
     Service,
 ]

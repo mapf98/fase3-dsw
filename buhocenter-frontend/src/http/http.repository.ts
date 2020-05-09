@@ -1,12 +1,12 @@
 import httpClient from './http-client';
-import { AxiosRequestConfig } from 'axios';
+import { AxiosRequestConfig, AxiosResponse } from 'axios';
 
 export class HttpRepository {
 
     protected createUri(
         path: string[],
-        queryString: Object | any
-    ) {
+        queryString?: Object | any
+    ): string {
         let uri: string = '';
 
         if (path) {
@@ -30,22 +30,22 @@ export class HttpRepository {
     protected post(uri: string,
         data: AxiosRequestConfig['data'],
         header: AxiosRequestConfig['headers'],
-    ) {
+    ): Promise<AxiosResponse<any>> {
         return httpClient.post(uri, data, header);
     }
 
-    protected get(uri: string): any {
+    protected get(uri: string): Promise<AxiosResponse<any>> {
         return httpClient.get(uri);
     }
 
     protected patch(uri: string,
         data: AxiosRequestConfig['data'],
         header: AxiosRequestConfig['headers']
-    ) {
+    ): Promise<AxiosResponse<any>> {
         return httpClient.patch(uri, data, header);
     }
 
-    protected delete(uri: string, header: AxiosRequestConfig['headers']) {
+    protected delete(uri: string, header: AxiosRequestConfig['headers']): Promise<AxiosResponse<any>> {
         return httpClient.delete(uri, header);
     }
 }

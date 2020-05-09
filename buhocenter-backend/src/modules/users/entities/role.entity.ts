@@ -1,4 +1,4 @@
-import { Entity,Column ,OneToOne } from 'typeorm';
+import { Entity, Column, OneToMany } from 'typeorm';
 import { BaseEntity } from '../../app/entities/base-entity';
 import { Customer } from './customer.entity';
 
@@ -8,11 +8,9 @@ export class Role extends BaseEntity {
 	@Column({ name: 'nombre', type: 'varchar', length: 100, nullable: false })
 	name: string;
 
-
 	@Column({ name: 'prioridad', type: 'integer', nullable: false })
-
 	priority: number;
 
-	@OneToOne(type => Customer, customer => customer.role)
+	@OneToMany(type => Customer, customer => customer.role)
 	customer: Customer;
 }

@@ -11,17 +11,17 @@
     </v-navigation-drawer>
 
     <v-app-bar
-            :clipped-left="$vuetify.breakpoint.lgAndUp"
+            clipped-left
             app
             color="primary"
             dark
     >
 
-      <v-toolbar-title
-              style="width: 200px"
-              class="ml-0 pl-4"
-      >
-        <span>Buhocenter</span>
+        <v-toolbar-title
+            style="width: 200px"
+            class="ml-0 pl-4 overline"
+        >
+        <span class="title">Buhocenter</span>
       </v-toolbar-title>
       <v-toolbar-items class="hidden-sm-and-down">
         <div class="mr-2 ml-2 pt-3">
@@ -40,7 +40,7 @@
         <router-link to="/sign-in">
 
           <v-btn text>
-            Sign in
+            Inicia sesión
           </v-btn>
 
         </router-link>
@@ -51,11 +51,8 @@
         <v-icon>mdi-cart</v-icon>
       </v-btn>
     </v-app-bar>
-    <v-content>
-      <v-container
-              class="fill-height"
-              fluid
-      >
+    <v-content class="pa-0">
+      <v-container>
         <router-view></router-view>
       </v-container>
     </v-content>

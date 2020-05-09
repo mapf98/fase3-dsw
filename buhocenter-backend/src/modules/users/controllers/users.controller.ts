@@ -12,13 +12,14 @@ export class UsersController {
     async getHello(@Param('id', new ParseIntPipe()) id: number): Promise<number> {
         return this.usersService.getUsers(id);
     }
+
     @Post('/login/gmail')
     async loginGmail(@Body() data: GmailDto, @Res() res): Promise<Response> {
         try {
             const dataResponse: ResponseAuth = await this.usersService.validateRegisterGmail(data);
             return res.status(HttpStatus.OK).send(dataResponse);
         } catch (e) {
-            return  res.status(HttpStatus.NOT_FOUND).send();
+            return res.status(HttpStatus.NOT_FOUND).send();
         }
     }
 }

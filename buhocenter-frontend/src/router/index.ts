@@ -3,6 +3,7 @@ import VueRouter, { RouteConfig } from 'vue-router';
 import Layout from '../views/Layout.vue';
 import Auth from '../views/Auth.vue';
 import Home from '../views/Home.vue';
+import Catalogue from '../modules/products/catalogue/Catalogue.vue';
 
 Vue.use(VueRouter);
 
@@ -21,6 +22,11 @@ const routes: RouteConfig[] = [
         path: "/sign-in",
         name: "Sign in",
         component: Auth,
+      },
+      {
+        path: '/products',
+        name: 'products',
+        component: Catalogue,
       },
     ],
   },
