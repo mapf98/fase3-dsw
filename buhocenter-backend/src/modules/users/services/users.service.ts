@@ -22,8 +22,8 @@ export class UsersService {
         return id;
     }
 
-    async validateRegisterGmail(data: GmailDto): Promise<ResponseAuth> {
-        const client: Customer = await this.customerRepository.findOne({
+    async validateRegisterSocial(data: GmailDto): Promise<ResponseAuth> {
+        const client: Customer =   await this.customerRepository.findOne({
             where: {
                 uid: data.clientData.uid,
             },
@@ -62,6 +62,30 @@ export class UsersService {
             },
         };
         return response;
-
     }
+
+    async logout(data: string): Promise<{ logout: boolean; }> {
+        const client: Customer =   await this.customerRepository.findOne({
+            where: {
+                uid: data,
+            },
+        });
+        let clientSave: Customer;
+        let response: { logout: boolean; };
+        if (client) {
+            const newClient: Customer = this.customerRepository.merge(client, {
+                token: '',
+            });
+            clientSave = await this.customerRepository.save(newClient);
+            response = {
+                logout: true,
+            };
+        } else {
+            response = {
+                logout: false,
+            };
+        }
+        return response;
+    }
+
 }

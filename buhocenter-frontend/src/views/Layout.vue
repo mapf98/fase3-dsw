@@ -7,7 +7,7 @@
             right
             temporary
     >
-      <Aside></Aside>
+      <Cart></Cart>
     </v-navigation-drawer>
 
     <v-app-bar
@@ -36,14 +36,50 @@
       <div class="searc d-none d-xl-block d-lg-block pr-3">
         <input type="search" class="search">
       </div>
-      <div class="mr-2 ml-2">
-        <router-link to="/sign-in">
+      <div class="mr-2 ml-2" v-if="getStatusLogin">
+        <div class="text-xs-center">
+          <v-menu
+                  v-model="menu"
+                  :close-on-content-click="false"
+                  :nudge-width="200"
+                  offset-x
+          >
+            <template v-slot:activator="{ on }">
+              <v-btn
+                      text
+                      v-on="on"
+              >
+                {{getClient.name+" "+getClient.lastName}}
+              </v-btn>
+            </template>
 
-          <v-btn text>
-            Inicia sesión
-          </v-btn>
+            <v-card>
+              <v-list>
+                <v-list-item avatar>
+                  <v-list-item-avatar>
+                    <img src="https://cdn.vuetifyjs.com/images/john.jpg" alt="John">
+                  </v-list-item-avatar>
 
-        </router-link>
+                  <v-list-item-action>
+                    <v-list-item-title>{{getClient.name+" "+getClient.lastName}}</v-list-item-title>
+                  </v-list-item-action>
+                </v-list-item>
+              </v-list>
+              <v-divider></v-divider>
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn color="primary" flat @click="signOut()">Log out</v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-menu>
+        </div>
+      </div>
+      <div class="mr-2 ml-2" v-else>
+        <router-link to="/sign-in" >
+        <v-btn text>
+          Sign in
+        </v-btn>
+      </router-link>
       </div>
 
 
@@ -59,19 +95,36 @@
   </v-app>
 </template>
 
-<script>
-  import Aside from "@/views/Aside";
-  export default {
-    components:{
-      Aside
-    },
-    props: {
-      source: String,
-    },
-    data: () => ({
-      dialog: false,
-      drawer: null,
-    }),
+<script lang="ts">
+  import {authModule} from "@/store/namespaces";
+  import AuthMethods from "@/store/auth-module/methods/auth-methods";
+  import {Component, Vue} from "vue-property-decorator";
+  import Cart from "@/views/Cart.vue";
+
+  @Component({
+    components: { Cart },
+  })
+  export default class Layout extends Vue {
+    dialog = false;
+    drawer =  null;
+    fav = true
+    menu = false
+    message = false
+    hints = true
+
+    async signOut(){
+      await this.logout();
+    }
+
+
+    get getStatusLogin(){
+      const token: string = this.getToken;
+      return !!token;
+    }
+
+    @authModule.Getter(AuthMethods.getters.GET_AUTH_TOKEN) getToken;
+    @authModule.Action(AuthMethods.actions.LOGOUT) logout;
+    @authModule.Getter(AuthMethods.getters.GET_CLIENT_DATA) getClient;
   }
 </script>
 
@@ -99,6 +152,5 @@
     -moz-box-shadow: 0 0 5px rgba(109, 207, 246, .5);
     box-shadow: 0 0 5px rgba(109, 207, 246, .5);
     backface-visibility: hidden;
-    perspective: 1000;
   }
 </style>

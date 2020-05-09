@@ -13,6 +13,15 @@
                         INICIO DE SESIÓN
                 </v-card-title>
                 <v-card-text>
+                    <v-alert
+                        v-if="getErrAuth"
+                        prominent
+                        type="error"
+                    >
+                        <v-row align="center">
+                            <v-col class="grow">{{getErrMessage}}</v-col>
+                        </v-row>
+                    </v-alert>
                     <v-form>
                         <v-text-field
                                 label="Login"
@@ -31,9 +40,13 @@
                 <v-card-actions class="content-actions d-block text-center">
                     <v-btn class="btn-login mb-4" color="primary">Log in</v-btn>
                     <h5 class="mb-4">OR</h5>
-                    <v-btn class="btn-login btn-gmail" @click="loginWithGoogle()">
+                    <v-btn class="btn-login btn-gmail mb-4" @click="loginWithSocial('google')">
                         <v-icon class="mr-2">mdi-gmail</v-icon>
                         Log in with Gmail
+                    </v-btn>
+                    <v-btn class="btn-login btn-facebook" @click="loginWithSocial('facebook')">
+                        <v-icon class="mr-2">mdi-facebook</v-icon>
+                        Log in with Facebook
                     </v-btn>
                 </v-card-actions>
             </v-card>
@@ -42,32 +55,27 @@
 </template>
 
 <script lang="ts">
-    import { Component, Vue, Watch } from 'vue-property-decorator';
-    import { Action, Getter, State } from 'vuex-class';
-    import AuthMethods from '../../../store/auth-module/methods/auth-methods';
-    import { authModule } from "../../../store/namespaces";
+    import { Component, Vue } from 'vue-property-decorator';
+    import AuthMethods from '@/store/auth-module/methods/auth-methods'
+    import { authModule } from "@/store/namespaces";
 
     @Component
     export default class Login extends Vue {
-        async loginWithGoogle(){
-            await this.loginGoogle();
-            const token: string = this.getTokenGoogle;
+        async loginWithSocial(social: string){
+            await this.loginSocial(social);
+            const token: string = this.getToken;
             if(token){
                 this.$router.push("/home");
+            } else {
+                console.log(token);
             }
         }
 
-        @Watch('tokenGoogle')
-        tokenGoogle(){
-            const token: string = this.getTokenGoogle;
-            if(token){
-                this.$router.push("/home");
-            }
-            return ""
-        }
 
-        @authModule.Action(AuthMethods.actions.LOGIN_WITH_GOOGLE) loginGoogle;
-        @authModule.Getter(AuthMethods.getters.GET_AUTH_TOKEN_GOOGLE) getTokenGoogle;
+        @authModule.Action(AuthMethods.actions.LOGIN_SOCIAL) loginSocial;
+        @authModule.Getter(AuthMethods.getters.GET_AUTH_TOKEN) getToken;
+        @authModule.Getter(AuthMethods.getters.GET_ERR_MESSAGES) getErrMessage;
+        @authModule.Getter(AuthMethods.getters.GET_ERR_AUTH)  getErrAuth;
     }
 </script>
 
@@ -91,6 +99,9 @@
 
     .btn-gmail{
         background-color: #db5040 !important;
+    }
+    .btn-facebook{
+        background-color: #3b5998 !important;
     }
 
 </style>

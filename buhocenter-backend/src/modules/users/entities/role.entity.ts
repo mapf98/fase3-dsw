@@ -1,10 +1,10 @@
-import { Entity, Column, OneToMany } from 'typeorm';
+
+import {Entity, Column, OneToOne, ManyToOne, OneToMany} from 'typeorm';
 import { BaseEntity } from '../../app/entities/base-entity';
 import { Customer } from './customer.entity';
 
 @Entity({ name: 'rol' }) 
 export class Role extends BaseEntity {
-	
 	@Column({ name: 'nombre', type: 'varchar', length: 100, nullable: false })
 	name: string;
 
