@@ -9,6 +9,7 @@ import {ResponseAuth} from '../interfaces/ResponseAuth';
 import { STATUS, ROLE } from '../../../config/constants';
 
 
+
 @Injectable()
 export class UsersService {
     constructor(
@@ -22,8 +23,10 @@ export class UsersService {
         return id;
     }
 
-    async validateRegisterSocial(data: GmailDto): Promise<ResponseAuth> {
-        const client: Customer =   await this.customerRepository.findOne({
+
+    async validateRegisterGmail(data: GmailDto): Promise<ResponseAuth> {
+
+        const client: Customer = await this.customerRepository.findOne({
             where: {
                 uid: data.clientData.uid,
             },
@@ -36,16 +39,20 @@ export class UsersService {
             });
             clientSave = await this.customerRepository.save(newClient);
         } else {
+
             clientSave = await this.customerRepository.save({
+
                 name: data.clientData.first_name,
                 lastName: data.clientData.last_name,
                 uid: data.clientData.uid,
                 token: data.token,
                 status: {
+
                     id: STATUS.ACTIVE.id,
                 },
                 role: {
                     id: ROLE.CUSTOMER.id,
+
                 },
             });
         }
@@ -88,4 +95,5 @@ export class UsersService {
         return response;
     }
 
+}
 }

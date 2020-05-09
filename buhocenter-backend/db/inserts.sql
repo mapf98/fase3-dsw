@@ -1,3 +1,7 @@
+
+insert into cliente (primer_nombre, primer_apellido) values ('angel','sucasas');
+insert into producto (nombre,descripcion,precio,precio_envio) values ('ejemplo','este es un producto ejemplo',22,23);
+
 insert into estatus (nombre, descripcion) VALUES ('Activo', 'Indica que el recurso está disponible para el sistema');
 insert into estatus (nombre, descripcion) VALUES ('Inactivo', 'Indica que el recurso no está disponible para el sistema');
 
@@ -44,3 +48,4 @@ insert into cliente (primer_nombre, primer_apellido, fecha_nacimiento, estatus_i
 
 insert into calificacion_producto (calificacion, comentario, producto_id, cliente_id) VALUES
      (5, 'Me gustó el producto', 1, 1), (4, 'Es de muy buena calidad', 1, 1);
+

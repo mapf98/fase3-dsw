@@ -2,7 +2,6 @@
 /dist
 /node_modules
 
-
 # credentioals
 /.env
 
@@ -38,6 +37,11 @@ lerna-debug.log*
 !.vscode/launch.json
 !.vscode/extensions.json
 
+# Config
+config
+
 # TypeORM
 ormconfig.json
+
 .env
+
