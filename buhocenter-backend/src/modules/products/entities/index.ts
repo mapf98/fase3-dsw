@@ -22,12 +22,14 @@ import { ServiceCatalogue } from './service-catalogue.entity';
 import { ServiceCategory } from './service-category.entity';
 import { ServiceOffer } from './service-offer.entity';
 import { Service } from './service.entity';
+import { Customer } from '../../users/entities/customer.entity';    // FIX
 
 export const productEntities = [
     Brand,
     Cart,
     Catalogue,
     Category,
+    Customer,
     Dimension,
     Offer,
     ProductCart,

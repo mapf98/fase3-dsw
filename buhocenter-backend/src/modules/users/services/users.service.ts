@@ -8,8 +8,6 @@ import { Customer } from '../entities/customer.entity';
 import {ResponseAuth} from '../interfaces/ResponseAuth';
 import { STATUS, ROLE } from '../../../config/constants';
 
-
-
 @Injectable()
 export class UsersService {
     constructor(
@@ -23,8 +21,7 @@ export class UsersService {
         return id;
     }
 
-
-    async validateRegisterGmail(data: GmailDto): Promise<ResponseAuth> {
+    async validateRegisterSocial(data: GmailDto): Promise<ResponseAuth> {
 
         const client: Customer = await this.customerRepository.findOne({
             where: {
@@ -95,5 +92,4 @@ export class UsersService {
         return response;
     }
 
-}
 }

@@ -51,8 +51,8 @@ const authModule: Module<any, any> = {
          async [AuthTypes.actions.LOGIN_SOCIAL]({ commit }, social: string): Promise<boolean>{
              try {
                  const response = await AuthRepository.loginWithSocial(social);
-                 console.log("epa response")
-                 console.log(response)
+                //  console.log("epa response")
+                //  console.log(response)
                  if ( response ) {
                      commit(AuthTypes.mutations.AUTH_GOOGLE_SUCCESS, response);
                      return true;

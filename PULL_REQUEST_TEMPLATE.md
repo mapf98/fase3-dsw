@@ -1,9 +1,8 @@
 
+### Nuevas características:
 
-### Nuevas caracteristicas:
-
-1. [ ] Descripción de caracteristica realizada 1
-2. [ ] Descripción de caracteristica realizada 2
+1. [ ] Descripción de característica realizada 1
+2. [ ] Descripción de característica realizada 2
 
 ### Cambios en funcionalidades:
 

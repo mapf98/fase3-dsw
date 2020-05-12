@@ -2,11 +2,10 @@ import { Entity, Column, OneToMany, ManyToOne, JoinColumn } from 'typeorm';
 import { BaseEntity } from '../../app/entities/base-entity';
 import { Status } from '../../app/entities/status.entity';
 import { ServiceCart } from './service-cart.entity'
-import { ServiceRating } from '../../social-intractions/entities/service-rating.entity';
 import { ServiceCatalogue } from './service-catalogue.entity';
 import { ServiceCategory } from './service-category.entity';
 import { ServiceOffer } from './service-offer.entity';
-import { ServiceQuestion } from 'src/modules/social-intractions/entities/service-question.entity';
+import { ServiceQuestion } from './service-question.entity';
 import { ServiceRating } from './service-rating.entity';
 
 

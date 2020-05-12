@@ -13,6 +13,7 @@ class AuthRepository extends HttpRepository {
         try{
             const result = await firebase.auth().signInWithPopup(provider);
             if ( result ) {
+                // @ts-ignore
                 const token: string = result.credential.accessToken;
                 const user: any = result.user;
                 const userName: string[] = user.displayName.split(' ');
@@ -23,7 +24,7 @@ class AuthRepository extends HttpRepository {
                 };
                 const registerData: { token: string, clientData: ClientSocial } = { token, clientData };
                 try {
-                    return await this.post( this.createUri(['api/v1/users/login'],false), registerData , false);
+                    return await this.post(this.createUri(['users', 'login'], false), registerData, false);
                 } catch (e) {
                     return false;
                 }
@@ -31,14 +32,14 @@ class AuthRepository extends HttpRepository {
                 return false;
             }
         } catch (e) {
-            console.log(e)
+            // console.log(e)
             return false;
         }
     }
 
     public async logout(uid: string): Promise<any> {
         try {
-            await this.post( this.createUri(['api/v1/users/logout'],false), {uid} , false);
+            await this.post(this.createUri(['users', 'logout'], false), { uid }, false);
             return await firebase.auth().signOut();
         } catch (e) {
             return false;

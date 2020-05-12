@@ -5,10 +5,10 @@ import { Customer } from '../../users/entities/customer.entity';
 
 @Entity({ name: 'calificacion_producto' }) 
 export class ProductRating extends BaseEntity {
-	@Column({ name: 'calificacion', type: 'integer', nullable: false })
+	@Column({ name: 'calificacion', type: 'integer', nullable: true })
 	rating: number;
 
-	@Column({ name: 'comentario', type: 'text', nullable: false })
+	@Column({ name: 'comentario', type: 'text', nullable: true })
 	comment: string;
 
 	@Column({ name: 'fecha', nullable: true })

@@ -9,8 +9,6 @@ export class AppService {
   ) {}
 
   getHello(): string {
-    // console.log('logger', this.logger);
-    this.logger.info('pruea')
     return 'Hello World!';
   }
 }

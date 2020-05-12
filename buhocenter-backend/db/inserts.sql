@@ -8,12 +8,44 @@ insert into estatus (nombre, descripcion) VALUES ('Inactivo', 'Indica que el rec
 insert into rol (nombre, prioridad) values ('Cliente', 1);
 insert into rol (nombre, prioridad) values ('Administrador', 1);
 
-insert into proveedor (fecha_creacion, fecha_modificacion, nombre) values (null, null, 'Apple Products');
-insert into proveedor (fecha_creacion, fecha_modificacion, nombre) values (null, null, 'HP');
+insert into proveedor (nombre) values ('Apple Products');
+insert into proveedor (nombre) values ('HP');
 
 insert into marca (nombre) values ('Apple Computers');
 insert into marca (nombre) values ('HP');
 
+insert into producto (nombre, descripcion, precio, precio_envio, estatus_id, proveedor_id, marca_id) VALUES
+    ('2018 Newest HP Touchscreen 15.6 inch HD Laptop, Latest Intel Quad-Core i5-8250U Processor up to 3.40 GHz, 8GB DDR4, 1TB Hard Drive, DVD-RW, HDMI, Webcam, Bluetooth, Windows 10 Home',
+     'Intel 8th Generation Quad-Core i5-8250U Processor Dual-Core, up to 3.4 GHz, Intel UHD Graphics 620',
+     599.99, 20.5, 1, 2, 2);
+insert into producto (nombre, descripcion, precio, precio_envio, estatus_id, proveedor_id, marca_id) VALUES
+    ('2018 Newest HP Touchscreen 15.6 inch HD Laptop, Latest Intel Quad-Core i5-8250U Processor up to 3.40 GHz, 8GB DDR4, 1TB Hard Drive, DVD-RW, HDMI, Webcam, Bluetooth, Windows 10 Home',
+     'Intel 8th Generation Quad-Core i5-8250U Processor Dual-Core, up to 3.4 GHz, Intel UHD Graphics 620',
+     599.99, 20.5, 1, 2, 2);
+insert into producto (nombre, descripcion, precio, precio_envio, estatus_id, proveedor_id, marca_id) VALUES
+    ('2018 Newest HP Touchscreen 15.6 inch HD Laptop, Latest Intel Quad-Core i5-8250U Processor up to 3.40 GHz, 8GB DDR4, 1TB Hard Drive, DVD-RW, HDMI, Webcam, Bluetooth, Windows 10 Home',
+     'Intel 8th Generation Quad-Core i5-8250U Processor Dual-Core, up to 3.4 GHz, Intel UHD Graphics 620',
+     599.99, 20.5, 1, 2, 2);
+insert into producto (nombre, descripcion, precio, precio_envio, estatus_id, proveedor_id, marca_id) VALUES
+    ('2018 Newest HP Touchscreen 15.6 inch HD Laptop, Latest Intel Quad-Core i5-8250U Processor up to 3.40 GHz, 8GB DDR4, 1TB Hard Drive, DVD-RW, HDMI, Webcam, Bluetooth, Windows 10 Home',
+     'Intel 8th Generation Quad-Core i5-8250U Processor Dual-Core, up to 3.4 GHz, Intel UHD Graphics 620',
+     599.99, 20.5, 1, 2, 2);
+insert into producto (nombre, descripcion, precio, precio_envio, estatus_id, proveedor_id, marca_id) VALUES
+    ('2018 Newest HP Touchscreen 15.6 inch HD Laptop, Latest Intel Quad-Core i5-8250U Processor up to 3.40 GHz, 8GB DDR4, 1TB Hard Drive, DVD-RW, HDMI, Webcam, Bluetooth, Windows 10 Home',
+     'Intel 8th Generation Quad-Core i5-8250U Processor Dual-Core, up to 3.4 GHz, Intel UHD Graphics 620',
+     599.99, 20.5, 1, 2, 2);
+insert into producto (nombre, descripcion, precio, precio_envio, estatus_id, proveedor_id, marca_id) VALUES
+    ('2018 Newest HP Touchscreen 15.6 inch HD Laptop, Latest Intel Quad-Core i5-8250U Processor up to 3.40 GHz, 8GB DDR4, 1TB Hard Drive, DVD-RW, HDMI, Webcam, Bluetooth, Windows 10 Home',
+     'Intel 8th Generation Quad-Core i5-8250U Processor Dual-Core, up to 3.4 GHz, Intel UHD Graphics 620',
+     599.99, 20.5, 1, 2, 2);
+insert into producto (nombre, descripcion, precio, precio_envio, estatus_id, proveedor_id, marca_id) VALUES
+    ('2018 Newest HP Touchscreen 15.6 inch HD Laptop, Latest Intel Quad-Core i5-8250U Processor up to 3.40 GHz, 8GB DDR4, 1TB Hard Drive, DVD-RW, HDMI, Webcam, Bluetooth, Windows 10 Home',
+     'Intel 8th Generation Quad-Core i5-8250U Processor Dual-Core, up to 3.4 GHz, Intel UHD Graphics 620',
+     599.99, 20.5, 1, 2, 2);
+insert into producto (nombre, descripcion, precio, precio_envio, estatus_id, proveedor_id, marca_id) VALUES
+    ('2018 Newest HP Touchscreen 15.6 inch HD Laptop, Latest Intel Quad-Core i5-8250U Processor up to 3.40 GHz, 8GB DDR4, 1TB Hard Drive, DVD-RW, HDMI, Webcam, Bluetooth, Windows 10 Home',
+     'Intel 8th Generation Quad-Core i5-8250U Processor Dual-Core, up to 3.4 GHz, Intel UHD Graphics 620',
+     599.99, 20.5, 1, 2, 2);
 insert into producto (nombre, descripcion, precio, precio_envio, estatus_id, proveedor_id, marca_id) VALUES
     ('2018 Newest HP Touchscreen 15.6 inch HD Laptop, Latest Intel Quad-Core i5-8250U Processor up to 3.40 GHz, 8GB DDR4, 1TB Hard Drive, DVD-RW, HDMI, Webcam, Bluetooth, Windows 10 Home',
      'Intel 8th Generation Quad-Core i5-8250U Processor Dual-Core, up to 3.4 GHz, Intel UHD Graphics 620',

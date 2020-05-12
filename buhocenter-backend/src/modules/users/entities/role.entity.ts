@@ -10,9 +10,6 @@ export class Role extends BaseEntity {
 	@Column({ name: 'prioridad', type: 'integer', nullable: false })
 	priority: number;
 
-	@Column({ name: 'prioridad', type: 'integer', nullable: false })
-	priority: number;
-
 	@OneToMany(type => Customer, customer => customer.role)
 	customer: Customer;
 }
