@@ -8,5 +8,6 @@ export interface ResponseAuth {
         status: any;
         rol: any;
         birthDate: Date;
+        language: any;
     };
 }

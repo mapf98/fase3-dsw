@@ -4,3 +4,4 @@ import { namespace } from 'vuex-class';
 export const products = namespace('products');
 export const layout = namespace('layout');
 export const authModule = namespace('authModule');
+export const languageModule = namespace('languageModule');

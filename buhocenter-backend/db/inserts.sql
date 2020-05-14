@@ -8,6 +8,9 @@ insert into estatus (nombre, descripcion) VALUES ('Inactivo', 'Indica que el rec
 insert into rol (nombre, prioridad) values ('Cliente', 1);
 insert into rol (nombre, prioridad) values ('Administrador', 1);
 
+insert into lenguaje (iso, nombre, bandera) values ('EN','English', 1);
+insert into lenguaje (iso, nombre, bandera) values ('ES','Spanish', 2);
+
 insert into proveedor (nombre) values ('Apple Products');
 insert into proveedor (nombre) values ('HP');
 

@@ -1,15 +1,13 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './modules/app/app.module';
 import * as helmet from 'helmet';
-import { WinstonModule } from 'nest-winston';
-import { LoggerSettingsService } from './modules/settings/services/logger.service';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 import * as rTracer from 'cls-rtracer';
 
 declare const module: any;
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule)
+  const app = await NestFactory.create(AppModule);
 
   app.useLogger(app.get(WINSTON_MODULE_NEST_PROVIDER));
 

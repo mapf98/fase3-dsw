@@ -13,21 +13,35 @@
     <v-app-bar
             clipped-left
             app
-            color="primary"
-            dark
+            color="white"
+            light
     >
-
-        <v-toolbar-title
-            style="width: 200px"
-            class="ml-0 pl-4 overline"
-        >
-        <span class="title">Buhocenter</span>
+      <v-toolbar-title
+              class="ml-0 pl-4 overline"
+      >
+        <v-img src="../assets/logo-header.png" width="250"></v-img>
       </v-toolbar-title>
       <v-toolbar-items class="hidden-sm-and-down">
         <div class="mr-2 ml-2 pt-3">
-          <v-btn text>
-            Home
-          </v-btn>
+          <router-link to="/home">
+            <v-btn text>
+              Home
+            </v-btn>
+          </router-link>
+        </div>
+        <div class="mr-2 ml-2 pt-3">
+          <router-link to="/products">
+            <v-btn text>
+              Products
+            </v-btn>
+          </router-link>
+        </div>
+        <div class="mr-2 ml-2 pt-3">
+          <router-link to="/products">
+            <v-btn text>
+              Services
+            </v-btn>
+          </router-link>
         </div>
       </v-toolbar-items>
 
@@ -76,19 +90,25 @@
       </div>
       <div class="mr-2 ml-2" v-else>
         <router-link to="/sign-in" >
-        <v-btn text>
-          Sign in
-        </v-btn>
-      </router-link>
+          <v-btn text>
+            Sign in
+          </v-btn>
+        </router-link>
       </div>
 
 
-      <v-btn icon @click.stop="drawer = !drawer">
-        <v-icon>mdi-cart</v-icon>
+      <v-btn class="pr-4" icon @click.stop="drawer = !drawer">
+        <v-badge
+                color="primary"
+                content="0"
+        >
+          <v-icon color="primary">mdi-cart</v-icon>
+        </v-badge>
+
       </v-btn>
     </v-app-bar>
-    <v-content class="pa-0">
-      <v-container>
+    <v-content class="pa-0 container-main">
+      <v-container fluid class="container-principal">
         <router-view></router-view>
       </v-container>
     </v-content>
@@ -129,22 +149,23 @@
 </script>
 
 <style>
+  .text{
+    font-family: 'Rozha One', serif;
+  }
+
+  .container-main { background-color: #f4f4f4 }
   .search {
     outline: none;
     border: 1px #F8F8F8;
     background: #ededed url('../assets/search.png') no-repeat 5px center;
     padding: 5px 8px 0px 26px;
-    width: 10px;
-    -webkit-border-radius: 10em;
-    -moz-border-radius: 10em;
+    width: 200px;
     border-radius: 10em;
-    -webkit-transition: all .5s;
-    -moz-transition: all .5s;
     transition: all .5s;
     margin-right: 10px;
   }
   .search:focus {
-    width: 160px;
+    width: 400px;
     border: solid 1px #ccc;
     background-color: #fff;
     border-color: #98ccfd;
@@ -153,4 +174,10 @@
     box-shadow: 0 0 5px rgba(109, 207, 246, .5);
     backface-visibility: hidden;
   }
+
+  .container-principal {
+    top: 110px;
+    padding: 0px 0px 0px 0px !important;
+  }
+
 </style>

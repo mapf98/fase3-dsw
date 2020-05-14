@@ -11,6 +11,7 @@ import { Platform } from '../../platform-management/entities/platform.entity';
 import { ProductQuestion } from '../../products/entities/product-question.entity';
 
 import { Address } from './address.entity';
+import {Language} from "./language.entity";
 
 @Entity({ name: 'cliente' }) 
 export class Customer extends BaseEntity {
@@ -37,6 +38,10 @@ export class Customer extends BaseEntity {
 	@JoinColumn({ name: 'rol_id' })
 	@ManyToOne(type => Role, role => role.customer)
 	role: Role;
+
+	@JoinColumn({ name: 'lenguaje_id' })
+	@ManyToOne(type => Language, language => language.customers)
+	language: Language;
 
 	@OneToMany(type => Address, addresses => addresses.customer)
 	addresses: Address[];

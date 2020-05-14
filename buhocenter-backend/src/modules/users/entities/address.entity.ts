@@ -3,9 +3,8 @@ import { BaseEntity } from '../../app/entities/base-entity';
 import { Customer } from './customer.entity';
 import { Status } from '../../app/entities/status.entity';
 
-@Entity({ name: 'direccion' }) 
+@Entity({ name: 'direccion' })
 export class Address extends BaseEntity {
-	
 	@Column({ name: 'nombre', type: 'varchar', length: 100, nullable: false })
 	name: string;
 
