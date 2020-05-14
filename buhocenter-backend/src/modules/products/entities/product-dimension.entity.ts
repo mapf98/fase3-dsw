@@ -1,19 +1,20 @@
-import { Entity, Column, ManyToOne, JoinColumn } from 'typeorm';
+import { Entity, Column, ManyToOne, JoinColumn, OneToOne } from 'typeorm';
 import { BaseEntity } from '../../app/entities/base-entity';
-import { Dimension } from './dimension.entity';
 import { Product } from './product.entity';
 
 @Entity({ name: 'dimension_producto' }) 
 export class ProductDimension extends BaseEntity {
 	
-	@Column({ name: 'valor', type: 'varchar', length: 100, nullable: false })
-	value: string;
+	@Column({ name: 'ancho', type: 'varchar', length: 100, nullable: false })
+	width: string;
 
-	@JoinColumn({ name: 'dimension_id' })
-	@ManyToOne(type => Dimension, dimension => dimension.productDimensions)
-	dimension: Dimension;
+	@Column({ name: 'alto', type: 'varchar', length: 100, nullable: false })
+	height: string;
+
+	@Column({ name: 'largo', type: 'varchar', length: 100, nullable: false })
+	long: string;
 
 	@JoinColumn({ name: 'producto_id' })
-	@ManyToOne(type => Product, product => product.productDimensions)
+	@OneToOne(type => Product, product => product.productDimensions)
 	product: Product;
 }

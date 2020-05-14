@@ -4,6 +4,7 @@ import Layout from '../views/Layout.vue';
 import Auth from '../views/Auth.vue';
 import Home from '../views/Home.vue';
 import Catalogue from '../modules/products/catalogue/Catalogue.vue';
+import ItemDetail from '../modules/products/item-detail/ItemDetail.vue';
 import Register from '../views/Register.vue';
 
 Vue.use(VueRouter);
@@ -33,6 +34,11 @@ const routes: RouteConfig[] = [
         path: '/products',
         name: 'products',
         component: Catalogue,
+      },
+      {
+        path: '/item-detail',
+        name: 'item-detail',
+        component: ItemDetail,
       },
     ],
   },

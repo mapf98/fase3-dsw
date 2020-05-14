@@ -1,6 +1,7 @@
-import { Entity, Column, ManyToOne, JoinColumn, OneToMany } from 'typeorm';
+import { Entity, Column, ManyToOne, JoinColumn, OneToMany, OneToOne } from 'typeorm';
 import { BaseEntity } from '../../app/entities/base-entity';
 import { Status } from '../../app/entities/status.entity';
+import { ProductProvider } from './product-provider.entity';
 import { Provider } from './provider.entity';
 import { Brand } from './brand.entity';
 import { ProductDimension } from './product-dimension.entity';
@@ -30,16 +31,15 @@ export class Product extends BaseEntity {
 	@ManyToOne(type => Status, status => status.products)
 	status: Status;
 
-	@JoinColumn({ name: 'proveedor_id' })
-	@ManyToOne(type => Provider, provider => provider.product)
-	provider: Provider;
+	@OneToMany(type => ProductProvider, productProvider => productProvider.product)
+	productProvider: ProductProvider;
 
 	@JoinColumn({ name: 'marca_id' })
 	@ManyToOne(type => Brand , brand => brand.products)
 	brand: Brand;
 
-	@OneToMany(type => ProductDimension, productDimensions => productDimensions.product)
-	productDimensions: ProductDimension[];
+	@OneToOne(type => ProductDimension, productDimensions => productDimensions.product)
+	productDimensions: ProductDimension;
 
 	@OneToMany(type => ProductRating, productRatings => productRatings.product)
 	productRatings: ProductRating[];
@@ -47,8 +47,8 @@ export class Product extends BaseEntity {
 	@OneToMany(type => ProductCategory, productCategories => productCategories.product)
 	productCategories: ProductCategory[];
 
-	@OneToMany(type => ProductOffer, productOffers => productOffers.product)
-	productOffers: ProductOffer[];
+	@OneToMany(type => ProductOffer, offers => offers.product)
+	offers: ProductOffer[];
 
 	@OneToMany(type => ProductCart, productCarts => productCarts.product)
 	productCarts: ProductCart[];
@@ -56,9 +56,9 @@ export class Product extends BaseEntity {
 	@OneToMany(type => ProductInventory, productInventories => productInventories.product)
 	productInventories: ProductInventory[];
 
-	@OneToMany(type => ProductPhoto, productPhotos => productPhotos.product)
-	productPhotos: ProductPhoto[];
+	@OneToMany(type => ProductPhoto, photos => photos.product)
+	photos: ProductPhoto[];
 
-	@OneToMany(type => ProductQuestion, productQuestions => productQuestions.product)
-	productQuestions: ProductQuestion[];
+	@OneToMany(type => ProductQuestion, questions => questions.product)
+	questions: ProductQuestion[];
 }

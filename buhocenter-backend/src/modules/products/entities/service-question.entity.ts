@@ -17,6 +17,6 @@ export class ServiceQuestion extends BaseEntity {
 	customer: Customer;
 
 	@JoinColumn({ name: 'servicio_id' })
-	@ManyToOne(type => Service, service => service.serviceQuestions)
+	@ManyToOne(type => Service, service => service.questions)
 	service: Service;
 }

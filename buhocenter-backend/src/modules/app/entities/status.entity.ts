@@ -6,6 +6,7 @@ import { Product } from '../../products/entities/product.entity';
 import { Service } from '../../products/entities/service.entity';
 import { Customer } from '../../users/entities/customer.entity';
 import { Address } from '../../users/entities/address.entity';
+import { Offer } from '../../products/entities/offer.entity';
 
 @Entity('estatus') 
 export class Status extends BaseEntity {
@@ -29,6 +30,9 @@ export class Status extends BaseEntity {
 
 	@OneToMany(type => Service, services => services.status)
 	services: Service[];
+
+	@OneToMany(type => Offer, offers => offers.status)
+	offers: Offer[];
 
 	@OneToMany(type => StatusHistory, statusHistories => statusHistories.status)
 	statusHistories: StatusHistory[];

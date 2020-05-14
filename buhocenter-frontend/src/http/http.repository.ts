@@ -29,7 +29,7 @@ export class HttpRepository {
 
     protected post(uri: string,
         data: AxiosRequestConfig['data'],
-        header: AxiosRequestConfig['headers'],
+        header?: AxiosRequestConfig['headers'],
     ): Promise<AxiosResponse<any>> {
         return httpClient.post(uri, data, header);
     }

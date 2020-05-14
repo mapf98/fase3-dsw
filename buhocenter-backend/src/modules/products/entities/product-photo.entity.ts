@@ -8,6 +8,6 @@ export class ProductPhoto extends BaseEntity {
 	content: string;
 
 	@JoinColumn({ name: 'producto_id' })
-	@ManyToOne(type => Product, product => product.productPhotos)
+	@ManyToOne(type => Product, product => product.photos)
 	product: Product;
 }

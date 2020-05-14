@@ -6,17 +6,11 @@ import { Customer } from '../../users/entities/customer.entity';
 @Entity({ name: 'pregunta_producto' }) 
 export class ProductQuestion extends BaseEntity {
 	
-	@Column({ name: 'valoracion', type: 'varchar', length: 100, nullable: false })
-	rating: string;
-
-	@Column({ name: 'comentario', type: 'varchar', length: 100, nullable: false })
+	@Column({ name: 'comentario', type: 'text', nullable: false })
 	comment: string;
 
-	@Column({ name: 'fecha', nullable: false })
-	date: Date;	
-
 	@JoinColumn({ name: 'producto_id' })
-	@ManyToOne(type => Product , product => product.productQuestions)
+	@ManyToOne(type => Product , product => product.questions)
 	product: Product;
 
 	@JoinColumn({ name: 'cliente_id' })

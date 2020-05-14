@@ -1,12 +1,16 @@
 <template>
   <div style="margin-top: 50px">
     <transition-group name="fade" class="row ma-1" tag="div">
-        <div v-for="item in GET_PRODUCTS" class="col-6 col-xl-3 col-lg-3 col-md-3 col-sm-6 col-xs-3 pb-3" :key="item.id">
+        <div v-for="item in GET_PRODUCTS" class="col-6 col-xl-3 col-lg-3 col-md-3 col-sm-6 col-xs-3 pb-3"
+            :key="item.id"
+            @click="getItemDetail(item)"
+        >
             <v-col v-if="GET_PRODUCTS_AND_PHOTOS_LOADED" class="pa-3 pointer">
                 <div class='justify-center'>
                     <v-row class="mx-auto py-2" justify='center'>
                         <img class="justify-center"
                             :height="$vuetify.breakpoint.mdAndUp ? '115' : '50'"
+                            :width="$vuetify.breakpoint.mdAndUp ? '115' : '50'"
                             :src="item.imageUrl"
                             alt="Product Image"
                         >
@@ -15,7 +19,7 @@
                         <h3 class="d-inline-block text-truncate body-2 font-weight-regular mx-auto">{{ item.name }}</h3>
                     </v-row>
                     <v-row class="overline">
-                        <p class="d-inline-block text-truncate mx-auto ma-0">por {{ item.provider.name }}</p>
+                        <p class="d-inline-block text-truncate mx-auto ma-0">por {{ getProvider(item) }}</p>
                     </v-row>
                     <v-row class="d-flex align-center">
                         <v-rating
@@ -53,27 +57,37 @@ import {
     FETCH_PRODUCTS,
     FETCH_PRODUCT_PHOTO_BY_NAME,
     SET_PRODUCT_PHOTOS_NOT_LOADED,
+    FETCH_PRODUCT_DETAIL,
+    FETCH_SERVICE_DETAIL,
 } from '../../../store/products/methods/products.actions';
+import { ITEM_TYPE } from '../../../config/constants';
 
 @Component
 export default class ProductCard extends Vue {
     contentLoaded: boolean = false;
-    rating: number = 2;
 
-    get getProducts() {
-        return this.GET_PRODUCTS;
+    getItemDetail(item): void {
+        if (item.type === ITEM_TYPE.PRODUCT) {
+            this.$router.push({ name: 'item-detail', query: { item: 'product', id: item.id } })
+        } else {
+            this.$router.push({ name: 'item-detail', query: { item: 'service', id: item.id } })
+        }
     }
 
-    get getProductPhotosLoaded() {
-        return this.GET_PRODUCTS_AND_PHOTOS_LOADED;
+    getProvider(item): string {
+        if (item.type === ITEM_TYPE.PRODUCT) {
+            return item.productProvider[0].provider.name;
+        }
+
+        return item.serviceProvider[0].provider.name;
     }
 
     getRating(productRatings): number {
         return productRatings[0] ? productRatings[0].rating : 0;
     }
 
-    @products.Action(FETCH_PRODUCTS) FETCH_PRODUCTS;
-    @products.Action(FETCH_PRODUCT_PHOTO_BY_NAME) FETCH_PRODUCT_PHOTO_BY_NAME;
+    @products.Action(FETCH_SERVICE_DETAIL) FETCH_SERVICE_DETAIL;
+    @products.Action(FETCH_PRODUCT_DETAIL) FETCH_PRODUCT_DETAIL;
     @products.Getter(GET_PRODUCTS) GET_PRODUCTS;
     @products.Getter(GET_PRODUCTS_AND_PHOTOS_LOADED) GET_PRODUCTS_AND_PHOTOS_LOADED;
 }

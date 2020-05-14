@@ -1,4 +1,4 @@
-import { Controller, Get,Param,Post,Body,ParseIntPipe, Query, Inject, Res, HttpStatus} from '@nestjs/common';
+import { Controller, Get, Param, Post, Body, ParseIntPipe, Query, Inject, Res, HttpStatus } from '@nestjs/common';
 import { ProductsService } from '../services/products.service'
 import { Product } from '../entities/product.entity'
 import { ProductDTO } from '../dto/products.dto'
@@ -20,12 +20,34 @@ export class ProductsController {
 		return this.service.asociateProductCart(user,body);
 	}
 
+	@Get(':id')
+	async getProductById(
+		@Res() res: Response,
+		@Param('id', new ParseIntPipe()) id: number,
+	): Promise<Response> {
+		this.logger.info(`getProductById: obteniendo el producto por id [id=${id}]`, { context: ProductsController.name });
+
+		try {
+			const product = await this.productsService.getProductById(id);
+			return res.status(HttpStatus.OK).send(product);
+		} catch (e) {
+			this.logger.error(`Error obteniendo el producto por el id ${id}`, { context: ProductsController.name });
+			this.logger.error(`${e}`, { context: ProductsController.name });
+			return res.status(HttpStatus.NOT_FOUND).send();
+		}
+	}
+
 	@Get()
 	async getProducts(
 		@Res() res: Response,
 		@Query('page', new ParseIntPipe()) page: number,
 		@Query('catalogueId') catalogueId: number,
 	): Promise<Response> {
+		this.logger.info(
+			`getProducts: obteniendo los productos [page=${page}|catalogueId=${catalogueId}]`,
+			{ context: ProductsController.name },
+		);
+
 		try {
 			const [products, total]: [Product[], number] = await this.productsService.getProducts(page, catalogueId);
 			return res.status(HttpStatus.OK).send([products, total]);
