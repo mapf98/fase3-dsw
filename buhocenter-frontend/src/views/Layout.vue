@@ -54,7 +54,7 @@
         <div class="text-xs-center">
           <v-menu
                   v-model="menu"
-                  :close-on-content-click="false"
+                  :close-on-content-click="true"
                   :nudge-width="200"
                   offset-x
           >
@@ -69,7 +69,7 @@
 
             <v-card>
               <v-list>
-                <v-list-item avatar>
+                <v-list-item avatar to="/profile">
                   <v-list-item-avatar>
                     <img src="https://cdn.vuetifyjs.com/images/john.jpg" alt="John">
                   </v-list-item-avatar>

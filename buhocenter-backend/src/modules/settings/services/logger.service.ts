@@ -33,7 +33,7 @@ export class LoggerSettingsService implements WinstonModuleOptionsFactory {
                     filename: 'buhocenter-%DATE%.log',
                     datePattern: 'YYYY-MM-DD',
                     zippedArchive: true,
-                    maxFiles: '1d',
+                    maxFiles: '7d',
                     dirname: "./logs",
                     format: format.combine(
                         format.splat(),
