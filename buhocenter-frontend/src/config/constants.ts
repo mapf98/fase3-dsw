@@ -6,3 +6,7 @@ export const ITEM_TYPE = Object.freeze({
 export const STATUS = Object.freeze({
     ACTIVE: 1,
 });
+
+export const SUCESS: string = 'success';
+export const FETCHING: string = 'fetching';
+export const FETCHED: string = 'fetched';

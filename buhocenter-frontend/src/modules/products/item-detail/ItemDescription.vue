@@ -47,11 +47,11 @@
 <script lang="ts">
 import Vue from 'vue';
 import Component from 'vue-class-component';
-import { products } from "../../../store/namespaces";
+import { products } from "@/store/namespaces";
 import {
     GET_ITEM_DETAIL,
-} from '../../../store/products/methods/products.getters';
-import { STATUS } from '../../../../../buhocenter-backend/dist/config/constants';
+} from '@/store/products/methods/products.getters';
+import { STATUS } from '@/config/constants';
 
 @Component
 export default class ItemDescription extends Vue {
@@ -100,7 +100,7 @@ export default class ItemDescription extends Vue {
         let discountPrice: string = '';
 
         this.GET_ITEM_DETAIL.offers.forEach((element) => {
-            if (element.offer.status.id === STATUS.ACTIVE.id) {
+            if (element.offer.status.id === STATUS.ACTIVE) {
                 discountPrice = element.discountPrice;
             }
         });
@@ -109,7 +109,7 @@ export default class ItemDescription extends Vue {
     }
 
     hasOffer() {
-        return this.GET_ITEM_DETAIL.offers.some((element) => element.offer.status.id === STATUS.ACTIVE.id);
+        return this.GET_ITEM_DETAIL.offers.some((element) => element.offer.status.id === STATUS.ACTIVE);
     }
 
     @products.Getter(GET_ITEM_DETAIL) GET_ITEM_DETAIL;

@@ -1,0 +1,20 @@
+export const  terms = {
+        "HOME": "Home",
+        "PRODUCTS": "Products",
+        "SERVICES": "Services",
+        "SIGN-IN": "Sign in",
+        "LOG-OUT": "Log out",
+        "SIGN-IN-WITH": "Sign In With",
+        "EMAIL": "Email",
+        "PASSWORD": "Password",
+        "FORGOT?": "Forgot?",
+        "NOT-A-MEMBER": "Not a member?",
+        "SIGN-UP-NOW": "Sign up now",
+        "REGISTER": "Register",
+        "FIRST-NAME": "First name",
+        "LAST-NAME": "Last name",
+        "BIRTHDATE": "Birthdate",
+        "LANGUAGE-OF-PLATFORM": "Language of platform",
+        "CONFIRM-PASSWORD": "Confirm Password",
+        "YOU-HAVE-ACCOUNT?": "You have account?"
+}

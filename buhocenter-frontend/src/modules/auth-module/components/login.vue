@@ -20,66 +20,72 @@
                 </v-row>
             </v-alert>
             <form class="login100-form validate-form flex-sb flex-w" @submit.prevent="submitLogin">
-                <v-img src="../../../assets/Logo-completo.png" width="300" class="img-header-form">
+                <v-img src="../../../assets/Logo-completo.png"  class="img-header-form">
                 </v-img>
                 <span class="login100-form-title p-b-53">
-                    Sign In With
+                    {{$t('SIGN-IN-WITH')}}
                 </span>
                 <div class="row">
-                    <v-col lg="6">
-                        <a href="#" class="btn-face m-b-20 btn-icons"  @click="loginWithSocial('facebook')">
-                            <v-icon class="mr-2 icon-facebook">fab fa-facebook</v-icon>
+                    <v-col lg="12" md="12" sm="12">
+                        <a href="#" class="btn-face m-b-20 btn-icons d-flex justify-center"  @click="loginWithSocial('facebook')">
+                            <v-icon class="mr-2 icon-facebook pa-2">fab fa-facebook</v-icon>
                             Facebook
                         </a>
                     </v-col>
-                    <v-col lg="6">
-                        <a href="#" class="btn-google m-b-20 btn-icons"  @click="loginWithSocial('google')">
-                            <img src="../../../assets/images/icons/icon-google.png" alt="GOOGLE">
+                    <v-col lg="12" md="12" sm="12">
+                        <a href="#" class="btn-google m-b-20 btn-icons d-flex justify-center"  @click="loginWithSocial('google')">
+                            <v-icon class="mr-2 icon-google pa-2">fab fa-google</v-icon>
                             Google
                         </a>
                     </v-col>
                 </div>
-                <div class="p-t-31 mb-4">
-                    <span class="txt1">
-                        Email
-                    </span>
-                </div>
-                <div class="wrap-input100 validate-input mb-4" data-validate = "Password is required">
-                    <input class="input100" type="email" name="email" v-model="email">
+                <span class="login100-form-title pt-4 pb-4">
+                    Or
+                </span>
+
+                <div class="validate-input mb-4" data-validate = "Password is required">
+                    <v-text-field
+                            :label="$t('EMAIL')"
+                            v-model="email"
+                    ></v-text-field>
                     <span class="focus-input100"></span>
                 </div>
 
+
+                <div class=" validate-input mb-4" data-validate = "Password is required">
+                    <v-text-field
+                            :label="$t('PASSWORD')"
+                            v-model="password"
+                            :append-icon="showPass ? 'mdi-eye' : 'mdi-eye-off'"
+                            :type="showPass ? 'text' : 'password'"
+                            @click:append="showPass = !showPass"
+                    ></v-text-field>
+
+                    <span class="focus-input100"></span>
+                </div>
                 <div class="p-t-13 mb-4">
-                    <span class="txt1">
-                        Password
-                    </span>
                     <a href="#" class="txt2 bo1 m-l-5">
-                        Forgot?
+                        {{$t('FORGOT?')}}
                     </a>
                 </div>
-                <div class="wrap-input100 validate-input mb-4" data-validate = "Password is required">
-                    <input class="input100" type="password" name="pass" v-model="password">
-                    <span class="focus-input100"></span>
-                </div>
-
                 <div class="container-login100-form-btn m-t-17 mb-4">
                     <button class="login100-form-btn primary" v-if="isLoading">
                         <v-progress-circular
-                                :size="50"
+                                :size="40"
                                 color="white"
                                 indeterminate
                         ></v-progress-circular>
                     </button>
                     <button class="login100-form-btn primary" v-else type="submit">
-                        Sign In
+                        {{$t('SIGN-IN')}}
                     </button>
                 </div>
                 <div class="w-full text-center p-t-55">
                     <span class="txt2">
-                        Not a member?
+                        {{$t('NOT-A-MEMBER')}}
                     </span>
                     <RouterLink to="/register" class="txt2 bo1">
-                        Sign up now
+                        {{$t('SIGN-UP-NOW')}}
                     </RouterLink>
                 </div>
             </form>
@@ -97,6 +103,7 @@
         email: string = '';
         password: string = '';
         isLoading: boolean = false;
+        showPass: boolean = false;
 
         async loginWithSocial(social: string){
             await this.loginSocial(social);
@@ -198,7 +205,7 @@
         align-items: center;
         padding: 15px;
         width: 100%;
-        height: 70px;
+        height: 40px;
         border-radius: 10px;
         box-shadow: 0 1px 5px 0px rgba(0, 0, 0, 0.2);
         transition: all 0.4s;
@@ -206,16 +213,21 @@
         z-index: 1;
     }
 
-    .btn-google:hover{
-        background-color: #DB4437;
-    }
     .btn-face{
-        background-color:#3b5998;
-        color:#ffffff;
+        color: #3b5998;
+        background: none;
     }
+
+    .btn-face i{
+        color: #3b5998 !important;
+    }
+
+    .btn-google i {
+        color: #db4a39;
+    }
+
     .btn-face::after {
         display: block;
-
         position: absolute;
         z-index: -1;
         width: 100%;
@@ -241,19 +253,10 @@
         background-color: #fff;
     }
 
-    .btn-google img {
-        width: 30px;
-        margin-right: 15px;
-        padding-bottom: 3px;
-    }
 
     .btn-face:hover:before,
     .btn-google:hover:before {
         opacity: 1;
-    }
-
-    .btn-google:hover {
-        color: #fff;
     }
 
 
@@ -263,17 +266,6 @@
         background-color: #f7f7f7;
         border: 1px solid #e6e6e6;
         border-radius: 10px;
-    }
-
-    .input100 {
-        color: #333333;
-        line-height: 1.2;
-        font-size: 18px;
-        display: block;
-        width: 100%;
-        background: transparent;
-        height: 60px;
-        padding: 0 20px;
     }
 
     .focus-input100 {
@@ -310,7 +302,7 @@
         align-items: center;
         padding: 0 20px;
         width: 100%;
-        height: 60px;
+        height: 40px;
         background-color: #F1CABB;
         border-radius: 10px;
         font-size: 16px;

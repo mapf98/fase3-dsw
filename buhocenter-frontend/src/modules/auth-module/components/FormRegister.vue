@@ -29,41 +29,36 @@
                 <v-img src="../../../assets/Logo-completo.png" width="300" class="img-header-form">
                 </v-img>
                 <span class="login100-form-title p-b-53 mb-4">
-                    Register
+                    {{$t('REGISTER')}}
                 </span>
                 <v-row>
                     <v-col cols="12" lg="6" md="12">
-                        <div class="p-t-31 mb-4">
-                            <span class="txt1">
-                                First name
-                            </span>
-                        </div>
-                        <div class="wrap-input100 validate-input mb-4" data-validate = "Name is required">
-                            <input class="input100" type="text" name="name" v-model="name">
-
+                        <div class="validate-input mb-4" data-validate = "Name is required">
+                            <v-text-field
+                                    :label="$t('FIRST-NAME')"
+                                    v-model="name"
+                                    :rules="[() => !!name || 'This field is required']"
+                            ></v-text-field>
                         </div>
                         <v-alert type="error" v-if="errorInputs.name">
                             Valid name is required.
                         </v-alert>
                     </v-col>
-                    <v-col  cols="12"  lg="6" md="12">
-                        <div class="p-t-31 mb-4">
-                            <span class="txt1">
-                                Last name
-                            </span>
-                        </div>
-                        <div class="wrap-input100 validate-input mb-4" data-validate = "Lastname is required">
-                            <input class="input100" type="text" name="lastName" v-model="lastName">
-                            <span class="focus-input100"></span>
+                    <v-col cols="12" lg="6" md="12">
+                        <div class="validate-input mb-4" data-validate = "Name is required">
+                            <v-text-field
+                                    :label="$t('LAST-NAME')"
+                                    v-model="lastName"
+                                    :rules="[() => !!lastName || 'This field is required']"
+                            ></v-text-field>
                         </div>
                         <v-alert type="error" v-if="errorInputs.lastName">
-                            Valid lastname is required.
+                            Valid name is required.
                         </v-alert>
                     </v-col>
                 </v-row>
-
                 <v-row>
-                    <v-col  cols="12"  lg="6" md="12">
+                    <v-col  cols="12"  lg="12" md="12">
                         <v-dialog
                                 ref="dialog"
                                 v-model="modal"
@@ -75,10 +70,10 @@
                             <template v-slot:activator="{ on }">
                                 <div class="p-t-31 mb-4">
                                     <span class="txt1">
-                                        Birthdate
+                                        {{$t('BIRTHDATE')}}
                                     </span>
                                 </div>
-                                <div class="wrap-input100 validate-input mb-4" data-validate = "birthdate is required">
+                                <div class=" validate-input mb-4" data-validate = "birthdate is required">
                                     <v-btn primary class="input100 btn-date" v-on="on" >
                                             {{birthdate}}
                                     </v-btn>
@@ -95,10 +90,10 @@
                             You must be of legal age
                         </v-alert>
                     </v-col>
-                    <v-col lg="6" md="12">
+                    <v-col lg="12" md="12">
                         <div class="p-t-31 mb-4">
                             <span class="txt1">
-                                language of platform
+                                {{$t('LANGUAGE-OF-PLATFORM')}}
                             </span>
                         </div>
                         <v-select
@@ -106,7 +101,7 @@
                                 name="category"
                                 v-model="language"
                                 item-text="name"
-                                item-value="id"
+                                item-value="code"
                         ></v-select>
                         <v-alert type="error" v-if="errorInputs.language">
                             Language is required.
@@ -115,40 +110,41 @@
                     </v-col>
                 </v-row>
 
-                <div class="p-t-31 mb-4">
-                    <span class="txt1">
-                        Email
-                    </span>
-                </div>
-                <div class="wrap-input100 validate-input mb-4" data-validate = "Email is required">
-                    <input class="input100" type="email" name="email" v-model="email">
-                    <span class="focus-input100"></span>
+                <div class="validate-input mb-4" data-validate = "Email is required">
+                    <v-text-field
+                            :label="$t('EMAIL')"
+                            v-model="email"
+                            :rules="[() => !!email || 'This field is required']"
+                    ></v-text-field>
                 </div>
                 <v-alert type="error" v-if="errorInputs.email">
                     Valid email is required.
                 </v-alert>
 
-                <div class="p-t-13 mb-4">
-                    <span class="txt1">
-                        Password
-                    </span>
-                </div>
-                <div class="wrap-input100 validate-input mb-4" data-validate = "Password is required">
-                    <input class="input100" type="password" name="pass" v-model="password">
-                    <span class="focus-input100"></span>
+                <div class=" validate-input mb-4" data-validate = "Password is required">
+                    <v-text-field
+                            :label="$t('PASSWORD')"
+                            v-model="password"
+                            :append-icon="showPass ? 'mdi-eye' : 'mdi-eye-off'"
+                            :type="showPass ? 'text' : 'password'"
+                            @click:append="showPass = !showPass"
+                            :rules="[() => !!password || 'This field is required']"
+                    ></v-text-field>
                 </div>
                 <v-alert type="error" v-if="errorInputs.password">
                     Password must be at least 6 characters
                 </v-alert>
 
-                <div class="p-t-13 mb-4">
-                    <span class="txt1">
-                        Confirm Password
-                    </span>
-                </div>
-                <div class="wrap-input100 validate-input mb-4" data-validate = "Password is required">
-                    <input class="input100" type="password" name="pass" v-model="confirmPassword">
-                    <span class="focus-input100"></span>
+
+                <div class="validate-input mb-4" data-validate = "Password is required">
+                    <v-text-field
+                            :label="$t('CONFIRM-PASSWORD')"
+                            v-model="confirmPassword"
+                            :append-icon="showRepeatPass ? 'mdi-eye' : 'mdi-eye-off'"
+                            :type="showRepeatPass ? 'text' : 'password'"
+                            @click:append="showRepeatPass = !showRepeatPass"
+                            :rules="[() => !!confirmPassword || 'This field is required']"
+                    ></v-text-field>
                 </div>
                 <v-alert type="error" v-if="errorInputs.passwordEquals">
                     passwords must match
@@ -157,7 +153,7 @@
                 <div class="container-login100-form-btn m-t-17 mb-4">
                     <button class="login100-form-btn" v-if="isLoading">
                         <v-progress-circular
-                                :size="50"
+                                :size="40"
                                 color="white"
                                 indeterminate
 
@@ -165,17 +161,17 @@
                     </button>
 
                     <button type="submit"  v-else class="login100-form-btn primary">
-                        Register
+                        {{$t('REGISTER')}}
                     </button>
                 </div>
 
                 <div class="w-full text-center p-t-55">
                             <span class="txt2">
-                                You have account?
+                                {{$t('YOU-HAVE-ACCOUNT?')}}
                             </span>
 
                     <RouterLink to="/sign-in" class="txt2 bo1">
-                        Sign in
+                        {{$t('SIGN-IN')}}
                     </RouterLink>
                 </div>
             </form>
@@ -195,6 +191,8 @@
     export default class Login extends Vue {
         timeout: number = 5000;
         snackbar: boolean = false;
+        showPass: boolean = false;
+        showRepeatPass: boolean = false;
         name: string = "";
         lastName: string = "";
         birthdate: string = new Date().toISOString().substr(0, 10);
@@ -216,8 +214,10 @@
         };
 
         async mounted() {
-            await this.apiGetLanguages();
-            this.snackbar = this.getErrLanguages;
+            if(this.getLanguages.length){
+                await this.apiGetLanguages();
+                this.snackbar = this.getErrLanguages;
+            }
         }
 
 
@@ -297,6 +297,9 @@
     }
 
     .btn-date {
+        background: none !important;
+        border-bottom: 1px solid;
+        border-radius: 0px;
         box-shadow: none !important;
         height: 50px !important;
     }
@@ -422,7 +425,7 @@
         align-items: center;
         padding: 0 20px;
         width: 100%;
-        height: 60px;
+        height: 40px;
         background-color: #F1CABB;
         border-radius: 10px;
         font-size: 16px;

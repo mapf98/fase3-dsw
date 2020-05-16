@@ -3,6 +3,6 @@ export class CustomerDto {
     lastname: string;
     birthdate: string;
     uid: string;
-    language: number;
+    language: string;
     email: string;
 }

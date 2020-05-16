@@ -57,9 +57,7 @@ export class UsersService {
                 lastName: data.lastname,
                 uid: data.uid,
                 birthdate: data.birthdate,
-                language: {
-                    id: data.language,
-                },
+                language:  data.language,
                 status: {
                     id: STATUS.ACTIVE.id,
                 },
@@ -153,9 +151,7 @@ export class UsersService {
                     role: {
                         id: ROLE.CUSTOMER.id,
                     },
-                    language: {
-                        id: LANGUAGE.ENGLISH.id,
-                    },
+                    language:  LANGUAGE.ENGLISH.id,
                 });
                 this.logger.debug(`validateRegisterSocial: New client registered [id=${clientSave.id}]`, { context: UsersService.name } );
                 await this.sendEmailWelcome({email: data.clientData.email, name: data.clientData.first_name});

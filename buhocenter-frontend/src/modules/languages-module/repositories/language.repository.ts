@@ -9,7 +9,21 @@ class LanguageRepository extends HttpRepository {
              }
              return false;
         } catch (e) {
-            return { error: e.message};
+            return { error: e.message };
+        }
+    }
+
+    public async setLanguage(code: string): Promise<any> {
+        try {
+            const response = await this.get(this.createUri([`languages/terms/${code}`], false));
+            console.log(response);
+            if (response) {
+                console.log("entre al if")
+                return response;
+            }
+            return { error: "Error encontrando idioma"};
+        } catch (e) {
+            return { error: e.message };
         }
     }
 }

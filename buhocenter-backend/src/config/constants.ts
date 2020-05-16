@@ -15,9 +15,11 @@ export const ROLE = Object.freeze({
 
 export const LANGUAGE = Object.freeze({
     ENGLISH: {
-        id: 1,
+        id: 'en',
     },
     SPANISH: {
-        id: 2,
+        id: 'es',
     },
 });
+
+export const SUCCESS = 'success';
