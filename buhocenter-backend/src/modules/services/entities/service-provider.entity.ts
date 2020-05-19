@@ -1,7 +1,7 @@
 import { Entity, Column, OneToMany, ManyToOne, JoinColumn } from 'typeorm';
 import { BaseEntity } from '../../app/entities/base-entity';
 import { Service } from './service.entity';
-import { Provider } from './provider.entity';
+import { Provider } from '../../products/entities/provider.entity';
 
 @Entity({ name: 'proveedor_servicio' }) 
 export class ServiceProvider extends BaseEntity {

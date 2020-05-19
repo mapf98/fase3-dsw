@@ -1,6 +1,6 @@
 import { Entity, ManyToOne, JoinColumn } from 'typeorm';
 import { BaseEntity } from '../../app/entities/base-entity';
-import { Catalogue } from './catalogue.entity';
+import { Catalogue } from '../../products/entities/catalogue.entity';
 import { Service } from './service.entity';
 
 @Entity({ name: 'servicio_catalogo' }) 

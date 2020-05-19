@@ -5,6 +5,8 @@ import { Logger } from 'winston';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { ServiceRating } from '../entities/service-rating.entity';
+import { STATUS } from '../../../config/constants';
+
 
 @Injectable()
 export class ServicesService {
@@ -61,5 +63,10 @@ export class ServicesService {
         await this.getServiceAverageRating([service]);
 
         return service;
+    }
+
+  
+    async findService( ServiceId: number ): Promise<Service>{
+        return await this.servicesRepository.findOne(ServiceId);
     }
 }

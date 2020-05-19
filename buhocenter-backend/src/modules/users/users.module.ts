@@ -8,9 +8,11 @@ import {LanguagesController} from './controllers/languages.controller';
 import {LanguageRepository} from './repositories/language.repository';
 
 @Module({
+
   imports: [TypeOrmModule.forFeature([Customer]), HttpModule],
   controllers: [UsersController, LanguagesController],
   providers: [UsersService, LanguagesService, LanguageRepository],
+  exports:[UsersService]
 
 })
 export class UsersModule {}

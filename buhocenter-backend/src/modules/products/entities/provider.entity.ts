@@ -1,7 +1,7 @@
 import { Entity, Column, OneToMany } from 'typeorm';
 import { BaseEntity } from '../../app/entities/base-entity';
 import { ProductProvider } from './product-provider.entity';
-import { ServiceProvider } from './service-provider.entity';
+import { ServiceProvider } from '../../services/entities/service-provider.entity';
 
 @Entity({ name: 'proveedor' }) 
 export class Provider extends BaseEntity {

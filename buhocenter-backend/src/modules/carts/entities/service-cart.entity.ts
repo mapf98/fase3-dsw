@@ -1,6 +1,6 @@
 import { Entity, Column, ManyToOne, JoinColumn } from 'typeorm';
 import { BaseEntity } from '../../app/entities/base-entity';
-import { Service } from './service.entity';
+import { Service } from '../../services/entities/service.entity';
 import { Cart } from './cart.entity';
 
 @Entity('carrito_servicio') 

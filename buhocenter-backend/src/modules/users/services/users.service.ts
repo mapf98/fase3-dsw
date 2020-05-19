@@ -204,4 +204,11 @@ export class UsersService {
         return response;
     }
 
+
+    async findUser(UserID:number): Promise<Customer>{
+        return await this.customerRepository.findOne(UserID);        
+    }
+
+
 }
+

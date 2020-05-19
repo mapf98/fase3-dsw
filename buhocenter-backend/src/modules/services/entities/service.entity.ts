@@ -1,7 +1,7 @@
 import { Entity, Column, OneToMany, ManyToOne, JoinColumn } from 'typeorm';
 import { BaseEntity } from '../../app/entities/base-entity';
-import { Status } from '../../app/entities/status.entity';
-import { ServiceCart } from './service-cart.entity'
+import { Status } from '../../status/entities/status.entity';
+import { ServiceCart } from '../../carts/entities/service-cart.entity'
 import { ServiceCatalogue } from './service-catalogue.entity';
 import { ServiceCategory } from './service-category.entity';
 import { ServiceOffer } from './service-offer.entity';

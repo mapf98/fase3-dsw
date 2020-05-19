@@ -96,7 +96,14 @@
                 />
             </v-col>
         </v-row>
-
+        <v-snackbar v-model="itemAddedToCart" top :timeout="timeout" color="success">
+            {{ isProduct() ? 'Producto' : 'Servicio' }} añadido al carrito exitosamente
+            <v-btn color="white" text @click="itemAddedToCart = false">Cerrar</v-btn>
+        </v-snackbar>
+        <v-snackbar v-model="errorAddingItemToCart" top :timeout="timeout" color="error">
+            Ocurrió un error añadiendo el {{ isProduct() ? 'producto' : 'servicio' }} al carrito
+            <v-btn color="white" text @click="errorAddingItemToCart = false">Cerrar</v-btn>
+        </v-snackbar>
         <v-snackbar v-model="errorLoadingContent" top :timeout="timeout" color="error">
             Ocurrió un error obteniendo los productos, por favor intente nuevamente
             <v-btn color="white" text @click="closeSnackbar">Cerrar</v-btn>
@@ -155,6 +162,8 @@ export default class ItemDetail extends Vue {
 
     itemDetailLoaded: boolean = false;
     errorLoadingContent: boolean = false;
+    errorAddingItemToCart: boolean = false;
+    itemAddedToCart: boolean = false;
     timeout: number = 5000;
 
     buyItem(quantity: number) {
@@ -172,7 +181,7 @@ export default class ItemDetail extends Vue {
             },
         };
 
-        await this.ADD_PRODUCT_TO_CART(productCart);
+        return await this.ADD_PRODUCT_TO_CART(productCart);
     };
 
     private async addServiceToCart() {
@@ -186,14 +195,22 @@ export default class ItemDetail extends Vue {
             },
         };
 
-        await this.ADD_PRODUCT_TO_CART(serviceCart);
+        return await this.ADD_SERVICE_TO_CART(serviceCart);
     };
 
     async addItemToCart(quantity: number) {
+        let created: boolean;
+
         if (this.isProduct()) {
-            await this.addProductToCart();
+            created = await this.addProductToCart();
         } else {
-            await this.addServiceToCart();
+            created = await this.addServiceToCart();
+        }
+
+        if (created) {
+            this.itemAddedToCart = true;
+        } else {
+            this.errorAddingItemToCart = true;
         }
     }
 

@@ -1,9 +1,9 @@
 import { Entity,Column, OneToMany } from 'typeorm';
-import { BaseEntity } from './base-entity';
-import { Cart } from '../../products/entities/cart.entity';
+import { BaseEntity } from '../../app/entities/base-entity';
+import { Cart } from '../../carts/entities/cart.entity';
 import { StatusHistory } from './status-history.entity';
 import { Product } from '../../products/entities/product.entity';
-import { Service } from '../../products/entities/service.entity';
+import { Service } from '../../services/entities/service.entity';
 import { Customer } from '../../users/entities/customer.entity';
 import { Address } from '../../users/entities/address.entity';
 import { Offer } from '../../products/entities/offer.entity';

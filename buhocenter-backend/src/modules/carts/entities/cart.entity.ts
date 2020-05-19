@@ -1,6 +1,6 @@
 import { Entity, Column, ManyToOne, JoinColumn, OneToMany } from 'typeorm';
 import { BaseEntity } from '../../app/entities/base-entity';
-import { Status } from '../../app/entities/status.entity';
+import { Status } from '../../status/entities/status.entity';
 import { ServiceCart } from './service-cart.entity';
 import { Customer } from '../../users/entities/customer.entity';
 import { ProductCart } from './product-cart.entity';

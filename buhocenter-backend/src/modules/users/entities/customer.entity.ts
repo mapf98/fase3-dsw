@@ -1,11 +1,11 @@
 import { Entity, Column, ManyToOne, JoinColumn, OneToMany, OneToOne } from 'typeorm';
 import { BaseEntity } from '../../app/entities/base-entity';
-import { Status } from '../../app/entities/status.entity';
+import { Status } from '../../status/entities/status.entity';
 import { Role } from './role.entity';
 import { ProductRating } from '../../products/entities/product-rating.entity';
-import { ServiceQuestion } from '../../products/entities/service-question.entity';
-import { Cart } from '../../products/entities/cart.entity';
-import { ServiceRating } from '../../products/entities/service-rating.entity';
+import { ServiceQuestion } from '../../services/entities/service-question.entity';
+import { Cart } from '../../carts/entities/cart.entity';
+import { ServiceRating } from '../../services/entities/service-rating.entity';
 import { Notification } from '../../notifications/entities/notification.entity';
 import { Platform } from '../../platform-management/entities/platform.entity';
 import { ProductQuestion } from '../../products/entities/product-question.entity';

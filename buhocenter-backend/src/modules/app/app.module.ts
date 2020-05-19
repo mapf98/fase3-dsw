@@ -12,6 +12,10 @@ import { PurchasesModule } from '../purchases/purchases.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import * as dotenv from 'dotenv';
 dotenv.config();
+import { CartsModule } from '../carts/carts.module'
+import { StatussModule } from '../status/status.module'
+import { ServicesModule } from '../services/services.module'
+
 
 @Module({
   imports: [
@@ -22,11 +26,11 @@ dotenv.config();
     PlatformManagementModule,
     WinstonModule.forRootAsync({
       useClass: LoggerSettingsService,
-    }),
+    }),CartsModule,StatussModule,
     TypeOrmModule.forRoot(),
     SendGridModule.forRoot({
       apikey: process.env.SENDGRID_API_KEY,
-    }),
+    }),ServicesModule
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -15,10 +15,6 @@ export class ProductsController {
 		public service: ProductsService
 	) {}
 
-	@Post(':id')
-		async getCartprod(@Param('id') user: number, @Body() body: ProductDTO) :Promise<any>{
-		return this.service.asociateProductCart(user,body);
-	}
 
 	@Get(':id')
 	async getProductById(

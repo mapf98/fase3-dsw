@@ -1,8 +1,9 @@
 import { Entity, Column, OneToMany, ManyToOne, JoinColumn} from 'typeorm';
 import { BaseEntity } from '../../app/entities/base-entity';
 import { ProductOffer } from './product-offer.entity';
-import { ServiceOffer } from './service-offer.entity';
-import { Status } from 'src/modules/app/entities/status.entity';
+import { ServiceOffer } from '../../services/entities/service-offer.entity';
+import { Status } from '../../status/entities/status.entity';
+
 
 @Entity('oferta') 
 export class Offer extends BaseEntity {

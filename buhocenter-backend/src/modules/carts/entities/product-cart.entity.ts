@@ -1,6 +1,6 @@
 import { Entity,Column,ManyToOne, JoinColumn } from 'typeorm';
 import { BaseEntity } from '../../app/entities/base-entity';
-import { Product } from './product.entity';
+import { Product } from '../../products/entities/product.entity';
 import { Cart } from './cart.entity';
 
 @Entity({ name: 'carrito_producto' }) 

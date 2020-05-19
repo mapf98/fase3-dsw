@@ -1,7 +1,7 @@
 import { Entity,Column,ManyToOne, JoinColumn } from 'typeorm';
 import { BaseEntity } from '../../app/entities/base-entity';
 import { Customer } from './customer.entity';
-import { Status } from '../../app/entities/status.entity';
+import { Status } from '../../status/entities/status.entity';
 
 @Entity({ name: 'direccion' })
 export class Address extends BaseEntity {

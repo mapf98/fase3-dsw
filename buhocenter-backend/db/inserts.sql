@@ -109,6 +109,7 @@ insert into producto_catalogo (catalogo_id, producto_categoria_id) VALUES (1, 5)
 insert into calificacion_producto (calificacion, comentario, producto_id, cliente_id) VALUES
      (5, 'Me gustó el producto', 1, 1), (4, 'Es de muy buena calidad', 1, 1);
 
+
 insert into inventario_producto (cantidad_disponible, producto_id) VALUES (13, 1);
 insert into inventario_producto (cantidad_disponible, producto_id) VALUES (35, 2);
 insert into inventario_producto (cantidad_disponible, producto_id) VALUES (11, 3);
@@ -125,4 +126,8 @@ insert into oferta (nombre, descripcion, fecha_inicio, fecha_fin, estatus_id) VA
 
 insert into producto_oferta (oferta_id, producto_id, precio_descuento, porcentaje) VALUES
     (1, 1, '10.78', 70), (2, 1, '24.54', 25), (2, 1, '56.15', 48);
+
+
+insert into servicio (nombre,descripcion,precio,estatus_id) values ('ejemplo','ejemplo',22,1);
+
 

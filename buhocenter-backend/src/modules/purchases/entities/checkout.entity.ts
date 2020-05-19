@@ -1,7 +1,7 @@
 import { Entity, Column, OneToOne, OneToMany } from 'typeorm';
 import { BaseEntity } from '../../app/entities/base-entity';
-import { Cart } from '../../products/entities/cart.entity';
-import { StatusHistory } from '../../app/entities/status-history.entity';
+import { Cart } from '../../carts/entities/cart.entity';
+import { StatusHistory } from '../../status/entities/status-history.entity';
 
 @Entity('checkout') 
 export class Checkout extends BaseEntity {

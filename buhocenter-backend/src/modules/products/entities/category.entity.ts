@@ -1,7 +1,7 @@
 import { Entity, Column, OneToMany } from 'typeorm';
 import { BaseEntity } from '../../app/entities/base-entity';
 import { ProductCategory } from './product-category.entity';
-import { ServiceCategory } from './service-category.entity';
+import { ServiceCategory } from '../../services/entities/service-category.entity';
 
 @Entity({ name: 'categoria' }) 
 export class Category extends BaseEntity {

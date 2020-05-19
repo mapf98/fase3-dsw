@@ -2,8 +2,6 @@ import { createQueryBuilder, Repository} from 'typeorm'
 import { Injectable, Inject} from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Product } from '../entities/product.entity'
-import { Cart } from '../entities/cart.entity'
-import { ProductCart } from '../entities/product-cart.entity'
 import { Customer } from '../../users/entities/customer.entity'
 import { ProductDTO } from '../dto/products.dto'
 import { WINSTON_MODULE_PROVIDER } from 'nest-winston'
@@ -20,65 +18,9 @@ export class ProductsService {
         private readonly productsRepository: Repository<Product>,
         @InjectRepository(ProductRating)
         private readonly productRatingsRepository: Repository<ProductRating>,
-        @InjectRepository(Cart)
-        private readonly cartRepository: Repository<Cart>,
-        @InjectRepository(ProductCart)
-        private readonly productCartRepository: Repository<ProductCart>,
-        @InjectRepository(Customer)
-        private readonly customerRepository: Repository<Customer>,
         @InjectRepository(ProductInventory)
         private readonly productInventoriesRepository: Repository<ProductInventory>,
     ) {}
-
-  	private async findCartUser(customerId: number): Promise<Cart> {
-  		return await createQueryBuilder()
-							    .select('carrito')
-							    .addSelect('max("fecha_creacion")','newestTime')
-							    .from(Cart,'carrito')
-							    .where('carrito.cliente_id = :id', {id:customerId})
-							    .addGroupBy('id')
-							    .getOne();
-	}
-
-	private async createCart(findCustomer: Customer): Promise<Cart> {
-        let newCart=  new Cart();
-        newCart.name= new Date(Date.now());							
-        newCart.customer=findCustomer;
-        this.cartRepository.save(newCart);	
-        return newCart;
-	}
-
-    public async asociateProductCart(customerID: number, ProductRes: ProductDTO): Promise<any>{
-        let findCustomer = await this.customerRepository.findOne({id :customerID});
-        let findProduct  = await this.productsRepository.findOne({id: ProductRes.id});					
-        let FindCartNewest = await this.findCartUser(customerID);
-
-        if(FindCartNewest){
-            let numero= FindCartNewest.id;
-            let product_cart3= await this.productCartRepository.findOne({where:{ numero } });
-            let newProduct_cart=new ProductCart();
-            let findCArt=  createQueryBuilder()
-                                .select()
-                                .where('carrito.id= :id', {id:FindCartNewest.id})
-                                .from(Cart,'carrito')
-                                .addGroupBy('id')
-                                .getOne();
-                                    newProduct_cart.quantity=ProductRes.quantity;				  			
-                                    newProduct_cart.cart=FindCartNewest;
-                                    newProduct_cart.product=findProduct;								  		
-                                    this.productCartRepository.save(newProduct_cart);
-        } else {
-                        let newCart= await this.createCart(findCustomer);								
-                        let newProduct_cart=new ProductCart();
-                        newProduct_cart.quantity=ProductRes.quantity;
-                        newProduct_cart.product=findProduct;
-                        newProduct_cart.cart=newCart;				  	
-                        this.productCartRepository.save(newProduct_cart);
-                        this.logger.debug(`asociateProductCart: ([customerID=${customerID}|ProductRes=${ProductRes}])`, { context: ProductsService.name });
-        }
-  	  	return "Producto asociado al carrito exitosamente!";
-  }
-
 
     /**
      * Obtiene las valoraciones emitidas sobre un arreglo de productos
@@ -176,6 +118,10 @@ export class ProductsService {
         await this.getProductAverageRating(products);
 
         return [products, total];
+    }
+
+    async findProduct(ProductID:number):Promise<Product>{
+        return await this.productsRepository.findOne(ProductID);     
     }
 
 }

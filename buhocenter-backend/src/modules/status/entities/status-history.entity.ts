@@ -1,5 +1,5 @@
 import { Entity,Column,ManyToOne, JoinColumn } from 'typeorm';
-import { BaseEntity } from './base-entity';
+import { BaseEntity } from '../../app/entities/base-entity';
 import { Checkout } from '../../purchases/entities/checkout.entity';
 import { Status } from './status.entity'; 
 
