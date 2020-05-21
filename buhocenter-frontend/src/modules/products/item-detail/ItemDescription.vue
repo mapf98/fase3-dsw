@@ -109,7 +109,11 @@ export default class ItemDescription extends Vue {
     }
 
     hasOffer() {
-        return this.GET_ITEM_DETAIL.offers.some((element) => element.offer.status.id === STATUS.ACTIVE);
+        if (this.GET_ITEM_DETAIL.offers) {
+            return this.GET_ITEM_DETAIL.offers.some((element) => element.offer.status.id === STATUS.ACTIVE);
+        }
+
+        return false;
     }
 
     @products.Getter(GET_ITEM_DETAIL) GET_ITEM_DETAIL;

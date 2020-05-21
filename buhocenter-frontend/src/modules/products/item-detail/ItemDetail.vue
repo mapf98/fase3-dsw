@@ -201,6 +201,8 @@ export default class ItemDetail extends Vue {
     async addItemToCart(quantity: number) {
         let created: boolean;
 
+        this.quantity = quantity;
+
         if (this.isProduct()) {
             created = await this.addProductToCart();
         } else {

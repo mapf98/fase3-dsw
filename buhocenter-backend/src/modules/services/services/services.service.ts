@@ -3,13 +3,13 @@ import { Service } from '../entities/service.entity';
 import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
 import { Logger } from 'winston';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository,createQueryBuilder } from 'typeorm';
 import { ServiceRating } from '../entities/service-rating.entity';
 import { STATUS } from '../../../config/constants';
 
-
 @Injectable()
 export class ServicesService {
+    
     constructor(
         @Inject(WINSTON_MODULE_PROVIDER) private readonly logger: Logger,
         @InjectRepository(Service)
@@ -17,6 +17,7 @@ export class ServicesService {
         @InjectRepository(ServiceRating)
         private readonly serviceRatingsRepository: Repository<ServiceRating>,
     ) {}
+
 
     /**
      * Obtiene las valoraciones emitidas sobre un arreglo de servicios

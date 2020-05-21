@@ -11,11 +11,11 @@ import { ServiceCart } from './entities/service-cart.entity'
 import { ServicesModule } from '../services/services.module'
 
 @Module({
-  imports: [ TypeOrmModule.forFeature([Cart, ProductCart, ServiceCart]),
-    UsersModule,
-    ProductsModule,
-    StatussModule,
-    ServicesModule,
+  imports: [ TypeOrmModule.forFeature([Cart,ProductCart,ServiceCart]),
+	  UsersModule,
+	  ProductsModule,
+	  StatussModule,
+	  ServicesModule
   ],
   controllers: [CartsController],
   providers: [CartsService]

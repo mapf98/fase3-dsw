@@ -9,9 +9,6 @@ import { Checkout } from '../../purchases/entities/checkout.entity';
 @Entity('carrito') 
 export class Cart extends BaseEntity {
 	
-	@Column({ name: 'nombre', nullable: false }) // FIX: Consultar
-	name: Date;
-
 	@JoinColumn({ name: 'cliente_id' })
 	@ManyToOne(type => Customer, customer => customer.carts)
 	customer: Customer;
