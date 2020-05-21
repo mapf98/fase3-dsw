@@ -8,7 +8,7 @@ import { Checkout } from '../../purchases/entities/checkout.entity';
 
 @Entity('carrito') 
 export class Cart extends BaseEntity {
-	
+
 	@JoinColumn({ name: 'cliente_id' })
 	@ManyToOne(type => Customer, customer => customer.carts)
 	customer: Customer;

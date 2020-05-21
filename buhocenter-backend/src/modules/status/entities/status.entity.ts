@@ -5,7 +5,7 @@ import { StatusHistory } from './status-history.entity';
 import { Product } from '../../products/entities/product.entity';
 import { Service } from '../../services/entities/service.entity';
 import { Customer } from '../../users/entities/customer.entity';
-import { Address } from '../../users/entities/address.entity';
+import { Address } from '../../address/entities/address.entity';
 import { Offer } from '../../products/entities/offer.entity';
 
 @Entity('estatus') 

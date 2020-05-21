@@ -10,7 +10,7 @@ import { Notification } from '../../notifications/entities/notification.entity';
 import { Platform } from '../../platform-management/entities/platform.entity';
 import { ProductQuestion } from '../../products/entities/product-question.entity';
 
-import { Address } from './address.entity';
+import { Address } from '../../address/entities/address.entity';
 
 @Entity({ name: 'cliente' })
 export class Customer extends BaseEntity {
