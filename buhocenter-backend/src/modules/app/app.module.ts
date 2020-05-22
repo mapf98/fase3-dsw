@@ -31,7 +31,7 @@ import { AddressModule } from '../address/address.module'
     PlatformManagementModule,
     WinstonModule.forRootAsync({
       useClass: LoggerSettingsService,
-    }),CartsModule,StatussModule,
+    }),CartsModule,StatussModule
     ,AddressModule,
     SendGridModule.forRoot({
       apikey: process.env.SENDGRID_API_KEY,
