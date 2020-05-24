@@ -1,47 +1,80 @@
 <template>
-  <div style="margin-top: 50px">
-    <transition-group name="fade" class="row ma-1" tag="div">
-        <div v-for="item in GET_PRODUCTS" class="col-6 col-xl-3 col-lg-3 col-md-3 col-sm-6 col-xs-3 pb-3"
-            :key="item.id"
-            @click="getItemDetail(item)"
-        >
-            <v-col v-if="GET_PRODUCTS_AND_PHOTOS_LOADED" class="pa-3 pointer">
-                <div class='justify-center'>
-                    <v-row class="mx-auto py-2" justify='center'>
-                        <img class="justify-center"
-                            :height="$vuetify.breakpoint.mdAndUp ? '115' : '50'"
-                            :width="$vuetify.breakpoint.mdAndUp ? '115' : '50'"
-                            :src="item.imageUrl"
-                            alt="Product Image"
-                        >
-                    </v-row>
-                    <v-row class="card-body overline">
-                        <h3 class="d-inline-block text-truncate body-2 font-weight-regular mx-auto">{{ item.name }}</h3>
-                    </v-row>
-                    <v-row class="overline">
-                        <p class="d-inline-block text-truncate mx-auto ma-0">por {{ getProvider(item) }}</p>
-                    </v-row>
-                    <v-row class="d-flex align-center">
-                        <v-rating
-                            class="mx-auto"
-                            :value="getRating(item.productRatings)"
-                            background-color="orange lighten-3"
-                            color="orange"
-                            :small="$vuetify.breakpoint.mdAndUp"
-                            :x-small="$vuetify.breakpoint.mdAndDown"
-                            readonly
-                            :size="$vuetify.breakpoint.mdAndDown ? '3' : '30'"
-                            :dense="$vuetify.breakpoint.mdAndDown"
-                            half-increments
-                        ></v-rating>
-                    </v-row>
-                    <v-row class="overline">
-                        <p class="mx-auto subtitle-1">${{ item.price }}</p>
-                    </v-row>
-                </div>
-            </v-col>
-        </div>
-    </transition-group>
+  <div>
+      <v-row>
+          <v-col cols="12" lg="4" md="6" sm="12" v-for="(item) in GET_PRODUCTS" :key="item.id" class="mb-4 contenedor-producto">
+              <v-card class="d-inline-block" style="width: 100%" v-if="GET_PRODUCTS_AND_PHOTOS_LOADED">
+                  <v-container>
+                      <v-row justify="center" style="height: 520px">
+                          <v-col cols="12">
+                              <v-img
+                                      height="200"
+                                      contain
+                                      :src="item.imageUrl"
+                              ></v-img>
+                          </v-col>
+                          <v-col
+                                  cols="9"
+                                  class="pl-0 pb-0"
+                          >
+                              <v-row
+                                      class="flex-column ma-0 fill-height caption"
+                                      justify="center"
+                              >
+                                  <p>por <b>{{ getProvider(item) }}</b></p>
+                              </v-row>
+                          </v-col>
+
+                          <v-col
+                                  cols="9"
+                                  class="pl-0 product-name"
+                                  @click="getItemDetail(item)"
+                          >
+                              <v-row
+                                      class="flex-column ma-0 fill-height caption"
+                                      justify="center"
+                              >
+                                  {{ item.name }}
+                              </v-row>
+                          </v-col>
+
+                          <v-col
+                                  cols="9"
+                                  class="pl-0 pb-0"
+                          >
+                              <v-row
+                                      class="flex-column ma-0 fill-height title"
+                                      justify="center"
+                              >
+                                  ${{ item.price }}
+                              </v-row>
+                          </v-col>
+
+                          <v-col
+                                  cols="9"
+                                  class="pl-0"
+                          >
+                              <v-row
+                                      class="flex-column ma-0 fill-height title ml-0 mr-0"
+                                      justify="center"
+                              >
+                                  <v-rating
+                                          :value="getRating(item.productRatings)"
+                                          background-color="orange lighten-3"
+                                          color="primary"
+                                          :small="$vuetify.breakpoint.mdAndUp"
+                                          :x-small="$vuetify.breakpoint.mdAndDown"
+                                          readonly
+                                          :size="$vuetify.breakpoint.mdAndDown ? '3' : '30'"
+                                          :dense="$vuetify.breakpoint.mdAndDown"
+                                          half-increments
+                                  ></v-rating>
+                              </v-row>
+                          </v-col>
+                      </v-row>
+                  </v-container>
+              </v-card>
+          </v-col>
+      </v-row>
   </div>
 </template>
 
@@ -93,46 +126,61 @@ export default class ProductCard extends Vue {
 }
 </script>
 <style scoped lang="scss">
-.pointer {
-    cursor: pointer;
-}
-.fade-move {
-  transition: transform 1s;
-}
-.card {
-  transition: 500ms;
-  position: relative;
-  overflow: hidden;
-}
-.card img {
-  z-index: 1;
-}
-.card button {
-  width: 140px;
-  margin-bottom: 10px;
-}
-.card:hover img {
-  filter: blur(4px);
-}
-.card:hover .overlay {
-  opacity: 0.8;
+    .pointer {
+        cursor: pointer;
+    }
+    .fade-move {
+      transition: transform 1s;
+    }
+    .card {
+      transition: 500ms;
+      position: relative;
+      overflow: hidden;
+    }
+    .card img {
+      z-index: 1;
+    }
+    .card button {
+      width: 140px;
+      margin-bottom: 10px;
+    }
+    .card:hover img {
+      filter: blur(4px);
+    }
+    .card:hover .overlay {
+      opacity: 0.8;
 
-}
-.card .overlay {
-  position: absolute;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  height: 70%;
-  background-color: #232b34;
-  opacity: 0;
-  z-index: 100;
-  transition: all 0.3s ease-in;
-}
-.card:hover, .card:active {
-  transform: scaleY(1.1) scaleX(1.06);
-  box-shadow: 0 14px 98px rgba(0, 0, 0, 0.25), 0 0px 60px rgba(0, 0, 0, 0.22);
-}
+    }
+    .card .overlay {
+      position: absolute;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      height: 70%;
+      background-color: #232b34;
+      opacity: 0;
+      z-index: 100;
+      transition: all 0.3s ease-in;
+    }
+    .card:hover, .card:active {
+      transform: scaleY(1.1) scaleX(1.06);
+      box-shadow: 0 14px 98px rgba(0, 0, 0, 0.25), 0 0px 60px rgba(0, 0, 0, 0.22);
+    }
+    .product-name{
+        cursor: pointer;
+    }
+
+    .product-name:hover{
+        text-decoration: underline;
+        color: #907F46;
+    }
+
+
+    @media only screen and (max-width: 768px) {
+        .contenedor-producto{
+            max-height: 500px;
+        }
+    }
 </style>

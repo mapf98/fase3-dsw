@@ -120,8 +120,39 @@ export class ProductsService {
         return [products, total];
     }
 
-    async findProduct(ProductID:number):Promise<Product>{
-        return await this.productsRepository.findOne(ProductID);     
+    async findProduct(ProductID: number): Promise<Product> {
+        return await this.productsRepository.findOne(ProductID);
+    }
+
+    /**
+     * Obtiene el listado de productos recomendados del dia
+     */
+    public async getDailyProductsRecommendation(): Promise<Product[]> {
+        this.logger.debug(`getDailyProductsRecommendation: ejecutando query`, { context: ProductsService.name });
+        let products: Product[] = await this.productsRepository.find({
+            where: `status.id = ${STATUS.ACTIVE.id}`,
+            join: {
+                alias: 'products',
+                innerJoinAndSelect: {
+                    photos: 'products.photos',
+                    productProvider: 'products.productProvider',
+                    provider: 'productProvider.provider',
+                    productCategories: 'products.productCategories',
+                    productCatalogues: 'productCategories.productCatalogues',
+                    catalogue: 'productCatalogues.catalogue',
+                    status: 'products.status',
+                },
+            },
+        });
+
+        await this.getProductAverageRating(products);
+        products = this.randomProducts(products);
+        return products;
+    }
+
+     randomProducts(products: Product[]): Product[] {
+        const randomProducts = products.sort((a, b) => (Math.random() - 0.5));
+        return [...randomProducts].slice(0, 5);
     }
 
 }

@@ -56,8 +56,10 @@ export class UsersService {
                 name: data.name,
                 lastName: data.lastname,
                 uid: data.uid,
+                email: data.email,
                 birthdate: data.birthdate,
                 language:  data.language,
+                is_federate: false,
                 status: {
                     id: STATUS.ACTIVE.id,
                 },
@@ -100,6 +102,8 @@ export class UsersService {
                     name: clientSave.name,
                     lastName: clientSave.lastName,
                     uid: clientSave.uid,
+                    email: clientSave.email,
+                    is_federate: clientSave.is_federate,
                     status: clientSave.status,
                     rol: clientSave.role,
                     birthDate: clientSave.birthdate,
@@ -144,7 +148,9 @@ export class UsersService {
                     name: data.clientData.first_name,
                     lastName: data.clientData.last_name,
                     uid: data.clientData.uid,
+                    email: data.clientData.email,
                     token: data.token,
+                    is_federate: false,
                     status: {
                         id: STATUS.ACTIVE.id,
                     },
@@ -162,9 +168,11 @@ export class UsersService {
                     id: clientSave.id,
                     name: clientSave.name,
                     lastName: clientSave.lastName,
+                    email: clientSave.email,
                     uid: clientSave.uid,
                     status: clientSave.status,
                     rol: clientSave.role,
+                    is_federate: clientSave.is_federate,
                     birthDate: clientSave.birthdate,
                     language: clientSave.language,
                 },
@@ -204,11 +212,7 @@ export class UsersService {
         return response;
     }
 
-
-    async findUser(UserID:number): Promise<Customer>{
-        return await this.customerRepository.findOne(UserID);        
+    async findUser(UserID:number): Promise<Customer> {
+        return await this.customerRepository.findOne(UserID);
     }
-
-
 }
-

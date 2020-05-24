@@ -14,12 +14,6 @@ export class Offer extends BaseEntity {
 	@Column({ name: 'descripcion', type: 'text', nullable: true })
 	description: string;
 
-	@Column({ name: 'fecha_inicio', nullable: false })
-	startDate: Date;
-
-	@Column({ name: 'fecha_fin', nullable: false })
-	endDate: Date;
-
 	@OneToMany(type => ProductOffer, productOffers => productOffers.offer)
 	productOffers: ProductOffer[];
 

@@ -1,30 +1,20 @@
 <template>
   <v-container class="ma-0">
-    <v-navigation-drawer
-        fixed
-        right
-        clipped
-        bottom
-        permanent
-        mobile-break-point="0"
-        ref="navigationDrawer"
-        class="pa-0 mt-5"
-        :width="$vuetify.breakpoint.smAndDown ? '90px' : '300px'"
-    >
+
         <v-container style="margin-top: 60px">
-            <v-form ref="form">
+            <v-form ref="form" class="d-flex justify-center">
                 <v-select
-                    :x-small="$vuetify.breakpoint.mdAndDown"
-                    small
-                    color="white"
-                    v-model="quantity"
-                    :items="quantityValues"
-                    label="Qty"
-                    persistent-hint
+                        v-model="quantity"
+                        :items="quantityValues"
+                        :x-small="$vuetify.breakpoint.mdAndDown"
+                        label="Quantity"
+                        primary
+                        dense
+                        outlined
                 ></v-select>
             </v-form>
         </v-container>
-        <v-container class="overline mt-5 d-flex justify-center">
+        <v-container class="overline d-flex justify-center">
             <v-btn @click="addToCart()" block outlined color="primary" :x-small="$vuetify.breakpoint.mdAndDown">
                 <v-icon left class="d-flex align-center">mdi-cart-outline</v-icon>
                 <p class="ma-0 d-none d-lg-block">Agregar al carrito</p>
@@ -43,7 +33,6 @@
         </v-container>
         <v-divider></v-divider>
         <SocialIcons/>
-    </v-navigation-drawer>
   </v-container>
 </template>
 
@@ -91,13 +80,13 @@ export default class ShoppingBar extends Vue {
 
     @Emit('addToCart')
     async addToCart() {
+        console.log(this.GET_CLIENT_DATA)
         if (!this.GET_CLIENT_DATA.id) {
             return; // TODO: Disparar el modal de inicio de sesión
         } else {
             if (this.quantity === 0) {
                 return;
             }
-
             this.$emit('addItemToCart', this.quantity);
         }
     }
@@ -111,3 +100,5 @@ export default class ShoppingBar extends Vue {
   text-decoration: none !important;
 }
 </style>
+
+

@@ -1,8 +1,8 @@
 <template>
-    <v-container class="mt-5" style="max-width: none !important;">
+    <v-container class="mt-5" style="max-width: none !important;background: #ffffff; ">
         <v-row>
             <v-col cols="12" lg="9" md="8" sm="12">
-                <v-container fluid class="mt-5" style="max-width: none !important; width: 100%;">
+                <v-container fluid class="mt-5" style="max-width: none !important; width: 100%; ">
                     <v-row>
                         <v-col cols="12"
                             offset-lg="1"
@@ -13,7 +13,7 @@
                             col-sm="12"
                         >
                             <p class="overline font-weight-light caption" style="word-break: break-word;">
-                                {{ GET_CATEGORY }} > {{ GET_CATALOGUE }}
+                                <RouterLink :to="`/catalogues?category_id=${GET_CATEGORY_ID}`"> {{ GET_CATEGORY }} </RouterLink>> <RouterLink :to="`/products?category_id=${GET_CATEGORY_ID}&catalogue_id=${GET_CATALOGUE_ID}`"> {{ GET_CATALOGUE }} </RouterLink>
                             </p>
                         </v-col>
                     </v-row>
@@ -21,24 +21,25 @@
                         <v-col cols="12" lg="1" md="1" sm="2" class="justify-center ma-0">
                             <div v-for="photo in GET_ITEM_DETAIL.photos"
                                    :key="photo.imageUrl">
-                                <img
+                                <v-img
                                     class="justify-center my-2 pa-0"
                                     alt="Image"
+                                    contain
                                     :height="$vuetify.breakpoint.mdAndUp ? '50' : '50'"
                                     :width="$vuetify.breakpoint.mdAndUp ? '50' : '50'"
                                     :src="photo.imageUrl"
                                     @click="changePhotoSelected(photo.imageUrl)"
                                     :style="imageSelected === photo.imageUrl ? 'border: 1px solid #c4c3c0;' : ''"
-                                >
+                                ></v-img>
                             </div>
                         </v-col>
-                        <v-col  col="12" lg="5"  md="5" sm="8" class="mx-auto d-flex justify-center">
-                            <img
+                        <v-col  col="12" lg="6"  md="5" sm="8" class="mx-auto d-flex justify-center">
+                            <v-img
                                 class="justify-center image-product"
                                 alt="Image"
+                                contain
                                 :src="imageSelected"
-                                style="border: 1px solid #c4c3c0;"
-                            >
+                            ></v-img>
                         </v-col>
                         <v-col cols="12" sm="12" class="d-xs-flex d-sm-flex d-md-none d-lg-none">
                             <v-row>
@@ -66,7 +67,7 @@
                                 </v-row>
                             </v-row>
                         </v-col>
-                        <v-col col="12" lg="6" md="4" sm="12" class="d-none d-lg-block">
+                        <v-col col="12" lg="5" md="4" sm="12" class="d-none d-lg-block">
                             <ItemDescription/>
                         </v-col>
                     </v-row>
@@ -95,6 +96,7 @@
                     @buyItem="buyItem"
                 />
             </v-col>
+            <DailyRecomendation></DailyRecomendation>
         </v-row>
         <v-snackbar v-model="itemAddedToCart" top :timeout="timeout" color="success">
             {{ isProduct() ? 'Producto' : 'Servicio' }} añadido al carrito exitosamente
@@ -115,13 +117,10 @@
 import Vue from 'vue';
 import Component from 'vue-class-component';
 import { layout, products, authModule, carts } from "../../../store/namespaces";
-import {
-    ADD_SERVICE_TO_CART,
-    ADD_PRODUCT_TO_CART,
-} from '../../../store/carts/methods/carts.actions';
+import CartMethods from '@/store/carts/methods/cart-methods'
 import {
     GET_CATEGORY,
-    GET_CATALOGUE,
+    GET_CATALOGUE, GET_CATEGORY_ID, GET_CATALOGUE_ID,
 } from '../../../store/layout/methods/layout.getters';
 import {
     FETCH_PRODUCTS,
@@ -141,9 +140,11 @@ import ItemDescription from './ItemDescription.vue';
 import SocialIcons from '../../social/SocialIcons.vue';
 import AuthTypes from '../../../store/auth-module/methods/auth-methods';
 import * as CART_INTERFACE from '../interfaces/carts.interface';
+import DailyRecomendation from "@/modules/products/daily-recomendation/DailyRecomendation.vue";
 
 @Component({
     components: {
+        DailyRecomendation,
         ShoppingBar,
         ItemDescription,
         SocialIcons,
@@ -211,6 +212,8 @@ export default class ItemDetail extends Vue {
 
         if (created) {
             this.itemAddedToCart = true;
+            await this.GET_ITEMS_CARS(this.GET_CLIENT_DATA.id);
+
         } else {
             this.errorAddingItemToCart = true;
         }
@@ -267,20 +270,32 @@ export default class ItemDetail extends Vue {
         }
     }
 
-    @carts.Action(ADD_PRODUCT_TO_CART) private ADD_PRODUCT_TO_CART;
-    @carts.Action(ADD_SERVICE_TO_CART) private ADD_SERVICE_TO_CART;
+    @carts.Action(CartMethods.actions.ADD_PRODUCT_TO_CART) private ADD_PRODUCT_TO_CART;
+    @carts.Action(CartMethods.actions.ADD_SERVICE_TO_CART) private ADD_SERVICE_TO_CART;
+    @carts.Action(CartMethods.actions.GET_ITEMS_CARS) GET_ITEMS_CARS;
+
     @products.Getter(GET_ITEM_DETAIL) private GET_ITEM_DETAIL;
     @products.Action(FETCH_PRODUCT_ITEM_PHOTOS) private FETCH_PRODUCT_ITEM_PHOTOS;
     @products.Action(FETCH_SERVICE_ITEM_PHOTOS) private FETCH_SERVICE_ITEM_PHOTOS;
     @products.Action(FETCH_SERVICE_DETAIL) private FETCH_SERVICE_DETAIL;
     @products.Action(FETCH_PRODUCT_DETAIL) private FETCH_PRODUCT_DETAIL;
     @layout.Getter(GET_CATEGORY) private GET_CATEGORY;
+    @layout.Getter(GET_CATEGORY_ID) private GET_CATEGORY_ID;
     @layout.Getter(GET_CATALOGUE) private GET_CATALOGUE;
+    @layout.Getter(GET_CATALOGUE_ID) private GET_CATALOGUE_ID;
+
+
     @authModule.Getter(AuthTypes.getters.GET_CLIENT_DATA) private GET_CLIENT_DATA;
+
 }
 </script>
 
 <style scoped>
+
+    .container-principal {
+        top: 0px;
+        background: #ffffff;
+    }
 .image-product{
     height: 450px;
     width: 420px;

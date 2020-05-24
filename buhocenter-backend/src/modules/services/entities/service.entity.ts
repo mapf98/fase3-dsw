@@ -10,7 +10,7 @@ import { ServiceRating } from './service-rating.entity';
 import { ServicePhoto } from './service-photo.entity';
 import { ServiceProvider } from './service-provider.entity';
 
-@Entity({ name: 'servicio' }) 
+@Entity({ name: 'servicio' })
 export class Service extends BaseEntity {
 	@Column({ name: 'nombre', type: 'text', nullable: false })
 	name: string;
@@ -19,7 +19,7 @@ export class Service extends BaseEntity {
 	description: string;
 
 	@Column({ name: 'precio', type: 'decimal', nullable: false })
-	price: number;	
+	price: number;
 
 	@JoinColumn({ name: 'estatus_id' })
 	@ManyToOne(type => Status, status => status.services)
@@ -36,9 +36,6 @@ export class Service extends BaseEntity {
 
 	@OneToMany(type => ServiceQuestion, question => question.service)
 	questions: ServiceQuestion[];
-
-	@OneToMany(type => ServiceCatalogue, serviceCatalogues => serviceCatalogues.service)
-	serviceCatalogues: ServiceCatalogue[];
 
 	@OneToMany(type => ServiceCategory, serviceCategories => serviceCategories.service)
 	serviceCategories: ServiceCategory[];

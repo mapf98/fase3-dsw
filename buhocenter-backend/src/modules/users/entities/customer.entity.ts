@@ -24,6 +24,12 @@ export class Customer extends BaseEntity {
 	@Column({ name: 'fecha_nacimiento', nullable: true })
 	birthdate: Date;
 
+	@Column({ name: 'email', type: 'varchar', length: 100, nullable: false })
+	email: string;
+
+	@Column({ name: 'is_federate', type: 'boolean', nullable: false })
+	is_federate: boolean;
+
 	@Column({ name: 'uid', type: 'text', nullable: true })
 	uid: string;
 

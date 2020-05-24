@@ -6,6 +6,8 @@ class ProductsFirebaseRepository extends FirebaseRepository {
     async getProductPhotoByName(productId: number, fileName: string) {
         return this.getImage(`${ProductsFirebaseRepository.RESOURCE}/${productId}/${fileName}`);
     }
+
+
 }
 
 export default new ProductsFirebaseRepository();

@@ -12,8 +12,24 @@ export class ProductsController {
 	constructor (
 		private readonly productsService: ProductsService,
         @Inject(WINSTON_MODULE_PROVIDER) private readonly logger: Logger,
-		public service: ProductsService
+		public service: ProductsService,
 	) {}
+
+	@Get('daily-recommendation')
+	async getDailyProductsRecommendation(
+		@Res() res: Response,
+	): Promise<Response> {
+		this.logger.info(
+			`getDailyProductsRecommendation: productos recomendados del dia `,
+			{ context: ProductsController.name },
+		);
+		try {
+			const products: Product[] = await this.productsService.getDailyProductsRecommendation();
+			return res.status(HttpStatus.OK).send(products);
+		} catch (e) {
+			return res.status(HttpStatus.BAD_REQUEST).send();
+		}
+	}
 
 
 	@Get(':id')
@@ -43,7 +59,6 @@ export class ProductsController {
 			`getProducts: obteniendo los productos [page=${page}|catalogueId=${catalogueId}]`,
 			{ context: ProductsController.name },
 		);
-
 		try {
 			const [products, total]: [Product[], number] = await this.productsService.getProducts(page, catalogueId);
 			return res.status(HttpStatus.OK).send([products, total]);
@@ -51,4 +66,6 @@ export class ProductsController {
 			return res.status(HttpStatus.BAD_REQUEST).send();
 		}
 	}
+
+
 }

@@ -1,19 +1,27 @@
 <template>
-  <div class="container-page">
-    <v-carousel hide-delimiters height="400">
+  <div class="container-page" style="position: relative">
+    <v-carousel hide-delimiters height="300">
       <v-carousel-item
               class="carrousel-home"
               v-for="(item,i) in items"
               :key="i"
               :src="item.src"
-              contain
       ></v-carousel-item>
     </v-carousel>
+    <Categories></Categories>
+    <DailyRecomendation></DailyRecomendation>
+    <AboutUs></AboutUs>
+
   </div>
 </template>
 <script lang="ts">
   import { Component, Vue } from 'vue-property-decorator';
-  @Component
+  import Categories from "@/modules/products/categories/Categories.vue";
+  import AboutUs from "@/modules/about-us/aboutUs.vue";
+  import DailyRecomendation from "@/modules/products/daily-recomendation/DailyRecomendation.vue";
+  @Component({
+    components: {Categories,AboutUs,DailyRecomendation}
+  })
   export default class Home extends Vue {
     items = [
       {
@@ -29,8 +37,8 @@
   }
 </script>
 <style>
+
   .container-page{
-    bottom: 65px;
     position: relative;
     width: 100%;
     padding: 0;

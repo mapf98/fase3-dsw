@@ -7,6 +7,8 @@ import products from '@/store/products/products';
 import layout from '@/store/layout/layout';
 import authModule from '@/store/auth-module/AuthModule';
 import languageModule from '@/store/languages-module/LanguagesModule';
+import categoryModule from '@/store/category-module/CategoryModule';
+import catalogueModule from '@/store/catalogue-module/CatalogueModule'
 
 Vue.use(Vuex);
 
@@ -17,7 +19,9 @@ export default new Vuex.Store({
     layout,
     products,
     authModule,
-    languageModule
+    languageModule,
+    categoryModule,
+    catalogueModule,
   },
-  plugins: [createPersistedState({ storage: window.sessionStorage })]
+  plugins: [createPersistedState({ storage: window.sessionStorage })],
 });

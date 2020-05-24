@@ -16,9 +16,7 @@ class LanguageRepository extends HttpRepository {
     public async setLanguage(code: string): Promise<any> {
         try {
             const response = await this.get(this.createUri([`languages/terms/${code}`], false));
-            console.log(response);
             if (response) {
-                console.log("entre al if")
                 return response;
             }
             return { error: "Error encontrando idioma"};

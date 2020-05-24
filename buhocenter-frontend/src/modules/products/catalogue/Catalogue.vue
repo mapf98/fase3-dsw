@@ -1,24 +1,28 @@
 <template>
-    <div>
-        <Aside>
-            <ProductCard/>
-            <v-container>
+    <v-row style="height: auto">
+        <div style="width: auto;position: relative;"
+             class="d-none d-md-flex d-lg-flex">
+            <Aside>
+            </Aside>
+        </div>
+        <v-col cols="12" lg="9" md="9" sm="12">
+            <v-container fluid>
+                <ProductCard/>
                 <v-pagination
-                    color="#b1c2e3"
-                    circle
-                    v-model="page"
-                    :length="getLength"
-                    :total-visible="7"
+                        color="primary"
+                        v-model="page"
+                        :length="getLength"
+                        :total-visible="7"
                 ></v-pagination>
             </v-container>
-        </Aside>
+        </v-col>
         <v-snackbar
             v-model="errorLoadingContent" top :timeout="timeout" color="error"
         >
             Ocurrió un error obteniendo los productos, por favor intente nuevamente
             <v-btn color="white" text @click="closeSnackbar">Cerrar</v-btn>
         </v-snackbar>
-    </div>
+    </v-row>
 </template>
 
 <script lang="ts">
@@ -26,19 +30,19 @@ import Vue from 'vue';
 import Component from "vue-class-component";
 import ProductCard from './ProductCard.vue';
 import Aside from './Aside.vue';
-import { products, layout } from "../../../store/namespaces";
+import { products, layout } from "@/store/namespaces";
 import {
     FETCH_PRODUCTS,
     FETCH_PRODUCT_PHOTO_BY_NAME,
     SET_PRODUCT_PHOTOS_NOT_LOADED,
-} from '../../../store/products/methods/products.actions';
+} from '@/store/products/methods/products.actions';
 import {
     GET_CATEGORY, GET_CATALOGUE_ID,
-} from '../../../store/layout/methods/layout.getters';
+} from '@/store/layout/methods/layout.getters';
 import {
     GET_PRODUCTS,
     GET_TOTAL_PRODUCTS,
-} from '../../../store/products/methods/products.getters';
+} from '@/store/products/methods/products.getters';
 import { Watch } from "vue-property-decorator";
 
 @Component({
@@ -52,6 +56,7 @@ export default class Catalogue extends Vue {
     productsDisplayed: number = 8;
     timeout: number = 5000;
     errorLoadingContent: boolean = false;
+
 
     @Watch('page')
     async changePage() {

@@ -7,6 +7,8 @@ export interface ResponseAuth {
         uid: string;
         status: any;
         rol: any;
+        email: string;
+        is_federate: boolean;
         birthDate: Date;
         language: any;
     };

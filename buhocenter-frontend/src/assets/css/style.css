@@ -5,6 +5,10 @@ body{
     background: #f3f3f3;
 }
 
+ .v-application--wrap {
+     background: #f3f3f3;
+ }
+
 /* YUI Base css http://developer.yahoo.com/yui/base/ */
 
 h1 {

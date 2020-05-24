@@ -7,6 +7,7 @@ import Catalogue from '../modules/products/catalogue/Catalogue.vue';
 import ItemDetail from '../modules/products/item-detail/ItemDetail.vue';
 import Register from '../views/Register.vue';
 import Profile from '../modules/users/profile/Profile.vue';
+import Catalogues from "@/modules/products/catalogues/Catalogues.vue";
 
 Vue.use(VueRouter);
 
@@ -40,6 +41,11 @@ const routes: RouteConfig[] = [
         path: '/products',
         name: 'products',
         component: Catalogue,
+      },
+      {
+        path: '/catalogues',
+        name: 'catalogues',
+        component: Catalogues,
       },
       {
         path: '/item-detail',

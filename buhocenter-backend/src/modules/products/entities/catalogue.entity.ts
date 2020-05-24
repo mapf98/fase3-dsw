@@ -12,6 +12,9 @@ export class Catalogue extends BaseEntity {
 	@Column({name: 'descripcion', type: 'varchar', length: 100, nullable: true })
 	description: string;
 
+	@Column({name: 'term', type: 'varchar', length: 100, nullable: true })
+	term: string;
+
 	@OneToMany(type => ServiceCatalogue, serviceCatalogues => serviceCatalogues.catalogue)
 	serviceCatalogues: ServiceCatalogue[];
 

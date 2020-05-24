@@ -8,16 +8,42 @@ class CartsHttpRepository extends HttpRepository {
      * Permite agregar el producto al carrito del cliente que está actualmente en línea
      * @param data objeto que contiene todos los datos necesarios para agregar el producto al carrito
      */
-    addProductToCart(data: CART_INTERFACE.ProductCart) {
-        return this.post(this.createUri([`${CartsHttpRepository.RESOURCE}`, 'products']), data);
+    public async addProductToCart(data: CART_INTERFACE.ProductCart) {
+        return await this.post(this.createUri([`${CartsHttpRepository.RESOURCE}`, 'products']), data);
     }
 
     /**
      * Permite agregar el servicio al carrito del cliente que está actualmente en línea
      * @param data objeto que contiene todos los datos necesarios para agregar el producto al carrito
      */
-    addServiceToCart(data: CART_INTERFACE.ServiceCart) {
-        return this.post(this.createUri([`${CartsHttpRepository.RESOURCE}`, 'services']), data);
+    public async addServiceToCart(data: CART_INTERFACE.ServiceCart) {
+        return await this.post(this.createUri([`${CartsHttpRepository.RESOURCE}`, 'services']), data);
+    }
+
+    /**
+     * Permite obtener todos los productos del carrito del cliente
+     * @param clientId id de cliente
+     */
+    public async getItemsCars(clientId: number): Promise<any> {
+        try {
+            return await this.get(this.createUri([`${CartsHttpRepository.RESOURCE}`, `client/${clientId}`]));
+        } catch (e) {
+            return false;
+        }
+    }
+
+    /**
+     * 
+     * @param productCartId id de producto_carrito a eliminar
+     */
+    public async deleteProductCart(productCartId: number): Promise<any> {
+        try {
+            return await this.delete(
+                this.createUri([`${CartsHttpRepository.RESOURCE}`, `products/${productCartId}`]),
+                false);
+        } catch (e) {
+            return false;
+        }
     }
 }
 

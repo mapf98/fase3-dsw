@@ -6,4 +6,5 @@ export interface ClientResponse {
     name: string;
     token: string;
     uid: string;
+    email: string;
 };
