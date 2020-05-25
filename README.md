@@ -113,5 +113,5 @@ También usamos firebase para guardar cierta información del usuario
 ## MIT © 
  [Angel Sucasas](mailto:aasucasas.17@est.ucab.edu.ve)
  [Andrea Da Silva](mailto:avdasilvab.17@est.ucab.edu.ve)
- [Gabriel Ortega](mailto:angel.alejandro.sucasas08@gmail.com)
+ [Gabriel Ortega](mailto:geortega.17@est.ucab.edu.ve)
 
