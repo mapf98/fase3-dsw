@@ -5,11 +5,11 @@
 
 ## Find everything, buy anything
 
- Buhocenter es un nuevo comercio electrónico que permite el pago con cryptomonedas. miles de productos al alcance de un click, encuentra el producto de tu necesidad en nuestros catálogos, te sientes perdido? ¡no te preocupes! ¡con nuestras categorías podrás encontrar lo que necesites, desde tecnología, hasta productos del hogar!
+ Buhocenter es un nuevo comercio electrónico que permite el pago con cryptomonedas. miles de productos al alcance de un click, encuentra el producto de tu necesidad en nuestros catálogos, ¿te sientes perdido? ¡no te preocupes! ¡con nuestras categorías podrás encontrar lo que necesites, desde tecnología, hasta productos del hogar!
  
  ## detalles
  
-  buhocenter está hecho en nestjs en el backend y vuejs en el frontend, para la BD se usa postgresql.
+  buhocenter está hecho en nestjs en el backend , vuejs en el frontend y para la BD se usa postgresql.
   
  
 ## features
@@ -50,8 +50,10 @@ Como parte de nuestro equipo de administradores podrás:
 
 ## archivo. env
 
-[este] es el formato del archivo. env, en él se declararán variables de entorno necesarias para la ejecución de
+[este](https://github.com/ingswucab/consorcio2-buhocenter/blob/develop/buhocenter-backend/.env.test) es el formato del archivo. env para backend, en él se declararán variables de entorno necesarias para la ejecución de
 la aplicación. Por lo tanto, es de vital importancia llenarla antes de pasar a la instalación.
+
+[este](https://github.com/ingswucab/consorcio2-buhocenter/blob/develop/buhocenter-frontend/.env.test) es el formato del archivo .env para frontend
 
 El archivo. env para el backend debe estar ubicado en la carpeta buhocenter-backend, y el. end del front en buhocenter-frontend
 
@@ -75,7 +77,7 @@ llenar el archivo. env (asegurar que la sincronización este activa para que se 
  ```
  Crear una base de datos en postgresql llamada "buhocenter"
  
- llenar la BD con los inserts que se encuentran [aquí](https://github.com/PandiyanCool/angular-clipboard-auto)
+ llenar la BD con los inserts que se encuentran [aquí](https://github.com/ingswucab/consorcio2-buhocenter/blob/develop/buhocenter-backend/db/inserts.sql)
 
 ¡Ya finalizamos con la instalación de backend!  ahora vamos con fronend.
 
@@ -109,7 +111,7 @@ También usamos firebase para guardar cierta información del usuario
 
 ---------------------------
 ## MIT © 
-:shipit: [Angel Sucasas](mailto:angel.alejandro.sucasas08@gmail.com)
-:shipit: [Andrea Da Silva](mailto:angel.alejandro.sucasas08@gmail.com)
-:shipit: [Gabriel Ortega](mailto:angel.alejandro.sucasas08@gmail.com)
+ [Angel Sucasas](mailto:aasucasas.17@est.ucab.edu.ve)
+ [Andrea Da Silva](mailto:avdasilvab.17@est.ucab.edu.ve)
+ [Gabriel Ortega](mailto:angel.alejandro.sucasas08@gmail.com)
 
