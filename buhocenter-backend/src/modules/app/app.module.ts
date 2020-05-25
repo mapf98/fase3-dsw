@@ -19,11 +19,13 @@ import { ServicesModule } from '../services/services.module'
 
 
 import { AddressModule } from '../address/address.module'
+import { AuthModule } from '../auth/auth.module';
 
 
 
 @Module({
   imports: [TypeOrmModule.forRoot(),
+    AuthModule,
     UsersModule,
     ProductsModule,
     PurchasesModule,
@@ -35,7 +37,7 @@ import { AddressModule } from '../address/address.module'
     ,AddressModule,
     SendGridModule.forRoot({
       apikey: process.env.SENDGRID_API_KEY,
-    }),ServicesModule
+    }),ServicesModule,
   ],
   controllers: [AppController],
   providers: [AppService],

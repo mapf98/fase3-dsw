@@ -1,18 +1,19 @@
-import {Body, Controller, Get, Post, Param, ParseIntPipe, Res, HttpStatus, Inject} from '@nestjs/common';
+import {Body, Controller, Get, Post, Param, ParseIntPipe, Res, HttpStatus, Inject, UseGuards } from '@nestjs/common';
 import { UsersService } from '../services/users.service';
 import { GmailDto } from '../dto/GmailDto.dto';
-import {ResponseAuth} from '../interfaces/ResponseAuth';
-import {CustomerDto} from '../dto/Customer.dto';
-import {ResponseRegister} from '../interfaces/ResponseRegister';
-import {WINSTON_MODULE_PROVIDER} from 'nest-winston';
-import {Logger} from 'winston';
+import { ResponseAuth } from '../interfaces/ResponseAuth';
+import { CustomerDto } from '../dto/Customer.dto';
+import { ResponseRegister } from '../interfaces/ResponseRegister';
+import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
+import { Logger } from 'winston';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('users')
 export class UsersController {
     constructor(
         private readonly usersService: UsersService,
         @Inject(WINSTON_MODULE_PROVIDER) private readonly logger: Logger,
-                ) {}
+    ) {}
 
     @Get(':id')
     async getHello(@Param('id', new ParseIntPipe()) id: number): Promise<number> {
@@ -61,11 +62,11 @@ export class UsersController {
         }
     }
 
+    @UseGuards(AuthGuard('jwt'))
     @Post('/logout')
-    async logout(@Body() data: {uid: string; }, @Res() res): Promise<Response> {
+    async logout(@Body() data: { uid: string; }, @Res() res): Promise<Response> {
         try {
-            this.logger.info(`
-            logout: Logout de cliente [uid=${data.uid}]`,
+            this.logger.info(`logout: Logout de cliente [uid=${data.uid}]`,
                 { context: UsersController.name },
             );
             const dataResponse: { logout: boolean; } = await this.usersService.logout(data.uid);

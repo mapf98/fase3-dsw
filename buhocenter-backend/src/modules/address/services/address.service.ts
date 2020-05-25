@@ -63,7 +63,7 @@ import { Response } from 'express';
         }
         catch(e){
             this.logger.error(`saveAddress:fallo al guardar la direccion en la BD (address = ${JSON.stringify(address)})`,
-                        { context: AddressService.name });
+                { context: AddressService.name });
         }    
     }    
 

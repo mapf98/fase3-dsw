@@ -8,7 +8,6 @@ import { Logger } from 'winston';
 
 @Controller('products')
 export class ProductsController {
-
 	constructor (
 		private readonly productsService: ProductsService,
         @Inject(WINSTON_MODULE_PROVIDER) private readonly logger: Logger,

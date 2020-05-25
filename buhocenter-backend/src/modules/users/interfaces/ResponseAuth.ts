@@ -1,4 +1,5 @@
 export interface ResponseAuth {
+    apiAccessToken: string;
     token: string;
     data: {
         id: number;

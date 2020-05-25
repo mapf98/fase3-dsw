@@ -10,6 +10,7 @@ import {ResponseAuth} from '../interfaces/ResponseAuth';
 import { STATUS, ROLE, LANGUAGE } from '../../../config/constants';
 import {CustomerDto} from '../dto/Customer.dto';
 import {ResponseRegister} from '../interfaces/ResponseRegister';
+import { AuthService } from '../../auth/services/auth.service';
 
 @Injectable()
 export class UsersService {
@@ -17,7 +18,16 @@ export class UsersService {
         @Inject(WINSTON_MODULE_PROVIDER) private readonly logger: Logger,
         @InjectRepository(Customer) private customerRepository: Repository<Customer>,
         private readonly sendGrid: SendGridService,
+        private readonly authService: AuthService,
     ) {}
+
+    async getUserByUuid(uid: string): Promise<Customer> {
+        this.logger.debug(`login: Client exist [uid=${uid}]`, { context: UsersService.name } );
+
+        return await this.customerRepository.findOne({
+            where: { uid },
+        });
+    }
 
     /**
      * Envia un correo electronico de bienvenida al email y con el nombre enviado
@@ -83,11 +93,7 @@ export class UsersService {
      * @param data Objeto que contiene el token y uid del usuario en firebase
      */
     async login(data: { token: string, uid: string }): Promise<any> {
-        const client: Customer = await this.customerRepository.findOne({
-            where: {
-                uid: data.uid,
-            },
-        });
+        const client: Customer = await this.getUserByUuid(data.uid);
         let clientSave: Customer;
         let response: ResponseAuth;
         if ( client ) {
@@ -96,6 +102,7 @@ export class UsersService {
             });
             clientSave = await this.customerRepository.save(newClient);
             response = {
+                apiAccessToken: await this.authService.login(clientSave),
                 token: clientSave.token,
                 data: {
                     id: clientSave.id,
@@ -130,11 +137,7 @@ export class UsersService {
      */
     async validateRegisterSocial(data: GmailDto): Promise<ResponseAuth> {
         try {
-            const client: Customer = await this.customerRepository.findOne({
-                where: {
-                    uid: data.clientData.uid,
-                },
-            });
+            const client: Customer = await this.getUserByUuid(data.clientData.uid);
             let clientSave: Customer;
             let response: ResponseAuth;
             if ( client ) {
@@ -142,8 +145,9 @@ export class UsersService {
                     token: data.token,
                 });
                 clientSave = await this.customerRepository.save(newClient);
-                this.logger.debug(`validateRegisterSocial: Client exist  [id=${newClient.id}]`, { context: UsersService.name } );
+                this.logger.debug(`validateRegisterSocial: client exist [id=${newClient.id}]`, { context: UsersService.name } );
             } else {
+                // @ts-ignore
                 clientSave = await this.customerRepository.save({
                     name: data.clientData.first_name,
                     lastName: data.clientData.last_name,
@@ -163,6 +167,7 @@ export class UsersService {
                 await this.sendEmailWelcome({email: data.clientData.email, name: data.clientData.first_name});
             }
             response = {
+                apiAccessToken: await this.authService.login(clientSave),
                 token: clientSave.token,
                 data: {
                     id: clientSave.id,
@@ -179,7 +184,7 @@ export class UsersService {
             };
             return response;
         } catch (e) {
-            this.logger.error(`validateRegisterSocial: error message [id=${e.message}]`, { context: UsersService.name } );
+            this.logger.error(`validateRegisterSocial: error message [e=${e.message}]`, { context: UsersService.name } );
         }
     }
 

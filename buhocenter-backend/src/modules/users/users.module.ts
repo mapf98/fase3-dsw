@@ -6,10 +6,11 @@ import { UsersService } from './services/users.service';
 import {LanguagesService} from './services/languages.service';
 import {LanguagesController} from './controllers/languages.controller';
 import {LanguageRepository} from './repositories/language.repository';
+import { AuthModule } from '../auth/auth.module';
 
 @Module({
 
-  imports: [TypeOrmModule.forFeature([Customer]), HttpModule],
+  imports: [TypeOrmModule.forFeature([Customer]), HttpModule, AuthModule],
   controllers: [UsersController, LanguagesController],
   providers: [UsersService, LanguagesService, LanguageRepository],
   exports:[UsersService]

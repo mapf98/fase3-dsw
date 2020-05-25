@@ -1,12 +1,14 @@
-import {Controller, Get, Param, Post, Body, ParseIntPipe, Query, Inject, Res, HttpStatus, Delete} from '@nestjs/common';
+import {Controller, Get, Param, Post, Body, ParseIntPipe, Query, Inject, Res, HttpStatus, Delete, UseGuards} from '@nestjs/common';
 import { CartsService } from '../services/carts.service';
 import { CartProductDTO } from '../dto/cartProduct.dto';
 import { Response } from 'express';
 import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
 import { Logger } from 'winston';
 import { CartServiceDTO } from '../dto/cartService.dto';
+import { AuthGuard } from '@nestjs/passport';
 
 
+@UseGuards(AuthGuard('jwt'))
 @Controller('carts')
 export class CartsController {
 	constructor(

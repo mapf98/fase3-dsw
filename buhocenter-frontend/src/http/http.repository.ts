@@ -3,6 +3,15 @@ import { AxiosRequestConfig, AxiosResponse } from 'axios';
 
 export class HttpRepository {
 
+    protected createHeader(): Partial<AxiosRequestConfig['headers']> {
+        const token: any = localStorage.getItem('token');
+        return {
+            headers: {
+                Authorization: `Bearer ${JSON.parse(token)}`,
+            }
+        }
+    }
+
     protected createUri(
         path: string[],
         queryString?: Object | any
@@ -34,18 +43,18 @@ export class HttpRepository {
         return httpClient.post(uri, data, header);
     }
 
-    protected get(uri: string): Promise<AxiosResponse<any>> {
-        return httpClient.get(uri);
+    protected get(uri: string, header?: AxiosRequestConfig['headers'],): Promise<AxiosResponse<any>> {
+        return httpClient.get(uri, header);
     }
 
     protected patch(uri: string,
         data: AxiosRequestConfig['data'],
-        header: AxiosRequestConfig['headers']
+        header?: AxiosRequestConfig['headers']
     ): Promise<AxiosResponse<any>> {
         return httpClient.patch(uri, data, header);
     }
 
-    protected delete(uri: string, header: AxiosRequestConfig['headers']): Promise<AxiosResponse<any>> {
+    protected delete(uri: string, header?: AxiosRequestConfig['headers']): Promise<AxiosResponse<any>> {
         return httpClient.delete(uri, header);
     }
 }

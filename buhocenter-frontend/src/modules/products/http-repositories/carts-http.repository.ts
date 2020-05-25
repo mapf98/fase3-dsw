@@ -9,7 +9,7 @@ class CartsHttpRepository extends HttpRepository {
      * @param data objeto que contiene todos los datos necesarios para agregar el producto al carrito
      */
     public async addProductToCart(data: CART_INTERFACE.ProductCart) {
-        return await this.post(this.createUri([`${CartsHttpRepository.RESOURCE}`, 'products']), data);
+        return await this.post(this.createUri([`${CartsHttpRepository.RESOURCE}`, 'products']), data, this.createHeader());
     }
 
     /**
@@ -17,7 +17,7 @@ class CartsHttpRepository extends HttpRepository {
      * @param data objeto que contiene todos los datos necesarios para agregar el producto al carrito
      */
     public async addServiceToCart(data: CART_INTERFACE.ServiceCart) {
-        return await this.post(this.createUri([`${CartsHttpRepository.RESOURCE}`, 'services']), data);
+        return await this.post(this.createUri([`${CartsHttpRepository.RESOURCE}`, 'services']), data, this.createHeader());
     }
 
     /**
@@ -26,7 +26,10 @@ class CartsHttpRepository extends HttpRepository {
      */
     public async getItemsCars(clientId: number): Promise<any> {
         try {
-            return await this.get(this.createUri([`${CartsHttpRepository.RESOURCE}`, `client/${clientId}`]));
+            return await this.get(
+                this.createUri([`${CartsHttpRepository.RESOURCE}`, `client/${clientId}`]),
+                this.createHeader(),
+            );
         } catch (e) {
             return false;
         }
@@ -39,8 +42,7 @@ class CartsHttpRepository extends HttpRepository {
     public async deleteProductCart(productCartId: number): Promise<any> {
         try {
             return await this.delete(
-                this.createUri([`${CartsHttpRepository.RESOURCE}`, `products/${productCartId}`]),
-                false);
+                this.createUri([`${CartsHttpRepository.RESOURCE}`, `products/${productCartId}`]), this.createHeader());
         } catch (e) {
             return false;
         }

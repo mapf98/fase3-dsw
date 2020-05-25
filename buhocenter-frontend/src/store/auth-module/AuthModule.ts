@@ -35,7 +35,9 @@ const authModule: Module<any, any> = {
         },
     },
     mutations: {
-        [AuthTypes.mutations.AUTH_GOOGLE_SUCCESS](state, data: { token: string, data: ClientResponse} ) {
+        [AuthTypes.mutations.AUTH_GOOGLE_SUCCESS](state, data: { apiAccessToken: string, token: string, data: ClientResponse} ) {
+            localStorage.setItem('token', JSON.stringify(data.apiAccessToken));
+            state.apiAccessToken = data.apiAccessToken;
             state.token = data.token;
             state.client = data.data;
             state.err_auth = false;
@@ -50,6 +52,7 @@ const authModule: Module<any, any> = {
             }
         },
         [AuthTypes.mutations.LOGOUT_SUCCESS](state) {
+            localStorage.removeItem('token');
             state.token = '';
             state.err_message = '';
             state.client = {};
@@ -82,7 +85,6 @@ const authModule: Module<any, any> = {
             try {
                 const response = await AuthRepository.loginWithSocial(social);
                 //  console.log("epa response")
-                //  console.log(response)
                 if ( response ) {
                     commit(AuthTypes.mutations.AUTH_GOOGLE_SUCCESS, response);
                     return true;
@@ -96,7 +98,6 @@ const authModule: Module<any, any> = {
         async [AuthTypes.actions.LOGIN]({ commit }, data: {email: string; password: string }): Promise<boolean> {
             try {
                 const response = await AuthRepository.login(data.email, data.password);
-
                 if ( response && ! response.hasOwnProperty('error') ) {
                     commit(AuthTypes.mutations.AUTH_GOOGLE_SUCCESS, response);
                     return true;
@@ -109,9 +110,9 @@ const authModule: Module<any, any> = {
         },
         async [AuthTypes.actions.LOGOUT]({ commit, state }): Promise<boolean>{
             try {
-                const response = await AuthRepository.logout( state.client.uid );
+                const response = await AuthRepository.logout(state.client.uid);
                 commit(AuthTypes.mutations.LOGOUT_SUCCESS);
-                return false;
+                return true;
             } catch (e) {
                 return false;
             }

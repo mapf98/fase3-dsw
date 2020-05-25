@@ -7,7 +7,6 @@ import {CategoriesService} from '../services/categories.service';
 
 @Controller('categories')
 export class CategoriesController {
-
     constructor(
         private readonly categoriesService: CategoriesService,
         @Inject(WINSTON_MODULE_PROVIDER) private readonly logger: Logger,
