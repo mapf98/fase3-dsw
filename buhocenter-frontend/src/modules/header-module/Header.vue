@@ -98,7 +98,7 @@
                 <div class="text-xs-center">
                     <v-menu
                             v-model="menu"
-                            :close-on-content-click="false"
+                            :close-on-content-click="true"
                             :nudge-width="200"
                             offset-x
                     >
@@ -182,6 +182,7 @@
 
         async signOut(){
             await this.logout();
+            this.$router.push({ name: 'home' });
         }
 
         async mounted() {

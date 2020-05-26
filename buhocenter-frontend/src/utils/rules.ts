@@ -18,6 +18,18 @@ export default {
     },
     validateEmail: (email: string): boolean => {
         let re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-        return re.test(String(email).toLowerCase());
+        return re.test(String(email).toLowerCase())
     },
+    required() {
+        return v => !!v || 'This field is required';
+    },
+    minPsswdLength() {
+        return v => !v || v.length > 5 || "La contraseña debe tener mínimo 6 caracteres";
+    },
+    matchPsswd(psswd: string, confirmedPsswd: string) {
+        return psswd === confirmedPsswd || "Las contraseñas deben coincidir";
+    },
+    fieldLength(maxLength: number) {
+        return v => (v && v.length <= maxLength) || 'El campo no debe exceder el límite de caracteres';
+    }
 };

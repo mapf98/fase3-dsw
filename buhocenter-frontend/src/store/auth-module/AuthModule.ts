@@ -1,6 +1,7 @@
 import { Module } from 'vuex';
 import AuthTypes from '@/store/auth-module/methods/auth-methods';
 import AuthRepository from '@/modules/auth-module/repositories/auth.repository';
+import CustomersRepository from '@/modules/customers/repositories/customers.repository';
 import {ClientResponse} from '@/store/auth-module/interfaces/ClientResponse';
 import {CustomerInterface} from '@/modules/auth-module/interfaces/CustomertInterface';
 
@@ -66,6 +67,9 @@ const authModule: Module<any, any> = {
             state.err_register = true;
             state.err_register_message = error;
         },
+        [AuthTypes.mutations.SET_CUSTOMER_DATA](state, customer) {
+            state.client = customer;
+        }
     },
     actions: {
         async [AuthTypes.actions.REGISTER_CUSTOMER]({ commit }, customer: CustomerInterface): Promise<any>{
@@ -84,7 +88,6 @@ const authModule: Module<any, any> = {
         async [AuthTypes.actions.LOGIN_SOCIAL]({ commit }, social: string): Promise<boolean>{
             try {
                 const response = await AuthRepository.loginWithSocial(social);
-                //  console.log("epa response")
                 if ( response ) {
                     commit(AuthTypes.mutations.AUTH_GOOGLE_SUCCESS, response);
                     return true;
@@ -116,6 +119,25 @@ const authModule: Module<any, any> = {
             } catch (e) {
                 return false;
             }
+        },
+        async [AuthTypes.actions.UPDATE_CUSTOMER]({ commit, state }, data): Promise<boolean>{
+            try {
+                const response = await CustomersRepository.updateCustomer(data);
+                return true;
+            } catch (e) {
+                return false;
+            }
+        },
+        async [AuthTypes.actions.UPDATE_CREDENTIALS]({ commit, state }, credencials: { email: string; psswd: string }): Promise<boolean>{
+            try {
+                console.log('credencials', credencials);
+                return await AuthRepository.updateCustomerCredencials(credencials);
+            } catch (e) {
+                return false;
+            }
+        },
+        [AuthTypes.actions.MODIFY_CLIENT_DATA]({ commit, state }, data): void {
+            commit(AuthTypes.mutations.SET_CUSTOMER_DATA, data);
         },
     },
 }

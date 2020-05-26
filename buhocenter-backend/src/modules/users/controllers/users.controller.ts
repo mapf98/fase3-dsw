@@ -1,4 +1,5 @@
-import {Body, Controller, Get, Post, Param, ParseIntPipe, Res, HttpStatus, Inject, UseGuards } from '@nestjs/common';
+import { Customer } from '../entities/customer.entity';
+import {Body, Controller, Get, Post, Param, ParseIntPipe, Res, HttpStatus, Inject, Patch, UseGuards } from '@nestjs/common';
 import { UsersService } from '../services/users.service';
 import { GmailDto } from '../dto/GmailDto.dto';
 import { ResponseAuth } from '../interfaces/ResponseAuth';
@@ -14,6 +15,20 @@ export class UsersController {
         private readonly usersService: UsersService,
         @Inject(WINSTON_MODULE_PROVIDER) private readonly logger: Logger,
     ) {}
+
+    @Patch()
+    async updateCustomer(
+        @Body() customer: Partial<Customer>,
+        @Res() res,
+    ): Promise<Response> {
+        this.logger.info(`updateCustomer [customer=${JSON.stringify(customer)}]`, { context: UsersController.name });
+
+        try {
+            return res.status(HttpStatus.OK).send(await this.usersService.updateCustomer(customer));
+        } catch(e) {
+            return res.status(HttpStatus.BAD_REQUEST).send();
+        }
+    }
 
     @Get(':id')
     async getHello(@Param('id', new ParseIntPipe()) id: number): Promise<number> {

@@ -30,6 +30,17 @@ export class UsersService {
     }
 
     /**
+     * Permite actualizar la información del cliente
+     * @param customer entidad que representa el objeto del cliente del cual se le va a modificar
+     * los datos personales
+     */
+    public async updateCustomer(customer: Partial<Customer>): Promise<Customer> {
+        this.logger.debug(`updateCustomer: modificando la información del cliente [customer=${
+            JSON.stringify(customer)}]`, { context: UsersService.name } );
+        return await this.customerRepository.save(customer);
+    }
+
+    /**
      * Envia un correo electronico de bienvenida al email y con el nombre enviado
      * @param data objeto con email y nombre, los cuales se usaran en el correo a enviar
      * @promise boolean
@@ -142,7 +153,7 @@ export class UsersService {
             let response: ResponseAuth;
             if ( client ) {
                 const newClient: Customer = this.customerRepository.merge(client, {
-                    token: data.token,
+                    token: data.token, is_federate: true
                 });
                 clientSave = await this.customerRepository.save(newClient);
                 this.logger.debug(`validateRegisterSocial: client exist [id=${newClient.id}]`, { context: UsersService.name } );
@@ -154,7 +165,7 @@ export class UsersService {
                     uid: data.clientData.uid,
                     email: data.clientData.email,
                     token: data.token,
-                    is_federate: false,
+                    is_federate: true,
                     status: {
                         id: STATUS.ACTIVE.id,
                     },

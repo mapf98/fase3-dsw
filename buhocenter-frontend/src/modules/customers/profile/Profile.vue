@@ -12,7 +12,7 @@
                     v-for="item in items"
                     :key="item.title"
                 >
-                    <v-card color="white" class="mb-5 mx-2 ma-0" >
+                    <v-card color="white" class="mb-5 mx-2 ma-0" :to="item.link">
                         <div class="d-flex flex-no-wrap justify-space-between">
                             <div>
                                 <v-card-title
@@ -47,21 +47,25 @@ export default class Profile extends Vue {
             src: require('../assets/orders.png'),
             title: "Your Orders",
             subtitle: "Track, return or buy things again",
+            link: "#",
         },
         {
             src: require('../assets/login.png'),
             title: "Your Profile",
             subtitle: "Edit login, name, language",
+            link: "/your-account",
         },
         {
             src: require('../assets/address.png'),
             title: "Your Addresses",
             subtitle: "Edit your addresses",
+            link: "#",
         },
         {
             src: require('../assets/invoice.jpg'),
             title: "Your Invoices",
             subtitle: "Get all your invoices",
+            link: "#",
         },
     ]
 }

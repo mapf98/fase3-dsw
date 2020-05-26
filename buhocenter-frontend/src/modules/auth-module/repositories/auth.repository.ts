@@ -4,6 +4,8 @@ import { ClientSocial } from '@/store/auth-module/interfaces/ClientGmail'
 import { CustomerInterface } from '@/modules/auth-module/interfaces/CustomertInterface';
 
 class AuthRepository extends HttpRepository {
+    private _USER;
+
     public async loginWithSocial(social: string): Promise<any> {
         let provider: any;
         if ( social === 'google' ) {
@@ -79,6 +81,30 @@ class AuthRepository extends HttpRepository {
             return { error:  'Unexpected error'};
         } catch (e) {
             return { error: e.message};
+        }
+    }
+
+    public async updateCustomerCredencials({ email, psswd }): Promise<any> {
+        try {
+            return new Promise((resolve, reject) => {
+                firebase.auth().onAuthStateChanged(async function(user) {
+                    if (user) {
+                        console.log('user signed in');
+                        try {
+                            await user.updateEmail(email);
+                            await user.updatePassword(psswd);
+                            resolve(true);
+                        } catch(e) {
+                            reject(false);
+                        }
+                    } else {
+                        console.log('user NOT signed in');
+                        reject(false);
+                    }
+                });
+            })
+        } catch(e) {
+            return e.message;
         }
     }
 }
