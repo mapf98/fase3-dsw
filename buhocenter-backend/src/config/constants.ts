@@ -2,6 +2,10 @@ export const STATUS = Object.freeze({
     ACTIVE: {
         id: 1,
     },
+
+    INACTIVE:{
+        id: 2,
+    },
 });
 
 export const ROLE = Object.freeze({

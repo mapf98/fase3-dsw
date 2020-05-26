@@ -18,23 +18,22 @@ import { Response } from 'express';
 
     constructor(
         @Inject(WINSTON_MODULE_PROVIDER) private readonly logger: Logger,
-        @InjectRepository(Address)
-        private readonly addressRepository: Repository<Address>,
         @Inject(UsersService)
-        private readonly UsersService: UsersService,
+        private readonly usersService: UsersService,
         @Inject(StatusService)
-        private readonly StatusService: StatusService,
-        @Inject(AddressHttpRepository) private readonly AddressHttpRepository: AddressHttpRepository,
-        private http: HttpService
+        private readonly statusService: StatusService,
+        @Inject(AddressHttpRepository) private readonly addressHttpRepository: AddressHttpRepository,
+        private http: HttpService,
      ){}
 
 
-    private async checkDefault(){
-        let verifyDefault= await createQueryBuilder()
-        .select('direccion')
-        .from(Address,'direccion')
-        .where('direccion.direccion_default= :bool',{bool:true})
-        .getOne();
+    private async checkDefault(customerId : number, addressEntityManager){
+        let active = STATUS.ACTIVE.id;
+        let verifyDefault = await addressEntityManager.findOne({
+              where: [
+                { customer: customerId, status:active  },
+              ]
+        });
 
         if (verifyDefault){ 
             return false;        
@@ -45,51 +44,56 @@ import { Response } from 'express';
         
     }
 
-    private async saveAddress(address:AddressVerificationDto){        
+    private async saveAddress(address:AddressVerificationDto , addressEntityManager){        
         try{               
-            let allowDefault=await this.checkDefault();
+            let currentCustomer = await this.usersService.findUser(address.customer.id);
+            let allowDefault = await this.checkDefault(currentCustomer.id,addressEntityManager);
             let newAddress:Address =  new Address();
             newAddress.firstStreet = address.firstStreet;
             newAddress.secondStreet = address.secondStreet;
             newAddress.city = address.cityName;
             newAddress.state = address.state;
             newAddress.zipcode = address.zipcode;
-            newAddress.customer = await this.UsersService.findUser(address.customer.id);
-            newAddress.status = await this.StatusService.getStatus(STATUS.ACTIVE.id);
+            newAddress.customer = currentCustomer;
+            newAddress.status = await this.statusService.getStatus(STATUS.ACTIVE.id);
             newAddress.setDefault = (allowDefault && address.default);
-            await this.addressRepository.save(newAddress);
-            this.logger.debug(`saveAddress:guardado exitoso de la direccion (address = ${JSON.stringify(address)}])`,
+            await addressEntityManager.save(newAddress);
+
+            this.logger.debug(`saveAddress:address save succesfully (address = ${JSON.stringify(address)}])`,
                 { context: AddressService.name });
         }
         catch(e){
-            this.logger.error(`saveAddress:fallo al guardar la direccion en la BD (address = ${JSON.stringify(address)})`,
-                { context: AddressService.name });
+            this.logger.error(`saveAddress:failed to save address on the DB(error=${e.message}})`,
+                        { context: AddressService.name });
+
+            throw new BadRequestException('error when saving in the database');
         }    
     }    
 
     private async verificateAddress(body: AddressVerificationSO ){    
         try{
-            return await this.AddressHttpRepository.postAddressUri(body,{
+            return await this.addressHttpRepository.postAddressUri(body,{
                 "auth-id" : `${process.env.SMARTSTREET_AUTH_KEY}`,
                 "auth-token" : `${process.env.SMARTSTREET_AUTH_TOKEN}`
             });
         }
         catch(e){
-            this.logger.error(`verificateAddress:fallo al enviar el request para la validacion (body = ${JSON.stringify(body)}])`,
+
+            this.logger.error(`verificateAddress: failed to send the request to validate (body = ${JSON.stringify(body)}])`,
             { context: AddressService.name });
         }
     }
 
-    async checkAddress(address: AddressVerificationRO, body){        
+    async checkAddress(address: AddressVerificationRO, body , addressEntityManager ){        
         if(address[0].metadata.precision === "Unknown")
         {
-            this.logger.debug(` checkAddress: la direccion enviada es erronea(address = ${JSON.stringify(address)}]|body = ${JSON.stringify(body)})`,
+            this.logger.debug(` checkAddress: invalid address (address = ${JSON.stringify(address)}]|body = ${JSON.stringify(body)})`,
                 { context: AddressService.name });
 
             throw new BadRequestException('Invalid address');
         }
         else{
-            this.saveAddress(body);        
+            this.saveAddress(body, addressEntityManager);        
 
             return address;
         }    
@@ -101,7 +105,7 @@ import { Response } from 'express';
     * @param body es un objeto que contiene los datos de la direccion que introdujo el usuario
     * @returns string
     */
-    async addressControl(body: AddressVerificationDto){    
+    async addressControl(body: AddressVerificationDto, addressEntityManager){    
         let addressSO:AddressVerificationSO= {
             'candidates' : 10,match : 'invalid',"street" :  `${body.firstStreet}`,
             "street2" :  `${body.secondStreet}`,"city" :  `${body.cityName}`,
@@ -109,9 +113,61 @@ import { Response } from 'express';
         };
 
         let addressDetail:AddressVerificationRO = await this.verificateAddress(addressSO);        
-        this.logger.debug(`AddressControl: request de verificacion de direccion recibido exitosamente (body = ${JSON.stringify(body)}])`,
+        this.logger.debug(`addressControl: address verification request recibe succesfully (body = ${JSON.stringify(body)}])`,
             { context: AddressService.name });
 
-        return this.checkAddress(addressDetail,body);
+        return this.checkAddress(addressDetail, body, addressEntityManager);
+    }
+
+    async updateAddressDefault( addressId : number , customerId: number ,addressEntityManager){
+        let active = STATUS.ACTIVE.id;
+
+        let verifyDefault= await addressEntityManager.findOne({
+              where: [
+                { customer: customerId, status:active, setDefault:true},
+              ]
+        });
+
+        if (verifyDefault){
+            this.logger.info(
+                `updateAddressDefault: users ${customerId} alredy have a default (address = ${JSON.stringify(verifyDefault)}]) , changing...`,
+                { context: AddressService.name });
+
+            verifyDefault.setDefault=false;
+            await addressEntityManager.save(verifyDefault);
+        }
+
+        let addressCurrentDefault = await addressEntityManager.findOne(addressId);        
+        addressCurrentDefault.setDefault = true;
+        await addressEntityManager.save(addressCurrentDefault);
+
+        return "address updated succesfully";
+    }
+
+    async deleteAddress( addressId : number ,addressEntityManager){
+        
+        let innactiveAddress=await addressEntityManager.findOne({
+              where: [
+                {  id: addressId},
+              ]
+        });
+
+        innactiveAddress.status= await this.statusService.getStatus(STATUS.INACTIVE.id);
+        addressEntityManager.save(innactiveAddress);
+
+        this.logger.info(`deleteAddress:address with id (addressId = ${addressId}) deleted succesfully`,
+            { context: AddressService.name }); 
+
+        return "address deleted succesfully";
+    }
+
+    async getAddress(customerId : number, addressEntityManager){
+        let active = STATUS.ACTIVE.id; 
+
+        return await addressEntityManager.find({
+              where: [
+                { customer: customerId, status:active  },
+              ]
+        });
     }
 }

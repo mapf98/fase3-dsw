@@ -70,3 +70,16 @@ export class AddressVerificationRO{
     active: string;      
   }; 
 }
+export class AddressUDDto{
+  id: number;
+  customer:{
+        id:number;
+    };
+}
+
+export class UsersAddress{
+  customer:{
+        id:number;
+    };
+}
+

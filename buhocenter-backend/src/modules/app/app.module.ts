@@ -16,8 +16,6 @@ dotenv.config();
 import { CartsModule } from '../carts/carts.module'
 import { StatussModule } from '../status/status.module'
 import { ServicesModule } from '../services/services.module'
-
-
 import { AddressModule } from '../address/address.module'
 import { AuthModule } from '../auth/auth.module';
 
@@ -33,11 +31,10 @@ import { AuthModule } from '../auth/auth.module';
     PlatformManagementModule,
     WinstonModule.forRootAsync({
       useClass: LoggerSettingsService,
-    }),CartsModule,StatussModule
-    ,AddressModule,
+    }),CartsModule,StatussModule,
     SendGridModule.forRoot({
       apikey: process.env.SENDGRID_API_KEY,
-    }),ServicesModule,
+    }),ServicesModule,AddressModule
   ],
   controllers: [AppController],
   providers: [AppService],
