@@ -7,6 +7,11 @@ export const STATUS = Object.freeze({
     ACTIVE: 1,
 });
 
+export const ROL = Object.freeze({
+    CLIENT: 1,
+    ADMIN: 2,
+});
+
 export const SUCESS: string = 'success';
 export const FETCHING: string = 'fetching';
 export const FETCHED: string = 'fetched';

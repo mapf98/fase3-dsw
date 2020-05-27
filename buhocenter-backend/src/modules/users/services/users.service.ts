@@ -112,6 +112,12 @@ export class UsersService {
                 token: data.token,
             });
             clientSave = await this.customerRepository.save(newClient);
+            clientSave = await this.customerRepository.findOne({
+                where: { id: clientSave.id },
+                relations: [
+                    'role',
+                ],
+            });
             response = {
                 apiAccessToken: await this.authService.login(clientSave),
                 token: clientSave.token,
@@ -153,9 +159,15 @@ export class UsersService {
             let response: ResponseAuth;
             if ( client ) {
                 const newClient: Customer = this.customerRepository.merge(client, {
-                    token: data.token, is_federate: true
+                    token: data.token, is_federate: true,
                 });
                 clientSave = await this.customerRepository.save(newClient);
+                clientSave = await this.customerRepository.findOne({
+                    where: { id: clientSave.id },
+                    relations: [
+                        'role',
+                    ],
+                });
                 this.logger.debug(`validateRegisterSocial: client exist [id=${newClient.id}]`, { context: UsersService.name } );
             } else {
                 // @ts-ignore
@@ -174,6 +186,12 @@ export class UsersService {
                     },
                     language:  LANGUAGE.ENGLISH.id,
                 });
+                clientSave = await this.customerRepository.findOne({
+                    where: { id: clientSave.id },
+                    relations: [
+                        'role',
+                    ],
+                });
                 this.logger.debug(`validateRegisterSocial: New client registered [id=${clientSave.id}]`, { context: UsersService.name } );
                 await this.sendEmailWelcome({email: data.clientData.email, name: data.clientData.first_name});
             }
@@ -187,11 +205,12 @@ export class UsersService {
                     email: clientSave.email,
                     uid: clientSave.uid,
                     status: clientSave.status,
-                    rol: clientSave.role,
+                    rol: {...clientSave.role},
                     is_federate: clientSave.is_federate,
                     birthDate: clientSave.birthdate,
                     language: clientSave.language,
                 },
+
             };
             return response;
         } catch (e) {

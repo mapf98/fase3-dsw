@@ -153,7 +153,7 @@
 
     @Component
     export default class AboutUs extends Vue {
-
+        show:boolean = true;
 
     }
 </script>
