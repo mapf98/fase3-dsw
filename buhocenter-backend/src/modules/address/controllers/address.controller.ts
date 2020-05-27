@@ -1,14 +1,14 @@
-import { Controller, Get, Post, Res, Body,HttpStatus,Inject, Patch,Param, Delete, Query } from '@nestjs/common';
-import { AddressVerificationDto, AddressUDDto ,UsersAddress } from '../dto/AddressVerification.dto'
+import { Controller, Get, Post, Res, Body,HttpStatus,Inject, Patch,Param, Delete, Query, UseGuards } from '@nestjs/common';
+import { AddressVerificationDto, AddressUDDto, UsersAddress } from '../dto/AddressVerification.dto'
 import { AddressService } from '../services/address.service';
 import { Response } from 'express';
 import { Logger } from 'winston'
 import { WINSTON_MODULE_PROVIDER } from 'nest-winston'
 import { AddressTransactionsRepository } from '../transaction/address.transactions.service'
-//import { AuthGuard } from '@nestjs/passport';
+import { AuthGuard } from '@nestjs/passport';
 
 
-//@UseGuards(AuthGuard('jwt'))
+@UseGuards(AuthGuard('jwt'))
 @Controller('address') 
 export class AddressController {
 	constructor(
@@ -22,7 +22,7 @@ export class AddressController {
 		@Res() res: Response,
 		@Body() body: AddressVerificationDto
 	): Promise<Response> {	    
-		this.logger.info(`verifyAddress : recibiendo direccion (body = ${JSON.stringify(body)}])`,
+		this.logger.info(`verifyAddress: recibiendo direccion (body = ${JSON.stringify(body)}])`,
             { context:AddressController.name });
 
 	    try{
@@ -30,7 +30,7 @@ export class AddressController {
 	        return res.status(HttpStatus.OK).send(response);
 	    }
 	    catch(e){
-	   		this.logger.error(`verifyAddress : error al verificar la direccion [error =${JSON.stringify(e.message)}]})`,
+	   		this.logger.error(`verifyAddress: error al verificar la direccion [error =${JSON.stringify(e.message)}]})`,
             { context: AddressController.name });
 
 
@@ -48,7 +48,7 @@ export class AddressController {
 	    	return res.status(HttpStatus.OK).send(response);
 	    }
 	    catch(e){
-	   		this.logger.error(`getAddress :error when trying to get all address [error =${JSON.stringify(e.message)}]})`,
+	   		this.logger.error(`getAddress: error when trying to get all address [error =${JSON.stringify(e.message)}]})`,
             { context: AddressController.name });
 
 	   		return res.status(HttpStatus.BAD_REQUEST).send(e.message);
@@ -65,7 +65,7 @@ export class AddressController {
     		return res.status(HttpStatus.OK).send(response);
 	    }
 	    catch(e){
-	   		this.logger.error(`deleteAddress :error when trying to delete an address [error =${JSON.stringify(e.message)}]})`,
+	   		this.logger.error(`deleteAddress: error when trying to delete an address [error =${JSON.stringify(e.message)}]})`,
             { context: AddressController.name });
 
 	   		return res.status(HttpStatus.BAD_REQUEST).send(e.message);
@@ -83,7 +83,7 @@ export class AddressController {
     		return res.status(HttpStatus.OK).send(response);
 	    }
 	    catch(e){
-	   		this.logger.error(`getAddress :error when trying to get all address [error =${JSON.stringify(e.message)}]})`,
+	   		this.logger.error(`getAddress: error when trying to get all address [error =${JSON.stringify(e.message)}]})`,
             { context: AddressController.name });
 
 	   		return res.status(HttpStatus.BAD_REQUEST).send(e.message);

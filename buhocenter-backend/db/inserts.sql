@@ -23,7 +23,7 @@ insert into marca (nombre) values ('ASUS');
 insert into marca (nombre) values ('XIAOMI');
 
 insert into marca (nombre) values ('COLUMBIA');
-insert into marca (nombre) values ('VAN HEUSEN')
+insert into marca (nombre) values ('VAN HEUSEN');
 
 insert into marca (nombre) values ('BARRINGTON HARDWOODS');
 
@@ -349,13 +349,13 @@ insert into producto_oferta (oferta_id, producto_id, precio_descuento, porcentaj
 insert into servicio (nombre,descripcion,precio,estatus_id) values ('ejemplo','ejemplo',22,1);
 
 
-insert into platform_parameter (name) VALUES ('Comisión Pasarela de Pagos'), ('Comisión de Servicios'),
-    ('Cantidad Mínima en el Inventario');
+-- insert into platform_parameter (name) VALUES ('Comisión Pasarela de Pagos'), ('Comisión de Servicios'),
+--     ('Cantidad Mínima en el Inventario');
 
-insert into currency (name, iso) VALUES ('Dólar', 'USD'), ('Euro', 'EUR');
+-- insert into currency (name, iso) VALUES ('Dólar', 'USD'), ('Euro', 'EUR');
 
-insert into platform (content, customer_id, platform_parameter_id, status_id) VALUES
-    ('0.75', 1, 1, 1), ('1.75', 1, 2, 1), ('10', 1, 3, 1);
+-- insert into platform (content, customer_id, platform_parameter_id, status_id) VALUES
+--     ('0.75', 1, 1, 1), ('1.75', 1, 2, 1), ('10', 1, 3, 1);
 
 
 

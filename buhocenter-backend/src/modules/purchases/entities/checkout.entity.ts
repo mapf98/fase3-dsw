@@ -6,9 +6,6 @@ import { StatusHistory } from '../../status/entities/status-history.entity';
 @Entity('checkout') 
 export class Checkout extends BaseEntity {
 	
-	@Column({ name: 'descripcion', type: 'varchar', length: 100, nullable: false })
-	description: string;
-
 	@OneToOne(type => Cart, cart => cart.checkouts)
 	cart: Cart;
 

@@ -82,8 +82,7 @@ export default class Profile extends Vue {
             src: require('../assets/address.png'),
             title: "Your Addresses",
             subtitle: "Edit your addresses",
-            admin: false,
-            link: "#",
+            link: "/address-management",
         },
         {
             src: require('../assets/invoice.jpg'),

@@ -5,12 +5,7 @@ import { Status } from './status.entity';
 
 @Entity({ name: 'historial_estatus' }) 
 export class StatusHistory extends BaseEntity {
-	@Column({ name: 'fecha_inicio', nullable: false })
-	startDate: Date;
-
-	@Column({ name: 'fecha_fin', nullable: true })
-	endDate: string;
-
+	
 	@JoinColumn({ name: 'checkout_id' })
 	@ManyToOne(type => Checkout, checkout => checkout.statusHistories)
 	checkout: Checkout;

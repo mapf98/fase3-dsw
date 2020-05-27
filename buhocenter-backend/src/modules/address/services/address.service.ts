@@ -123,9 +123,9 @@ import { Response } from 'express';
         let active = STATUS.ACTIVE.id;
 
         let verifyDefault= await addressEntityManager.findOne({
-              where: [
+            where: [
                 { customer: customerId, status:active, setDefault:true},
-              ]
+            ]
         });
 
         if (verifyDefault){

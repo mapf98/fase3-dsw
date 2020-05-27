@@ -9,11 +9,13 @@ import authModule from '@/store/auth-module/AuthModule';
 import languageModule from '@/store/languages-module/LanguagesModule';
 import categoryModule from '@/store/category-module/CategoryModule';
 import catalogueModule from '@/store/catalogue-module/CatalogueModule'
+import addresses from '@/store/addresses/addresses';
 
 Vue.use(Vuex);
 
 export default new Vuex.Store({
   modules: {
+    addresses,
     baseModule,
     carts,
     layout,

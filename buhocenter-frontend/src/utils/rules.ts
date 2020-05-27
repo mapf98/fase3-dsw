@@ -31,5 +31,8 @@ export default {
     },
     fieldLength(maxLength: number) {
         return v => (v && v.length <= maxLength) || 'El campo no debe exceder el límite de caracteres';
+    },
+    fieldMaxLength(maxLength: number) {
+        return v => (v.length <= maxLength) || 'El campo no debe exceder el límite de caracteres';
     }
 };

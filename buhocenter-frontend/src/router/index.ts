@@ -7,7 +7,9 @@ import Catalogue from '../modules/products/catalogue/Catalogue.vue';
 import ItemDetail from '../modules/products/item-detail/ItemDetail.vue';
 import Register from '../views/Register.vue';
 import Profile from '../modules/customers/profile/Profile.vue';
-import Catalogues from '@/modules/products/catalogues/Catalogues.vue';
+import Catalogues from "@/modules/products/catalogues/Catalogues.vue";
+import AddressManagement from '../modules/customers/profile/AddressManagement.vue';
+import CreateAddressForm from '../modules/customers/addresses/CreateAddressForm.vue';
 import Dashboard from '@/views/dashboard/Dashboard.vue';
 import DashboardHome from '@/modules/dashboard/components/Home.vue';
 import DashboardCatalogues from '@/modules/dashboard/components/Catalogues.vue';
@@ -46,8 +48,18 @@ const routes: RouteConfig[] = [
         component: Profile,
       },
       {
-        path: '/register',
-        name: 'Register',
+        path: "/address-management",
+        name: "address-management",
+        component: AddressManagement,
+      },
+      {
+        path: '/create-address',
+        name: 'create-address',
+        component: CreateAddressForm,
+      },
+      {
+        path: "/register",
+        name: "Register",
         component: Register,
       },
       {
