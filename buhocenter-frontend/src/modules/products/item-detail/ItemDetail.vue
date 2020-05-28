@@ -116,7 +116,7 @@
 <script lang="ts">
 import Vue from 'vue';
 import Component from 'vue-class-component';
-import { layout, products, authModule, carts } from "../../../store/namespaces";
+import { layout, products, authModule, carts, payments, loader } from "../../../store/namespaces";
 import CartMethods from '@/store/carts/methods/cart-methods'
 import {
     GET_CATEGORY,
@@ -134,12 +134,19 @@ import {
 import {
     GET_ITEM_DETAIL,
 } from '../../../store/products/methods/products.getters';
+import {
+    CREATE_ORDER,
+} from '../../../store/payments/methods/payments.actions';
 import { getDate } from '../../../utils/date-functions';
 import ShoppingBar from './ShoppingBar.vue';
 import ItemDescription from './ItemDescription.vue';
 import SocialIcons from '../../social/SocialIcons.vue';
 import AuthTypes from '../../../store/auth-module/methods/auth-methods';
 import * as CART_INTERFACE from '../interfaces/carts.interface';
+import { ITEM_TYPE, CURRENCY } from '../../../config/constants';
+import { STATUS } from '../../../../../buhocenter-backend/dist/config/constants';
+import { IS_LOADING } from '../../../store/loader/methods/loader.getters';
+import { SHOW_LOADER } from '../../../store/loader/methods/loader.actions';
 import DailyRecomendation from "@/modules/products/daily-recomendation/DailyRecomendation.vue";
 
 @Component({
@@ -167,8 +174,73 @@ export default class ItemDetail extends Vue {
     itemAddedToCart: boolean = false;
     timeout: number = 5000;
 
-    buyItem(quantity: number) {
-        // TODO: Implementar checkout con la pasarela de pagos
+    createOrder(quantity: number) {
+        // FIX: Acomodar al implementar el dropdown multimoneda
+        const currencyISO: string = 'USD';
+        const currencyId: number = CURRENCY.USD.id;
+
+        const total: string = `${this.getDiscountPrice() !== 0 ? this.getDiscountPrice() * quantity : this.GET_ITEM_DETAIL.price * quantity}`;
+
+        return {
+            customer: {
+                id: this.GET_CLIENT_DATA.id,
+                firstName: this.GET_CLIENT_DATA.name,
+                lastName: this.GET_CLIENT_DATA.lastName,
+                email: this.GET_CLIENT_DATA.email,
+                country: 'US',
+            },
+            items: [{
+                sku: `${this.GET_ITEM_DETAIL.id}`,
+                name: this.GET_ITEM_DETAIL.name,
+                price: this.getDiscountPrice() !== 0 ? `${this.getDiscountPrice()}` : `${this.GET_ITEM_DETAIL.price}`,
+                currency: currencyISO,
+                quantity: parseInt(`${quantity}`),
+                type: {
+                    id: this.isProduct() ? ITEM_TYPE.PRODUCT : ITEM_TYPE.SERVICE,
+                },
+            }],
+            amount: {
+                total: total,
+                currency: currencyISO,
+                details: {
+                    subtotal: total,
+                }
+            },
+            currency: {
+                id: currencyId,
+                name: currencyISO,
+            },
+        }
+    }
+
+    async buyItem(quantity: number): Promise<void> {
+
+        if (quantity) {
+            const order = this.createOrder(quantity);
+            
+            this.SHOW_LOADER(true);
+
+            const paymentUrl: string | boolean = await this.CREATE_ORDER(order);
+
+            if (paymentUrl) {
+                this.SHOW_LOADER(false);
+                window.open(paymentUrl as string, '_blank');
+            }
+
+            this.SHOW_LOADER(false);
+        }
+    }
+
+    getDiscountPrice(): number {
+        let discountPrice: number = 0;
+
+        this.GET_ITEM_DETAIL.offers.forEach((element) => {
+            if (element.offer.status.id === STATUS.ACTIVE.id) {
+                discountPrice = parseFloat(element.discountPrice);
+            }
+        });
+
+        return discountPrice;
     }
 
     private async addProductToCart() {
@@ -270,6 +342,11 @@ export default class ItemDetail extends Vue {
         }
     }
 
+    @loader.Getter(IS_LOADING) IS_LOADING;
+    @loader.Action(SHOW_LOADER) SHOW_LOADER;
+
+    @payments.Action(CREATE_ORDER) private CREATE_ORDER;
+    
     @carts.Action(CartMethods.actions.ADD_PRODUCT_TO_CART) private ADD_PRODUCT_TO_CART;
     @carts.Action(CartMethods.actions.ADD_SERVICE_TO_CART) private ADD_SERVICE_TO_CART;
     @carts.Action(CartMethods.actions.GET_ITEMS_CARS) GET_ITEMS_CARS;
@@ -279,11 +356,11 @@ export default class ItemDetail extends Vue {
     @products.Action(FETCH_SERVICE_ITEM_PHOTOS) private FETCH_SERVICE_ITEM_PHOTOS;
     @products.Action(FETCH_SERVICE_DETAIL) private FETCH_SERVICE_DETAIL;
     @products.Action(FETCH_PRODUCT_DETAIL) private FETCH_PRODUCT_DETAIL;
+
     @layout.Getter(GET_CATEGORY) private GET_CATEGORY;
     @layout.Getter(GET_CATEGORY_ID) private GET_CATEGORY_ID;
     @layout.Getter(GET_CATALOGUE) private GET_CATALOGUE;
     @layout.Getter(GET_CATALOGUE_ID) private GET_CATALOGUE_ID;
-
 
     @authModule.Getter(AuthTypes.getters.GET_CLIENT_DATA) private GET_CLIENT_DATA;
 

@@ -62,7 +62,8 @@ export class ProductsController {
 			const [products, total]: [Product[], number] = await this.productsService.getProducts(page, catalogueId);
 			return res.status(HttpStatus.OK).send([products, total]);
 		} catch (e) {
-			return res.status(HttpStatus.BAD_REQUEST).send();
+			this.logger.error(`Exception ${e}`);
+			return res.status(HttpStatus.INTERNAL_SERVER_ERROR).send();
 		}
 	}
 

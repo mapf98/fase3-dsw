@@ -7,6 +7,10 @@ import { Service } from '../../services/entities/service.entity';
 import { Customer } from '../../users/entities/customer.entity';
 import { Address } from '../../address/entities/address.entity';
 import { Offer } from '../../products/entities/offer.entity';
+import { Checkout } from '../../payments/entities/checkout.entity';
+import { Platform } from '../../platform-management/entities/platform.entity';
+import { ProductInventory } from '../../products/entities/product-inventory.entity';
+import { ProductCart } from '../../carts/entities/product-cart.entity';
 
 @Entity('estatus') 
 export class Status extends BaseEntity {
@@ -36,4 +40,10 @@ export class Status extends BaseEntity {
 
 	@OneToMany(type => StatusHistory, statusHistories => statusHistories.status)
 	statusHistories: StatusHistory[];
+
+	@OneToMany(type => Platform, platforms => platforms.status)
+	platforms: Platform[];
+
+	@OneToMany(type => ProductInventory, productInventories => productInventories.status)
+	productInventories: ProductInventory[];
 }

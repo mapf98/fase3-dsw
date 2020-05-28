@@ -9,6 +9,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
     TypeOrmModule.forFeature(platformManagementEntities),
   ],
   providers: [PlatformManagementService],
-  controllers: [PlatformManagementController]
+  controllers: [PlatformManagementController],
+  exports: [PlatformManagementService]
 })
 export class PlatformManagementModule {}

@@ -6,19 +6,19 @@ import { Status } from '../../status/entities/status.entity';
 @Entity({ name: 'direccion' })
 export class Address extends BaseEntity {
 	
-	@Column({ name: 'primera_calle', type: 'varchar', nullable: false })
+	@Column({ name: 'primera_calle', type: 'text', nullable: false })
 	firstStreet: string;
 
-	@Column({ name: 'segunda_calle', type: 'varchar', nullable: true })
+	@Column({ name: 'segunda_calle', type: 'text', nullable: true })
 	secondStreet: string;
 
-    @Column({ name: 'ciudad', type: 'varchar', nullable: false })
+    @Column({ name: 'ciudad', type: 'text', nullable: false })
     city: string;
       
-    @Column({ name: 'estado', type: 'varchar', nullable: false })
+    @Column({ name: 'estado', type: 'text', nullable: false })
     state: string;
 
-    @Column({ name: 'codigo_zip', type: 'varchar', nullable: false })
+    @Column({ name: 'codigo_zip', type: 'text', nullable: false })
 	zipcode: number;
 	
 	@Column({ name: 'direccion_default', type: 'boolean', nullable: true })

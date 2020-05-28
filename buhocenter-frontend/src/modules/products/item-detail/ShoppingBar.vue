@@ -14,7 +14,7 @@
                 ></v-select>
             </v-form>
         </v-container>
-        <v-container class="overline d-flex justify-center">
+        <v-container v-if="isProduct()" class="overline d-flex justify-center">
             <v-btn @click="addToCart()" block outlined color="primary" :x-small="$vuetify.breakpoint.mdAndDown">
                 <v-icon left class="d-flex align-center">mdi-cart-outline</v-icon>
                 <p class="ma-0 d-none d-lg-block">Agregar al carrito</p>
@@ -75,16 +75,23 @@ export default class ShoppingBar extends Vue {
 
     @Emit('buyItem')
     buyItem() {
-        // TODO: Implementar checkout con la pasarela de pagos
+        if (!this.GET_CLIENT_DATA.id) {
+            this.$router.push({ name: 'Sign in' });
+        } else {
+            if (!this.quantity) {
+                return;
+            }
+
+            this.$emit('buyItem', this.quantity);
+        }
     }
 
     @Emit('addToCart')
     async addToCart() {
-        console.log(this.GET_CLIENT_DATA)
         if (!this.GET_CLIENT_DATA.id) {
-            return; // TODO: Disparar el modal de inicio de sesión
+            this.$router.push({ name: 'Sign in' });
         } else {
-            if (this.quantity === 0) {
+            if (!this.quantity) {
                 return;
             }
             this.$emit('addItemToCart', this.quantity);

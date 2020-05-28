@@ -35,7 +35,7 @@
         </v-row>
         <v-row v-if="isProduct()" class="mx-auto d-flex align-center">
             <h3>In stock: </h3>
-            <p class="body-1 mx-2 my-0"> {{ this.GET_ITEM_DETAIL.productInventories[0].availableQuantity }} </p>
+            <p class="body-1 mx-2 my-0"> {{ getAvailableQuantity }} </p>
         </v-row>
         <v-row v-if="isProduct()" class="mx-auto d-flex align-center">
             <h3>Product dimensions: </h3>
@@ -64,6 +64,14 @@ export default class ItemDescription extends Vue {
         return false;
     }
 
+    get getAvailableQuantity(): number {
+        if (this.isProduct()) {
+            return this.GET_ITEM_DETAIL.productInventories[0].availableQuantity
+        }
+
+        return 0;
+    }
+
     get getTotalRatings(): number {
         if (this.isProduct()) {
             return this.GET_ITEM_DETAIL.productRatings ? this.GET_ITEM_DETAIL.productRatings[0].total : 0;
@@ -90,10 +98,11 @@ export default class ItemDescription extends Vue {
 
     getProvider(): string {
         if (this.isProduct()) {
-            return this.GET_ITEM_DETAIL.productProvider[0].provider.name;   
+            return this.GET_ITEM_DETAIL.productProvider[0].provider.name;
+        } else {
+            return this.GET_ITEM_DETAIL.serviceProvider[0].provider.name;
         }
 
-        return this.GET_ITEM_DETAIL.serviceProvider[0].provider.name;
     }
 
     getDiscountPrice(): string {

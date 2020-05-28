@@ -1,4 +1,4 @@
-import { createQueryBuilder, Repository} from 'typeorm'
+import { createQueryBuilder, Repository, EntityManager, UpdateResult} from 'typeorm'
 import { Injectable, Inject} from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Product } from '../entities/product.entity'
@@ -44,16 +44,72 @@ export class ProductsService {
      * @param productId id del producto del cual se quiere obtener la disponibilidad en el inventario
      * @returns Promise<ProductInventory>
      */
-    private async getProductInventoryAvailability(productId: number): Promise<ProductInventory> {
+    public async getProductInventoryAvailability(productId: number): Promise<ProductInventory> {
         this.logger.debug(`getProductInventoryAvailability: [productId=${productId}]`, { context: ProductsService.name });
 
         return this.productInventoriesRepository.findOne({
-            where: `producto_id = ${productId}`,
+            where: `producto_id = ${productId} AND (status_id IN (${STATUS.REJECTED.id}, ${STATUS.PROCESSED.id}, ${STATUS.RESERVED.id})
+                OR status_id IS NULL)`,
             order: {
                 id: 'DESC',
             },
         })
     }
+
+    public async getMinimumProductAvailable(productId: number): Promise<Product> {
+        return this.productsRepository.findOne({
+            where: { id: productId }
+        })
+    }
+
+    public async updateProductInventorySetCheckout(
+        productId: number,
+        checkoutId: number,
+        transactionalEntityManager: EntityManager,
+    ): Promise<UpdateResult> {
+        this.logger.debug(`updateProductInventorySetCheckout: [checkoutId=${
+            checkoutId}|productId=${typeof productId}]`, { context: ProductsService.name });
+
+        const productInventoryTransactionRepository: Repository<ProductInventory> = transactionalEntityManager.getRepository(
+            ProductInventory,
+        );
+
+        const update= await productInventoryTransactionRepository.update({ product: { id: productId }}, { checkout: { id: checkoutId }});
+
+        // console.log('update', update);
+
+        return update;
+    }
+
+    public async updateProductInventoryWithCheckout(
+        checkoutId: number,
+        statusId: number,
+        transactionalEntityManager: EntityManager,
+    ): Promise<UpdateResult> {
+        this.logger.debug(`updateProductInventoryWithCheckout: [checkoutId=${
+            checkoutId}|statusId=${statusId}]`, { context: ProductsService.name });
+
+        const productInventoryTransactionRepository: Repository<ProductInventory> = transactionalEntityManager.getRepository(
+            ProductInventory,
+        );
+
+        return productInventoryTransactionRepository.update({ checkout: { id: checkoutId }}, { status: { id: statusId }});
+    }
+
+    public async updateProductInventory(
+        productInventory,
+        transactionalEntityManager: EntityManager,
+    ): Promise<any> {
+        this.logger.debug(`updateProductInventory: [productInventory=${
+            JSON.stringify(productInventory)}]`, { context: ProductsService.name });
+
+        const productInventoryTransactionRepository: Repository<ProductInventory> = transactionalEntityManager.getRepository(
+            ProductInventory,
+        );
+
+        return productInventoryTransactionRepository.save(productInventory);
+    }
+
 
     /**
      * Obtiene el producto por el id del producto
@@ -115,9 +171,19 @@ export class ProductsService {
             take,
         });
 
-        await this.getProductAverageRating(products);
+        let productsFiltered = [];
 
-        return [products, total];
+        for await (const i of products) {
+            const inventoryAvailable = await this.getProductInventoryAvailability(i.id);
+
+            if (inventoryAvailable.availableQuantity > i.minimumQuantityAvailable) {
+                productsFiltered.push(i);
+            }
+        }
+
+        await this.getProductAverageRating(productsFiltered);
+
+        return [productsFiltered, total];
     }
 
     async findProduct(ProductID: number): Promise<Product> {

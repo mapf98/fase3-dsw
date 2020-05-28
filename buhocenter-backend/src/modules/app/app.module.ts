@@ -9,32 +9,36 @@ import { UsersModule } from '../users/users.module';
 import { NotificationsModule } from '../notifications/notifications.module';
 import { PlatformManagementModule } from '../platform-management/platform-management.module';
 import { ProductsModule } from '../products/products.module';
-import { PurchasesModule } from '../purchases/purchases.module';
-
-import * as dotenv from 'dotenv';
-dotenv.config();
+import { PaymentsModule } from '../payments/payments.module';
 import { CartsModule } from '../carts/carts.module'
 import { StatussModule } from '../status/status.module'
 import { ServicesModule } from '../services/services.module'
 import { AddressModule } from '../address/address.module'
 import { AuthModule } from '../auth/auth.module';
+import * as dotenv from 'dotenv';
 
-
+dotenv.config();
 
 @Module({
   imports: [TypeOrmModule.forRoot(),
     AuthModule,
     UsersModule,
     ProductsModule,
-    PurchasesModule,
+    PaymentsModule,
     NotificationsModule,
     PlatformManagementModule,
     WinstonModule.forRootAsync({
       useClass: LoggerSettingsService,
-    }),CartsModule,StatussModule,
+    }),StatussModule
+    ,AddressModule,
     SendGridModule.forRoot({
-      apikey: process.env.SENDGRID_API_KEY,
-    }),ServicesModule,AddressModule
+        apikey: process.env.SENDGRID_API_KEY,
+    }),
+    WinstonModule.forRootAsync({
+        useClass: LoggerSettingsService,
+    }),
+    CartsModule,
+    ServicesModule,
   ],
   controllers: [AppController],
   providers: [AppService],

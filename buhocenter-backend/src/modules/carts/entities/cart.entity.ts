@@ -4,7 +4,7 @@ import { Status } from '../../status/entities/status.entity';
 import { ServiceCart } from './service-cart.entity';
 import { Customer } from '../../users/entities/customer.entity';
 import { ProductCart } from './product-cart.entity';
-import { Checkout } from '../../purchases/entities/checkout.entity';
+import { Checkout } from '../../payments/entities/checkout.entity';
 
 @Entity('carrito') 
 export class Cart extends BaseEntity {
@@ -13,7 +13,7 @@ export class Cart extends BaseEntity {
 	@ManyToOne(type => Customer, customer => customer.carts)
 	customer: Customer;
 
-	@JoinColumn({ name: 'estatus_id' })
+	@JoinColumn({ name: 'cart_status_id' })
 	@ManyToOne(type => Status, status => status.carts)
 	status: Status;
 
@@ -22,7 +22,4 @@ export class Cart extends BaseEntity {
 
 	@OneToMany(type => ProductCart, productCarts => productCarts.cart)
 	productCarts: ProductCart[];
-
-	@OneToMany(type => Checkout, checkouts => checkouts.cart)
-	checkouts: Checkout[];
 }

@@ -1,32 +1,36 @@
 import { NestFactory } from '@nestjs/core';
-import { AppModule } from './modules/app/app.module';
-import * as helmet from 'helmet';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
+import { AppModule } from './modules/app/app.module';
+import { join } from 'path';
 import * as rTracer from 'cls-rtracer';
+import * as helmet from 'helmet';
+import * as express from 'express';
 
 declare const module: any;
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+    const app = await NestFactory.create(AppModule);
 
-  app.useLogger(app.get(WINSTON_MODULE_NEST_PROVIDER));
+    // app.use(express.static(join('./templates')));
 
-  app.enableCors({
-    origin: '*',
-    methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'DELETE', 'POST'],
-    allowedHeaders: ['Origin', 'X-Requested-With', 'Content-Type', 'Accept', 'Authorization'],
-  });
+    app.useLogger(app.get(WINSTON_MODULE_NEST_PROVIDER));
 
-  app.use(rTracer.expressMiddleware());
-  app.use(helmet());
+    app.enableCors({
+        origin: '*',
+        methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'DELETE', 'POST'],
+        allowedHeaders: ['Origin', 'X-Requested-With', 'Content-Type', 'Accept', 'Authorization'],
+    });
 
-  app.setGlobalPrefix('/api/v1');
+    app.use(rTracer.expressMiddleware());
+    app.use(helmet());
 
-  await app.listen(3000);
+    app.setGlobalPrefix('/api/v1');
 
-  if (module.hot) {
-    module.hot.accept();
-    module.hot.dispose(() => app.close());
-  }
+    await app.listen(3000);
+
+    if (module.hot) {
+        module.hot.accept();
+        module.hot.dispose(() => app.close());
+    }
 }
 bootstrap();

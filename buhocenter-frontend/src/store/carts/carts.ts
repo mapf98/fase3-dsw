@@ -100,7 +100,7 @@ const carts: Module<any, any> = {
         async [CartTypes.actions.DELETE_PRODUCT_CART]({ commit }, data: {productCartId: number, index: number}): Promise<boolean> {
             try {
                 const response = await cartsHttpRepository.deleteProductCart(data.productCartId);
-                console.log(response)
+                // console.log(response)
                 if (response) {
                     commit(CartTypes.mutations.REMOVE_PRODUCT_CART, data.index);
                     return true;
@@ -109,6 +109,16 @@ const carts: Module<any, any> = {
             } catch (e) {
                 return false;
             }
+        },
+        [CartTypes.actions.EMPTY_CART]({ commit }): void {
+            const emptyCart = {
+                cart: {},
+                checkout: [],
+                err_cart: false,
+                err_cart_message: false
+            }
+
+            commit(CartTypes.mutations.SET_CART, emptyCart);
         },
     },
 };

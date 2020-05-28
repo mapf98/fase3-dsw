@@ -5,9 +5,6 @@ import { StatusHistory } from '../../status/entities/status-history.entity';
 
 @Entity('checkout') 
 export class Checkout extends BaseEntity {
-	
-	@OneToOne(type => Cart, cart => cart.checkouts)
-	cart: Cart;
 
 	@OneToMany(type => StatusHistory, statusHistories => statusHistories.checkout)
 	statusHistories: StatusHistory[];

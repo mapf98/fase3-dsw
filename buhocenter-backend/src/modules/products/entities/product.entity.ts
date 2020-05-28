@@ -22,7 +22,10 @@ export class Product extends BaseEntity {
 	description: string;
 
 	@Column({ name: 'precio', type: 'decimal', nullable: false })
-	price: number;	
+	price: number;
+
+	@Column({ name: 'minimum_quantity_available', type: 'integer', nullable: true })
+	minimumQuantityAvailable: number;
 
 	@Column({ name: 'precio_envio', type: 'decimal', nullable: false })
 	shippingPrice: number;	

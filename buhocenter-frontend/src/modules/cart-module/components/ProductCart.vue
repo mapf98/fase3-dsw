@@ -96,7 +96,7 @@
         }
 
         changeQuantity(){
-            console.log(this.item.quantity)
+            // console.log(this.item.quantity)
             const index_checkout  = this.GET_PRODUCTS_CHECKOUT.findIndex((productCart)=>productCart.id == this.item.id)
             const index  = this.GET_CART_OBJECT.productCarts.findIndex((productCart)=>productCart.id == this.item.id)
             this.SET_QUANTITY_PRODUCT({

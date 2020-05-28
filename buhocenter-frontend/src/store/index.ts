@@ -7,6 +7,8 @@ import products from '@/store/products/products';
 import layout from '@/store/layout/layout';
 import authModule from '@/store/auth-module/AuthModule';
 import languageModule from '@/store/languages-module/LanguagesModule';
+import payments from '@/store/payments/payments';
+import loader from '@/store/loader/loader';
 import categoryModule from '@/store/category-module/CategoryModule';
 import catalogueModule from '@/store/catalogue-module/CatalogueModule'
 import addresses from '@/store/addresses/addresses';
@@ -19,6 +21,8 @@ export default new Vuex.Store({
     baseModule,
     carts,
     layout,
+    loader,
+    payments,
     products,
     authModule,
     languageModule,

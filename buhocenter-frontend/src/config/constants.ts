@@ -7,6 +7,16 @@ export const STATUS = Object.freeze({
     ACTIVE: 1,
 });
 
+export const CURRENCY = Object.freeze({
+    USD: {
+        id: 1,
+        iso: 'USD'
+    },
+    EUR: {
+        id: 2,
+        iso: 'EUR',
+    },
+})
 export const ROL = Object.freeze({
     CLIENT: 1,
     ADMIN: 2,

@@ -16,5 +16,6 @@ export default {
         ADD_SERVICE_TO_CART: 'ADD_SERVICE_TO_CART',
         GET_ITEMS_CARS: 'GET_ITEMS_CARS',
         DELETE_PRODUCT_CART: 'DELETE_PRODUCT_CART',
+        EMPTY_CART: 'EMPTY_CART',
     },
 };

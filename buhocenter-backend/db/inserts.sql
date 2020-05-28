@@ -3,6 +3,7 @@ insert into estatus (nombre, descripcion) VALUES ('Inactivo', 'Indica que el rec
 insert into estatus (nombre, descripcion) VALUES ('Por Procesar', 'Indica que la orden está en espera de confirmación de pago');
 insert into estatus (nombre, descripcion) VALUES ('Procesada', 'Indica que la orden ha sido confirmada y su pago ha sido aprobado');
 insert into estatus (nombre, descripcion) VALUES ('Rechazada', 'Indica que la orden no puede ser procesada');
+insert into estatus (nombre, descripcion) VALUES ('Reservado', 'Indica que la cantidad del producto está reservado');
 
 insert into rol (nombre, prioridad) values ('Cliente', 1);
 insert into rol (nombre, prioridad) values ('Administrador', 1);
@@ -10,6 +11,9 @@ insert into rol (nombre, prioridad) values ('Administrador', 1);
 
 insert into cliente (primer_nombre, primer_apellido, fecha_nacimiento,email,is_federate, estatus_id, rol_id) VALUES
     ('Andrea', 'Da Silva', '1999-01-25 00:00:00.000000','andrea@gmail.com',true, 1, 1);
+
+insert into cliente (primer_nombre, primer_apellido, fecha_nacimiento, estatus_id, rol_id) VALUES
+    ('Andrea', 'Da Silva', '1999-01-25 00:00:00.000000', 1, 1);
 
 insert into proveedor (nombre) values ('Apple Products');
 insert into proveedor (nombre) values ('HP C.A');
@@ -349,13 +353,13 @@ insert into producto_oferta (oferta_id, producto_id, precio_descuento, porcentaj
 insert into servicio (nombre,descripcion,precio,estatus_id) values ('ejemplo','ejemplo',22,1);
 
 
--- insert into platform_parameter (name) VALUES ('Comisión Pasarela de Pagos'), ('Comisión de Servicios'),
---     ('Cantidad Mínima en el Inventario');
+insert into platform_parameter (name) VALUES ('Comisión Pasarela de Pagos'), ('Comisión de Servicios'),
+    ('Cantidad Mínima en el Inventario');
 
--- insert into currency (name, iso) VALUES ('Dólar', 'USD'), ('Euro', 'EUR');
+insert into currency (name, iso) VALUES ('Dólar', 'USD'), ('Euro', 'EUR');
 
--- insert into platform (content, customer_id, platform_parameter_id, status_id) VALUES
---     ('0.75', 1, 1, 1), ('1.75', 1, 2, 1), ('10', 1, 3, 1);
+insert into platform (content, customer_id, platform_parameter_id, status_id) VALUES
+    ('0.75', 1, 1, 1), ('1.75', 1, 2, 1), ('10', 1, 3, 1);
 
 
 

@@ -1,4 +1,4 @@
-import { createQueryBuilder, Repository} from 'typeorm';
+import { createQueryBuilder, Repository, UpdateResult, EntityManager} from 'typeorm';
 import { Injectable, Inject} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Product } from '../../products/entities/product.entity';
@@ -38,24 +38,36 @@ export class CartsService {
         private readonly ServicesService: ServicesService,
     ) {}
 
- private async findCartUser(customerId: number): Promise<Cart> {
+    public async updateCartStatus(
+        cartId: number, statusId: number, transactionalEntityManager: EntityManager,
+    ): Promise<UpdateResult> {
+        const cartTransactionRepository: Repository<Cart> = transactionalEntityManager.getRepository(
+            Cart,
+        );
+        
+        return cartTransactionRepository.update({ id: cartId }, { status: { id: statusId }});
+    }
+
+    public async findCartUser(customerId: number): Promise<Cart> {
         this.logger.debug(`findCartUser: [customerId = ${customerId}]`, { context: CartsService.name });
         return await createQueryBuilder()
             .select('carrito')
             .from(Cart, 'carrito')
             .where('carrito.cliente_id = :customerId', { customerId })
-            .andWhere('carrito.estatus_id = :statusId', { statusId: STATUS.ACTIVE.id })
+            .andWhere('carrito.cart_status_id = :statusId', { statusId: STATUS.ACTIVE.id })
             .getOne();
     }
 
 	private async createCart(findCustomer: Customer): Promise<Cart> {
+        await this.logger.debug(`createCart: creando carrito [findCustomer=${JSON.stringify(findCustomer)}`,
+            { context: CartsService.name });
         const active = await this.StatusService.getStatus(STATUS.ACTIVE.id);
         const newCart = new Cart();
         newCart.customer = findCustomer;
         newCart.status = active;
         await this.cartRepository.save(newCart);
-        await this.logger.debug(`createCart:carrito creado ([findCustomer = ${JSON.stringify(findCustomer)}`,
-             { context: CartsService.name });
+        await this.logger.debug(`createCart: carrito creado [findCustomer = ${JSON.stringify(findCustomer)}`,
+            { context: CartsService.name });
         return newCart;
 	}
 
@@ -72,9 +84,9 @@ export class CartsService {
     /**
     *asocia un producto a el carrito del cliente
     *@params ProductRes, contiene los datos del producto
-    *@returns un string que indica si el carrito fue asociado
+    *@returns Promise<Cart>
     */
-    public async asociateProductCart( ProductRes: CartProductDTO): Promise<string> {
+    public async asociateProductCart( ProductRes: CartProductDTO): Promise<Cart> {
         this.logger.debug(`asociateProductCart:Producto asociado  al carrito exitosamente ([ProductRes = ${JSON.stringify(ProductRes)}])`,
             { context: CartsService.name });
 
@@ -82,13 +94,13 @@ export class CartsService {
         const findProduct: Product = await this.ProductsService.findProduct(ProductRes.product.id);
         const findCartNewest: Cart = await this.findCartUser(ProductRes.customer.id);
         if (findCartNewest) {
-             this.createProductCart(findCartNewest, findProduct, ProductRes.quantity);
+            await this.createProductCart(findCartNewest, findProduct, ProductRes.quantity);
         } else {
             const newCart: Cart = await this.createCart(findCustomer);
-            this.createProductCart( newCart, findProduct, ProductRes.quantity);
+            await this.createProductCart(newCart, findProduct, ProductRes.quantity);
         }
 
-        return 'Producto asociado al carrito exitosamente!';
+        return findCartNewest;
    }
 
     private async createServiceCart(CustomerCart: Cart, Service, quantity: number) {
@@ -127,6 +139,7 @@ export class CartsService {
             where: `cliente_id = ${customerId}`,
             relations: [
                 'productCarts',
+                'productCarts.checkout',
                 'productCarts.product',
                 'productCarts.product.photos',
                 'productCarts.product.productProvider',
@@ -136,7 +149,20 @@ export class CartsService {
             ],
         });
         cart.productCarts = await this.cleanStatusOfferProducts(cart.productCarts);
+        cart.productCarts = cart.productCarts.filter((i) => !i.checkout);
         return cart;
+    }
+
+    async updateProductCartCheckout(cartId: number, productId: number, checkoutId: number, transactionalEntityManager: EntityManager): Promise<UpdateResult> {
+        this.logger.debug(`updateProductCartCheckout: [cartId=${cartId}|productId=${productId}|checkoutId=${checkoutId}]`, { context: CartsService.name });
+
+        const productCartTransactionRepository: Repository<ProductCart> = transactionalEntityManager.getRepository(
+            ProductCart,
+        );
+
+        return productCartTransactionRepository.query(
+            `UPDATE carrito_producto SET checkout_id = ${checkoutId} WHERE carrito_id = ${cartId} AND producto_id = ${productId}`
+        );
     }
 
     /**
@@ -164,7 +190,7 @@ export class CartsService {
     }
 
     async dropProductCart(productCartId: number): Promise<boolean> {
-        this.logger.debug(`dropProductCart: ejecutando query para eliminar producto carrito [id = ${productCartId}]`, { context: ServiceCart.name });
+        this.logger.debug(`deleteProductCart: ejecutando query para eliminar producto carrito [id = ${productCartId}]`, { context: ServiceCart.name });
         const productCartResponse = await this.productCartRepository.delete(productCartId);
         return !!productCartResponse;
     }
