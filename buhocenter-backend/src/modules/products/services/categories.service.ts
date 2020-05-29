@@ -79,7 +79,7 @@ export class CategoriesService {
         try {
             this.logger.debug(`getCataloguesByCatergory: ejecutando query para obtener catalogues por category`, { context: CategoriesService.name });
             return await this.categoriesRepository.query(`
-            SELECT ca.id AS id, ca.name AS name
+            SELECT ca.id AS id, ca.name AS name, ca.term AS term
             FROM catalogue ca, product_catalogue pctlg, product_category pctgr
             WHERE ca.id = pctlg.catalogue_id
                 AND pctlg.product_category_id = pctgr.id
