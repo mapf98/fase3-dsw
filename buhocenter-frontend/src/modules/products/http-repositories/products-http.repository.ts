@@ -4,6 +4,7 @@ class ProductsHttpRepository extends HttpRepository {
     private static readonly RESOURCE = 'products';
     private static readonly RESOURCEDIMENSION = 'products/dimension';
     private static readonly RESOURCEIMAGE = 'products/image';
+    private static readonly RESOURCEINVENTORY= 'products/inventory'
 
     public getProducts(page: number, catalogueId: number = 1) {
         return this.get(this.createUri([`${ProductsHttpRepository.RESOURCE}`], { page, catalogueId }));
@@ -34,11 +35,18 @@ class ProductsHttpRepository extends HttpRepository {
     }
    
     public uploadImage(data){
-        return this.post(this.createUri([`${ProductsHttpRepository.RESOURCEIMAGE}`]),data)
+        return this.post(this.createUri([`${ProductsHttpRepository.RESOURCEIMAGE}`]),data);
     }
    
     public createDimension(data){
-        return this.post(this.createUri([`${ProductsHttpRepository.RESOURCEDIMENSION}`]),data)
+        return this.post(this.createUri([`${ProductsHttpRepository.RESOURCEDIMENSION}`]),data);
+    }
+    public saveInventary(data){
+        return this.post(this.createUri([`${ProductsHttpRepository.RESOURCEINVENTORY}`]),data);
+    }
+
+    public updateInventory(data){
+        return this.patch(this.createUri([`${ProductsHttpRepository.RESOURCEINVENTORY}`],false),data,false);
     }
 }
 

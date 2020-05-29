@@ -14,7 +14,7 @@ export class ProductInventory extends BaseEntity {
 	@ManyToOne(type => Product, product => product.productInventories)
 	product: Product;
 
-	@JoinColumn({ name: 'status_id' })
+	@JoinColumn({ name: 'estatus_id' })
 	@ManyToOne(type => Status, status => status.productInventories)
 	status: Status;	
 

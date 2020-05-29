@@ -78,7 +78,6 @@ export class AddressController {
 	    @Query('customerId') customerId: number, 
     ): Promise<Response>{
     	try{
-    		console.log(1&&0);
 	        let response= await this.addressTransactionRepository.getUserAddress(customerId);   
     		return res.status(HttpStatus.OK).send(response);
 	    }

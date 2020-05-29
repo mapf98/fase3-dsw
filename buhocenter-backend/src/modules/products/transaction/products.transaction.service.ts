@@ -4,7 +4,11 @@ import { InjectConnection } from "@nestjs/typeorm";
 import { Logger } from "winston";
 import { Connection } from 'typeorm';
 import { ProductsService } from "../services/products.service";
-import { ProductDTO ,ProductsAO, dimensionDto ,categoryDto} from '../dto/products.dto'
+import { 
+    ProductDTO ,ProductsAO,
+    dimensionDto ,categoryDto,
+    InventoryProductDto
+} from '../dto/products.dto'
 import { Product } from '../entities/product.entity'
 import { Brand } from '../entities/brand.entity'
 import { Provider } from '../entities/provider.entity'
@@ -109,7 +113,7 @@ export class ProductTransactionsRepository {
         })
     }
 
-    public async saveProductImage(imageName, productId): Promise<string>{
+    public async saveProductImage(imageName:string, productId:number): Promise<string>{
          this.logger.info(`createProduct: creating the product: product=${JSON.stringify(productId)}]`,
             { context: ProductTransactionsRepository.name });
 
@@ -146,10 +150,32 @@ export class ProductTransactionsRepository {
         );
 
          return await this.connection.transaction(async transactionalEntityManage => {
-            let productObj :Product= await this.productsService.findProduct(catalogueData.productId);
-            let categoryObj : Category= await this.categoriesService.findCategory(catalogueData.categoryId);
-            return await this.cataloguesService.asocciateProductCatalogue(catalogueData.id,categoryObj,productObj);
+            let productObj :Product= await this.productsService.findProduct(catalogueData.product.id);
+            let categoryObj : Category= await this.categoriesService.findCategory(catalogueData.category.id);
+            return await this.cataloguesService.asocciateProductCatalogue(catalogueData.id,productObj,categoryObj);
         })
 
+    }
+
+    public async saveInventary(data: InventoryProductDto): Promise<any>{
+         this.logger.info(
+            `catalogueSaveControl:`,
+            { context: ProductTransactionsRepository.name }
+        );
+
+         return await this.connection.transaction(async transactionalEntityManage => {           
+            return await this.productsService.saveInventory(data.quantity, data.product.id);
+        })
+    }
+
+    public async updateInventory(data: InventoryProductDto) :Promise<any>{
+        this.logger.info(
+            `catalogueSaveControl:`,
+            { context: ProductTransactionsRepository.name }
+        );
+
+         return await this.connection.transaction(async transactionalEntityManage => {           
+            return await this.productsService.updateInventory(data.quantity, data.product.id);
+        })
     }
 }

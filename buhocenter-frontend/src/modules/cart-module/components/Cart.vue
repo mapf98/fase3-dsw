@@ -11,7 +11,7 @@
                                         Subtotal({{GET_PRODUCTS_CHECKOUT.length}} items):{{" "}}<b>{{GET_TOTAL_PRICE_CHECKOUT.toFixed(2)}}$</b>
                                 </v-card-actions>
                                 <v-card-actions>
-                                        <v-btn  color="primary" outlined class="btn-remove" outlined >{{$t('PROCEED_CHECKOUT')}}</v-btn>
+                                        <v-btn @click="checkout"  color="primary" outlined class="btn-remove" >{{$t('PROCEED_CHECKOUT')}}</v-btn>
                                 </v-card-actions>
                         </v-card>
                 </v-list-item>

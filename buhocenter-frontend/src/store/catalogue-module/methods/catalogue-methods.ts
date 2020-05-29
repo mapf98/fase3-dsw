@@ -12,5 +12,6 @@ export default {
     actions: {
         FETCH_CATALOGUES: 'FETCH_CATALOGUES',
         FETCH_ALL_CATALOGUES: 'GET_ALL_CATALOGUES',
+        SAVE_CATALOGUE : 'SAVE_CATALOGUE'
     },
 };

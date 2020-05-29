@@ -94,12 +94,13 @@ export class CartsService {
         const findCartNewest: Cart = await this.findCartUser(ProductRes.customer.id);
         if (findCartNewest) {
             await this.createProductCart(findCartNewest, findProduct, ProductRes.quantity);
+            return findCartNewest;
         } else {
             const newCart: Cart = await this.createCart(findCustomer);
             await this.createProductCart(newCart, findProduct, ProductRes.quantity);
+            return newCart;
         }
-
-        return findCartNewest;
+        
    }
 
     private async createServiceCart(CustomerCart: Cart, Service, quantity: number) {

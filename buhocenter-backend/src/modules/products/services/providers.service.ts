@@ -31,6 +31,8 @@ export class ProvidersService {
 
     public createProvider(providerId: number, product: Product){
         return new Promise(async resolve => { 
+            console.log('product', product);
+            console.log('providerId', providerId);
             let newProductProvider = new ProductProvider();
             newProductProvider.product = product;
             newProductProvider.provider = await this.providerRepository.findOne(providerId);
@@ -47,12 +49,14 @@ export class ProvidersService {
 
     public async checkProductProviders(providerId: number, productId: number): Promise<boolean>{
         let productsProviders = await this.productProviderRepository.find({
-            where: { provider : providerId, product : productId},
+            where: `proveedor_id = ${providerId} AND producto_id = ${productId}`
         });
 
-        if(productsProviders){
+        console.log('productsProviders', productsProviders);
+
+        if(productsProviders.length){
             this.logger.info(
-                `checkProductProviders: the provider ${providerId} is alredy associated to the product ${productId}`,
+                `checkProductProviders: the provider ${providerId} is alredy associated to the product ${productId} ${JSON.stringify(productsProviders)}`,
                 { context: ProvidersService.name }
             );
             return false;

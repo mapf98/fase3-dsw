@@ -22,22 +22,24 @@ export class CategoriesService {
         return await this.categoriesRepository.find();
     }
 
-    public async getCategory(categoryId: number){
+    public async getCategory(categoryId: number):Promise<Category>{
         return await this.categoriesRepository.findOne(categoryId);
     }
 
     public async createCategoryProduct(categoryId:number, product: Product){
-        try{
+        this.logger.debug(
+            `createCategoryProduct: the category ${categoryId} is alredy associated to the product ${product.id}`,
+            { context: CategoriesService.name }
+        );
         let newCategoryProduct = new ProductCategory();
-        newCategoryProduct.category = await this.getCategory(categoryId);
-        newCategoryProduct.product = product;
-        let maybeSave = await this.checkProductsCategories(categoryId,product.id);
-        if(maybeSave){
-            await this.productCategoryRepository.save(newCategoryProduct);      
-        }
-        } catch(e){
-            this.logger.error(`createCategoryProduct: error=${e.message}`, { context: CategoriesService.name });
-        }
+        newCategoryProduct.category = await this.categoriesRepository.findOne(categoryId);
+        this.logger.debug(
+            `createCategoryProduct: ${JSON.stringify(newCategoryProduct.category)}`,
+            { context: CategoriesService.name }
+        );
+        newCategoryProduct.product = product;       
+        await this.productCategoryRepository.save(newCategoryProduct);            
+        
     }
 
     public async checkProductsCategories( categoryId: number, productId: number): Promise<boolean>{

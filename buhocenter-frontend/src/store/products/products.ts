@@ -19,7 +19,9 @@ import {
     CREATE_PRODUCT,
     UPLOAD_IMAGE,
     SAVE_PRODUCT_PHOTOS,
-    SAVE_PRODUCT_DIMENSION
+    SAVE_PRODUCT_DIMENSION,
+    SAVE_INVENTORY_QUANTITY,
+    UPDATE_INVENTORY_QUANTITY
 } from './methods/products.actions';
 import {
     SET_PRODUCTS,
@@ -234,6 +236,7 @@ const products: Module<any, any> = {
         },
         async [SAVE_PRODUCT_PHOTOS]({commit}, imageAndProduct): Promise<boolean>{
             try {                
+                console.log(imageAndProduct);
                 const response = await await productsHttpRepository.uploadImage(imageAndProduct);
                 return true;
             } catch (e) {
@@ -247,7 +250,23 @@ const products: Module<any, any> = {
             } catch (e) {
                 return false;
             } 
-        }
+        },
+        async [SAVE_INVENTORY_QUANTITY]({commit}, inventoryData): Promise<boolean>{
+            try {                
+                const response = await await productsHttpRepository.saveInventary(inventoryData);
+                return true;
+            } catch (e) {
+                return false;
+            } 
+        },
+        async [UPDATE_INVENTORY_QUANTITY]({commit}, inventoryData): Promise<boolean>{
+            try {                
+                const response = await await productsHttpRepository.updateInventory(inventoryData);
+                return true;
+            } catch (e) {
+                return false;
+            } 
+        },
     },
 };
 

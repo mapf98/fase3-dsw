@@ -157,8 +157,7 @@
                                                     v-model="categorieSelected"
                                                     item-text="name"
                                                     item-value="id"
-                                                    item-v
-                                                    multiple
+                                                    item-v                                                    
                                                     hint="this is a optional field"
                                                     persistent-hint
                                                     required>                                                  
@@ -188,8 +187,7 @@
                                                     v-model="catalogueSelected"
                                                     item-text="name"
                                                     item-value="id"
-                                                    item-v
-                                                    multiple
+                                                    item-v                                                    
                                                     hint="this is a optional field"
                                                     persistent-hint>
                                                 </v-select>                                
@@ -240,13 +238,14 @@
                                                 ></v-text-field> 
                                             </v-col>
                                         </v-row>
+                                        {{categorieSelected}}
                                         </v-container>
 
                                         <v-alert type="error" v-if="snackbarErrorCreate">
                                             ¡Name, description, price , shipping price , minumun quantity avalaible, image , dimensions and brand required!
                                         </v-alert>   
                                         <v-alert type="error" v-if="snackbarMoreMinThanAvai">
-                                            ¡you cant register less products in inventary than the minimun quantity avalible you choose!
+                                            ¡You can't register less products in inventary than the minimun quantity avalible you choose!
                                         </v-alert>              
                                     </v-container>
                                     <button class="login100-form-btn" lg="12" v-if="isLoading">
@@ -299,11 +298,17 @@
     import { 
         UPDATE_PRODUCT, FETCH_ALL_PRODUCTS,
         DELETE_PRODUCT,CREATE_PRODUCT,
-        UPLOAD_IMAGE,SAVE_PRODUCT_PHOTOS,SAVE_PRODUCT_DIMENSION
+        UPLOAD_IMAGE,SAVE_PRODUCT_PHOTOS,
+        SAVE_PRODUCT_DIMENSION,SAVE_INVENTORY_QUANTITY,
+        UPDATE_INVENTORY_QUANTITY
     } from '../../../store/products/methods/products.actions';
     import { GET_PRODUCTS, GET_PRODUCT_INDEX_ID } from '../../../store/products/methods/products.getters';
     import { brands, providers, categoryModule, products, catalogueModule } from "../../../store/namespaces";
-    import { ProductsInterface,dimensionDto, ProductPhotoDto } from '../../products/interfaces/products.interface';
+    import { 
+        ProductsInterface,dimensionDto, 
+        ProductPhotoDto, InventoryProduct,
+        CatalogueDto 
+    } from '../../products/interfaces/products.interface';
     import CategoriesMethods from '@/store/category-module/methods/category-methods'
     import CatalogueMethods from "@/store/catalogue-module/methods/catalogue-methods";
     @Component
@@ -318,8 +323,8 @@
         quantityAvailable : number =0;
         brandSelected : number = 0 ;
         providerSelected : number[] = [];
-        categorieSelected : number[] = [];
-        catalogueSelected : number [] = [];
+        categorieSelected : number = 0;
+        catalogueSelected : number  = 0;
         files: any;
         selectedFiles = null;  
         product:any;
@@ -355,9 +360,9 @@
                 sortable: false,
                 value: 'name',
             },
-            { text: 'price', value: 'price' },
-            { text: 'shippingPrice', value: 'shippingPrice' },
-            { text: 'minimumQuantityAvailable', value: 'minimumQuantityAvailable' },
+            { text: 'Price', value: 'price' },
+            { text: 'Shipping Price', value: 'shippingPrice' },
+            { text: 'Minimum Quantity Available', value: 'minimumQuantityAvailable' },
             { text: 'Actions', value: 'actions', sortable: false },
         ]
         editedIndex = -1
@@ -399,7 +404,7 @@
             if (confirm('Are you sure you want to delete this item?')){
                 this.isLoading = true;                
                 this.snackbar = await this.deleteProduct(this.editedItem.id); 
-                this.$router.go(0);
+                //this.$router.go(0);
             }                                        
         }
 
@@ -420,6 +425,9 @@
                 this.MQA==0||
                 this.quantityAvailable==0||
                 this.brandSelected==0||
+                this.providerSelected==[]||
+                this.categorieSelected==0||
+                this.catalogueSelected==0||
                 this.selectedFiles==null||
                 this.X==0||
                 this.Y==0||
@@ -432,6 +440,7 @@
                 this.checkQuantity();                
             }    
         }else{   
+            console.log('updateProductObject');
             this.updateProductObject();
         }
     }
@@ -468,38 +477,63 @@
             },
             brand:{
                 id:this.brandSelected
-            },
+            },           
         }
 
         
              
         this.product = await this.createProduct(newProduct);
-        const imageAndProductID={
-            image: this.selectedFiles,
-            id: this.product.id
-        }                       
-        const dimensionSO: dimensionDto = {
-            dimension:{
-                width: this.X,  
-                height:this.Y,
-                long: this.Z
-            },
-            id: this.product.id
-        } 
         if(this.product!== false){
+            console.log(`el id del producto es ${this.product.id}`)
+            const imageAndProductID: ProductPhotoDto ={
+                id: this.product.id,
+                imageName: this.selectedFiles.name          
+            }             
+
+            const imageAndProductForFirebase={
+                id: this.product.id,
+                image: this.selectedFiles
+            }          
+
+            console.log(imageAndProductID);
+
+            const dimensionSO: dimensionDto = {
+                dimension:{
+                    width: this.X,  
+                    height:this.Y,
+                    long: this.Z
+                },
+                id: this.product.id
+            } 
+
+            const inventory :InventoryProduct={
+                quantity: this.quantityAvailable,
+                product:{
+                    id:this.product.id
+                }
+            }
+
+            const newCatalogue: CatalogueDto ={
+                id: this.catalogueSelected,
+                category:{id: this.categorieSelected},
+                product:{ id:this.product.id}
+            }                    
+            console.log(newCatalogue);
+
+            await this.saveCatalogues(newCatalogue);
+            await this.saveInventory(inventory);
             this.snackbarSuccessCreated=true;
             this.saveProductDimension(dimensionSO);
-            this.firebaseResponse = await this.uploadImage(imageAndProductID);
-            if(this.firebaseResponse){  
-                if(this.selectedFiles!==null){                      
+            this.firebaseResponse = await this.uploadImage(imageAndProductForFirebase);
+            console.log(this.firebaseResponse);        
+            if(this.firebaseResponse){                              
                     const imageAndProduct : ProductPhotoDto={
                         id: this.editedItem.id,
                         // @ts-ignore
                         imageName: this.selectedFiles.name
                     }
-                    await this.saveProductPhotos(imageAndProduct);
-                }
-
+                    await this.saveProductPhotos(imageAndProductID);                
+                //aqui llama a guardar el inventorio
                 this.selectedFiles = null;
             }
         }else{
@@ -509,7 +543,7 @@
             this.Z=0;
         }                                            
         this.isLoading=false;
-        this.$router.go(0);
+        //this.$router.go(0);
     }
 
     async updateProductObject(){
@@ -530,10 +564,33 @@
                 brand:{
                     id:this.brandSelected
                 }
-            } 
+            }
+            const imageAndProductID: ProductPhotoDto={
+                imageName: this.selectedFiles,
+                id: this.product.id
+            }                       
+            if (this.categorieSelected!==0 && this.catalogueSelected!==0){
+                const newCatalogue: CatalogueDto ={
+                    id: this.catalogueSelected,
+                    category:{id: this.categorieSelected},
+                    product:{id: this.product.id}
+                }      
+                await this.saveCatalogues(newCatalogue);
+            }
+
+            if (this.quantityAvailable!==0){
+                const inventory :InventoryProduct={
+                    quantity: this.quantityAvailable,
+                    product:{
+                        id:this.product.id
+                    }
+                }
+                await this.updateInventory(inventory);
+            }
+ 
             if(this.selectedFiles!==null){
-                const imageAndProductID={
-                    image: this.selectedFiles,
+                const imageAndProductID:ProductPhotoDto={
+                    imageName: this.selectedFiles,
                     id: this.editedItem.id
                 }   
                 this.isLoading=true;
@@ -553,11 +610,11 @@
             }
             this.snackbarSuccess = await this.updateProduct(newProduct);
             this.isLoading=false;
-            this.$router.go(0);
+            //this.$router.go(0);
     }
 
     checkQuantity(){
-        if(this.MQA<this.quantityAvailable){
+        if(parseInt(`${this.MQA}`) < parseInt(`${this.quantityAvailable}`)){
             this.createProductObject();            
         }else{                    
             this.snackbarMoreMinThanAvai=true;
@@ -581,11 +638,14 @@
     @products.Action(UPLOAD_IMAGE) uploadImage;
     @products.Action(SAVE_PRODUCT_PHOTOS) saveProductPhotos;
     @products.Action(SAVE_PRODUCT_DIMENSION) saveProductDimension;
+    @products.Action(SAVE_INVENTORY_QUANTITY) saveInventory;
+    @products.Action(UPDATE_INVENTORY_QUANTITY) updateInventory;
 
     @categoryModule.Action(CategoriesMethods.actions.FETCH_CATEGORIES) private fetchCategories;
     @categoryModule.Getter(CategoriesMethods.getters.GET_CATEGORIES) private getCategories;    
 
     @catalogueModule.Action(CatalogueMethods.actions.FETCH_ALL_CATALOGUES) private fetchAllCatalogues;
+    @catalogueModule.Action(CatalogueMethods.actions.SAVE_CATALOGUE) private saveCatalogues;
     @catalogueModule.Getter(CatalogueMethods.getters.GET_CATALOGUES) private getCatalogues;
     }
 </script>

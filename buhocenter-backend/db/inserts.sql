@@ -12,9 +12,6 @@ insert into rol (nombre, prioridad) values ('Administrador', 1);
 insert into cliente (primer_nombre, primer_apellido, fecha_nacimiento,email,is_federate, estatus_id, rol_id) VALUES
     ('Andrea', 'Da Silva', '1999-01-25 00:00:00.000000','andrea@gmail.com',true, 1, 1);
 
-insert into cliente (primer_nombre, primer_apellido, fecha_nacimiento, estatus_id, rol_id) VALUES
-    ('Andrea', 'Da Silva', '1999-01-25 00:00:00.000000', 1, 1);
-
 insert into proveedor (nombre) values ('Apple Products');
 insert into proveedor (nombre) values ('HP C.A');
 insert into proveedor (nombre) values ('CHIN IMPORTS');

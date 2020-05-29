@@ -12,12 +12,12 @@ export interface ProductsInterface {
     	id: number[];
     }
     category:{
-    	id: number[];
+    	id: number;
     }
 }
 
 export interface InventoryProduct{
-    id: number;
+    quantity: number;
     product:{
         id: number;
     }
@@ -39,6 +39,6 @@ export interface ProductPhotoDto{
 
 export interface CatalogueDto{     
     id:number;
-    categoryId: number;
-    productId: number;           
+    category:{id: number;}
+    product:{id: number;}           
 }

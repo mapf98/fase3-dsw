@@ -7,7 +7,11 @@ import { Logger } from 'winston'
 
 import { STATUS } from '../../../config/constants';
 
-import { ProductDTO, ProductsAO, DimensionDto, IdArrayDto,dimensionDto} from '../dto/products.dto'
+import { 
+    ProductDTO, InventoryProductDto,
+    ProductsAO, DimensionDto, 
+    IdArrayDto,dimensionDto
+} from '../dto/products.dto'
 
 import { Product } from '../entities/product.entity'
 import { Customer } from '../../users/entities/customer.entity'
@@ -36,7 +40,7 @@ export class ProductsService {
         @InjectRepository(ProductInventory)
         private readonly productInventoriesRepository: Repository<ProductInventory>,
         @InjectRepository(ProductDimension)
-        private readonly productDimensionRepository: Repository<ProductDimension>,          
+        private readonly productDimensionRepository: Repository<ProductDimension>,               
         @Inject(StatusService)
         private readonly statusService:StatusService,
         @Inject(BrandsService)
@@ -77,8 +81,8 @@ export class ProductsService {
         this.logger.debug(`getProductInventoryAvailability: [productId=${productId}]`, { context: ProductsService.name });
 
         return this.productInventoriesRepository.findOne({
-            where: `producto_id = ${productId} AND (status_id IN (${STATUS.REJECTED.id}, ${STATUS.PROCESSED.id}, ${STATUS.RESERVED.id})
-                OR status_id IS NULL)`,
+            where: `producto_id = ${productId} AND (estatus_id IN (${STATUS.REJECTED.id}, ${STATUS.PROCESSED.id}, ${STATUS.RESERVED.id})
+                OR estatus_id IS NULL)`,
             order: {
                 id: 'DESC',
             },
@@ -203,6 +207,7 @@ export class ProductsService {
         let productsFiltered = [];
 
         for await (const i of products) {
+            console.log(i);
             const inventoryAvailable = await this.getProductInventoryAvailability(i.id);
 
             if (inventoryAvailable.availableQuantity > i.minimumQuantityAvailable) {
@@ -320,29 +325,12 @@ export class ProductsService {
                     break;
 
                     case "category":  
-                    let maybeCategoryArray:IdArrayDto = keys[i][1] as IdArrayDto;                    
-                    let  maybeSaveCategory = maybeCategoryArray.id.length;
-                    if( maybeSaveCategory==0){
-                        this.logger.info(
-                            `updateUsersProduct: category not declare, not updating category...`,
-                            { context: ProductsService.name }
-                        ); 
-                    }else{
-                        //**en caso de que se quiera asociar varias categorias a un mismo producto,
-                        //*siempre sera un array, solo que estara vacio o no
-                        //*elemento llamara a la funcion crear categoria producto de manera asincrona
-                        //*todas esas promesas son almacenadas en un array de promesas
-                        //*y Promise.all se encarga de esperar a que cada una de esas promesas en el
-                        //**array se resuelvan                                             
-                        const status2 = 
-                        Promise.all(
-                            maybeCategoryArray.id.map(async(value2)=>{
-                                await this.categoriesService.createCategoryProduct(
-                                    value2,verifyProduct 
-                                )
-                            })
-                        );
-                    }
+
+                    let maybeCategoryArray:number = keys[i][1] as number;
+                    await this.categoriesService.createCategoryProduct(
+                        maybeCategoryArray,verifyProduct 
+                    ) ;
+
                     break;
 
                     case  "brand":
@@ -374,6 +362,12 @@ export class ProductsService {
                     case "provider":   
                     let maybeProviderArray: IdArrayDto = keys[i][1] as IdArrayDto;                     
                     let maybeSaveProvider= maybeProviderArray.id.length;
+                    //**en caso de que se quiera asociar varias proveedores a un mismo producto,
+                        //*siempre sera un array, solo que estara vacio o no
+                        //*elemento llamara a la funcion crear categoria producto de manera asincrona
+                        //*todas esas promesas son almacenadas en un array de promesas
+                        //*y Promise.all se encarga de esperar a que cada una de esas promesas en el
+                        //**array se resuelvan  
                     if( maybeSaveProvider==0){
                         this.logger.info(
                             `updateUsersProduct: provider not declare, not updating provider...`,
@@ -458,29 +452,22 @@ export class ProductsService {
         newProduct.brand =  await this.brandsService.getBrand(product.brand.id);                   
         await this.productsRepository.save(newProduct);
 
+        console.log(`el id de categoria es =${product.category.id}`);
 
-        if(product.category.id.length!==0){
-            console.log("entro en categoria");
-            const status2 = 
-                Promise.all(
-                    product.category.id.map(async(value4)=>{
-                        await this.categoriesService.createCategoryProduct(
-                            value4,newProduct 
-                        )
-                    })
-                );
-        }
+        await this.categoriesService.createCategoryProduct(
+            product.category.id, newProduct 
+        );
+     
 
         if(product.provider.id.length!==0){
-            console.log("entro en proveedor");
+            console.log("entro en proveedor", product.provider);
             const status = 
                 Promise.all(
                     product.provider.id.map(async(value)=>{
                         await this.providersService.createProvider(
                             value,newProduct
                         )
-                    })
-                ); 
+                    }))
         }
         
         return newProduct;
@@ -488,25 +475,46 @@ export class ProductsService {
 
 
 
-    async createDimension(newWidth: string , newHeight: string, newLong:string , verifiedProduct:Product): Promise<any>{
+    async createDimension(newWidth: string , newHeight: string, newLong:string , verifiedProduct:number): Promise<any>{
         let newDimension= new ProductDimension();
+        let foundProduct= await this.productsRepository.findOne(verifiedProduct);
         newDimension.width = newWidth;
         newDimension.height = newHeight;
         newDimension.long = newLong;
-        newDimension.product= verifiedProduct;
-        verifiedProduct.productDimensions=newDimension; 
+        newDimension.product= foundProduct;        
         await this.productDimensionRepository.save(newDimension);
         
         return true;       
     } 
 
-    async saveProductImage(imageName, productId): Promise<string>{
+    async saveProductImage(imageName:string, productId:number): Promise<string>{
         let imageProduct:Product = await this.productsRepository.findOne(productId);
-        let newProductPhoto = await this.productPhotoRepository.create({ 
-            content:imageName, product:imageProduct
-        });
+        console.log(`producto = ${JSON.stringify(imageProduct)}`);
+        let newProductPhoto= new ProductPhoto();
+        newProductPhoto.product=imageProduct;
+        newProductPhoto.content=imageName;         
         await this.productPhotoRepository.save(newProductPhoto);
         return "product associate with image!";
+    }
+
+    public async saveInventory(quantity,productId): Promise<string>{
+        let newProductInventory= new ProductInventory();
+        let foundProduct = await this.productsRepository.findOne(productId);
+        newProductInventory.product= foundProduct;
+        newProductInventory.availableQuantity=quantity;       
+        await this.productInventoriesRepository.save(newProductInventory);
+        return "inventorio guardado";
+    }
+
+    public async updateInventory( quantity: number, productId:number): Promise<string>{
+        let foundProduct = await this.productsRepository.findOne(productId);
+        let foundInventory = await this.productInventoriesRepository.findOne({
+            where:{ product:foundProduct }
+        });
+        foundInventory.availableQuantity=quantity;
+
+        await this.productInventoriesRepository.save(foundInventory);
+        return "inventario actualizado exitosamente";
     }
 
 }

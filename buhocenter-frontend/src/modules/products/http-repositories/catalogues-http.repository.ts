@@ -11,6 +11,11 @@ class CataloguesHttpRepository extends HttpRepository {
     public getAllCatalogues(){
     	return this.get(this.createUri([`${CataloguesHttpRepository.RESOURCECATALOGUE}`]))
     }
+
+    public saveCatalogue(data){
+    	return this.post(this.createUri([`${CataloguesHttpRepository.RESOURCECATALOGUE}`]),data,false);    	
+    }
+
 }
 
 export default new CataloguesHttpRepository();

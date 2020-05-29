@@ -18,7 +18,7 @@ export class ProductsAO{
 		readonly id: number;
 	}
 	readonly category:{
-		id: number[];
+		id: number;
 	}
 	readonly catalogue:{
 		id: number[];
@@ -57,6 +57,16 @@ export class DimensionProductDto{
 
 export class categoryDto{
 	id:number;
-    categoryId: number;
-    productId: number;    
+    category:{
+     	id:number;
+    }
+    product:{
+      id:number;
+    }    
+}
+export class InventoryProductDto{
+    quantity: number;
+    product:{
+        id: number;
+    }
 }

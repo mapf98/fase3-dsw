@@ -1,7 +1,11 @@
 import { Controller, Get, Param, Post, Body, ParseIntPipe, Query, Inject, Res, HttpStatus, Patch, Delete } from '@nestjs/common';
 import { ProductsService } from '../services/products.service'
 import { Product } from '../entities/product.entity'
-import { ProductDTO, ProductsAO, IdArrayDto, ImageProductDto, DimensionProductDto} from '../dto/products.dto'
+import { 
+	ProductDTO, ProductsAO, IdArrayDto,
+	 ImageProductDto, DimensionProductDto,
+	 InventoryProductDto
+} from '../dto/products.dto'
 import { Response } from 'express';
 import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
 import { Logger } from 'winston';
@@ -200,6 +204,53 @@ export class ProductsController {
 			
 			return res.status(HttpStatus.BAD_REQUEST).send();
 		}
+	}
+
+	@Post('inventory')
+	async saveInventary(
+		@Res() res: Response,
+		@Body() data : InventoryProductDto
+	):Promise<Response>{
+		try{
+			this.logger.info(
+				`saveInventary:saving the inventory with id [product=${JSON.stringify(data)}]`,
+				 { context: ProductsController.name }
+			);
+			
+			let response = await this.productTransactionsRepository.saveInventary(data);
+			return res.status(HttpStatus.OK).send(response);
+		} catch (e) {
+			this.logger.error(
+				`saveInventary: error when trying to associate quantity to product =${JSON.stringify(e.message)}`,
+				{ context: ProductsController.name }
+			);
+			
+			return res.status(HttpStatus.BAD_REQUEST).send();
+		}
+	}
+
+	@Patch('inventory')
+	async updateInventory(
+		@Res() res: Response,
+		@Body() data : InventoryProductDto
+	):Promise<Response>{
+		try{
+			this.logger.info(
+				`updateInventory:updating the inventory with id [product=${JSON.stringify(data)}]`,
+				 { context: ProductsController.name }
+			);
+			
+			let response = await this.productTransactionsRepository.updateInventory(data);
+			return res.status(HttpStatus.OK).send(response);
+		} catch (e) {
+			this.logger.error(
+				`updateInventory: error when trying to update inventory=${JSON.stringify(e.message)}`,
+				{ context: ProductsController.name }
+			);
+			
+			return res.status(HttpStatus.BAD_REQUEST).send();
+		}
+
 	}
 
 }

@@ -137,6 +137,7 @@
 
         getItemDetail(item): void {
             this.$router.push({ name: 'item-detail', query: { item: 'product', id: item.id } })
+            this.$router.go(0);
         }
 
         getRating(productRatings): number {

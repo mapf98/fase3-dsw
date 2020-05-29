@@ -42,7 +42,9 @@ export class CataloguesService {
     }
 
     public async asocciateProductCatalogue (catalogueId: number , product , category){
-         let foundCatalogue = await this.catalogueRepository.findOne(catalogueId);
+        console.log(product);
+        console.log(category);
+         let foundCatalogue:Catalogue = await this.catalogueRepository.findOne(catalogueId);
          let newProductCategory= await this.productCategoryRepository.findOne({
              where:{ product:product, category:category }
          });
