@@ -166,7 +166,7 @@
             <v-btn color="white" text @click="addressCreated = false">{{ $t('CLOSE') }}</v-btn>
         </v-snackbar>
         <v-snackbar v-model="addressCreatedError" top :timeout="timeout" color="error">
-             {{ $t('ERROR_PUT_ADDRESS') }} //! FIX - Incorporar POEDITOR
+             {{ $t('ERROR_PUT_ADDRESS') }}
             <v-btn color="white" text @click="addressCreatedError = false">{{ $t('CLOSE') }}</v-btn>
         </v-snackbar>
     </v-container>
