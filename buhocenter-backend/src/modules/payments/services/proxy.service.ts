@@ -22,7 +22,6 @@ export class ProxyService {
      * @returns Promise<void>
      */
     async connect(): Promise<void> {
-        // process.env['NGROK_URL'] = await ngrok.connect();
         this._url = await ngrok.connect(3000);
         this.logger.debug(`Tunnel started! [url=${this._url}]`);
     }

@@ -13,9 +13,8 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     }
 
     /**
-     * Valida el contenido del token proveniente de la petición
-     * a la API
-     * @param payload payload del token proveniente del request
+     * Validates payload from request
+     * @param payload token payload
      */
     async validate(payload: any) {
         return { uuid: payload.uid, username: payload.username };

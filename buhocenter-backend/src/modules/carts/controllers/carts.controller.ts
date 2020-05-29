@@ -36,22 +36,22 @@ export class CartsController {
 		@Res() res: Response,
 		@Body() body: CartServiceDTO,
 	) {
-		this.logger.info(`associateCartServices: asociando el servicio al carrito`, { context: CartsController.name });
+		this.logger.info(`associateCartServices: asociando el service al carrito`, { context: CartsController.name });
 			const response = await this.service.asociateServiceCart(body);
 			return res.status(HttpStatus.OK).send(response);
 	}
 
 	@Get('client/:id')
-	async getCartProductsByClientID(
+	async getCartProductsBycustomerID(
 		@Res() res: Response,
 		@Param('id', new ParseIntPipe()) id: number,
 	) {
 		try {
-			this.logger.info(`getCartProductsByClientID: obteniendo el carrito y productos, cliente [id=${id}]`, { context: CartsController.name });
+			this.logger.info(`getCartProductsBycustomerID: obteniendo el carrito y products, customer [id=${id}]`, { context: CartsController.name });
 			const response = await this.service.findCartProduct(id);
 			return res.status(HttpStatus.OK).send({cart: response});
 		} catch (e) {
-			this.logger.error(`getCartProductsByClientID: catch error [message=${e.message}]`, { context: CartsController.name });
+			this.logger.error(`getCartProductsBycustomerID: catch error [message=${e.message}]`, { context: CartsController.name });
 			return  res.status(HttpStatus.BAD_REQUEST).status(500);
 		}
 	}
@@ -62,7 +62,7 @@ export class CartsController {
 		@Param('id', new ParseIntPipe()) id: number,
 	): Promise<Response> {
 		try {
-			this.logger.info(`deleteProductCart: eliminando  item producto carrito  [id=${id}]`, { context: CartsController.name });
+			this.logger.info(`deleteProductCart: eliminando  item product carrito  [id=${id}]`, { context: CartsController.name });
 			const response: boolean = await this.service.dropProductCart(id);
 			if (response) {
 				return res.status(HttpStatus.OK).send({message: 'Item eliminado con exito'});
@@ -70,7 +70,7 @@ export class CartsController {
 				return res.status(HttpStatus.BAD_REQUEST).send({message: 'ID no existe'});
 			}
 		} catch (e) {
-			this.logger.error(`deleteProductCart: eliminando  item producto carrito  [id=${id}]`, { context: CartsController.name });
+			this.logger.error(`deleteProductCart: eliminando  item product carrito  [id=${id}]`, { context: CartsController.name });
 			return  res.status(HttpStatus.BAD_REQUEST).status(500);
 		}
 	}

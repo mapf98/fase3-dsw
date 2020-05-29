@@ -21,8 +21,12 @@ export class UsersService {
         private readonly authService: AuthService,
     ) {}
 
+    /**
+     * Returns the customer found by the parameter received
+     * @param uid parameter to obtain the customer
+     */
     async getUserByUuid(uid: string): Promise<Customer> {
-        this.logger.debug(`login: Client exist [uid=${uid}]`, { context: UsersService.name } );
+        this.logger.debug(`login: customer exists [uid=${uid}]`, { context: UsersService.name } );
 
         return await this.customerRepository.findOne({
             where: { uid },
@@ -30,20 +34,20 @@ export class UsersService {
     }
 
     /**
-     * Permite actualizar la información del cliente
-     * @param customer entidad que representa el objeto del cliente del cual se le va a modificar
-     * los datos personales
+     * Updates customer information
+     * @param customer represents the customer entity which will be modified
+     * @returns Promise<Customer>
      */
     public async updateCustomer(customer: Partial<Customer>): Promise<Customer> {
-        this.logger.debug(`updateCustomer: modificando la información del cliente [customer=${
+        this.logger.debug(`updateCustomer: update customer information [customer=${
             JSON.stringify(customer)}]`, { context: UsersService.name } );
         return await this.customerRepository.save(customer);
     }
 
     /**
-     * Envia un correo electronico de bienvenida al email y con el nombre enviado
-     * @param data objeto con email y nombre, los cuales se usaran en el correo a enviar
-     * @promise boolean
+     * Send the welcome email to the customer
+     * @param data customer entity to send the email
+     * @returns Promise<boolean>
      */
     async sendEmailWelcome(data: { email: string; name: string; }): Promise<boolean> {
         try {
@@ -66,14 +70,17 @@ export class UsersService {
     }
 
     /**
-     * Funcion para registrar nuevos clientes
-     * @param data DTO con los datos para registrar a un cliente
-     * @promise ResponseRegister es una interfaces con el mensaje 
+     * This method allows you to create customers and additionally,
+     * it sends the welcome mail to our platform
+     * @param data customer entity which will be registered
      */
     async registerCustomer(data: CustomerDto): Promise<ResponseRegister> {
+        this.logger.debug(`registerCustomer: creating customer [customer=${JSON.stringify(data)}]`,
+            { context: UsersService.name } );
+
         try {
             let response: ResponseRegister;
-            const clientSave: Customer = await this.customerRepository.save({
+            const customerSave: Customer = await this.customerRepository.save({
                 name: data.name,
                 lastName: data.lastname,
                 uid: data.uid,
@@ -90,54 +97,57 @@ export class UsersService {
                 },
             });
             await this.sendEmailWelcome({email: data.email, name: data.name});
-            this.logger.debug(`registerCustomer: user created [id=${clientSave.id}]`, { context: UsersService.name } );
+            this.logger.debug(`registerCustomer: user created! [id=${customerSave.id}]`, { context: UsersService.name } );
             response = { message: 'Created' };
             return response;
         } catch (e) {
-            this.logger.error(`registerCustomer: catch error [error=${e.message}]`, { context: UsersService.name } );
-            return { message: 'Error at created' };
+            this.logger.error(`registerCustomer: error creating customer [error=${e.message}]`, { context: UsersService.name } );
+            return { message: 'Error creating customer' };
         }
     }
 
     /**
-     * Funcion para iniciar sesion en la plataforma
-     * @param data Objeto que contiene el token y uid del usuario en firebase
+     * This method allows you to login to the platform giving the customer
+     * the necessary credentials to access to our API
+     * @param data object that contains the token and uid given by firebase
      */
     async login(data: { token: string, uid: string }): Promise<any> {
-        const client: Customer = await this.getUserByUuid(data.uid);
-        let clientSave: Customer;
+        const customer: Customer = await this.getUserByUuid(data.uid);
+        let customerSave: Customer;
         let response: ResponseAuth;
-        if ( client ) {
-            const newClient: Customer = this.customerRepository.merge(client, {
+        if ( customer ) {
+            const newcustomer: Customer = this.customerRepository.merge(customer, {
                 token: data.token,
             });
-            clientSave = await this.customerRepository.save(newClient);
-            clientSave = await this.customerRepository.findOne({
-                where: { id: clientSave.id },
+            customerSave = await this.customerRepository.save(newcustomer);
+            customerSave = await this.customerRepository.findOne({
+                where: { id: customerSave.id },
                 relations: [
                     'role',
+                    'addresses',
                 ],
             });
             response = {
-                apiAccessToken: await this.authService.login(clientSave),
-                token: clientSave.token,
+                apiAccessToken: await this.authService.login(customerSave),
+                token: customerSave.token,
                 data: {
-                    id: clientSave.id,
-                    name: clientSave.name,
-                    lastName: clientSave.lastName,
-                    uid: clientSave.uid,
-                    email: clientSave.email,
-                    is_federate: clientSave.is_federate,
-                    status: clientSave.status,
-                    rol: clientSave.role,
-                    birthDate: clientSave.birthdate,
-                    language: clientSave.language,
+                    id: customerSave.id,
+                    name: customerSave.name,
+                    lastName: customerSave.lastName,
+                    uid: customerSave.uid,
+                    email: customerSave.email,
+                    is_federate: customerSave.is_federate,
+                    status: customerSave.status,
+                    role: customerSave.role,
+                    birthDate: customerSave.birthdate,
+                    language: customerSave.language,
+                    addresses: customerSave.addresses.filter((i) => i.status && i.status.id === STATUS.ACTIVE.id),
                 },
             };
-            this.logger.debug(`login: Client exist [id=${client.id}]`, { context: UsersService.name } );
+            this.logger.debug(`login: customer exist [id=${customer.id}]`, { context: UsersService.name } );
             return response;
         }
-        this.logger.error(`login: Client not exist [uid=${data.uid}]`, { context: UsersService.name } );
+        this.logger.error(`login: customer not exist [uid=${data.uid}]`, { context: UsersService.name } );
         return false;
     }
 
@@ -149,29 +159,30 @@ export class UsersService {
 
     /**
      * Funcion para registrar e iniciar sesion con gmail o facebook
-     * @param data DTO con datos necesarios para registrar clientes con gmail o facebook
+     * @param data DTO con datos necesarios para registrar customers con gmail o facebook
      * @promise ResponseAuth objeto de respuesta de autenticacion
      */
     async validateRegisterSocial(data: GmailDto): Promise<ResponseAuth> {
         try {
-            const client: Customer = await this.getUserByUuid(data.clientData.uid);
-            let clientSave: Customer;
+            const customer: Customer = await this.getUserByUuid(data.clientData.uid);
+            let customerSave: Customer;
             let response: ResponseAuth;
-            if ( client ) {
-                const newClient: Customer = this.customerRepository.merge(client, {
+            if ( customer ) {
+                const newcustomer: Customer = this.customerRepository.merge(customer, {
                     token: data.token, is_federate: true,
                 });
-                clientSave = await this.customerRepository.save(newClient);
-                clientSave = await this.customerRepository.findOne({
-                    where: { id: clientSave.id },
+                customerSave = await this.customerRepository.save(newcustomer);
+                customerSave = await this.customerRepository.findOne({
+                    where: { id: customerSave.id },
                     relations: [
                         'role',
+                        'addresses',
                     ],
                 });
-                this.logger.debug(`validateRegisterSocial: client exist [id=${newClient.id}]`, { context: UsersService.name } );
+                this.logger.debug(`validateRegisterSocial: customer exist [id=${newcustomer.id}]`, { context: UsersService.name } );
             } else {
                 // @ts-ignore
-                clientSave = await this.customerRepository.save({
+                customerSave = await this.customerRepository.save({
                     name: data.clientData.first_name,
                     lastName: data.clientData.last_name,
                     uid: data.clientData.uid,
@@ -186,29 +197,31 @@ export class UsersService {
                     },
                     language:  LANGUAGE.ENGLISH.id,
                 });
-                clientSave = await this.customerRepository.findOne({
-                    where: { id: clientSave.id },
+                customerSave = await this.customerRepository.findOne({
+                    where: { id: customerSave.id },
                     relations: [
                         'role',
+                        'addresses',
                     ],
                 });
-                this.logger.debug(`validateRegisterSocial: New client registered [id=${clientSave.id}]`, { context: UsersService.name } );
+                this.logger.debug(`validateRegisterSocial: New customer registered [id=${customerSave.id}]`, { context: UsersService.name } );
                 await this.sendEmailWelcome({email: data.clientData.email, name: data.clientData.first_name});
             }
             response = {
-                apiAccessToken: await this.authService.login(clientSave),
-                token: clientSave.token,
+                apiAccessToken: await this.authService.login(customerSave),
+                token: customerSave.token,
                 data: {
-                    id: clientSave.id,
-                    name: clientSave.name,
-                    lastName: clientSave.lastName,
-                    email: clientSave.email,
-                    uid: clientSave.uid,
-                    status: clientSave.status,
-                    rol: {...clientSave.role},
-                    is_federate: clientSave.is_federate,
-                    birthDate: clientSave.birthdate,
-                    language: clientSave.language,
+                    id: customerSave.id,
+                    name: customerSave.name,
+                    lastName: customerSave.lastName,
+                    email: customerSave.email,
+                    uid: customerSave.uid,
+                    status: customerSave.status,
+                    role: {...customerSave.role},
+                    is_federate: customerSave.is_federate,
+                    birthDate: customerSave.birthdate,
+                    language: customerSave.language,
+                    addresses: customerSave.addresses.filter((i) => i.status && i.status.id === STATUS.ACTIVE.id),
                 },
 
             };
@@ -219,27 +232,27 @@ export class UsersService {
     }
 
     /**
-     * Funcion para deslogear y borrar token en el cliente
+     * Funcion para deslogear y borrar token en el customer
      * @param data string que trae el UID del usuario a ser deslogeado
      */
     async logout(data: string): Promise<{ logout: boolean; }> {
-        const client: Customer =   await this.customerRepository.findOne({
+        const customer: Customer =   await this.customerRepository.findOne({
             where: {
                 uid: data,
             },
         });
         let response: { logout: boolean; };
-        if (client) {
-            const newClient: Customer = this.customerRepository.merge(client, {
+        if (customer) {
+            const newcustomer: Customer = this.customerRepository.merge(customer, {
                 token: '',
             });
-            await this.customerRepository.save(newClient);
-            this.logger.debug(`logout: loguot success, client [id=${data}]`, { context: UsersService.name } );
+            await this.customerRepository.save(newcustomer);
+            this.logger.debug(`logout: loguot success, customer [id=${data}]`, { context: UsersService.name } );
             response = {
                 logout: true,
             };
         } else {
-            this.logger.error(`logout: loguot error, client [id=${data}]`, { context: UsersService.name } );
+            this.logger.error(`logout: loguot error, customer [id=${data}]`, { context: UsersService.name } );
             response = {
                 logout: false,
             };
@@ -247,7 +260,7 @@ export class UsersService {
         return response;
     }
 
-    async findUser(UserID:number): Promise<Customer> {
+    async findUser(UserID: number): Promise<Customer> {
         return await this.customerRepository.findOne(UserID);
     }
 }

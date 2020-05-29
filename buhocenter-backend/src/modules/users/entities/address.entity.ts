@@ -3,16 +3,16 @@ import { BaseEntity } from '../../app/entities/base-entity';
 import { Customer } from './customer.entity';
 import { Status } from '../../status/entities/status.entity';
 
-@Entity({ name: 'direccion' })
+@Entity({ name: 'direction' })
 export class Address extends BaseEntity {
-	// @Column({ name: 'nombre', type: 'varchar', length: 100, nullable: false })
+	// @Column({ name: 'name', type: 'varchar', length: 100, nullable: false })
 	// name: string;
 
-	@JoinColumn({ name: 'cliente_id' })
+	@JoinColumn({ name: 'customer_id' })
 	@ManyToOne(type => Customer, customer => customer.addresses)
 	customer: Customer
 
-	@JoinColumn({ name: 'estatus_id' })
+	@JoinColumn({ name: 'status_id' })
 	@ManyToOne(type => Status , status => status.addresses)
 	status: Status;
 }

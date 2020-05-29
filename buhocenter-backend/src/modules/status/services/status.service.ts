@@ -17,8 +17,8 @@ export class StatusService {
 	){}
 
 	/**
-	 * Permite obtener el estatus dado un id
-	 * @param id id del estatus del cual se desea obtener su entidad
+	 * Permite obtener el status dado un id
+	 * @param id id del status del cual se desea obtener su entidad
 	 */
 	public async getStatus(id: number): Promise<Status> {
 		this.logger.debug(`getStatus: [id=${id}]`, { context: StatusHistory.name });
@@ -27,15 +27,15 @@ export class StatusService {
 	}
 
 	/**
-	 * Permite crear una entidad para el historial estatus
-	 * @param statusHistory entidad a almacenar como parte del historial del estatus
+	 * Permite crear una entidad para el historial status
+	 * @param statusHistory entidad a almacenar como parte del historial del status
 	 * @param transactionalEntityManager entity manager encargado de la ejecución de la transacción
 	 */
-	public async createStatusHistory(
+	public async creatstatusHistory(
 		statusHistory,
 		transactionalEntityManager: EntityManager,
 	): Promise<StatusHistory> {
-		this.logger.debug(`createStatusHistory: [statusHistory=${
+		this.logger.debug(`creatstatusHistory: [statusHistory=${
 			JSON.stringify(statusHistory)}]`, { context: StatusHistory.name });
 
 		const statusHistoryTransactionRepository: Repository<StatusHistory> = transactionalEntityManager.getRepository(

@@ -3,23 +3,23 @@ import { BaseEntity } from '../../app/entities/base-entity';
 import { Service } from './service.entity';
 import { Customer } from '../../users/entities/customer.entity';
 
-@Entity({ name: 'calificacion_servicio' }) 
+@Entity({ name: 'service_rating' }) 
 export class ServiceRating extends BaseEntity {
 	
-	@Column({ name: 'calificacion', type: 'integer', nullable: false })
+	@Column({ name: 'rating', type: 'integer', nullable: false })
 	rating: number;
 
-	@Column({ name: 'comentario', type: 'varchar', length: 500, nullable: true })
+	@Column({ name: 'comment', type: 'varchar', length: 500, nullable: true })
 	comment: string;
 
-	@Column({ name: 'fecha', nullable: false })
+	@Column({ name: 'date', nullable: false })
 	date: Date;	
 
-	@JoinColumn({ name: 'cliente_id' })
+	@JoinColumn({ name: 'customer_id' })
 	@ManyToOne(type => Customer, customer => customer.serviceRatings)
 	customer: Customer;
 
-	@JoinColumn({ name: 'servicio_id' })
+	@JoinColumn({ name: 'service_id' })
 	@ManyToOne(type => Service, service => service.serviceRatings)
 	service: Service;
 }

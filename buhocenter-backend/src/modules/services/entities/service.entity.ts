@@ -10,18 +10,18 @@ import { ServiceRating } from './service-rating.entity';
 import { ServicePhoto } from './service-photo.entity';
 import { ServiceProvider } from './service-provider.entity';
 
-@Entity({ name: 'servicio' })
+@Entity({ name: 'service' })
 export class Service extends BaseEntity {
-	@Column({ name: 'nombre', type: 'text', nullable: false })
+	@Column({ name: 'name', type: 'text', nullable: false })
 	name: string;
 
-	@Column({ name: 'descripcion', type: 'text', nullable: false })
+	@Column({ name: 'description', type: 'text', nullable: false })
 	description: string;
 
-	@Column({ name: 'precio', type: 'decimal', nullable: false })
+	@Column({ name: 'price', type: 'decimal', nullable: false })
 	price: number;
 
-	@JoinColumn({ name: 'estatus_id' })
+	@JoinColumn({ name: 'status_id' })
 	@ManyToOne(type => Status, status => status.services)
 	status: Status;
 

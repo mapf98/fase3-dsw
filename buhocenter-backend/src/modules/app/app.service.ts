@@ -4,11 +4,11 @@ import { Logger } from 'winston';
 
 @Injectable()
 export class AppService {
-  constructor(
-    @Inject(WINSTON_MODULE_PROVIDER) private readonly logger: Logger
-  ) {}
+    constructor(
+        @Inject(WINSTON_MODULE_PROVIDER) private readonly logger: Logger
+    ) {}
 
-  getHello(): string {
-    return 'Hello World!';
-  }
+    getHello(): string {
+        return 'Hello World!';
+    }
 }

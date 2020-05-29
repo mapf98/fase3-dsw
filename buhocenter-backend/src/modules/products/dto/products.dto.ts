@@ -70,3 +70,7 @@ export class InventoryProductDto{
         id: number;
     }
 }
+
+export class  idDto{
+	id:number
+}

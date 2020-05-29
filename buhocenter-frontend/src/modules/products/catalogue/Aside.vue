@@ -5,7 +5,7 @@
             permanent
     >
         <v-list-item class="px-2" v-if="!mini">
-            <v-list-item-title class="overline ml-3" v-if="getCategory !== '' && getCategory !== ''">
+            <v-list-item-title class="overline ml-3" v-if="getCategory !== '' && getCategory">
                 <RouterLink :to="`/catalogues?category_id=${getCategoryId}`"> {{ $t(getCategory) }} </RouterLink>> {{ $t(getCatalogue) }}
             </v-list-item-title >
         </v-list-item>
@@ -121,6 +121,7 @@ export default class Aside extends Vue {
     mini:boolean = false;
 
     get getCategory(): string {
+        console.log('GET_CATEGORY', this.GET_CATEGORY);
         return this.GET_CATEGORY;
     }
 

@@ -3,9 +3,9 @@ import { BaseEntity } from '../../app/entities/base-entity';
 import { ProductCategory } from './product-category.entity';
 import { ServiceCategory } from '../../services/entities/service-category.entity';
 
-@Entity({ name: 'categoria' })
+@Entity({ name: 'category' })
 export class Category extends BaseEntity {
-	@Column({ name: 'nombre', type: 'varchar', length: 100, nullable: false })
+	@Column({ name: 'name', type: 'varchar', length: 100, nullable: false })
 	name: string;
 
     @Column({ name: 'icon', type: 'varchar', length: 100, nullable: true })

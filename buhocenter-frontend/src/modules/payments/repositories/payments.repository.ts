@@ -6,7 +6,7 @@ class PaymentsRepository extends HttpRepository {
 
     /**
      * Permite crear una orden iniciando el proceso de checkout con la pasarela de pago
-     * @param order objeto que incluye los items de la orden y el cliente que desea adquirir los productos o servicios 
+     * @param order objeto que incluye los items de la orden y el client que desea adquirir los products o services 
      */
     async createOrder(order): Promise<AxiosResponse['data']> {
         console.log('order payment', order);

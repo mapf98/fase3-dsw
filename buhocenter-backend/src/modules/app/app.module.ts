@@ -20,27 +20,26 @@ import * as dotenv from 'dotenv';
 dotenv.config();
 
 @Module({
-  imports: [TypeOrmModule.forRoot(),
-    AuthModule,
-    UsersModule,
-    ProductsModule,
-    PaymentsModule,
-    NotificationsModule,
-    PlatformManagementModule,
-    WinstonModule.forRootAsync({
-      useClass: LoggerSettingsService,
-    }),StatussModule
-    ,AddressModule,
-    SendGridModule.forRoot({
-        apikey: process.env.SENDGRID_API_KEY,
-    }),
-    WinstonModule.forRootAsync({
-        useClass: LoggerSettingsService,
-    }),
-    CartsModule,
-    ServicesModule,
-  ],
-  controllers: [AppController],
-  providers: [AppService],
+    imports: [
+        AuthModule,
+        UsersModule,
+        ProductsModule,
+        PaymentsModule,
+        NotificationsModule,
+        PlatformManagementModule,
+        StatussModule,
+        AddressModule,
+        CartsModule,
+        ServicesModule,
+        TypeOrmModule.forRoot(),
+        WinstonModule.forRootAsync({
+            useClass: LoggerSettingsService,
+        }),
+        SendGridModule.forRoot({
+            apikey: process.env.SENDGRID_API_KEY,
+        }),
+    ],
+    controllers: [AppController],
+    providers: [AppService],
 })
 export class AppModule {}

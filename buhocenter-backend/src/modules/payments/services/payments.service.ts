@@ -78,8 +78,6 @@ export class PaymentsService {
 
                     const cart: Cart = await this.cartsService.asociateProductCart(productCart);
 
-                    // await this.cartsService.createProductCart();
-
                     await this.cartsService.updateProductCartCheckout(cart.id, item.sku, checkoutId, transactionalEntityManager);
                 }
 
@@ -113,6 +111,11 @@ export class PaymentsService {
         }
     }
 
+    /**
+     * Creates the order object to proceed with checkout process
+     * @param order 
+     * @param checkoutId 
+     */
     private async createOrderObject(order, checkoutId: number) {
         const checkout = {
             id: checkoutId,
@@ -152,7 +155,7 @@ export class PaymentsService {
         return checkout;
     }
 
-    private createStatusHistoryEntity(checkoutId, statusId) {
+    private creatstatusHistoryEntity(checkoutId, statusId) {
         return {
             checkout: {
                 id: checkoutId
@@ -163,8 +166,14 @@ export class PaymentsService {
         }
     }
 
+    /**
+     * Creates the order to checkout, updates the status history of the order and checks if the products
+     * are available in inventory
+     * @param order entity which represents the order to checkout
+     * @param transactionalEntityManager 
+     */
     public async createOrder(order, transactionalEntityManager: EntityManager): Promise<string> {
-        this.logger.debug(`createOrder: ejecutando el pago [order=${JSON.stringify(order)}]`, { context: PaymentsService.name });
+        this.logger.debug(`createOrder: executing payment [order=${JSON.stringify(order)}]`, { context: PaymentsService.name });
         
         const checkout: Checkout =
             await this.checkoutsService.createCheckout(this.createCheckoutEntity(order), transactionalEntityManager);
@@ -172,11 +181,11 @@ export class PaymentsService {
         const canStartCheckout: boolean = await this.validateItemsAvailability(order, checkout.id, transactionalEntityManager);
 
         if (!canStartCheckout) {
-            throw new Error('No hay cantidad disponible en el inventario para procesar la orden');
+            throw new Error('This product is not available.');
         }
 
-        await this.statusService.createStatusHistory(
-            this.createStatusHistoryEntity(checkout.id, STATUS.TO_PROCESS.id), transactionalEntityManager
+        await this.statusService.creatstatusHistory(
+            this.creatstatusHistoryEntity(checkout.id, STATUS.TO_PROCESS.id), transactionalEntityManager
         );
             
         const orderObj = await this.createOrderObject(order, checkout.id);
@@ -190,11 +199,19 @@ export class PaymentsService {
         return paymentOrder.data.attributes.redirect_url;
     }
 
+    /**
+     * Updates the checkout created according to the payment gateway
+     * @param paymentOrder object sent by UTRUST notifying the payment status
+     * @param transactionalEntityManager transactional entity manager
+     */
     public async updateOrder(paymentOrder: PaymentOrderDto, transactionalEntityManager: EntityManager): Promise<void> {
-        this.logger.debug(`updateOrder: actualizando la orden [order=${JSON.stringify(paymentOrder)}]`,
+        this.logger.debug(`updateOrder: modifying the order [order=${JSON.stringify(paymentOrder)}]`,
             { context: PaymentsService.name });
 
         if (paymentOrder.event_type === UTRUST_PAYMENT_STATUS.CONFIRMED.text) {
+            this.logger.debug(`updateOrder: order approved! [eventType=${
+                paymentOrder.event_type}|orderId=${paymentOrder.resource.reference}]`, { context: PaymentsService.name });
+
             this.logger.debug(`${paymentOrder.event_type} - ${paymentOrder.resource.reference}`);
             
             await this.createPayment(paymentOrder, transactionalEntityManager);
@@ -207,20 +224,21 @@ export class PaymentsService {
             );
 
             if (!lastStatusHistory) {
-                await this.statusService.createStatusHistory(
-                    this.createStatusHistoryEntity(paymentOrder.resource.reference, STATUS.PROCESSED.id), transactionalEntityManager
+                await this.statusService.creatstatusHistory(
+                    this.creatstatusHistoryEntity(paymentOrder.resource.reference, STATUS.PROCESSED.id), transactionalEntityManager
                 );
             }
 
 		} else {
-            this.logger.error(`${paymentOrder.event_type} - ${paymentOrder.resource.reference}`);
+            this.logger.error(`updateOrder: order cancelled! [eventType=${
+                paymentOrder.event_type}|orderId=${paymentOrder.resource.reference}]`, { context: PaymentsService.name });
             
             const lastStatusHistory: StatusHistory = await this.statusService.getStatusHistoryByCheckoutIdAndStatusId(
                 parseInt(paymentOrder.resource.reference), STATUS.REJECTED.id);
 
             if (!lastStatusHistory) {
-                await this.statusService.createStatusHistory(
-                    this.createStatusHistoryEntity(paymentOrder.resource.reference, STATUS.REJECTED.id), transactionalEntityManager
+                await this.statusService.creatstatusHistory(
+                    this.creatstatusHistoryEntity(paymentOrder.resource.reference, STATUS.REJECTED.id), transactionalEntityManager
                 );
             }
             

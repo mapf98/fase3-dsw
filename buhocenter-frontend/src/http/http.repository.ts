@@ -1,4 +1,4 @@
-import httpClient from './http-client';
+import httpcustomer from './http-client';
 import { AxiosRequestConfig, AxiosResponse } from 'axios';
 
 export class HttpRepository {
@@ -40,21 +40,21 @@ export class HttpRepository {
         data: AxiosRequestConfig['data'],
         header?: AxiosRequestConfig['headers'],
     ): Promise<AxiosResponse<any>> {
-        return httpClient.post(uri, data, header);
+        return httpcustomer.post(uri, data, header);
     }
 
     protected get(uri: string, header?: AxiosRequestConfig['headers'],): Promise<AxiosResponse<any>> {
-        return httpClient.get(uri, header);
+        return httpcustomer.get(uri, header);
     }
 
     protected patch(uri: string,
         data: AxiosRequestConfig['data'],
         header?: AxiosRequestConfig['headers']
     ): Promise<AxiosResponse<any>> {
-        return httpClient.patch(uri, data, header);
+        return httpcustomer.patch(uri, data, header);
     }
 
     protected delete(uri: string, header?: AxiosRequestConfig['headers']): Promise<AxiosResponse<any>> {
-        return httpClient.delete(uri, header);
+        return httpcustomer.delete(uri, header);
     }
 }

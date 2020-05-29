@@ -4,14 +4,14 @@ import { Category } from './category.entity';
 import { Product } from './product.entity';
 import { ProductCatalogue } from './product-catalogue.entity';
 
-@Entity({ name: 'producto_categoria' })
+@Entity({ name: 'product_category' })
 export class ProductCategory extends BaseEntity {
 
 	@JoinColumn({ name: 'category_id' })
 	@ManyToOne(type => Category, category => category.productCategories)
 	category: Category;
 
-	@JoinColumn({ name: 'producto_id' })
+	@JoinColumn({ name: 'product_id' })
 	@ManyToOne(type => Product, products => products.productCategories)
 	product: Product;
 

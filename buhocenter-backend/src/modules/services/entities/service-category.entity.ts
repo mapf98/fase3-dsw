@@ -4,14 +4,14 @@ import { Category } from '../../products/entities/category.entity';
 import { Service } from './service.entity';
 import { ServiceCatalogue } from './service-catalogue.entity';
 
-@Entity('servicio_categoria')
+@Entity('service_category')
 export class ServiceCategory extends BaseEntity {
 
-	@JoinColumn({ name: 'categoria_id' })
+	@JoinColumn({ name: 'category_id' })
 	@ManyToOne(type => Category, category => category.serviceCategories)
 	category: Category;
 
-	@JoinColumn({ name: 'servicio_id' })
+	@JoinColumn({ name: 'service_id' })
 	@ManyToOne(type => Service, service => service.serviceCategories)
 	service: Service;
 

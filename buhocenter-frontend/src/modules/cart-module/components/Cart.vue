@@ -1,6 +1,6 @@
 <template>
         <v-container>
-                <v-list-item v-for="(item,i) in GET_CART_OBJECT.productCarts" :key="item.id" class="mb-4">
+                <v-list-item v-if="GET_LOAD_PHOTO_CART" v-for="(item,i) in GET_CART_OBJECT.productCarts" :key="item.id" class="mb-4">
                         <ProductCart :item="item" :index="i"></ProductCart>
                 </v-list-item>
                 <v-list-item>
@@ -37,8 +37,13 @@ export default class Cart extends Vue {
 
     async mounted(){
         if(this.GET_AUTH_TOKEN !== ''){
+            this.FALSE_PHOTO_CART();
             await this.GET_ITEMS_CARS(this.GET_CLIENT_DATA.id);
+            if( this.GET_CART_OBJECT.productCarts ){
+                    await this.FETCH_PRODUCT_CART_PHOTO_BY_NAME(this.GET_CART_OBJECT.productCarts);
+            }
         }
+
     }
 
     getProductPrice(item) {
@@ -128,9 +133,12 @@ export default class Cart extends Vue {
     @authModule.Getter(AuthMethods.getters.GET_CLIENT_DATA) GET_CLIENT_DATA;
 
     @carts.Action(CartMethods.actions.GET_ITEMS_CARS) GET_ITEMS_CARS;
+    @carts.Action(CartMethods.actions.FETCH_PRODUCT_CART_PHOTO_BY_NAME) FETCH_PRODUCT_CART_PHOTO_BY_NAME;
     @carts.Getter(CartMethods.getters.GET_CART_OBJECT) GET_CART_OBJECT;
     @carts.Getter(CartMethods.getters.GET_PRODUCTS_CHECKOUT) GET_PRODUCTS_CHECKOUT;
     @carts.Getter(CartMethods.getters.GET_TOTAL_PRICE_CHECKOUT) GET_TOTAL_PRICE_CHECKOUT;
+    @carts.Getter(CartMethods.getters.GET_LOAD_PHOTO_CART) GET_LOAD_PHOTO_CART;
+    @carts.Mutation(CartMethods.mutations.FALSE_PHOTO_CART) FALSE_PHOTO_CART;
 
     @payments.Action(CREATE_ORDER) private CREATE_ORDER;
 }

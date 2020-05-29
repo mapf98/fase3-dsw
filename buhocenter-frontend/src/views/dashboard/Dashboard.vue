@@ -121,7 +121,7 @@
         ];
 
         mounted(){
-            if(this.getClient.rol.id !== ROL.ADMIN){
+            if(this.getClient.role.id !== ROL.ADMIN){
                 this.$router.push('/home');
             }
         }

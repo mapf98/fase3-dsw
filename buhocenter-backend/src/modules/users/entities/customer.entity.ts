@@ -12,16 +12,16 @@ import { ProductQuestion } from '../../products/entities/product-question.entity
 
 import { Address } from '../../address/entities/address.entity';
 
-@Entity({ name: 'cliente' })
+@Entity({ name: 'customer' })
 export class Customer extends BaseEntity {
 
-	@Column({ name: 'primer_nombre', type: 'varchar', length: 100, nullable: false })
+	@Column({ name: 'name', type: 'varchar', length: 100, nullable: false })
 	name: string;
 
-	@Column({ name: 'primer_apellido', type: 'varchar', length: 100, nullable: false })
+	@Column({ name: 'last_name', type: 'varchar', length: 100, nullable: false })
 	lastName: string;
 
-	@Column({ name: 'fecha_nacimiento', nullable: true })
+	@Column({ name: 'birthdate', nullable: true })
 	birthdate: Date;
 
 	@Column({ name: 'email', type: 'varchar', length: 100, nullable: false })
@@ -36,7 +36,7 @@ export class Customer extends BaseEntity {
 	@Column({ name: 'token', type: 'varchar', length: 200,  nullable: true })
 	token: string;
 
-	@JoinColumn({ name: 'estatus_id' })
+	@JoinColumn({ name: 'status_id' })
 	@ManyToOne(type => Status, status => status.customers)
 	status: Status;
 

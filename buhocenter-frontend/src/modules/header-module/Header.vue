@@ -51,13 +51,13 @@
                         </v-btn>
                     </router-link>
                 </div>
-                <div class="mr-2 ml-2 pt-3">
+                <!-- <div class="mr-2 ml-2 pt-3">
                     <router-link to="/products">
                         <v-btn text>
                             {{$t('SERVICES')}}
                         </v-btn>
                     </router-link>
-                </div>
+                </div> -->
             </v-toolbar-items>
 
 
@@ -178,6 +178,7 @@
 
         async signOut(){
             await this.logout();
+            this.EMPTY_CART();
             this.$router.push({ name: 'home' });
         }
 
@@ -210,7 +211,7 @@
         @authModule.Getter(AuthMethods.getters.GET_AUTH_TOKEN) getToken;
 
         @carts.Getter(CartMethods.getters.GET_CART_OBJECT) GET_CART_OBJECT;
-
+        @carts.Action(CartMethods.actions.EMPTY_CART) EMPTY_CART;
 
         @languageModule.Action(LanguageMethods.actions.API_GET_LANGUAGES) apiGetLanguages;
         @languageModule.Action(LanguageMethods.actions.API_CHANGE_LANGUAGE) apiChangeLanguage;

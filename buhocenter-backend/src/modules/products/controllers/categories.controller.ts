@@ -40,7 +40,7 @@ export class CategoriesController {
     async getCataloguesByCategory(@Res() res: Response, @Query() query ): Promise<Response> {
         try {
             this.logger.debug(
-                `getCataloguesByCategory: Obteniendo catalogos por la categoria: [id= ${query.category_id}]`,
+                `getCataloguesByCategory: Obteniendo catalogues por la category: [id= ${query.category_id}]`,
                 { context: CategoriesController.name },
             );
             const catalogues: any = await this.categoriesService.getCataloguesByCatergory(query.category_id);

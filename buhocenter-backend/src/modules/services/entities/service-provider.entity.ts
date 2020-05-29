@@ -3,14 +3,14 @@ import { BaseEntity } from '../../app/entities/base-entity';
 import { Service } from './service.entity';
 import { Provider } from '../../products/entities/provider.entity';
 
-@Entity({ name: 'proveedor_servicio' }) 
+@Entity({ name: 'service_provider' }) 
 export class ServiceProvider extends BaseEntity {
 
-	@JoinColumn({ name: 'servicio_id' })
+	@JoinColumn({ name: 'service_id' })
 	@ManyToOne(type => Service, service => service.serviceProvider)
 	services: Service;
 
-	@JoinColumn({ name: 'proveedor_id' })
+	@JoinColumn({ name: 'provider_id' })
 	@ManyToOne(type => Provider, provider => provider.serviceProviders)
 	provider: Provider;
 }

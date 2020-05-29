@@ -4,17 +4,17 @@ import { Product } from '../../products/entities/product.entity';
 import { Cart } from './cart.entity';
 import { Checkout } from '../../payments/entities/checkout.entity';
 
-@Entity({ name: 'carrito_producto' }) 
+@Entity({ name: 'cart_product' })
 export class ProductCart extends BaseEntity {
 	
-	@Column({ name: 'cantidad', type: 'integer', nullable: false })
+	@Column({ name: 'quantity', type: 'integer', nullable: false })
 	quantity: number;
 
-	@JoinColumn({ name: 'producto_id' })
+	@JoinColumn({ name: 'product_id' })
 	@ManyToOne(type => Product , product => product.productCarts)
 	product: Product;
 
-	@JoinColumn({ name: 'carrito_id' })
+	@JoinColumn({ name: 'cart_id' })
 	@ManyToOne(type => Cart, cart => cart.productCarts)
 	cart: Cart;
 

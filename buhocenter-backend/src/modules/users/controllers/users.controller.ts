@@ -39,7 +39,7 @@ export class UsersController {
     async register(@Body() data: CustomerDto, @Res() res): Promise<Response> {
         try {
             this.logger.info(`
-            register: registrando cliente [uid=${data.uid}]`,
+            register: registrando customer [uid=${data.uid}]`,
                 { context: UsersController.name },
             );
             const dataResponse: ResponseRegister = await this.usersService.registerCustomer(data);
@@ -53,7 +53,7 @@ export class UsersController {
     async login(@Body() data: { token: string, uid: string }, @Res() res): Promise<Response> {
         try {
             this.logger.info(`
-            login: Logeando cliente [cliente=${data.uid}]|[token=${data.token}]`,
+            login: Logeando customer [customer=${data.uid}]|[token=${data.token}]`,
                 { context: UsersController.name },
             );
             const dataResponse: any = await this.usersService.login(data);
@@ -67,7 +67,7 @@ export class UsersController {
     async loginSocial(@Body() data: GmailDto, @Res() res): Promise<Response> {
         try {
             this.logger.info(`
-            loginSocial: Logeando cliente con gmail o facebook [uid=${data.clientData.uid}] | [token=${data.token}]`,
+            loginSocial: Logeando customer con gmail o facebook [uid=${data.clientData.uid}] | [token=${data.token}]`,
                 { context: UsersController.name },
             );
             const dataResponse: ResponseAuth = await this.usersService.validateRegisterSocial(data);
@@ -77,11 +77,10 @@ export class UsersController {
         }
     }
 
-    @UseGuards(AuthGuard('jwt'))
     @Post('/logout')
     async logout(@Body() data: { uid: string; }, @Res() res): Promise<Response> {
         try {
-            this.logger.info(`logout: Logout de cliente [uid=${data.uid}]`,
+            this.logger.info(`logout: Logout de customer [uid=${data.uid}]`,
                 { context: UsersController.name },
             );
             const dataResponse: { logout: boolean; } = await this.usersService.logout(data.uid);

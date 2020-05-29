@@ -5,6 +5,7 @@
             <v-form ref="form" class="d-flex justify-center">
                 <v-select
                         v-model="quantity"
+                        :rules="rules.required()"
                         :items="quantityValues"
                         :x-small="$vuetify.breakpoint.mdAndDown"
                         :label="$t('QUANTITY')"
@@ -47,6 +48,7 @@ import {
 import AuthTypes from '../../../store/auth-module/methods/auth-methods';
 import * as CART_INTERFACE from '../interfaces/carts.interface';
 import SocialIcons from '../../social/SocialIcons.vue';
+import rules from '../../../utils/rules';
 
 @Component({
     components: {
@@ -60,6 +62,8 @@ export default class ShoppingBar extends Vue {
         '1', '2', '3', '4', '5', '6', '10', '11', '12', '13', '14', '15', '16', '17',
         '18', '19', '20', '21', '22', '23', '25', '26', '27', '28', '29', '30',
     ];
+
+    rules: any = rules;
 
     $refs!: {
         form: any;
@@ -77,7 +81,7 @@ export default class ShoppingBar extends Vue {
     buyItem() {
         if (!this.GET_CLIENT_DATA.id) {
             this.$router.push({ name: 'Sign in' });
-        } else {
+        } else if(this.$refs.form.validate()) {
             if (!this.quantity) {
                 return;
             }
@@ -90,7 +94,7 @@ export default class ShoppingBar extends Vue {
     async addToCart() {
         if (!this.GET_CLIENT_DATA.id) {
             this.$router.push({ name: 'Sign in' });
-        } else {
+        } else if (this.$refs.form.validate()) {
             if (!this.quantity) {
                 return;
             }

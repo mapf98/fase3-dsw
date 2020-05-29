@@ -21,12 +21,14 @@
                     size="80"
                     color="grey"
             >
-                <!--<img class="justify-center"
+                <v-img class="justify-center"
+                       style="background: #ffffff"
                      :height="$vuetify.breakpoint.mdAndUp ? '115' : '50'"
                      :width="$vuetify.breakpoint.mdAndUp ? '115' : '50'"
-                     :src="item.imageUrl"
+                     :src="item.product.photos[0].imageUrl"
+                     contain
                      alt="Product Image"
-                >-->
+                ></v-img>
             </v-list-item-avatar>
         </v-list-item>
 

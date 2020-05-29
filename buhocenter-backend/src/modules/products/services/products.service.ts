@@ -10,7 +10,8 @@ import { STATUS } from '../../../config/constants';
 import { 
     ProductDTO, InventoryProductDto,
     ProductsAO, DimensionDto, 
-    IdArrayDto,dimensionDto
+    IdArrayDto,dimensionDto,
+    idDto
 } from '../dto/products.dto'
 
 import { Product } from '../entities/product.entity'
@@ -56,15 +57,15 @@ export class ProductsService {
     ) {}
 
     /**
-     * Obtiene las valoraciones emitidas sobre un arreglo de productos
-     * @param products arreglo de productos de los cuales se obtendrán las valoraciones
+     * Returns the appreciations emitted to a product array
+     * @param products products array to obtain its appreciations
      */
     private async getProductAverageRating(products: Product[]): Promise<void> {
         for await (const product of products) {
             product.productRatings = await this.productRatingsRepository.query(`
-            SELECT ROUND(AVG(CP.calificacion)) as rating, COUNT(*) as total
-                FROM calificacion_producto CP
-                WHERE CP.producto_id = ${product.id}
+            SELECT ROUND(AVG(CP.rating)) as rating, COUNT(*) as total
+                FROM product_rating CP
+                WHERE CP.product_id = ${product.id}
             `.trim())
 
             this.logger.debug(`getProductAverageRating [id=${product.id}|productRatings=${
@@ -73,16 +74,16 @@ export class ProductsService {
     }
 
     /**
-     * Obtiene la disponibilidad de un producto en el inventario
-     * @param productId id del producto del cual se quiere obtener la disponibilidad en el inventario
+     * Returns the quantity available in inventory according to a product
+     * @param productId product id to obtain the inventory availability
      * @returns Promise<ProductInventory>
      */
     public async getProductInventoryAvailability(productId: number): Promise<ProductInventory> {
         this.logger.debug(`getProductInventoryAvailability: [productId=${productId}]`, { context: ProductsService.name });
 
         return this.productInventoriesRepository.findOne({
-            where: `producto_id = ${productId} AND (estatus_id IN (${STATUS.REJECTED.id}, ${STATUS.PROCESSED.id}, ${STATUS.RESERVED.id})
-                OR estatus_id IS NULL)`,
+            where: `product_id = ${productId} AND (status_id IN (${STATUS.REJECTED.id}, ${STATUS.PROCESSED.id}, ${STATUS.RESERVED.id})
+                OR status_id IS NULL)`,
             order: {
                 id: 'DESC',
             },
@@ -90,11 +91,19 @@ export class ProductsService {
     }
 
     public async getMinimumProductAvailable(productId: number): Promise<Product> {
+        this.logger.debug(`getMinimumProductAvailable: [productId=${productId}]`, { context: ProductsService.name });
+
         return this.productsRepository.findOne({
             where: { id: productId }
         })
     }
 
+    /**
+     * Sets the checkout id to the product inventory
+     * @param productId product id which will be modified
+     * @param checkoutId checkout id which will be set to inventory
+     * @param transactionalEntityManager transactional entity manager
+     */
     public async updateProductInventorySetCheckout(
         productId: number,
         checkoutId: number,
@@ -109,11 +118,15 @@ export class ProductsService {
 
         const update= await productInventoryTransactionRepository.update({ product: { id: productId }}, { checkout: { id: checkoutId }});
 
-        // console.log('update', update);
-
         return update;
     }
 
+    /**
+     * Modifies the product inventory of the product with a status according to a checkout
+     * @param checkoutId checkout id that reduces the inventory
+     * @param statusId status id to set to product inventory
+     * @param transactionalEntityManager 
+     */
     public async updateProductInventoryWithCheckout(
         checkoutId: number,
         statusId: number,
@@ -129,6 +142,11 @@ export class ProductsService {
         return productInventoryTransactionRepository.update({ checkout: { id: checkoutId }}, { status: { id: statusId }});
     }
 
+    /**
+     * Creates a new entity in the product inventory
+     * @param productInventory productInventory entity to save in database
+     * @param transactionalEntityManager
+     */
     public async updateProductInventory(
         productInventory,
         transactionalEntityManager: EntityManager,
@@ -145,8 +163,8 @@ export class ProductsService {
 
 
     /**
-     * Obtiene el producto por el id del producto
-     * @param id id del producto
+     * Returns the product by id
+     * @param id product id
      */
     public async getProductById(id: number): Promise<Product> {
         this.logger.debug(`getProductById: [id=${id}]`, { context: ProductsService.name });
@@ -174,9 +192,9 @@ export class ProductsService {
     }
 
     /**
-     * Obtiene el listado de productos de acuerdo a los parámetros recibidos
-     * @param page página por la cual se desea empezar a listar los productos
-     * @param catalogueId id del catálogo del cual se desean obtener los productos
+     * Returns the products according the parameters received
+     * @param page page to start listing products
+     * @param catalogueId catalogue id which products must belong to
      */
     public async getProducts(page: number = 1, catalogueId: number = 1): Promise<[Product[], number]> {
         this.logger.debug(`getProducts: [page=${page}|catalogueId=${catalogueId}]`, { context: ProductsService.name });
@@ -225,7 +243,7 @@ export class ProductsService {
     }
 
     /**
-     * Obtiene el listado de productos recomendados del dia
+     * Obtiene el listado de products recomendados del dia
      */
     public async getDailyProductsRecommendation(): Promise<Product[]> {
         this.logger.debug(`getDailyProductsRecommendation: ejecutando query`, { context: ProductsService.name });
@@ -325,12 +343,20 @@ export class ProductsService {
                     break;
 
                     case "category":  
-
-                    let maybeCategoryArray:number = keys[i][1] as number;
-                    await this.categoriesService.createCategoryProduct(
-                        maybeCategoryArray,verifyProduct 
-                    ) ;
-
+                    let maybeCategory: idDto= keys[i][1] as idDto;
+                    if(maybeCategory.id as number==0){
+                        this.logger.info(
+                            `updateUsersProduct: category not declare, not updating category..`,
+                            { context: ProductsService.name }
+                        ); 
+                    }else{
+                        console.log("saving category...");
+                        let maybeCategoryArray:number = keys[i][1] as number;
+                        await this.categoriesService.createCategoryProduct(
+                            maybeCategoryArray,verifyProduct 
+                        ) ;
+                    }     
+                    
                     break;
 
                     case  "brand":

@@ -237,8 +237,7 @@
                                                     v-model="Y"                        
                                                 ></v-text-field> 
                                             </v-col>
-                                        </v-row>
-                                        {{categorieSelected}}
+                                        </v-row>                                        
                                         </v-container>
 
                                         <v-alert type="error" v-if="snackbarErrorCreate">
@@ -246,7 +245,11 @@
                                         </v-alert>   
                                         <v-alert type="error" v-if="snackbarMoreMinThanAvai">
                                             ¡You can't register less products in inventary than the minimun quantity avalible you choose!
+                                        </v-alert> 
+                                        <v-alert type="error" v-if="snackbarCataloguesCategories">
+                                            ¡You can't register a product in a catalogue without a category!
                                         </v-alert>              
+
                                     </v-container>
                                     <button class="login100-form-btn" lg="12" v-if="isLoading">
                                     <v-progress-circular
@@ -342,6 +345,7 @@
         snackbarBrands : boolean = false;
         snackbarSuccess : boolean = false;
         snackbarMoreMinThanAvai: boolean = false;
+        snackbarCataloguesCategories: boolean= false;
 
         timeout: number = 5000;               
         snackbar : boolean= false;
@@ -395,7 +399,9 @@
 
         editItem (item) {      
             this.editedIndex = this.getProducts.indexOf(item);
+            console.log(this.editedIndex);
             this.editedItem = Object.assign({}, item)
+            this.letDimensionMod=false;
             this.changeDialog(true);
         }
 
@@ -404,7 +410,7 @@
             if (confirm('Are you sure you want to delete this item?')){
                 this.isLoading = true;                
                 this.snackbar = await this.deleteProduct(this.editedItem.id); 
-                //this.$router.go(0);
+                this.$router.go(0);
             }                                        
         }
 
@@ -413,10 +419,26 @@
             this.$nextTick(() => {
                 this.editedIndex = -1;
             })
+            this.letDimensionMod=true;
+            this.name  = "";
+            this.description = "";
+            this.price  = 0;
+            this.shippingPrice  = 0;
+            this.MQA  = 0;
+            this.quantityAvailable  =0;
+            this.brandSelected  = 0 ;
+            this.providerSelected = [];
+            this.categorieSelected  = 0;
+            this.catalogueSelected   = 0;        
+            this.selectedFiles = null;              
+            this.X =0;
+            this.Y =0;
+            this.Z = 0;
         }
         
     async save () {     
         this.isLoading = true;
+        console.log(this.editedIndex);
         if(this.editedIndex == -1){
             if( this.name=='' ||
                 this.description=='' ||
@@ -482,11 +504,12 @@
 
         
              
-        this.product = await this.createProduct(newProduct);
+        await this.createProduct(newProduct);
         if(this.product!== false){
             console.log(`el id del producto es ${this.product.id}`)
             const imageAndProductID: ProductPhotoDto ={
                 id: this.product.id,
+                // @ts-ignore
                 imageName: this.selectedFiles.name          
             }             
 
@@ -543,11 +566,30 @@
             this.Z=0;
         }                                            
         this.isLoading=false;
-        //this.$router.go(0);
+        this.product = true;
+        this.name  = "";
+        this.description = "";
+        this.price  = 0;
+        this.shippingPrice  = 0;
+        this.MQA  = 0;
+        this.quantityAvailable  =0;
+        this.brandSelected  = 0 ;
+        this.providerSelected = [];
+        this.categorieSelected  = 0;
+        this.catalogueSelected   = 0;        
+        this.selectedFiles = null;              
+        this.X =0;
+        this.Y =0;
+        this.Z = 0;
+        this.changeDialog(false);
+        this.$router.go(0);
     }
 
     async updateProductObject(){
-        const newProduct: ProductsInterface = {
+     if((this.categorieSelected==0) && (this.catalogueSelected!==0)){
+        this.snackbarCataloguesCategories=true;
+    }else{
+        const newProduct :ProductsInterface = {
                 id:this.editedItem.id,
                 productName: this.name,
                 description: this.description,
@@ -565,36 +607,35 @@
                     id:this.brandSelected
                 }
             }
-            const imageAndProductID: ProductPhotoDto={
-                imageName: this.selectedFiles,
-                id: this.product.id
-            }                       
-            if (this.categorieSelected!==0 && this.catalogueSelected!==0){
-                const newCatalogue: CatalogueDto ={
-                    id: this.catalogueSelected,
-                    category:{id: this.categorieSelected},
-                    product:{id: this.product.id}
-                }      
-                await this.saveCatalogues(newCatalogue);
-            }
+
+
+                
+
 
             if (this.quantityAvailable!==0){
-                const inventory :InventoryProduct={
+                console.log(`actualizando cantidad con = ${this.quantityAvailable}`)
+                const inventory :InventoryProduct = {
                     quantity: this.quantityAvailable,
                     product:{
-                        id:this.product.id
+                        id:this.editedItem.id
                     }
                 }
                 await this.updateInventory(inventory);
             }
  
             if(this.selectedFiles!==null){
-                const imageAndProductID:ProductPhotoDto={
-                    imageName: this.selectedFiles,
+                console.log("actualizando imagen")
+                 const imageAndProductIDForFirebase={
+                    image: this.selectedFiles,
                     id: this.editedItem.id
-                }   
+                }    
+                const imageAndProductIDForDB: ProductPhotoDto={
+                    // @ts-ignore
+                    imageName: this.selectedFiles.name,
+                    id: this.editedItem.id
+                }                 
                 this.isLoading=true;
-                this.firebaseResponse = await this.uploadImage(imageAndProductID);
+                this.firebaseResponse = await this.uploadImage(imageAndProductIDForFirebase);
                 if(this.firebaseResponse){                        
                     const imageAndProduct : ProductPhotoDto={
                         id: this.editedItem.id,
@@ -602,16 +643,45 @@
                         imageName: this.selectedFiles.name
                     }
 
-                    await this.saveProductPhotos(imageAndProduct);
+                    await this.saveProductPhotos(imageAndProductIDForDB);
 
                     this.selectedFiles = null;
                 }
                 this.selectedFiles = null;
             }
+            console.log("actualizando producto..")
             this.snackbarSuccess = await this.updateProduct(newProduct);
+            if ((this.categorieSelected!==0) && (this.catalogueSelected!==0)){
+                console.log("actualizando caegoria")
+                const newCatalogue: CatalogueDto ={
+                    id: this.catalogueSelected,
+                    category:{id: this.categorieSelected},
+                    product:{id: this.editedItem.id}
+                }      
+                console.log(newCatalogue)
+                await this.saveCatalogues(newCatalogue);
+            }
+            console.log("producto actualizado")
             this.isLoading=false;
-            //this.$router.go(0);
+            this.name  = "";
+            this.description = "";
+            this.price  = 0;
+            this.shippingPrice  = 0;
+            this.MQA  = 0;
+            this.quantityAvailable  =0;
+            this.brandSelected  = 0 ;
+            this.providerSelected = [];
+            this.categorieSelected  = 0;
+            this.catalogueSelected   = 0;        
+            this.selectedFiles = null;              
+            this.X =0;
+            this.Y =0;
+            this.Z = 0;
+            this.changeDialog(false);
+            this.$router.go(0);
+        }
     }
+    
 
     checkQuantity(){
         if(parseInt(`${this.MQA}`) < parseInt(`${this.quantityAvailable}`)){

@@ -12,11 +12,11 @@ export class AuthService {
     ) {}
 
     /**
-     * Genera el token para los usuarios al momento de iniciar sesión
+     * Creates token for users when logging in
      * @param user objeto del usuario que se encuentra iniciando sesión
      */
     async login(user: Customer): Promise<string> {
-        this.logger.debug(`login: generando el token para el usuario [uid=${user.uid}|email=${user.email}]`,
+        this.logger.debug(`login: generating token to user [uid=${user.uid}|email=${user.email}]`,
             { context: AuthService.name });
 
         const payload = { username: user.email, uid: user.uid };

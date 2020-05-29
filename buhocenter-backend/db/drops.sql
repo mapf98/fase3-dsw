@@ -1,4 +1,4 @@
-DROP TABLE carrito_servicio;
-DROP TABLE carrito_producto;
-DROP TABLE producto;
-DROP TABLE carrito;
+DROP TABLE direction_service;
+DROP TABLE direction_product;
+DROP TABLE product;
+DROP TABLE direction;

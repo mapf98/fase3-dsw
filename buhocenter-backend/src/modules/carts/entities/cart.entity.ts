@@ -6,10 +6,10 @@ import { Customer } from '../../users/entities/customer.entity';
 import { ProductCart } from './product-cart.entity';
 import { Checkout } from '../../payments/entities/checkout.entity';
 
-@Entity('carrito') 
+@Entity('cart')
 export class Cart extends BaseEntity {
 
-	@JoinColumn({ name: 'cliente_id' })
+	@JoinColumn({ name: 'customer_id' })
 	@ManyToOne(type => Customer, customer => customer.carts)
 	customer: Customer;
 

@@ -165,6 +165,10 @@
              {{ $t('SUCCESS_ADDRESS') }}
             <v-btn color="white" text @click="addressCreated = false">{{ $t('CLOSE') }}</v-btn>
         </v-snackbar>
+        <v-snackbar v-model="addressCreatedError" top :timeout="timeout" color="error">
+             {{ $t('ERROR_PUT_ADDRESS') }} //! FIX - Incorporar POEDITOR
+            <v-btn color="white" text @click="addressCreatedError = false">{{ $t('CLOSE') }}</v-btn>
+        </v-snackbar>
     </v-container>
 </template>
 <script lang="ts">
@@ -181,7 +185,7 @@ import rules from '@/utils/rules';
     components:{CreateAddressForm}
 })
 export default class AddressManagement extends Vue {
-    defaultAddressError: boolean = true;
+    defaultAddressError: boolean = false;
     fetchingAddressesError: boolean = false;
     deletingAddressError: boolean = false;
     addressCreated: boolean = false;
@@ -240,6 +244,8 @@ export default class AddressManagement extends Vue {
     async fetchAddresses() {
         const fetched: boolean = await this.FETCH_ADDRESSES(this.GET_CLIENT_DATA.id);
 
+        console.log('fetched', fetched);
+
         if (!fetched) {
             this.defaultAddressError = true;
         }
@@ -286,7 +292,9 @@ export default class AddressManagement extends Vue {
     async saveChanges() {
         if (this.$refs.form.validate()) {
             const created: boolean = await this.CREATE_ADDRESS(this.createAddressObject());
+            console.log('created', created);
             if (!created) {
+                this.dialog = false;
                 this.addressCreatedError = true;
             } else {
                 this.addressCreated = true;

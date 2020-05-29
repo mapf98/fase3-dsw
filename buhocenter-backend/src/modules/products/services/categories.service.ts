@@ -77,19 +77,13 @@ export class CategoriesService {
      */
     public async getCataloguesByCatergory(id: number): Promise<Response> {
         try {
-            this.logger.debug(`getCataloguesByCatergory:  executing query to get all catalogues for each category`, { context: CategoriesService.name });
+            this.logger.debug(`getCataloguesByCatergory: ejecutando query para obtener catalogues por category`, { context: CategoriesService.name });
             return await this.categoriesRepository.query(`
-            SELECT ca.id AS id, ca.nombre AS name, ca.term AS term
-            FROM catalogo ca, producto_catalogo pctlg, producto_categoria pctgr
-            WHERE ca.id = pctlg.catalogo_id
-                AND pctlg.producto_categoria_id = pctgr.id
+            SELECT ca.id AS id, ca.name AS name
+            FROM catalogue ca, product_catalogue pctlg, product_category pctgr
+            WHERE ca.id = pctlg.catalogue_id
+                AND pctlg.product_category_id = pctgr.id
                 AND pctgr.category_id = ${id}
-            UNION
-            SELECT ca.id AS id, ca.nombre AS name, ca.term AS term
-            FROM catalogo ca, servicio_catalogo pctlg, servicio_categoria pctgr
-            WHERE ca.id = pctlg.catalogo_id
-                AND pctlg.servicio_categoria_id = pctgr.id
-                AND pctgr.categoria_id = ${id}
             `.trim());
         } catch (e) {
             this.logger.error(`getCataloguesByCatergory: catch error [error:${e.message}]`, { context: CategoriesService.name });

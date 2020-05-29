@@ -1,7 +1,7 @@
 <template>
   <div>
       <v-row>
-          <v-col cols="12" lg="4" md="6" sm="12" v-for="(item) in GET_PRODUCTS" :key="item.id" class="mb-4 contenedor-producto">
+          <v-col cols="12" lg="4" md="6" sm="12" v-for="(item) in GET_PRODUCTS" :key="item.id" class="mb-4 contenedor-product">
               <v-card class="d-inline-block" style="width: 100%" v-if="GET_PRODUCTS_AND_PHOTOS_LOADED">
                   <v-container>
                       <v-row justify="center" style="height: 520px">
@@ -179,7 +179,7 @@ export default class ProductCard extends Vue {
 
 
     @media only screen and (max-width: 768px) {
-        .contenedor-producto{
+        .contenedor-product{
             max-height: 500px;
         }
     }

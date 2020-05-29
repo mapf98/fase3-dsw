@@ -6,7 +6,7 @@ import { StatusHistory } from '../../status/entities/status-history.entity';
 import { ProductInventory } from '../../products/entities/product-inventory.entity';
 import { ProductCart } from '../../carts/entities/product-cart.entity';
 
-@Entity('checkout') 
+@Entity('checkout')
 export class Checkout extends BaseEntity {
 
 	@Column({ name: 'transaction_id', type: 'text', nullable: true })

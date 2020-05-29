@@ -2,12 +2,12 @@ import { Entity,Column,ManyToOne, JoinColumn } from 'typeorm';
 import { BaseEntity } from '../../app/entities/base-entity';
 import { Customer } from '../../users/entities/customer.entity';
 
-@Entity('notificacion') 
+@Entity('notification')
 export class Notification extends BaseEntity {
-	@Column({ name: 'descripcion', type: 'varchar', length: 100, nullable: false })
+	@Column({ name: 'description', type: 'varchar', length: 100, nullable: false })
 	description: string;
 
-	@JoinColumn({ name: 'cliente_id' })
+	@JoinColumn({ name: 'customer_id' })
 	@ManyToOne(type => Customer, customer => customer.notifications)
 	customer: Customer;
 }

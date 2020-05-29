@@ -6,38 +6,38 @@ import { Provider } from './provider.entity';
 import { Brand } from './brand.entity';
 import { ProductDimension } from './product-dimension.entity';
 import { ProductRating } from './product-rating.entity';
-import { ProductOffer } from './product-offer.entity';
+import { productOffer } from './product-offer.entity';
 import { ProductCart } from '../../carts/entities/product-cart.entity';
 import { ProductInventory } from './product-inventory.entity';
 import { ProductPhoto } from './product-photo.entity';
 import { ProductQuestion } from './product-question.entity';
 import { ProductCategory } from './product-category.entity';
 
-@Entity({ name: 'producto' }) 
+@Entity({ name: 'product' }) 
 export class Product extends BaseEntity {
-	@Column({ name: 'nombre', type: 'text', nullable: false })
+	@Column({ name: 'name', type: 'text', nullable: false })
 	name: string;
 
-	@Column({ name: 'descripcion', type: 'text', nullable: false })
+	@Column({ name: 'description', type: 'text', nullable: false })
 	description: string;
 
-	@Column({ name: 'precio', type: 'decimal', nullable: false })
+	@Column({ name: 'price', type: 'decimal', nullable: false })
 	price: number;
 
 	@Column({ name: 'minimum_quantity_available', type: 'integer', nullable: true })
 	minimumQuantityAvailable: number;
 
-	@Column({ name: 'precio_envio', type: 'decimal', nullable: false })
+	@Column({ name: 'shipping_price', type: 'decimal', nullable: false })
 	shippingPrice: number;	
 
-	@JoinColumn({ name: 'estatus_id' })
+	@JoinColumn({ name: 'status_id' })
 	@ManyToOne(type => Status, status => status.products)
 	status: Status;
 
 	@OneToMany(type => ProductProvider, productProvider => productProvider.product)
 	productProvider: ProductProvider;
 
-	@JoinColumn({ name: 'marca_id' })
+	@JoinColumn({ name: 'brand_id' })
 	@ManyToOne(type => Brand , brand => brand.products)
 	brand: Brand;
 
@@ -50,8 +50,8 @@ export class Product extends BaseEntity {
 	@OneToMany(type => ProductCategory, productCategories => productCategories.product)
 	productCategories: ProductCategory[];
 
-	@OneToMany(type => ProductOffer, offers => offers.product)
-	offers: ProductOffer[];
+	@OneToMany(type => productOffer, offers => offers.product)
+	offers: productOffer[];
 
 	@OneToMany(type => ProductCart, productCarts => productCarts.product)
 	productCarts: ProductCart[];

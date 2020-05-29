@@ -175,7 +175,7 @@ export default class PersonalInformation extends Vue {
     }
 
     private createClientDataObject() {
-
+        console.log(this.GET_CLIENT_DATA)
         return {
             id: this.GET_CLIENT_DATA.id,
             birthdate: this.GET_CLIENT_DATA.birthdate,
@@ -185,6 +185,7 @@ export default class PersonalInformation extends Vue {
             name: this.modifiedName,
             lastName: this.modifiedLastName,
             uid: this.GET_CLIENT_DATA.uid,
+            role:this.GET_CLIENT_DATA.role,
         }
     }
 

@@ -18,7 +18,7 @@ export const CURRENCY = Object.freeze({
     },
 })
 export const ROL = Object.freeze({
-    CLIENT: 1,
+    customer: 1,
     ADMIN: 2,
 });
 

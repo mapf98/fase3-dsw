@@ -3,7 +3,7 @@ import { BaseEntity } from '../../app/entities/base-entity';
 import { Checkout } from '../../payments/entities/checkout.entity';
 import { Status } from './status.entity'; 
 
-@Entity({ name: 'historial_estatus' }) 
+@Entity({ name: 'status_history' }) 
 export class StatusHistory extends BaseEntity {
 	@JoinColumn({ name: 'checkout_id' })
 	@ManyToOne(type => Checkout, checkout => checkout.statusHistories)

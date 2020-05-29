@@ -15,7 +15,8 @@ export class PlatformManagementService {
     ) {}
 
     /**
-     * Obtiene la cantidad configurada para la pasarela de pagos como parte de la comisión
+     * Returns the value corresponding to the parameter sent
+     * @params parameterId 
      * @returns Promise<Platform>
      */
     public async getPlatformParameterValue(parameterId: number): Promise<Platform> {

@@ -26,7 +26,7 @@ export class ProductsController {
 		@Res() res: Response,
 	): Promise<Response> {
 		this.logger.info(
-			`getDailyProductsRecommendation: productos recomendados del dia `,
+			`getDailyProductsRecommendation: products recomendados del dia `,
 			{ context: ProductsController.name },
 		);
 		try {
@@ -49,7 +49,7 @@ export class ProductsController {
 			const product = await this.productsService.getProductById(id);
 			return res.status(HttpStatus.OK).send(product);
 		} catch (e) {
-			this.logger.error(`Error obteniendo el producto por el id ${id}`, { context: ProductsController.name });
+			this.logger.error(`Error obteniendo el product por el id ${id}`, { context: ProductsController.name });
 			this.logger.error(`${e}`, { context: ProductsController.name });
 			return res.status(HttpStatus.NOT_FOUND).send();
 		}
@@ -62,7 +62,7 @@ export class ProductsController {
 		@Query('catalogueId') catalogueId: number,
 	): Promise<Response> {
 		this.logger.info(
-			`getProducts:getting the products [page=${page}|catalogueId=${catalogueId}]`,
+			`getProducts: [page=${page}|catalogueId=${catalogueId}]`,
 			{ context: ProductsController.name },
 		);
 		try {

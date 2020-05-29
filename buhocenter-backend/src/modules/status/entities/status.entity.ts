@@ -12,12 +12,12 @@ import { Platform } from '../../platform-management/entities/platform.entity';
 import { ProductInventory } from '../../products/entities/product-inventory.entity';
 import { ProductCart } from '../../carts/entities/product-cart.entity';
 
-@Entity('estatus') 
+@Entity('status')
 export class Status extends BaseEntity {
-	@Column({ name: 'nombre', type: 'varchar', length: 100, nullable: false })
+	@Column({ name: 'name', type: 'varchar', length: 100, nullable: false })
 	name: string;
 
-	@Column({ name: 'descripcion', type: 'varchar', length: 100, nullable: true })
+	@Column({ name: 'description', type: 'varchar', length: 100, nullable: true })
 	description: string;
 
 	@OneToMany(type => Customer, customers => customers.status)

@@ -1,6 +1,7 @@
 import { Module } from 'vuex';
 import CartTypes from '@/store/carts/methods/cart-methods';
 import cartsHttpRepository from '@/modules/products/http-repositories/carts-http.repository';
+import ProductsFirebaseRepository from '@/modules/products/firebase-repositories/products-firebase.repository'
 import * as CART_INTERFACE from '@/modules/products/interfaces/carts.interface';
 
 const carts: Module<any, any> = {
@@ -10,6 +11,7 @@ const carts: Module<any, any> = {
         err_cart_message: '',
         cart: {},
         checkout: [],
+        load_photo_cart: false,
     },
     mutations: {
         [CartTypes.mutations.SET_CART](state, data: Response) {
@@ -45,6 +47,13 @@ const carts: Module<any, any> = {
             new_cart.productCarts.splice(index, 1);
             state.cart = new_cart;
         },
+        [CartTypes.mutations.SET_PRODUCTS_CART](state, products) {
+            state.cart.productCarts = products;
+            state.load_photo_cart = true;
+        },
+        [CartTypes.mutations.FALSE_PHOTO_CART](state) {
+            state.load_photo_cart = false;
+        },
     },
     getters: {
         [CartTypes.getters.GET_CART_OBJECT](state): string {
@@ -67,6 +76,10 @@ const carts: Module<any, any> = {
             });
             return price;
         },
+        [CartTypes.getters.GET_LOAD_PHOTO_CART](state): number[] {
+            return state.load_photo_cart;
+        },
+
     },
     actions: {
         async [CartTypes.actions.ADD_PRODUCT_TO_CART]({ commit }, productCart: CART_INTERFACE.ProductCart): Promise<boolean> {
@@ -92,6 +105,17 @@ const carts: Module<any, any> = {
                     commit(CartTypes.mutations.SET_CART, response);
                     return true;
                 }
+                return false;
+            } catch (e) {
+                return false;
+            }
+        },
+        async [CartTypes.actions.FETCH_PRODUCT_CART_PHOTO_BY_NAME]({ commit }, products):Promise<boolean> {
+            try {
+                for(let i = 0 ; i < products.length; i++){
+                    products[i].product.photos[0].imageUrl = await ProductsFirebaseRepository.getProductPhotoByName(products[i].product.id, products[i].product.photos[0].content);
+                }
+                commit(CartTypes.mutations.SET_PRODUCTS_CART, products);
                 return false;
             } catch (e) {
                 return false;

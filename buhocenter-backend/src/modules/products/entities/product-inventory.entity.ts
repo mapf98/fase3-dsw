@@ -4,18 +4,18 @@ import { Product } from './product.entity';
 import { Status } from '../../status/entities/status.entity';
 import { Checkout } from '../../payments/entities/checkout.entity';
 
-@Entity({ name: 'inventario_producto' }) 
+@Entity({ name: 'product_inventory' })
 export class ProductInventory extends BaseEntity {
 	
-	@Column({ name: 'cantidad_disponible', type: 'integer', nullable: false })
+	@Column({ name: 'quantity_disponible', type: 'integer', nullable: false })
 	availableQuantity: number;
 
-	@JoinColumn({ name: 'producto_id' })
+	@JoinColumn({ name: 'product_id' })
 	@ManyToOne(type => Product, product => product.productInventories)
 	product: Product;
 
-	@JoinColumn({ name: 'estatus_id' })
-	@ManyToOne(type => Status, status => status.productInventories)
+	@JoinColumn({ name: 'status_id' })
+	@ManyToOne(type => Status, status => status.productInventories, { nullable: true })
 	status: Status;	
 
 	@JoinColumn({ name: 'checkout_id' })

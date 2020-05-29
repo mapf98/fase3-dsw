@@ -1,14 +1,13 @@
-import { HttpService , HttpException , HttpStatus,Inject} from '@nestjs/common'
+import { HttpService, Inject } from '@nestjs/common'
 import { map } from 'rxjs/operators';
 import { Logger } from 'winston'
 import { WINSTON_MODULE_PROVIDER } from 'nest-winston'
 
 export class AddressHttpRepository  {
-
     constructor(
         private http: HttpService,
         @Inject(WINSTON_MODULE_PROVIDER) private readonly logger: Logger,
-     ) {}
+    ) {}
 
     private static readonly RESOURCE = `${process.env.DIRECTION_VERIFICATION_URL}`;
 
@@ -33,21 +32,19 @@ export class AddressHttpRepository  {
             uri += query.join('&');
         }
 
+        console.log('uri', uri)
+
         return uri;
     }
 
          
     /**
-    *  forma el url para la peticion y se envia junto con los detalles de la direccion 
-    * @param addressDetail un objeto con la ciudad, calles , codigo zip, 
-    * y otros detalles de la direccion, el formato esta en addesssVerificationDto
-    * @param serviceKey , es un objeto con el apik_key y a el auth_token para hacer
-    * la peticion a smartyStreets.
-    * @returns promise<AddressVerificationRO>
+    * Validates the provided address with SmartyStreets
+    * @param addressDetail address to validate in SmartyStreets
+    * @param serviceKey credentials to use SmartyStreets and validate address
     */
     async postAddressUri(addressDetail, serviceKey: any): Promise<any> {          
-        let route= this.createUri([`${AddressHttpRepository.RESOURCE}`],
-                serviceKey)
-        return await this.http.post(route,[addressDetail]).pipe(map(response => response.data)).toPromise();       
+        let route = this.createUri([`${AddressHttpRepository.RESOURCE}`])
+        return await this.http.post(`${process.env.DIRECTION_VERIFICATION_URL}?auth-id=${process.env.SMARTSTREET_AUTH_KEY}&auth-token=${process.env.SMARTSTREET_AUTH_TOKEN}`, [addressDetail]).pipe(map(response => response.data)).toPromise();       
     }
 }

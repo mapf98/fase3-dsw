@@ -96,7 +96,8 @@
 <script lang="ts">
     import { Component, Vue } from 'vue-property-decorator';
     import AuthMethods from '@/store/auth-module/methods/auth-methods'
-    import { authModule } from "@/store/namespaces";
+    import { authModule, carts } from "@/store/namespaces";
+    import CartMethods from "@/store/carts/methods/cart-methods";
 
     @Component
     export default class Login extends Vue {
@@ -109,6 +110,7 @@
             await this.loginSocial(social);
             const token: string = this.getToken;
             if(token){
+                this.GET_ITEMS_CARS(this.getClient.id);
                 await this.$router.push("/home");
             }
         }
@@ -119,12 +121,14 @@
             this.isLoading = false;
             const token: string = this.getToken;
             if(token){
+                this.GET_ITEMS_CARS(this.getClient.id);
                 await this.$router.push("/home");
             }
         }
 
+        @carts.Action(CartMethods.actions.GET_ITEMS_CARS) GET_ITEMS_CARS;
 
-
+        @authModule.Getter(AuthMethods.getters.GET_CLIENT_DATA) getClient;
         @authModule.Action(AuthMethods.actions.LOGIN_SOCIAL) loginSocial;
         @authModule.Action(AuthMethods.actions.LOGIN) login;
         @authModule.Getter(AuthMethods.getters.GET_AUTH_TOKEN) getToken;

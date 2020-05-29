@@ -4,7 +4,7 @@ import { PlatformParameter } from './platform-parameter.entity';
 import { Customer } from '../../users/entities/customer.entity';
 import { Status } from '../../status/entities/status.entity';
 
-@Entity({ name: 'platform' }) 
+@Entity({ name: 'platform' })
 export class Platform extends BaseEntity {
 	
 	@Column({ name: 'content', type: 'varchar', length: 100, nullable: false })

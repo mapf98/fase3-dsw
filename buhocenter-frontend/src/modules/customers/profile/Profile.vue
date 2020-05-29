@@ -39,7 +39,7 @@
 
                         </div>
                     </v-card>
-                    <v-card color="white" class="mb-5 mx-2 ma-0"  style="cursor:pointer;" v-else-if="getClient.rol.id === rol.ADMIN">
+                    <v-card color="white" class="mb-5 mx-2 ma-0"  style="cursor:pointer;" v-else-if="getClient.role.id === rol.ADMIN">
                         <div class="container" @click="redirectDashboard()" style="height: 320px;">
                             <v-card-title class="row d-flex justify-center">
                                 <v-avatar
@@ -115,6 +115,10 @@ export default class Profile extends Vue {
 
     redirectDashboard(){
         this.$router.push('/dashboard');
+    }
+
+    mounted(){
+        console.log(this.getClient)
     }
 
     @authModule.Getter(AuthMethods.getters.GET_CLIENT_DATA) getClient;

@@ -17,7 +17,7 @@ export class ServicesController {
 		@Res() res: Response,
         @Param('id', new ParseIntPipe()) id: number,
 	): Promise<Response> {
-        this.logger.info(`getServiceById: obteniendo el servicio por id [id=${id}]`, { context: ServicesController.name });
+        this.logger.info(`getServiceById: obteniendo el service por id [id=${id}]`, { context: ServicesController.name });
 
         try {
             const service: Service = await this.servicesService.getServiceById(id);

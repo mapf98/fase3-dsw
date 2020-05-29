@@ -78,7 +78,7 @@
                     <v-container v-if="itemDetailLoaded" class="mr-3 my-2" style="max-width: none !important; width: 100%;">
                         <h3 class="my-3">{{$t('QUESTION_ANSWERS')}}</h3>
                         <v-row class="mx-auto my-3 d-flex"
-                               v-for="question of GET_ITEM_DETAIL.questions" :key="question.id"
+                            v-for="question of GET_ITEM_DETAIL.questions" :key="question.id"
                         >
                             <v-col cols="10">
                                 {{ question.comment }}
@@ -285,7 +285,8 @@ export default class ItemDetail extends Vue {
         if (created) {
             this.itemAddedToCart = true;
             await this.GET_ITEMS_CARS(this.GET_CLIENT_DATA.id);
-
+            this.FALSE_PHOTO_CART();
+            await this.FETCH_PRODUCT_CART_PHOTO_BY_NAME(this.GET_CART_OBJECT.productCarts);
         } else {
             this.errorAddingItemToCart = true;
         }
@@ -346,10 +347,12 @@ export default class ItemDetail extends Vue {
     @loader.Action(SHOW_LOADER) SHOW_LOADER;
 
     @payments.Action(CREATE_ORDER) private CREATE_ORDER;
-    
+
+    @carts.Getter(CartMethods.getters.GET_CART_OBJECT) GET_CART_OBJECT;
     @carts.Action(CartMethods.actions.ADD_PRODUCT_TO_CART) private ADD_PRODUCT_TO_CART;
     @carts.Action(CartMethods.actions.ADD_SERVICE_TO_CART) private ADD_SERVICE_TO_CART;
     @carts.Action(CartMethods.actions.GET_ITEMS_CARS) GET_ITEMS_CARS;
+    @carts.Action(CartMethods.actions.FETCH_PRODUCT_CART_PHOTO_BY_NAME) FETCH_PRODUCT_CART_PHOTO_BY_NAME;
 
     @products.Getter(GET_ITEM_DETAIL) private GET_ITEM_DETAIL;
     @products.Action(FETCH_PRODUCT_ITEM_PHOTOS) private FETCH_PRODUCT_ITEM_PHOTOS;
@@ -361,6 +364,7 @@ export default class ItemDetail extends Vue {
     @layout.Getter(GET_CATEGORY_ID) private GET_CATEGORY_ID;
     @layout.Getter(GET_CATALOGUE) private GET_CATALOGUE;
     @layout.Getter(GET_CATALOGUE_ID) private GET_CATALOGUE_ID;
+    @carts.Mutation(CartMethods.mutations.FALSE_PHOTO_CART) FALSE_PHOTO_CART;
 
     @authModule.Getter(AuthTypes.getters.GET_CLIENT_DATA) private GET_CLIENT_DATA;
 

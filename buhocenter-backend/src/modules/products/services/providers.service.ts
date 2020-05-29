@@ -49,7 +49,7 @@ export class ProvidersService {
 
     public async checkProductProviders(providerId: number, productId: number): Promise<boolean>{
         let productsProviders = await this.productProviderRepository.find({
-            where: `proveedor_id = ${providerId} AND producto_id = ${productId}`
+            where: `provider_id = ${providerId} AND product_id = ${productId}`
         });
 
         console.log('productsProviders', productsProviders);

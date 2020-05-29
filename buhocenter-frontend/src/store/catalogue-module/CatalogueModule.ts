@@ -44,10 +44,10 @@ const catalogueModule: Module<any, any> = {
             try {
                 const response: any = await catalogueHttpRepository.getAllCatalogues();
                 commit(CatalogueTypes.mutations.SET_CATALOGUES, response);
-                return true;
+                return false;
             } catch (e) {
                 commit(CatalogueTypes.mutations.SET_ERR_CATALOGUE);
-                return false;
+                return true;
             }
         },
         async [CatalogueTypes.actions.SAVE_CATALOGUE]({commit}, data): Promise<boolean>{

@@ -3,9 +3,8 @@ import { Service } from '../entities/service.entity';
 import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
 import { Logger } from 'winston';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository,createQueryBuilder } from 'typeorm';
+import { Repository, } from 'typeorm';
 import { ServiceRating } from '../entities/service-rating.entity';
-import { STATUS } from '../../../config/constants';
 
 @Injectable()
 export class ServicesService {
@@ -20,19 +19,19 @@ export class ServicesService {
 
 
     /**
-     * Obtiene las valoraciones emitidas sobre un arreglo de servicios
-     * @param services arreglo de servicios de los cuales se obtendrán las valoraciones
+     * Returns the appreciations emitted to a service array
+     * @param services services array to obtain its appreciations
      * @returns Promise<void>
      */
     private async getServiceAverageRating(services: Service[]): Promise<void> {
-        this.logger.debug(`getServiceAverageRating: obtiene el promedio de ratings de los servicios`,
+        this.logger.debug(`getServiceAverageRating: obtiene el promedio de ratings de los services`,
             { context: ServicesService.name });
 
         for await (const service of services) {
             service.serviceRatings = await this.serviceRatingsRepository.query(`
-                SELECT ROUND(AVG(CS.calificacion)) as rating, COUNT(*) as total
-                FROM calificacion_servicio CS
-                WHERE CS.servicio_id = ${service.id}
+                SELECT ROUND(AVG(CS.rating)) as rating, COUNT(*) as total
+                FROM service_rating CS
+                WHERE CS.service_id = ${service.id}
             `.trim())
 
             this.logger.debug(`getServiceAverageRating [id=${service.id}|serviceRatings=${
@@ -41,12 +40,12 @@ export class ServicesService {
     }
 
     /**
-     * Obtiene el servicio y todos sus componentes dado su id
-     * @param id id del servicio
+     * Returns the service and its properties according to its id
+     * @param id service id
      * @returns Promise<Service>
      */
     public async getServiceById(id: number): Promise<Service> {
-        this.logger.debug(`getServiceById: obteniendo el servicio por id [id=${id}]`, { context: ServicesService.name });
+        this.logger.debug(`getServiceById: [id=${id}]`, { context: ServicesService.name });
 
         const service: Service = await this.servicesRepository.findOne({
             where: { id },
@@ -67,7 +66,13 @@ export class ServicesService {
     }
 
   
-    async findService( ServiceId: number ): Promise<Service>{
+    /**
+     * Returns the service according to its id
+     * @param ServiceId service id
+     */
+    async findService(ServiceId: number): Promise<Service> {
+        this.logger.debug(`getServiceById: [id=${ServiceId}]`, { context: ServicesService.name });
+
         return await this.servicesRepository.findOne(ServiceId);
     }
 }
