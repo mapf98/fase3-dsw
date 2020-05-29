@@ -21,8 +21,8 @@ insert into customer
     (name, last_name, birthdate,email,is_federate, status_id, rol_id) VALUES
     ('Angel', 'Sucasas', '1999-01-25 00:00:00.000000','angel@gmail.com', true, 1, 2);
 insert into customer
-    (name, last_name, birthdate,email,is_federate, status_id, rol_id) VALUES
-    ('Admin', 'User', '1999-01-25 00:00:00.000000','admin@gmail.com', false, 1, 2);
+    (name, last_name, birthdate,email,is_federate, status_id, rol_id, uid) VALUES
+    ('Admin', 'User', '1999-01-25 00:00:00.000000','admin@gmail.com', false, 1, 2, 'ppi0RqZ7RuTFdFSvIqf7cpuDppT2');
 
 /* PROVIDERS INSERTS */
 insert into provider (name) values ('Apple Products');
