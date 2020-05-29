@@ -1,7 +1,7 @@
 <template>
     <div style="background: #f3f3f3;">
         <v-container class="mt-8" >
-            <h3 class="text-center">ABOUT US</h3>
+            <h3 class="text-center">{{$t('ABOUT_US').toUpperCase()}}</h3>
             <v-row dense>
                 <v-col
                         cols="12"
@@ -23,13 +23,11 @@
                         </v-card-title>
 
                         <v-card-title class="justify-center ">
-                            Pay with cryptocurrencies
+                            {{$t('PAY_CRYPTOCURRENCIES')}}
                         </v-card-title>
 
                         <v-card-subtitle class="justify-center text-center ">
-                            pay with the cryptocurrency of your choice thanks to utrust.
-                            <br>
-                            Product prices in traditional currencies and payment in cryptocurrencies
+                            {{$t('PAY_CRYPTOCURRENCIES_INFO')}}
                         </v-card-subtitle>
 
                         <v-card-actions class="justify-center">
@@ -37,15 +35,6 @@
                         </v-card-actions>
 
 
-                        <v-expand-transition>
-                            <div v-show="show">
-                                <v-divider></v-divider>
-
-                                <v-card-text>
-                                    I'm a thing. But, like most politicians, he promised more than he could deliver. You won't have time for sleeping, soldier, not with all the bed making you'll be doing. Then we'll go with that data file! Hey, you add a one and two zeros to that or we walk! You're going to do his laundry? I've got to find a way to escape.
-                                </v-card-text>
-                            </div>
-                        </v-expand-transition>
                     </v-card>
                 </v-col>
                 <v-col
@@ -68,32 +57,21 @@
                         </v-card-title>
 
                         <v-card-title class="justify-center ">
-                            Big ecommerce
+                            {{$t('BIG_ECOMMERCE')}}
                         </v-card-title>
 
                         <v-card-subtitle class="justify-center text-center ">
-                            Our e-commerce contains multiple categories and catalogs to obtain any type of product.
-                            <br>
-                            Our services are available to everyone
+                            {{$t('BIG_ECOMMERCE_INFO')}}
                         </v-card-subtitle>
 
                         <v-card-actions class="justify-center">
 
                             <RouterLink to="/sign-in" style="text-decoration: none;">
-                                <v-btn  color="primary">Go shopping</v-btn>
+                                <v-btn  color="primary"> {{$t('GO_SHOPPING')}}</v-btn>
                             </RouterLink>
                         </v-card-actions>
 
 
-                        <v-expand-transition>
-                            <div v-show="show">
-                                <v-divider></v-divider>
-
-                                <v-card-text>
-                                    I'm a thing. But, like most politicians, he promised more than he could deliver. You won't have time for sleeping, soldier, not with all the bed making you'll be doing. Then we'll go with that data file! Hey, you add a one and two zeros to that or we walk! You're going to do his laundry? I've got to find a way to escape.
-                                </v-card-text>
-                            </div>
-                        </v-expand-transition>
                     </v-card>
                 </v-col>
                 <v-col
@@ -116,13 +94,11 @@
                         </v-card-title>
 
                         <v-card-title class="justify-center ">
-                            Multi-language site
+                            {{$t('MULTI_LANGUAGE_SITE')}}
                         </v-card-title>
 
                         <v-card-subtitle class="justify-center text-center ">
-                            Our site is not only limited to one language.
-                            <br>
-                            Our goal is to be able to communicate with any client anywhere in the world
+                            {{$t('MULTI_LANGUAGE_SITE_INFO')}}
                         </v-card-subtitle>
 
                         <v-card-actions class="justify-center">
@@ -131,15 +107,7 @@
                         </v-card-actions>
 
 
-                        <v-expand-transition>
-                            <div v-show="show">
-                                <v-divider></v-divider>
 
-                                <v-card-text>
-                                    I'm a thing. But, like most politicians, he promised more than he could deliver. You won't have time for sleeping, soldier, not with all the bed making you'll be doing. Then we'll go with that data file! Hey, you add a one and two zeros to that or we walk! You're going to do his laundry? I've got to find a way to escape.
-                                </v-card-text>
-                            </div>
-                        </v-expand-transition>
                     </v-card>
                 </v-col>
             </v-row>

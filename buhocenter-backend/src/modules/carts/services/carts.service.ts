@@ -50,12 +50,11 @@ export class CartsService {
 
     public async findCartUser(customerId: number): Promise<Cart> {
         this.logger.debug(`findCartUser: [customerId = ${customerId}]`, { context: CartsService.name });
-        return await createQueryBuilder()
-            .select('carrito')
-            .from(Cart, 'carrito')
-            .where('carrito.cliente_id = :customerId', { customerId })
-            .andWhere('carrito.cart_status_id = :statusId', { statusId: STATUS.ACTIVE.id })
-            .getOne();
+        let thisCustomer = await this.UsersService.findUser(customerId);
+        let active = await this.StatusService.getStatus(STATUS.ACTIVE.id);
+        return await this.cartRepository.findOne({
+            where:{customer:thisCustomer, status:active}
+        });
     }
 
 	private async createCart(findCustomer: Customer): Promise<Cart> {

@@ -1,49 +1,59 @@
 <template>
-    <v-container class="mt-5" style="max-width: none !important;">
+    <v-container fluid class="mt-5" style="max-width: none !important;">
+        <v-img
+                src="../../../assets/images/account.jpg"
+                height="125"
+                class="grey darken-4"
+        ></v-img>
         <v-container class="mt-5" style="max-width: none !important;">
-            <div class="display-1">
-                Your Account
+            <div class="overline text-center mb-8">
+                {{$t('YOUR_ACCOUNT')}}
             </div>
             <v-row class="mx-auto my-2" fill-width>
                 <v-col
+                    xs="10"
                     sm="12"
-                    lg="4"
+                    md="4"
+                    lg="2"
                     class=" align-content-center justify-center pa-0"
-                    v-for="item in items"
+                    v-for="(item,index) in items"
                     :key="item.title"
+                    :offset-lg="index === 0? 1:null"
                 >
-                    <v-card color="white" class="mb-5 mx-2 ma-0" :to="item.link" v-if="!item.admin">
-                        <div class="d-flex flex-no-wrap justify-space-between">
-                            <div>
-                                <v-card-title
-                                    v-text="item.title"
-                                ></v-card-title>
-                                <v-card-subtitle v-text="item.subtitle"></v-card-subtitle>
-                            </div>
-                            <v-avatar
-                                class="ma-3"
-                                size="125"
-                                tile
-                            >
-                                <v-img :src="item.src"></v-img>
-                            </v-avatar>
+                    <v-card color="white" class="mb-5 mx-2 ma-0" :to="item.link" v-if="!item.admin" >
+                        <div class="container" style="height: 320px;">
+                            <v-card-title class="row d-flex justify-center">
+                                <v-avatar
+                                        class="ma-3"
+                                        size="80"
+                                        tile
+                                >
+                                    <v-img :src="item.src"></v-img>
+                                </v-avatar>
+                            </v-card-title>
+                            <v-card-title  class="row d-flex justify-center text-center"
+                            >{{$t(item.title)}}
+                            </v-card-title>
+                            <v-card-subtitle class="row d-flex justify-center text-center">{{$t(item.subtitle)}}</v-card-subtitle>
+
+
                         </div>
                     </v-card>
                     <v-card color="white" class="mb-5 mx-2 ma-0"  style="cursor:pointer;" v-else-if="getClient.rol.id === rol.ADMIN">
-                        <div class="d-flex flex-no-wrap justify-space-between" @click="redirectDashboard()">
-                            <div>
-                                <v-card-title
-                                        v-text="item.title"
-                                ></v-card-title>
-                                <v-card-subtitle v-text="item.subtitle"></v-card-subtitle>
-                            </div>
-                            <v-avatar
-                                    class="ma-3"
-                                    size="125"
-                                    tile
-                            >
-                                <v-img :src="item.src"></v-img>
-                            </v-avatar>
+                        <div class="container" @click="redirectDashboard()" style="height: 320px;">
+                            <v-card-title class="row d-flex justify-center">
+                                <v-avatar
+                                        class="ma-3"
+                                        size="80"
+                                        tile
+                                >
+                                    <v-img :src="item.src"></v-img>
+                                </v-avatar>
+                            </v-card-title>
+                            <v-card-title  class="row d-flex justify-center text-center mb-2" style="width: auto;word-break: break-word;"
+                            >{{$t(item.title)}}
+                            </v-card-title>
+                            <v-card-subtitle class="row d-flex justify-center text-center">{{$t(item.subtitle)}}</v-card-subtitle>
                         </div>
                     </v-card>
 
@@ -66,34 +76,35 @@ export default class Profile extends Vue {
     items = [
         {
             src: require('../assets/orders.png'),
-            title: "Your Orders",
-            subtitle: "Track, return or buy things again",
+            title: "YOUR_ORDERS",
+            subtitle: "YOUR_ORDERS_INFO",
             admin: false,
             link: "#",
         },
         {
             src: require('../assets/login.png'),
-            title: "Your Profile",
-            subtitle: "Edit login, name, language",
+            title: "YOUR_PROFILE",
+            subtitle: "YOUR_PROFILE_INFO",
             admin: false,
             link: "/your-account",
         },
         {
             src: require('../assets/address.png'),
-            title: "Your Addresses",
-            subtitle: "Edit your addresses",
+            title: "YOUR_ADDRESSES",
+            subtitle: "YOUR_ADDRESSES_INFO",
+            admin: false,
             link: "/address-management",
         },
         {
             src: require('../assets/invoice.jpg'),
-            title: "Your Invoices",
-            subtitle: "Get all your invoices",
+            title: "YOUR_INVOICES",
+            subtitle: "YOUR_INVOICES_INFO",
             admin: false,
         },
         {
             src: require('../assets/platform.png'),
-            title: "Platform administrate",
-            subtitle: "Management all products, service and the platform",
+            title: "PLATFORM_ADMINISTRATE",
+            subtitle: "PLATFORM_ADMINISTRATE_INFO",
             admin: true,
             link: "#",
         },

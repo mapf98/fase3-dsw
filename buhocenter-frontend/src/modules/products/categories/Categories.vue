@@ -1,7 +1,7 @@
 <template>
     <div>
         <v-container class="mt-8">
-            <h3 class="text-center">CATEGORIES</h3>
+            <h3 class="text-center">{{$t('CATEGORIES').toUpperCase()}} </h3>
             <v-row dense>
                 <v-col
                     v-for="card in GET_CATEGORIES"
@@ -36,7 +36,7 @@
                                                 <v-icon style="text-decoration: none;" color="primary">{{card.icon}}</v-icon>
                                             </v-card-text>
                                             <v-card-title class="overline justify-center">
-                                                {{card.name}}
+                                                {{$t(card.term)}}
                                             </v-card-title>
                                         </v-card>
                                     </v-hover>

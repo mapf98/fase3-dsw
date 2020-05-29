@@ -138,7 +138,6 @@ const routes: RouteConfig[] = [
         path: "/your-account",
         name: "your-account",
         component: PersonalInformation,
-
       },
     ],
   },

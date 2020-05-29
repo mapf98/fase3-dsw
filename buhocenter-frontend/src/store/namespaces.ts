@@ -10,4 +10,7 @@ export const layout = namespace('layout');
 export const loader = namespace('loader');
 export const authModule = namespace('authModule');
 export const languageModule = namespace('languageModule');
+export const brands = namespace('brands');
+export const providers = namespace('providers');
 export const catalogueModule = namespace('catalogueModule');
+

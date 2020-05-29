@@ -13,7 +13,7 @@
                             col-sm="12"
                         >
                             <p class="overline font-weight-light caption" style="word-break: break-word;">
-                                <RouterLink :to="`/catalogues?category_id=${GET_CATEGORY_ID}`"> {{ GET_CATEGORY }} </RouterLink>> <RouterLink :to="`/products?category_id=${GET_CATEGORY_ID}&catalogue_id=${GET_CATALOGUE_ID}`"> {{ GET_CATALOGUE }} </RouterLink>
+                                <RouterLink :to="`/catalogues?category_id=${GET_CATEGORY_ID}`"> {{ $t(GET_CATEGORY) }} </RouterLink>> <RouterLink :to="`/products?category_id=${GET_CATEGORY_ID}&catalogue_id=${GET_CATALOGUE_ID}`"> {{ $t( GET_CATALOGUE) }} </RouterLink>
                             </p>
                         </v-col>
                     </v-row>
@@ -56,13 +56,13 @@
                                 <v-row fill-width class="pa-1 mx-auto">
                                     <v-btn @click="addItemToCart(quantity)" block outlined color="primary" style="height: 50px" >
                                         <v-icon left class="d-flex align-center">mdi-cart-outline</v-icon>
-                                        <p class="ma-0 ">Agregar al carrito</p>
+                                        <p class="ma-0 ">{{$t('ADD_TO_CART')}}</p>
                                     </v-btn>
                                 </v-row>
                                 <v-row fill-width class="pa-1 mx-auto">
                                     <v-btn @click="buyItem(quantity)" block outlined color="primary" style="height: 50px" >
                                         <v-icon left class="d-flex align-center">mdi-play-box-outline</v-icon>
-                                        <p class="ma-0">Comprar ahora</p>
+                                        <p class="ma-0">{{$t('BUY_NOW')}}</p>
                                     </v-btn>
                                 </v-row>
                             </v-row>
@@ -76,7 +76,7 @@
                     </v-row>
                     <v-divider></v-divider>
                     <v-container v-if="itemDetailLoaded" class="mr-3 my-2" style="max-width: none !important; width: 100%;">
-                        <h3 class="my-3">Questions and Answers</h3>
+                        <h3 class="my-3">{{$t('QUESTION_ANSWERS')}}</h3>
                         <v-row class="mx-auto my-3 d-flex"
                                v-for="question of GET_ITEM_DETAIL.questions" :key="question.id"
                         >
@@ -99,16 +99,16 @@
             <DailyRecomendation></DailyRecomendation>
         </v-row>
         <v-snackbar v-model="itemAddedToCart" top :timeout="timeout" color="success">
-            {{ isProduct() ? 'Producto' : 'Servicio' }} añadido al carrito exitosamente
-            <v-btn color="white" text @click="itemAddedToCart = false">Cerrar</v-btn>
+            {{ isProduct() ? $t('PRODUCT_ADD_TO_CART_SUCCESS') : $t('SERVICE_ADD_TO_CART_SUCCESS') }}
+            <v-btn color="white" text @click="itemAddedToCart = false">{{$t('CLOSE')}}</v-btn>
         </v-snackbar>
         <v-snackbar v-model="errorAddingItemToCart" top :timeout="timeout" color="error">
-            Ocurrió un error añadiendo el {{ isProduct() ? 'producto' : 'servicio' }} al carrito
+            {{ isProduct() ? $t('PRODUCT_ADD_TO_CART_ERROR') : $t('SERVICE_ADD_TO_CART_ERROR') }}
             <v-btn color="white" text @click="errorAddingItemToCart = false">Cerrar</v-btn>
         </v-snackbar>
         <v-snackbar v-model="errorLoadingContent" top :timeout="timeout" color="error">
-            Ocurrió un error obteniendo los productos, por favor intente nuevamente
-            <v-btn color="white" text @click="closeSnackbar">Cerrar</v-btn>
+            {{$t('ERROR_LOAD_PRODUCTS')}}
+            <v-btn color="white" text @click="closeSnackbar">{{$t('CLOSE')}}</v-btn>
         </v-snackbar>
     </v-container>
 </template>

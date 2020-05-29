@@ -4,6 +4,8 @@ import { Response } from 'express';
 import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
 import { Logger } from 'winston';
 import {CategoriesService} from '../services/categories.service';
+import { Category } from '../entities/category.entity'
+import { ProductTransactionsRepository } from '../transaction/products.transaction.service'
 
 @Controller('categories')
 export class CategoriesController {
@@ -11,6 +13,7 @@ export class CategoriesController {
         private readonly categoriesService: CategoriesService,
         @Inject(WINSTON_MODULE_PROVIDER) private readonly logger: Logger,
         public service: ProductsService,
+        private readonly productTransactionsRepository: ProductTransactionsRepository
     ) {}
 
     @Get()
@@ -22,7 +25,7 @@ export class CategoriesController {
             { context: CategoriesController.name },
         );
         try {
-            const categories: any = await this.categoriesService.getCategories();
+            const categories: Category[] = await this.categoriesService.getCategories();
             return res.status(HttpStatus.OK).send({categories});
         } catch (e) {
             this.logger.error(

@@ -24,10 +24,10 @@ const layout: Module<any, any> = {
     },
     getters: {
         [GET_CATEGORY](state): string {
-            return state.category.name;
+            return state.category.term;
         },
         [GET_CATALOGUE](state): string {
-            return state.catalogue.name;
+            return state.catalogue.term;
         },
         [GET_CATEGORY_ID](state): number {
             return state.category.id;

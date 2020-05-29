@@ -1,16 +1,25 @@
 <template>
-    <v-container class="mt-5" style="max-width: none !important;">
-        <v-container class="mt-5 d-flex justify-center" style="max-width: none !important;">
-            <v-col xs="12" sm="12" lg="6" md="6" class="mt-5">
-                <v-card fill-width class="pa-2" style="border: 3px solid #907F46;">
-                    <v-row class="d-flex justify-center" fill-width>
-                        <h1> Your Profile </h1>
+    <v-container fluid class="mt-5" style="max-width: none !important;">
+        <v-img
+                src="../../../assets/images/profile.jpg"
+                height="125"
+                class="grey darken-4"
+        ></v-img>
+        <v-container class=" d-flex justify-center" style="max-width: none !important;">
+            <v-col xs="12" sm="12" lg="6" md="6">
+                <v-card fill-width class="pa-2" >
+                    <v-row class="d-flex justify-center pt-4" fill-width>
+                        <v-icon style="font-size: 15px;">fas fa-user</v-icon>
                     </v-row>
+                    <v-row class="d-flex justify-center mb-4" fill-width>
+                        <h1 class="overline"> {{$t('YOUR_PROFILE')}} </h1>
+                    </v-row>
+
                     <v-form ref="form" v-model="isFormValid">
                         <v-row class="mx-auto fill-width">
                             <v-col lg="6" xs="12">
                                 <v-text-field
-                                    label="Name"
+                                    :label="$t('FIRST-NAME')"
                                     @change="modifyName"
                                     :value="modifiedName"
                                     :rules="[
@@ -21,7 +30,7 @@
                             </v-col>
                             <v-col lg="6" xs="12">
                                 <v-text-field
-                                    label="Last Name"
+                                    :label="$t('LAST-NAME')"
                                     @change="modifyLastName"
                                     :value="modifiedLastName"
                                     :rules="[rules.required(), rules.fieldLength(100)]"
@@ -77,15 +86,16 @@
                                 v-for="(item, i) in GET_LANGUAGES"
                                 :key="i"
                                 @click="selectCustomerLanguage(item.code)"
-                                :style="modifiedLanguage === item.code ? 'border-bottom: 1px solid #907F46;' : ''"
+                                :style="modifiedLanguage === item.code ? 'border: 2px solid #907F46; border-radius:10px;' : ''"
                             >
-                                <v-col cols="3" class="pa-0 ma-0"><v-img :src="require(`../../../assets/flags/${item.code}.png`)" height="18" width="18"></v-img></v-col>
-                                <v-col cols="9" class="pa-0 ma-0">{{ item.name }}</v-col>
+                                <v-img class="d-flex justify-center mb-4" style="margin-left: 46%;" :src="require(`../../../assets/flags/${item.code}.png`)" height="18" width="18"></v-img>
+
+                                <v-row class="pa-0 ma-0 text-center d-flex justify-center">{{ item.name }}</v-row>
                             </v-col>
                         </v-row>
                     </v-form>
-                    <v-row class="d-flex justify-center my-2" @click="saveChanges()">
-                        <v-btn :loading="loading" outlined color="primary">SAVE</v-btn>
+                    <v-row class="d-flex justify-center my-2 mb-4" @click="saveChanges()">
+                        <v-btn :loading="loading" outlined color="primary">{{$t('SAVE')}}</v-btn>
                     </v-row>
                 </v-card>
             </v-col>

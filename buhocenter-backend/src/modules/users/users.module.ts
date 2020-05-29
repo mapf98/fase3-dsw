@@ -1,5 +1,5 @@
 import {Customer} from './entities/customer.entity';
-import {HttpModule, Module} from '@nestjs/common';
+import {HttpModule, Module, forwardRef} from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersController } from './controllers/users.controller';
 import { UsersService } from './services/users.service';

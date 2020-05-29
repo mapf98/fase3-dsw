@@ -40,6 +40,16 @@ const catalogueModule: Module<any, any> = {
                 return false;
             }
         },
+        async [CatalogueTypes.actions.FETCH_ALL_CATALOGUES]({commit}): Promise<boolean>{
+            try {
+                const response: any = await catalogueHttpRepository.getAllCatalogues();
+                commit(CatalogueTypes.mutations.SET_CATALOGUES, response);
+                return true;
+            } catch (e) {
+                commit(CatalogueTypes.mutations.SET_ERR_CATALOGUE);
+                return false;
+            }
+        }
     },
 };
 

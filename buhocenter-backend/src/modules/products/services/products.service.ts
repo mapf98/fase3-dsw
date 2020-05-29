@@ -1,14 +1,29 @@
 import { createQueryBuilder, Repository, EntityManager, UpdateResult} from 'typeorm'
-import { Injectable, Inject} from '@nestjs/common'
+import { Injectable, Inject , BadRequestException} from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
-import { Product } from '../entities/product.entity'
-import { Customer } from '../../users/entities/customer.entity'
-import { ProductDTO } from '../dto/products.dto'
+import {map} from 'rxjs/operators';
 import { WINSTON_MODULE_PROVIDER } from 'nest-winston'
 import { Logger } from 'winston'
+
+import { STATUS } from '../../../config/constants';
+
+import { ProductDTO, ProductsAO, DimensionDto, IdArrayDto,dimensionDto} from '../dto/products.dto'
+
+import { Product } from '../entities/product.entity'
+import { Customer } from '../../users/entities/customer.entity'
 import { ProductRating } from '../entities/product-rating.entity';
 import { ProductInventory } from '../entities/product-inventory.entity'
-import { STATUS } from '../../../config/constants';
+import { ProductDimension } from '../entities/product-dimension.entity'
+import { Status } from '../../status/entities/status.entity'
+import { ProductCategory } from '../entities/product-category.entity'
+import { ProductCatalogue } from '../entities/product-catalogue.entity'
+import { ProductProvider } from '../entities/product-provider.entity'
+import { StatusService } from '../../status/services/status.service'
+import { BrandsService } from '../services/brands.service'
+import { ProvidersService } from '../services/providers.service'
+import { CategoriesService } from'../services/categories.service'
+import { ProductPhoto } from '../entities/product-photo.entity'
+import { CataloguesService } from '../services/catalogues.service'
 
 @Injectable()
 export class ProductsService {
@@ -20,6 +35,20 @@ export class ProductsService {
         private readonly productRatingsRepository: Repository<ProductRating>,
         @InjectRepository(ProductInventory)
         private readonly productInventoriesRepository: Repository<ProductInventory>,
+        @InjectRepository(ProductDimension)
+        private readonly productDimensionRepository: Repository<ProductDimension>,          
+        @Inject(StatusService)
+        private readonly statusService:StatusService,
+        @Inject(BrandsService)
+        private readonly brandsService:BrandsService,
+        @Inject(ProvidersService)
+        private readonly providersService:ProvidersService,
+        @Inject(CategoriesService)
+        private readonly categoriesService:CategoriesService,
+        @Inject(CataloguesService)
+        private readonly cataloguesService:CataloguesService,        
+        @InjectRepository(ProductPhoto)
+        private readonly productPhotoRepository: Repository<ProductPhoto>, 
     ) {}
 
     /**
@@ -221,4 +250,264 @@ export class ProductsService {
         return [...randomProducts].slice(0, 5);
     }
 
+    async updateUsersProduct( productId : number , updatedProduct  ){
+        let active= STATUS.ACTIVE.id;
+        let verifyProduct= await this.productsRepository.findOne({
+            where: { id: productId, status: active},
+        });
+
+        let maybeProviderArray,maybeCategoryArray;
+
+        if (!verifyProduct){
+            throw new BadRequestException('that Product is not accesable for the system');            
+        } 
+        else{            
+            this.logger.debug(
+                `updateUsersProduct: [id=${JSON.stringify(updatedProduct)}]`,
+                { context: ProductsService.name }
+            );       
+
+            let keys = Object.entries(updatedProduct);                  
+            for(var i=0 ; i < keys.length ;i++) 
+            {               
+                switch (keys[i][0]) {
+
+                    case  "productName":
+                    if (keys[i][1] as string==''){
+                        this.logger.info(
+                            `updateUsersProduct: name not declare, not updating name..`,
+                            { context: ProductsService.name }
+                        );      
+                    }else{
+                        verifyProduct.name = keys[i][1] as string;
+                    }
+
+                    break;
+
+                    case  "description":
+                    if (keys[i][1] as string==''){
+                        this.logger.info(
+                            `updateUsersProduct: description not declare, not updating description..`,
+                            { context: ProductsService.name }
+                        ); 
+                    }else{
+                        verifyProduct.description = keys[i][1] as string;   
+                    }
+
+                    break;
+                    
+                    case  "price":
+                    if(keys[i][1] as number==0){             
+                        this.logger.info(
+                            `updateUsersProduct: price not declare, not updating price..`,
+                            { context: ProductsService.name }
+                        ); 
+                    }else{
+                        verifyProduct.price = keys[i][1] as number;     
+                    }
+                    break;                      
+
+                    case  "shippingPrice":
+                    if(keys[i][1] as number==0){
+                        this.logger.info(
+                            `updateUsersProduct: shipping price not declare, not updating shipping price..`,
+                            { context: ProductsService.name }
+                        ); 
+                    }else{
+                        verifyProduct.shippingPrice = keys[i][1] as number;
+                    }                                                                  
+                   
+                    break;
+
+                    case "category":  
+                    let maybeCategoryArray:IdArrayDto = keys[i][1] as IdArrayDto;                    
+                    let  maybeSaveCategory = maybeCategoryArray.id.length;
+                    if( maybeSaveCategory==0){
+                        this.logger.info(
+                            `updateUsersProduct: category not declare, not updating category...`,
+                            { context: ProductsService.name }
+                        ); 
+                    }else{
+                        //**en caso de que se quiera asociar varias categorias a un mismo producto,
+                        //*siempre sera un array, solo que estara vacio o no
+                        //*elemento llamara a la funcion crear categoria producto de manera asincrona
+                        //*todas esas promesas son almacenadas en un array de promesas
+                        //*y Promise.all se encarga de esperar a que cada una de esas promesas en el
+                        //**array se resuelvan                                             
+                        const status2 = 
+                        Promise.all(
+                            maybeCategoryArray.id.map(async(value2)=>{
+                                await this.categoriesService.createCategoryProduct(
+                                    value2,verifyProduct 
+                                )
+                            })
+                        );
+                    }
+                    break;
+
+                    case  "brand":
+                    if(keys[i][1] as number==0){
+                        this.logger.info(
+                            `updateUsersProduct: brand not declare, not updating brand...`,
+                            { context: ProductsService.name }
+                        ); 
+                    }else{
+                        verifyProduct.brand = await this.brandsService.getBrand(keys[i][1] as number);
+                    }
+
+                    break;    
+
+                    case "minimumQuantityAvailable":
+                    if(keys[i][1] as number==0){
+                        this.logger.info(
+                            `updateUsersProduct: minimumQuantityAvailable not declare, not updating minimumQuantityAvailable...`,
+                            { context: ProductsService.name }
+                        ); 
+                    }else{
+                        verifyProduct.minimumQuantityAvailable = keys[i][1] as number;  
+                    } 
+
+                    break; 
+
+
+
+                    case "provider":   
+                    let maybeProviderArray: IdArrayDto = keys[i][1] as IdArrayDto;                     
+                    let maybeSaveProvider= maybeProviderArray.id.length;
+                    if( maybeSaveProvider==0){
+                        this.logger.info(
+                            `updateUsersProduct: provider not declare, not updating provider...`,
+                            { context: ProductsService.name }
+                        ); 
+                    }else{                                                      
+                        const status = 
+                        Promise.all(
+                            maybeProviderArray.id.map(async(value)=>{
+                                await this.providersService.createProvider(
+                                    value,verifyProduct
+                                )
+                            })
+                        );   
+                    }                                                                                                                                                              
+                    break;                    
+                                                                                    
+                }                        
+            }                      
+        }
+
+    await this.productsRepository.save(verifyProduct);          
+    this.logger.info(
+        `updateUsersProduct: product updated and save succesfully [verifyProduct=${JSON.stringify(verifyProduct)}]`,
+        { context: ProductsService.name }
+    );
+
+    return "product updated succesfully";
+    }
+
+
+    async deleteProduct(productId : number ){
+        let active= STATUS.ACTIVE.id;
+        let findProduct= await this.productsRepository.findOne({
+            where:{ id: productId, status: active},
+        });
+
+        if (!findProduct){
+            throw new BadRequestException('product not found or not accesable');            
+        } else{
+            let unaccesable= await this.statusService.getStatus(STATUS.INACTIVE.id);
+            findProduct.status=unaccesable;
+
+            await this.productsRepository.save(findProduct);
+            this.logger.info(
+                `deleteProduct: product deleted succesfully [verifyProduct=${productId}]`,
+                { context: ProductsService.name }
+            );
+            return "product deleted sucesfully";
+        }
+    }
+
+    public async getAllProducts():Promise<Product[]>{
+        let active= STATUS.ACTIVE.id;
+        return await this.productsRepository.find({
+            where: { status: active },
+        })
+    }
+
+    public async deletMultiplesProducts(productsArray : number[]):Promise<string>{
+        const status = 
+            Promise.all(
+                productsArray.map(async(value)=>{
+                    await this.deleteProduct(
+                        value
+                    )
+                })
+            );   
+            
+        return "products deleted sucesfully";
+    }
+
+    public async createProduct(product: ProductsAO): Promise<Product>{
+        let active = STATUS.ACTIVE.id;
+        let newProduct = new Product();
+        newProduct.name = product.productName;
+        newProduct.description = product.description;
+        newProduct.price =  product.price;
+        newProduct.shippingPrice = product.shippingPrice;
+        newProduct.minimumQuantityAvailable = product.minimumQuantityAvailable;
+        newProduct.status = await  this.statusService.getStatus(active);
+        newProduct.brand =  await this.brandsService.getBrand(product.brand.id);                   
+        await this.productsRepository.save(newProduct);
+
+
+        if(product.category.id.length!==0){
+            console.log("entro en categoria");
+            const status2 = 
+                Promise.all(
+                    product.category.id.map(async(value4)=>{
+                        await this.categoriesService.createCategoryProduct(
+                            value4,newProduct 
+                        )
+                    })
+                );
+        }
+
+        if(product.provider.id.length!==0){
+            console.log("entro en proveedor");
+            const status = 
+                Promise.all(
+                    product.provider.id.map(async(value)=>{
+                        await this.providersService.createProvider(
+                            value,newProduct
+                        )
+                    })
+                ); 
+        }
+        
+        return newProduct;
+    }
+
+
+
+    async createDimension(newWidth: string , newHeight: string, newLong:string , verifiedProduct:Product): Promise<any>{
+        let newDimension= new ProductDimension();
+        newDimension.width = newWidth;
+        newDimension.height = newHeight;
+        newDimension.long = newLong;
+        newDimension.product= verifiedProduct;
+        verifiedProduct.productDimensions=newDimension; 
+        await this.productDimensionRepository.save(newDimension);
+        
+        return true;       
+    } 
+
+    async saveProductImage(imageName, productId): Promise<string>{
+        let imageProduct:Product = await this.productsRepository.findOne(productId);
+        let newProductPhoto = await this.productPhotoRepository.create({ 
+            content:imageName, product:imageProduct
+        });
+        await this.productPhotoRepository.save(newProductPhoto);
+        return "product associate with image!";
+    }
+
 }
+

@@ -8,11 +8,18 @@ import {
     FETCH_PRODUCT_PHOTOS,
     FETCH_SERVICE_PHOTOS,
     FETCH_PRODUCT_ITEM_PHOTOS,
-    FETCH_SERVICE_ITEM_PHOTOS,
+    FETCH_SERVICE_ITEM_PHOTOS,  
+    UPDATE_PRODUCT,
+    FETCH_ALL_PRODUCTS,
+    DELETE_PRODUCT,   
     FETCH_PRODUCTS_DAILY_DETAIL,
     FETCH_PRODUCTS_DAILY,
     FETCH_PRODUCTS_DAILY_DETAIL_PHOTOS,
     SET_PRODUCTS_DAILY_PHOTOS_NOT_LOADED,
+    CREATE_PRODUCT,
+    UPLOAD_IMAGE,
+    SAVE_PRODUCT_PHOTOS,
+    SAVE_PRODUCT_DIMENSION
 } from './methods/products.actions';
 import {
     SET_PRODUCTS,
@@ -29,12 +36,14 @@ import {
     GET_ITEM_DETAIL,
     GET_PRODUCTS_DAILY,
     GET_PRODUCTS_DAILY_AND_PHOTOS_LOADED,
+    GET_PRODUCT_INDEX_ID
 } from './methods/products.getters';
 import productsHttpRepository from '@/modules/products/http-repositories/products-http.repository';
 import servicesHttpRepository from '@/modules/products/http-repositories/services-http.repository';
 import productsFirebaseRepository from '@/modules/products/firebase-repositories/products-firebase.repository';
 import servicesFirebaseRepository from '@/modules/products/firebase-repositories/services-firebase.repository';
 import { ITEM_TYPE } from '@/config/constants';
+import { SUCESS, FETCHING, FETCHED } from '@/config/constants';
 import CategoryTypes from "@/store/category-module/methods/category-methods";
 import categoriesFirebaseRepository from "@/modules/products/firebase-repositories/categories-firebase.repository";
 
@@ -60,16 +69,16 @@ const products: Module<any, any> = {
         },
         [GET_ITEM_DETAIL](state) {
             return state.itemDetail;
-        },
-        [GET_PRODUCTS](state) {
-            return state.products;
-        },
+        },        
         [GET_PRODUCTS_DAILY](state) {
             return state.productsDaily;
         },
         [GET_PRODUCTS_DAILY_AND_PHOTOS_LOADED](state) {
             return state.productsDailyAndPhotosLoaded;
         },
+        [GET_PRODUCT_INDEX_ID](state,index){
+            return state.products[0].id;
+        }
     },
     mutations: {
         [SET_ITEM_DETAIL](state, item): void {
@@ -158,6 +167,31 @@ const products: Module<any, any> = {
             } catch (e) {
                 return false;
             }
+        },    
+        async [UPDATE_PRODUCT] ({commit} ,product): Promise<boolean | any>{
+            try{   
+                const response = await productsHttpRepository.updateProductData(product);               
+                return true;
+            }catch(e){
+                return false;
+            }
+        },
+        async [FETCH_ALL_PRODUCTS] ({commit}, product): Promise<boolean | any>{
+            try{
+                const products = await productsHttpRepository.getAllProducts();
+                commit(SET_PRODUCTS, products);   
+                return false;         
+            }catch(e){
+                return true;
+            }
+        },
+        async [DELETE_PRODUCT] ({commit}, id) : Promise<boolean>{
+            try{
+                const products = await productsHttpRepository.deleteProducts(id);                
+                return true;         
+            }catch(e){
+                return false;
+            }
         },
         async [FETCH_PRODUCTS_DAILY]({ commit }): Promise<boolean> {
             try {
@@ -182,6 +216,38 @@ const products: Module<any, any> = {
                 return false;
             }
         },
+        async [CREATE_PRODUCT]({commit}, product): Promise<any>{
+            try {
+                const response = await await productsHttpRepository.createProduct(product);
+                return response;
+            } catch (e) {
+                return false;
+            }            
+        },
+        async [UPLOAD_IMAGE]({commit}, imageAndProduct): Promise<boolean>{
+            try {                
+                const response = await await productsFirebaseRepository.uploadImage(imageAndProduct.image, imageAndProduct.id);
+                return true;
+            } catch (e) {
+                return false;
+            }  
+        },
+        async [SAVE_PRODUCT_PHOTOS]({commit}, imageAndProduct): Promise<boolean>{
+            try {                
+                const response = await await productsHttpRepository.uploadImage(imageAndProduct);
+                return true;
+            } catch (e) {
+                return false;
+            }              
+        },
+        async [SAVE_PRODUCT_DIMENSION]({commit}, imageAndProduct): Promise<boolean>{
+            try {                
+                const response = await await productsHttpRepository.createDimension(imageAndProduct);
+                return true;
+            } catch (e) {
+                return false;
+            } 
+        }
     },
 };
 

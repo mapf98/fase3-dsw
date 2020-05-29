@@ -7,7 +7,7 @@
                         v-model="quantity"
                         :items="quantityValues"
                         :x-small="$vuetify.breakpoint.mdAndDown"
-                        label="Quantity"
+                        :label="$t('QUANTITY')"
                         primary
                         dense
                         outlined
@@ -17,19 +17,19 @@
         <v-container v-if="isProduct()" class="overline d-flex justify-center">
             <v-btn @click="addToCart()" block outlined color="primary" :x-small="$vuetify.breakpoint.mdAndDown">
                 <v-icon left class="d-flex align-center">mdi-cart-outline</v-icon>
-                <p class="ma-0 d-none d-lg-block">Agregar al carrito</p>
+                <p class="ma-0 d-none d-lg-block">{{$t('ADD_TO_CART')}}</p>
             </v-btn>
         </v-container>
         <v-container class="overline mt-3 d-flex justify-center">
             <v-btn @click="buyItem()" block outlined color="primary" :x-small="$vuetify.breakpoint.mdAndDown">
                 <v-icon left class="d-flex align-center">mdi-play-box-outline</v-icon>
-                <p class="ma-0 d-none d-lg-block">Comprar ahora</p>
+                <p class="ma-0 d-none d-lg-block">{{$t('BUY_NOW')}}</p>
             </v-btn>
         </v-container>
         <v-divider></v-divider>
         <v-container class="overline mt-3 justify-center">
             <v-icon small color="black"> mdi-map-marker-outline </v-icon>
-            Entrega a: Caracas, Venezuela
+            {{$t('DELIVER_TO')}}: Caracas, Venezuela
         </v-container>
         <v-divider></v-divider>
         <SocialIcons/>

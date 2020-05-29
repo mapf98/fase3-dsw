@@ -1,21 +1,21 @@
 <template>
-    <v-container>
-        <v-list-item v-for="(item,i) in GET_CART_OBJECT.productCarts" :key="item.id" class="mb-4">
-            <ProductCart :item="item" :index="i"></ProductCart>
-        </v-list-item>
-        <v-list-item>
-            <v-card
-                margin="0px"
-            >
-                <v-card-actions>
-                    Subtotal({{GET_PRODUCTS_CHECKOUT.length}} items):{{" "}}<b>{{GET_TOTAL_PRICE_CHECKOUT.toFixed(2)}}$</b>
-                </v-card-actions>
-                <v-card-actions>
-                    <v-btn @click="checkout()"  color="primary" outlined class="btn-remove" outlined >Proceed to checkout</v-btn>
-                </v-card-actions>
-            </v-card>
-        </v-list-item>
-    </v-container>
+        <v-container>
+                <v-list-item v-for="(item,i) in GET_CART_OBJECT.productCarts" :key="item.id" class="mb-4">
+                        <ProductCart :item="item" :index="i"></ProductCart>
+                </v-list-item>
+                <v-list-item>
+                        <v-card
+                                margin="0px"
+                        >
+                                <v-card-actions>
+                                        Subtotal({{GET_PRODUCTS_CHECKOUT.length}} items):{{" "}}<b>{{GET_TOTAL_PRICE_CHECKOUT.toFixed(2)}}$</b>
+                                </v-card-actions>
+                                <v-card-actions>
+                                        <v-btn  color="primary" outlined class="btn-remove" outlined >{{$t('PROCEED_CHECKOUT')}}</v-btn>
+                                </v-card-actions>
+                        </v-card>
+                </v-list-item>
+        </v-container>
 </template>
 
 <script lang="ts">

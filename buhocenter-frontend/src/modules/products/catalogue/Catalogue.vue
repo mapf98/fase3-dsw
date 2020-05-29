@@ -19,8 +19,8 @@
         <v-snackbar
             v-model="errorLoadingContent" top :timeout="timeout" color="error"
         >
-            Ocurrió un error obteniendo los productos, por favor intente nuevamente
-            <v-btn color="white" text @click="closeSnackbar">Cerrar</v-btn>
+            {{$t('ERROR_LOAD_PRODUCTS')}}
+            <v-btn color="white" text @click="closeSnackbar">{{$t('CLOSE')}}</v-btn>
         </v-snackbar>
     </v-row>
 </template>

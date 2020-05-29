@@ -1,6 +1,6 @@
 <template>
     <v-container fluid style="background: #ffffff" class="pt-8 pb-8">
-        <h3 class="text-center">DAILY RECOMMENDATION</h3>
+        <h3 class="text-center">{{$t('DAILY_RECOMMENDATION').toUpperCase()}}</h3>
             <v-slide-group
                     class="pa-4"
                     center-active
@@ -43,7 +43,7 @@
                                                     class="flex-column ma-0 fill-height caption"
                                                     justify="center"
                                             >
-                                                <p>por <b>{{product.productProvider[0].provider.name}}</b></p>
+                                                <p>{{$t('BY')}} <b>{{product.productProvider[0].provider.name}}</b></p>
                                             </v-row>
                                         </v-col>
 

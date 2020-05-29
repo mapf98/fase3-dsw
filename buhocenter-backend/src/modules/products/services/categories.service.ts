@@ -1,24 +1,68 @@
-import {Repository} from 'typeorm';
-import {Inject, Injectable} from '@nestjs/common';
-import {InjectRepository} from '@nestjs/typeorm';
-import {WINSTON_MODULE_PROVIDER} from 'nest-winston';
-import {Logger} from 'winston';
-import {Category} from '../entities/category.entity';
+import { createQueryBuilder, Repository} from 'typeorm'
+import { Injectable, Inject, BadRequestException} from '@nestjs/common'
+import { InjectRepository } from '@nestjs/typeorm'
+import { Product } from '../entities/product.entity'
+import { ProductDTO, ProductsAO, DimensionDto} from '../dto/products.dto'
+import { WINSTON_MODULE_PROVIDER } from 'nest-winston'
+import { Logger } from 'winston'
+import { ProductCategory } from '../entities/product-category.entity'
+import { Category } from '../entities/category.entity'
 
 @Injectable()
 export class CategoriesService {
     constructor(
-        @Inject(WINSTON_MODULE_PROVIDER) private readonly logger: Logger,
-        @InjectRepository(Category)
-        private readonly categoriesRepository: Repository<Category>,
+        @Inject(WINSTON_MODULE_PROVIDER) private readonly logger: Logger,  
+        @InjectRepository(ProductCategory)
+        private readonly productCategoryRepository: Repository<ProductCategory>,  
+        @InjectRepository( Category)
+        private readonly  categoriesRepository: Repository< Category>, 
     ) {}
+   
+    async getAllCategorys():Promise<Category[]>{
+        return await this.categoriesRepository.find();
+    }
+
+    public async getCategory(categoryId: number){
+        return await this.categoriesRepository.findOne(categoryId);
+    }
+
+    public async createCategoryProduct(categoryId:number, product: Product){
+        try{
+        let newCategoryProduct = new ProductCategory();
+        newCategoryProduct.category = await this.getCategory(categoryId);
+        newCategoryProduct.product = product;
+        let maybeSave = await this.checkProductsCategories(categoryId,product.id);
+        if(maybeSave){
+            await this.productCategoryRepository.save(newCategoryProduct);      
+        }
+        } catch(e){
+            this.logger.error(`createCategoryProduct: error=${e.message}`, { context: CategoriesService.name });
+        }
+    }
+
+    public async checkProductsCategories( categoryId: number, productId: number): Promise<boolean>{
+        let productsCategories=await this.productCategoryRepository.find({
+            where: { category : categoryId, product : productId},
+        });
+
+        if(productsCategories){            
+             this.logger.info(
+                `checkProductsCategories: the category ${categoryId} is alredy associated to the product ${productId}`,
+                { context: CategoriesService.name }
+            );
+            return false;
+        }else{
+            return true;
+        }
+    }
+
 
     /**
      * Obtiene el listado de categorias
      */
     public async getCategories(): Promise<any> {
         try {
-            this.logger.debug(`getCategories: ejecutando query para obtener categorias`, { context: CategoriesService.name });
+            this.logger.debug(`getCategories: executting query to get all categories`, { context: CategoriesService.name });
             return await this.categoriesRepository.find();
         } catch (e) {
             this.logger.error(`getCategories: catch error [error:${e.message}]`, { context: CategoriesService.name });
@@ -31,15 +75,15 @@ export class CategoriesService {
      */
     public async getCataloguesByCatergory(id: number): Promise<Response> {
         try {
-            this.logger.debug(`getCataloguesByCatergory: ejecutando query para obtener catalogos por categoria`, { context: CategoriesService.name });
+            this.logger.debug(`getCataloguesByCatergory:  executing query to get all catalogues for each category`, { context: CategoriesService.name });
             return await this.categoriesRepository.query(`
-            SELECT ca.id AS id, ca.nombre AS name
+            SELECT ca.id AS id, ca.nombre AS name, ca.term AS term
             FROM catalogo ca, producto_catalogo pctlg, producto_categoria pctgr
             WHERE ca.id = pctlg.catalogo_id
                 AND pctlg.producto_categoria_id = pctgr.id
                 AND pctgr.category_id = ${id}
             UNION
-            SELECT ca.id AS id, ca.nombre AS name
+            SELECT ca.id AS id, ca.nombre AS name, ca.term AS term
             FROM catalogo ca, servicio_catalogo pctlg, servicio_categoria pctgr
             WHERE ca.id = pctlg.catalogo_id
                 AND pctlg.servicio_categoria_id = pctgr.id
@@ -51,4 +95,8 @@ export class CategoriesService {
         }
     }
 
+
+    public async findCategory(categoryId : number):Promise<Category>{
+        return await this.categoriesRepository.findOne(categoryId);
+    }
 }

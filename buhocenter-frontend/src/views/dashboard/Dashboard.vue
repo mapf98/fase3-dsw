@@ -16,7 +16,7 @@
                             >
                                 <v-col cols="6">
                                     <v-subheader v-if="item.heading">
-                                        {{ item.heading }}
+                                        {{ $t(item.heading) }}
                                     </v-subheader>
                                 </v-col>
                                 <v-col
@@ -31,7 +31,7 @@
                             </v-row>
                             <v-list-group
                                     v-else-if="item.children"
-                                    :key="item.text"
+                                    :key="item.term"
                                     v-model="item.model"
                                     :prepend-icon="item.model ? item.icon : item['icon-alt']"
                                     append-icon=""
@@ -39,7 +39,7 @@
                                 <template v-slot:activator>
                                     <v-list-item-content>
                                         <v-list-item-title>
-                                            {{ item.text }}
+                                            {{ $t(item.term) }}
                                         </v-list-item-title>
                                     </v-list-item-content>
                                 </template>
@@ -54,14 +54,14 @@
                                     </v-list-item-action>
                                     <v-list-item-content>
                                         <v-list-item-title>
-                                            {{ child.text }}
+                                            {{ $t(child.term) }}
                                         </v-list-item-title>
                                     </v-list-item-content>
                                 </v-list-item>
                             </v-list-group>
                             <v-list-item
                                     v-else
-                                    :key="item.text"
+                                    :key="item.term"
                                     link
                                     :to="item.url"
                             >
@@ -70,7 +70,7 @@
                                 </v-list-item-action>
                                 <v-list-item-content>
                                     <v-list-item-title >
-                                        {{ item.text }}
+                                        {{ $t(item.term) }}
                                     </v-list-item-title>
                                 </v-list-item-content>
                             </v-list-item>
@@ -93,31 +93,31 @@
     export default class Dashboard extends Vue {
         drawer = null;
         items = [
-            { icon: 'mdi-contacts', text: 'Clients', url:'/dashboard/clients' },
-            { icon: 'fas fa-boxes', text: 'Orders', url:'/dashboard/orders' },
+            { icon: 'mdi-contacts', term: 'CLIENTS', url:'/dashboard/clients' },
+            { icon: 'fas fa-boxes', term: 'ORDERS', url:'/dashboard/orders' },
             {
                 icon: 'mdi-chevron-up',
                 'icon-alt': 'mdi-chevron-down',
-                text: 'Categories',
+                term: 'CATEGORIES',
                 model: false,
                 children: [
-                    { icon: 'mdi-bookshelf', text: 'Categories', url:'/dashboard/categories' },
-                    { icon: 'mdi-bookmark-outline', text: 'Catalogue', url:'/dashboard/catalogues' },
+                    { icon: 'mdi-bookshelf', term: 'CATEGORIES', url:'/dashboard/categories' },
+                    { icon: 'mdi-bookmark-outline', term: 'CATALOGUES', url:'/dashboard/catalogues' },
                 ],
             },
             {
                 icon: 'mdi-chevron-up',
                 'icon-alt': 'mdi-chevron-down',
-                text: 'Items',
+                term: 'ITEMS',
                 model: false,
                 children: [
-                    { icon: 'fas fa-box',text: 'Products', url:'/dashboard/products' },
-                    { icon: 'mdi-room-service',text: 'Services', url:'/dashboard/services' },
+                    { icon: 'fas fa-box',term: 'PRODUCTS', url:'/dashboard/products' },
+                    { icon: 'mdi-room-service',term: 'SERVICES', url:'/dashboard/services' },
                 ],
             },
-            { icon: 'fas fa-percent', text: 'Promotions', url:'/dashboard/promotions' },
-            { icon: 'mdi-message', text: 'Emails', url:'/dashboard/emails' },
-            { icon: 'fas fa-cogs', text: 'Platform settings', url:'/dashboard/platform' },
+            { icon: 'fas fa-percent', term: 'PROMOTIONS', url:'/dashboard/promotions' },
+            { icon: 'mdi-message', term: 'EMAILS', url:'/dashboard/emails' },
+            { icon: 'fas fa-cogs', term: 'PLATFORM_SETTINGS', url:'/dashboard/platform' },
         ];
 
         mounted(){

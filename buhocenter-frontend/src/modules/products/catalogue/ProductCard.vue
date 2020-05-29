@@ -20,7 +20,7 @@
                                       class="flex-column ma-0 fill-height caption"
                                       justify="center"
                               >
-                                  <p>por <b>{{ getProvider(item) }}</b></p>
+                                  <p>{{$t('BY')}} <b>{{ getProvider(item) }}</b></p>
                               </v-row>
                           </v-col>
 

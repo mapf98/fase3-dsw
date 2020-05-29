@@ -2,6 +2,7 @@ export default {
     mutations: {
         SET_CATALOGUES: 'SET_CATALOGUES',
         SET_ERR_CATALOGUE: 'SET_ERR_CATALOGUE',
+        SET_ALL_CATALOGUES: 'SET_ALL_CATALOGUESC'
     },
     getters: {
         GET_CATALOGUES: 'GET_CATALOGUES',
@@ -10,5 +11,6 @@ export default {
     },
     actions: {
         FETCH_CATALOGUES: 'FETCH_CATALOGUES',
+        FETCH_ALL_CATALOGUES: 'GET_ALL_CATALOGUES',
     },
 };

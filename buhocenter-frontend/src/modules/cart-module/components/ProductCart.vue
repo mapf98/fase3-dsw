@@ -54,7 +54,7 @@
                 </v-col>
                 <v-col lg="4" class="mt-4">
                     <v-btn color="primary" outlined class="btn-remove" @click="removeProductCart()">
-                        Remove
+                        {{$t('REMOVE')}}
                     </v-btn>
                 </v-col>
             </v-row>

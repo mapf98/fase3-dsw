@@ -1,31 +1,94 @@
 <template>
-    <v-container>
-        <h1>
-            Your Addresses
-        </h1>
+    <v-container fluid>
+        <v-dialog v-model="dialog" max-width="500px" style="background: #ffffff">
+            <div style="background: #ffffff; padding: 40px 30px" >
+                <h1 class="text-center overline">{{$t('ADD_ADDRESS')}}</h1>
+                <v-form ref="form" v-model="isFormValid" >
+                    <v-row class="mx-auto fill-width">
+                        <v-col lg="12" xs="12">
+                            <v-text-field
+                                    :label="$t('FIRST_STREET')"
+                                    @change="modifyFirstStreet"
+                                    :rules="[
+                                        rules.required(),
+                                        rules.fieldLength(65500),
+                                    ]"
+                            ></v-text-field>
+                        </v-col>
+                        <v-col lg="12" xs="12">
+                            <v-text-field
+                                    :label="$t('SECOND_STREET')"
+                                    @change="modifySecondStreet"
+                                    :value="secondStreet"
+                                    :rules="[rules.fieldMaxLength(65500)]"
+                            ></v-text-field>
+                        </v-col>
+                    </v-row>
+                    <v-row class="mx-auto fill-width">
+                        <v-col cols="12">
+                            <v-text-field
+                                  :label="$t('CITY')"
+                                  :value="cityName"
+                                  :rules="[rules.required(), rules.fieldLength(65500)]"
+                                  @change="modifyCityName"
+                            ></v-text-field>
+                        </v-col>
+                    </v-row>
+                    <v-row class="mx-auto fill-width">
+                        <v-col cols="12">
+                            <v-text-field :label="$t('STATE')"
+                                          :value="state"
+                                          :rules="[rules.required(), rules.fieldLength(65500)]"
+                                          @change="modifyState"
+                            ></v-text-field>
+                        </v-col>
+                    </v-row>
+                    <v-row class="mx-auto fill-width">
+                        <v-col cols="12">
+                            <v-text-field :label="$t('ZIP_CODE')"
+                                          :value="zipCode"
+                                          :rules="[rules.fieldMaxLength(65500)]"
+                                          @change="modifyZipCode"
+                            ></v-text-field>
+                        </v-col>
+                    </v-row>
+                </v-form>
+                <v-row class="d-flex justify-center my-2" @click="saveChanges()">
+                    <v-btn outlined color="primary">{{$t('SAVE')}}</v-btn>
+                </v-row>
+            </div>
+        </v-dialog>
+        <v-img
+                src="../../../assets/images/direction.jpg"
+                height="125"
+                class="grey darken-4"
+        ></v-img>
+        <h1 class="overline text-center"> {{$t('YOUR_ADDRESSES')}} </h1>
         <v-row>
-            <v-col cols="4" class="mx-auto">
+            <v-col cols="2" class="mx-auto">
                 <v-card
-                    class="dashed-card d-flex justify-center fill-width"
+                    class="dashed-card fill-width"
                     fill-height
                     fill-width
                     max-width="344"
                     @click="createAddress()"
                 >
-                    <v-card-text class="d-flex justify-center">
-                        <p class="title text--primary">
-                            Add Address
-                        </p>
+                    <v-card-text class="container">
+                        <v-row class="d-flex justify-center">
+                            <v-icon x-large>
+                                mdi-plus
+                            </v-icon>
+                        </v-row>
+                        <v-row class="d-flex justify-center">
+                            <p class="overline text--primary">
+                                {{$t('ADD_ADDRESS')}}
+                            </p>
+                        </v-row>
                     </v-card-text>
-                    <v-card-actions class="d-flex justify-center">
-                        <v-icon x-large>
-                            mdi-plus
-                        </v-icon>
-                    </v-card-actions>
                 </v-card>
             </v-col>
             <v-row v-if="GET_ADDRESSES.length">
-                <v-col cols="4"
+                <v-col cols="3"
                     class="fill-height"
                     v-for="address in GET_ADDRESSES"
                     :key="address.id"
@@ -33,13 +96,15 @@
                     <v-card
                         class="mx-auto"
                         max-width="344"
+                        height="310"
                         fill-height
+                        :style="`border: ${address.setDefault?'2px solid #907F46':'none'}`"
                     >
                         <v-card-text class="font-weight-bold">
                             <p class="ma-0 text-center subtitle text--primary">
                                 {{ address.firstStreet }}
                             </p>
-                            <p v-if="address.secondStreet !== ''" class="subtitle text--primary">
+                            <p v-if="address.secondStreet !== ''" class="text-center subtitle text--primary">
                                 {{ address.secondStreet }}
                             </p>
                             <p class="text-center ma-0 subtitle text--primary">
@@ -52,16 +117,31 @@
                                 {{ address.zipcode }}
                             </p>
                             <p v-if="address.setDefault" class="text-center ma-0 caption text--primary">
-                                DEFAULT ADDRESS
+                                <b>DEFAULT ADDRESS</b>
                             </p>
                         </v-card-text>
                         <v-card-actions class="text-center d-flex justify-center">
                             <v-row class="d-flex justify-center">
-                                <v-col v-if="!address.setDefault" lg="6" sm="12" :class="{ 'pa-0': $vuetify.breakpoint.mdAndDown }">
-                                    <v-btn @click="setDefaultAddress(address.id)" :x-small="$vuetify.breakpoint.mdAndDown" text>Set as default</v-btn>
+                                <v-col v-if="!address.setDefault" sm="12" :class="{ 'pa-0': $vuetify.breakpoint.mdAndDown }">
+                                    <v-btn
+                                    color="primary"
+                                    outlined
+                                    class="btn-remove"
+                                    :x-small="$vuetify.breakpoint.mdAndDown"
+                                    @click="setDefaultAddress(address.id)"
+                                    text >
+                                        Set as default
+                                    </v-btn>
                                 </v-col>
-                                <v-col lg="6" sm="12">
-                                    <v-btn @click="deletAddress(address.id)" :x-small="$vuetify.breakpoint.mdAndDown" text>Delete</v-btn>
+                                <v-col sm="12">
+                                    <v-btn
+                                    color="primary"
+                                    class="btn-remove"
+                                    :x-small="$vuetify.breakpoint.mdAndDown"
+                                    @click="deletAddress(address.id)"
+                                    >
+                                        {{$t('REMOVE')}}
+                                    </v-btn>
                                 </v-col>
                             </v-row>
                         </v-card-actions>
@@ -70,40 +150,58 @@
             </v-row>
         </v-row>
         <v-snackbar v-model="defaultAddressError" top :timeout="timeout" color="error">
-            Ocurrió un error modificando la dirección
-            <v-btn color="white" text @click="defaultAddressError = false">Cerrar</v-btn>
+            {{$t('ERROR_PUT_ADDRESS')}}
+            <v-btn color="white" text @click="defaultAddressError = false">{{ $t('CLOSE') }}</v-btn>
         </v-snackbar>
         <v-snackbar v-model="fetchingAddressesError" top :timeout="timeout" color="error">
-            Ocurrió un error obteniendo las direcciones
-            <v-btn color="white" text @click="fetchingAddressesError = false">Cerrar</v-btn>
+            {{$t('ERROR_GET_ADDRESS')}}
+            <v-btn color="white" text @click="fetchingAddressesError = false">{{ $t('CLOSE') }}</v-btn>
         </v-snackbar>
         <v-snackbar v-model="deletingAddressError" top :timeout="timeout" color="error">
-            Ocurrió un error eliminando las dirección
-            <v-btn color="white" text @click="deletingAddressError = false">Cerrar</v-btn>
+            {{$t('ERROR_DELETE_ADDRESS')}}
+            <v-btn color="white" text @click="deletingAddressError = false">{{ $t('CLOSE') }}</v-btn>
         </v-snackbar>
         <v-snackbar v-model="addressCreated" top :timeout="timeout" color="success">
-            La dirección fue creada con éxito
-            <v-btn color="white" text @click="addressCreated = false">Cerrar</v-btn>
+             {{ $t('SUCCESS_ADDRESS') }}
+            <v-btn color="white" text @click="addressCreated = false">{{ $t('CLOSE') }}</v-btn>
         </v-snackbar>
     </v-container>
 </template>
 <script lang="ts">
 import Vue from 'vue';
 import Component from 'vue-class-component';
-import { addresses, authModule } from "../../../store/namespaces";
+import { addresses, authModule } from "@/store/namespaces";
 import AuthTypes from '../../../store/auth-module/methods/auth-methods';
 import AddressTypes from '@/store/addresses/methods/address-methods';
+import CreateAddressForm from "@/modules/customers/addresses/CreateAddressForm.vue";
+import {STATUS} from "@/config/constants";
+import rules from '@/utils/rules';
 
-@Component
+@Component({
+    components:{CreateAddressForm}
+})
 export default class AddressManagement extends Vue {
-    defaultAddressError: boolean = false;
+    defaultAddressError: boolean = true;
     fetchingAddressesError: boolean = false;
     deletingAddressError: boolean = false;
     addressCreated: boolean = false;
+    dialog: boolean = false;
+    timeout: number = 5000;
+    isFormValid: boolean = true;
+    addressCreatedError: boolean = false;
+    rules: any = rules;
+    firstStreet: string = '';
+    secondStreet: string = '';
+    cityName: string = '';
+    state: string = '';
+    zipCode: string = '';
+    $refs!: {
+        form: any;
+    };
 
     async createAddress() {
-        
-        this.$router.push({ name: 'create-address' });
+        this.dialog = true;
+        //this.$router.push({ name: 'create-address' });
     }
 
     createDefaultAddressObject(addressId: number) {
@@ -151,12 +249,63 @@ export default class AddressManagement extends Vue {
         await this.fetchAddresses();
     }
 
+    modifyFirstStreet(value: any) {
+        this.firstStreet = value;
+    }
+    modifySecondStreet(value: any) {
+        this.secondStreet = value;
+    }
+    modifyCityName(value: any) {
+        this.cityName = value;
+    }
+    modifyState(value: any) {
+        this.state = value;
+    }
+    modifyZipCode(value: any) {
+        this.zipCode = value;
+    }
+
+    createAddressObject() {
+        const address = {
+            firstStreet: this.firstStreet,
+            secondStreet: this.secondStreet,
+            cityName: this.cityName,
+            state: this.state,
+            zipcode: this.zipCode,
+            customer: {
+                id: this.GET_CLIENT_DATA.id,
+            },
+            status: {
+                id: STATUS.ACTIVE
+            }
+        }
+
+        return address;
+    }
+
+    async saveChanges() {
+        if (this.$refs.form.validate()) {
+            const created: boolean = await this.CREATE_ADDRESS(this.createAddressObject());
+            if (!created) {
+                this.addressCreatedError = true;
+            } else {
+                this.addressCreated = true;
+                this.fetchAddresses();
+                setTimeout(() => {
+                    this.dialog = false;
+                }, 2000);
+            }
+        }
+    }
+
+    @authModule.Getter(AuthTypes.getters.GET_CLIENT_DATA) private GET_CLIENT_DATA;
+    @addresses.Action(AddressTypes.actions.CREATE_ADDRESS) private CREATE_ADDRESS;
+
     @addresses.Action(AddressTypes.actions.SHOW_CREATE_ADDRESS_DIALOG) private SHOW_CREATE_ADDRESS_DIALOG;
     @addresses.Action(AddressTypes.actions.SET_DEFAULT_ADDRESS) private SET_DEFAULT_ADDRESS;
     @addresses.Action(AddressTypes.actions.DELETE_ADDRESS) private DELETE_ADDRESS;
     @addresses.Action(AddressTypes.actions.FETCH_ADDRESSES) private FETCH_ADDRESSES;
     @addresses.Getter(AddressTypes.getters.GET_ADDRESSES) private GET_ADDRESSES;
-    @authModule.Getter(AuthTypes.getters.GET_CLIENT_DATA) private GET_CLIENT_DATA;
 
 }
 </script>

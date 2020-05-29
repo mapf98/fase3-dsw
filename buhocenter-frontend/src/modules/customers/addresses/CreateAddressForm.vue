@@ -1,5 +1,6 @@
 <template>
     <v-container>
+
         <v-container class="mt-5 d-flex justify-center" style="max-width: none !important;">
             <v-col xs="12" sm="12" lg="6" md="6" class="mt-5">
                 <v-card fill-width class="pa-2" style="border: 3px solid #907F46;">

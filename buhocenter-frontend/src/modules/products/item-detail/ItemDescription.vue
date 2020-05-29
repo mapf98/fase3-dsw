@@ -1,4 +1,4 @@
-<template>
+z<template>
     <v-col class="mr-3 font-weight-light align-center pa-0 caption">
         <p v-if="isProduct()" class="title ma-0">{{ GET_ITEM_DETAIL.brand.name }}</p>
         <p class="subtitle-1 my-0 mr-3">{{ GET_ITEM_DETAIL.name }}</p>
@@ -17,28 +17,28 @@
                 ({{ getTotalRatings }})
             </p>
         </v-row>
-        <h3 class="body-2"> Price:
+        <h3 class="body-2"> {{$t('PRICE')}}:
             <span :class="{ 'title': true, 'item-offer__title': hasOffer() }">${{ GET_ITEM_DETAIL.price }}</span>
             <span v-if="hasOffer()" class="title"> ${{ getDiscountPrice() }} </span>
         </h3>
         <v-row class="mx-auto d-flex align-center">
-            <h3>Por: </h3>
+            <h3>{{$t('BY')}}: </h3>
             <div>
                 <p class="body-1 mx-2 my-0"> {{ getProvider() }} </p>
             </div>
         </v-row>
         <v-row class="mx-auto d-flex align-center">
-            <h3 class="mr-2">Description: </h3>
+            <h3 class="mr-2">{{$t('DESCRIPTION')}}: </h3>
             <div>
                 <p class="body-1 my-0"> {{ GET_ITEM_DETAIL.description }} </p>
             </div>
         </v-row>
         <v-row v-if="isProduct()" class="mx-auto d-flex align-center">
-            <h3>In stock: </h3>
-            <p class="body-1 mx-2 my-0"> {{ getAvailableQuantity }} </p>
+            <h3>{{$t('IN_STOCK')}}: </h3>
+            <p class="body-1 mx-2 my-0"> {{ this.GET_ITEM_DETAIL.productInventories[0].availableQuantity }} </p>
         </v-row>
         <v-row v-if="isProduct()" class="mx-auto d-flex align-center">
-            <h3>Product dimensions: </h3>
+            <h3>{{$t('PRODUCT_DIMENSIONS')}}: </h3>
             <p class="body-1 mx-2 my-0"> {{ productDimensions }} inches </p>
         </v-row>
     </v-col>
@@ -57,11 +57,7 @@ import { STATUS } from '@/config/constants';
 export default class ItemDescription extends Vue {
 
     isProduct(): boolean {
-        if (this.$route.query.item === 'product') {
-            return true;
-        }
-
-        return false;
+        return this.$route.query.item === 'product';
     }
 
     get getAvailableQuantity(): number {

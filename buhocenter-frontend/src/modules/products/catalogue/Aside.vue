@@ -6,25 +6,10 @@
     >
         <v-list-item class="px-2" v-if="!mini">
             <v-list-item-title class="overline ml-3" v-if="getCategory !== '' && getCategory !== ''">
-                <RouterLink :to="`/catalogues?category_id=${getCategoryId}`"> {{ getCategory }} </RouterLink>> {{ getCatalogue }}
+                <RouterLink :to="`/catalogues?category_id=${getCategoryId}`"> {{ $t(getCategory) }} </RouterLink>> {{ $t(getCatalogue) }}
             </v-list-item-title >
-            <!--<v-btn
-                    icon
-                    @click.stop="mini = !mini"
-            >
-                <v-icon >mdi-chevron-left</v-icon>
-            </v-btn>-->
-
         </v-list-item>
-        <!--<v-list-item class="px-2" v-else>
-            <v-btn
-                    icon
-                    @click.stop="mini = !mini"
-            >
-                <v-icon>mdi-chevron-right</v-icon>
-            </v-btn>
 
-        </v-list-item>-->
 
         <v-divider></v-divider>
         <v-list dense>
@@ -35,13 +20,13 @@
                 <v-list-item-content>
                     <v-list-item-title class="title-aside mb-4" style="color:#907F46;font-weight: bold;">
                         <v-icon class="iconos-aside-litle mr-2" style="color:#907F46;font-weight: bold;">fas fa-dollar-sign</v-icon>
-                        Precio
+                        {{$t('PRICE')}}
                     </v-list-item-title>
-                    <p class="body-2 my-1 text-price">Hasta <b style="color:#907F46">$25</b></p>
-                    <p class="body-2 my-1 text-price"><b style="color:#907F46">$25</b> a <b style="color:#907F46">$50</b></p>
-                    <p class="body-2 my-1 text-price"><b style="color:#907F46">$50</b> a <b style="color:#907F46">$100</b></p>
-                    <p class="body-2 my-1 text-price"><b style="color:#907F46">$100</b> a <b style="color:#907F46">$150</b></p>
-                    <p class="body-2 my-1 text-price">Más de <b style="color:#907F46">$150</b></p>
+                    <p class="body-2 my-1 text-price">{{$t('UP_TO')}} <b style="color:#907F46">$25</b></p>
+                    <p class="body-2 my-1 text-price"><b style="color:#907F46">$25</b> {{$t('TO')}} <b style="color:#907F46">$50</b></p>
+                    <p class="body-2 my-1 text-price"><b style="color:#907F46">$50</b> {{$t('TO')}} <b style="color:#907F46">$100</b></p>
+                    <p class="body-2 my-1 text-price"><b style="color:#907F46">$100</b> {{$t('TO')}} <b style="color:#907F46">$150</b></p>
+                    <p class="body-2 my-1 text-price">{{$t('MORE_THAN')}} <b style="color:#907F46">$150</b></p>
                 </v-list-item-content>
             </v-list-item>
             <v-list-item>
@@ -52,7 +37,7 @@
                     <v-list-item-title class="title-aside mb-4" style="color:#907F46;font-weight: bold;">
                         <v-list-item-title class="title-aside" style="color:#907F46;font-weight: bold;">
                             <v-icon class="iconos-aside-litle mr-2" style="color:#907F46;font-weight: bold;">fas fa-star</v-icon>
-                            Rating
+                            {{$t('RATING')}}
                         </v-list-item-title>
                     </v-list-item-title>
                     <v-row style="padding: 0px 10px">

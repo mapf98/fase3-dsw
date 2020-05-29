@@ -6,7 +6,7 @@
                 class="grey darken-4"
         ></v-img>
             <v-list rounded style="padding: 30px 0px;">
-                <h2 style="margin-left: 80px;" class="title">Catalogues</h2>
+                <h2 style="margin-left: 80px;" class="title">{{$t('CATALOGUES')}}</h2>
                 <v-row style="padding-left: 70px; padding-right: 80px;">
                     <v-col cols="12" lg="3" md="4" sm="6" xs="12" v-for="(item, i) in GET_CATALOGUES" :key="i">
                         <a href="#" class="link-router-catalogue" @click="setCatalogue(item)">
@@ -15,7 +15,7 @@
                                     <v-icon class="icon-catalogue">fas fa-circle</v-icon>
                                 </v-col>
                                 <v-col cols="10">
-                                    <v-list-item-title v-text="item.name"></v-list-item-title>
+                                    <v-list-item-title> {{$t(item.term)}}</v-list-item-title>
                                 </v-col>
                             </v-row>
                         </a>

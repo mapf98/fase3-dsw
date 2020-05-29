@@ -113,12 +113,8 @@
                         <v-card>
                             <v-list>
                                 <v-list-item avatar to="/profile">
-                                    <v-list-item-avatar>
-                                        <img src="https://cdn.vuetifyjs.com/images/john.jpg" alt="John">
-                                    </v-list-item-avatar>
-
                                     <v-list-item-action>
-                                        <v-list-item-title>{{getClient.name+" "+getClient.lastName}}</v-list-item-title>
+                                        <v-list-item-title>{{$t('PROFILE')+": "+getClient.name+" "+getClient.lastName}}</v-list-item-title>
                                     </v-list-item-action>
                                 </v-list-item>
                             </v-list>
@@ -144,7 +140,7 @@
                         :content="
                     getToken !== ''?
                       GET_CART_OBJECT.productCarts?
-                      GET_CART_OBJECT.productCarts.length:'0'
+                      GET_CART_OBJECT.productCarts.length.toString():'0'
                      :'0'"
                 >
                     <v-icon color="primary">mdi-cart</v-icon>
