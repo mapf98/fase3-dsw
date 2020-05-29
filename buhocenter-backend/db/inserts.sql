@@ -12,8 +12,8 @@ insert into role (name, priority) values ('Admin', 1);
 
 /* customer INSERTS */
 insert into customer
-    (name, last_name, birthdate,email,is_federate, status_id, rol_id) VALUES
-    ('Andrea', 'Da Silva', '1999-01-25 00:00:00.000000','andrea@gmail.com', true, 1, 2);
+    (name, last_name, birthdate,email,is_federate, uid, status_id, rol_id) VALUES
+    ('Andrea', 'Da Silva', '1999-01-25 00:00:00.000000','andrea@gmail.com', true,'UVvWC9yrxcjRqbNrEjb0w7BYlq2', 1, 2);
 insert into customer
     (name, last_name, birthdate,email,is_federate, status_id, rol_id) VALUES
     ('Gabriel', 'Ortega', '1998-10-19 00:00:00.000000','gabriel@gmail.com', true, 1, 2);
