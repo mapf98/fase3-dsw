@@ -10,13 +10,12 @@ import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
 import { Logger } from 'winston';
 import { STATUS } from '../../../config/constants';
 import { ProductsService } from '../../products/services/products.service';
-import { UsersService } from '../../users/services/Users.service';
+import { UsersService } from '../../users/services/users.service';
 import { StatusService } from '../../status/services/status.service';
 import { CartServiceDTO } from '../dto/cartService.dto';
 import { ServiceCart } from '../entities/service-cart.entity';
 import { ServicesService } from '../../services/services/services.service';
 import { Service } from '../../services/entities/service.entity';
-import { Status } from '../../Status/entities/status.entity';
 
 @Injectable()
 export class CartsService {
