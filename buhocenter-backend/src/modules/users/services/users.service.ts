@@ -93,7 +93,6 @@ export class UsersService {
                 },
                 role: {
                     id: ROLE.CUSTOMER.id,
-
                 },
             });
             await this.sendEmailWelcome({email: data.email, name: data.name});

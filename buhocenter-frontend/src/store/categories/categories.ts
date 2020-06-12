@@ -1,44 +1,83 @@
-import { Module } from 'vuex';
-import { 
-    FETCH_CATEGORIES 
-} from './methods/categories.actions';
-import { 
-    GET_CATEGORIES_SUCCESS 
-} from './methods/categories.mutations';
-import { 
-    GET_CATEGORIES 
-} from './methods/categories.getters';
+import { Module } from "vuex";
+import CategoryTypes from "@/store/categories/methods/categories.methods";
+import categoriesHttpRepository from "@/modules/client/categories/repositories/categories.repository";
+import categoriesFirebaseRepository from "@/modules/client/categories/repositories/categories.firebase";
+import { CATEGORY_EMPTY_STATE } from "./categories.state";
+import { CategoryStateInterface } from "./interfaces/categories.state.interface";
+import {
+  Categories,
+  Category,
+} from "@/modules/client/categories/interfaces/categories.interface";
 
-import CategoriesHttpRepository from '@/modules/products/http-repositories/categories-http.repository';
-
-const categories: Module<any, any> = {
-    namespaced: true,
-    state: {
-        categories: [],
-        err_Categories: false,
+const categoryModule: Module<CategoryStateInterface, any> = {
+  namespaced: true,
+  state: CATEGORY_EMPTY_STATE,
+  getters: {
+    [CategoryTypes.getters.GET_CATEGORIES](state): Category[] {
+      return state.categories!;
     },
-    getters: {
-        [GET_CATEGORIES](state){
-            return state.categories;
-        },
+    [CategoryTypes.getters.GET_TOTAL_CATEGORIES](state): number {
+      return state.totalCategories;
     },
-    mutations: {
-        [GET_CATEGORIES_SUCCESS](state, data) {
-            // @ts-ignore
-            state.categories = data.categories;
-        },
+    [CategoryTypes.getters.GET_CATEGORIES_AND_PHOTOS_LOADED](state): boolean {
+      return state.categoriesAndPhotosLoaded;
     },
-    actions: {
-        async [FETCH_CATEGORIES]({ commit }): Promise <boolean | any>{  
-            try{          
-                const response = await CategoriesHttpRepository.getCategories();
-                commit(GET_CATEGORIES_SUCCESS, response);
-                return false;   
-            }catch(e){
-                return true;
-            }
-        },
+  },
+  mutations: {
+    [CategoryTypes.mutations.SET_CATEGORIES](
+      state,
+      response: Categories
+    ): void {
+      state.categories = response.categories;
     },
+    [CategoryTypes.mutations.SET_CATEGORIES_AND_PHOTOS_LOADED](
+      state,
+      value: boolean
+    ): void {
+      state.categoriesAndPhotosLoaded = value;
+    },
+    [CategoryTypes.mutations.SET_TOTAL_CATEGORIES](state, total: number): void {
+      state.totalCategories = total;
+    },
+    [CategoryTypes.mutations.SET_CATEGORIES_AND_PHOTOS_LOADED](
+      state,
+      loaded: boolean
+    ): void {
+      state.categoriesAndPhotosLoaded = loaded;
+    },
+    [CategoryTypes.mutations.SET_CATEGORIES_AND_PHOTOS_LOADED_TOTAL](
+      state,
+      categories: Category[]
+    ): void {
+      state.categories = categories;
+      state.categoriesAndPhotosLoaded = true;
+    },
+  },
+  actions: {
+    [CategoryTypes.actions.SET_CATEGORY_PHOTOS_NOT_LOADED](
+      { commit },
+      loaded: boolean
+    ): void {
+      commit(CategoryTypes.mutations.SET_CATEGORIES_AND_PHOTOS_LOADED, loaded);
+    },
+    async [CategoryTypes.actions.FETCH_CATEGORIES]({
+      commit,
+    }): Promise<boolean> {
+      try {
+        const response: Categories = await categoriesHttpRepository.getCategories();
+        commit(CategoryTypes.mutations.SET_CATEGORIES, response);
+        commit(
+          CategoryTypes.mutations.SET_TOTAL_CATEGORIES,
+          // eslint-disable-next-line
+          // @ts-ignore
+          response.categories.length
+        );
+        return true;
+      } catch (e) {
+        return false;
+      }
+    },
+  },
 };
 
-export default categories;
+export default categoryModule;

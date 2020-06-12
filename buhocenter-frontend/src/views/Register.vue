@@ -1,21 +1,18 @@
 <template>
-    <v-content>
-        <v-container
-                class="fill-height"
-                fluid
-        >
-            <FormRegister></FormRegister>
-        </v-container>
-    </v-content>
+  <v-content>
+    <v-container class="fill-height" fluid>
+      <FormRegister></FormRegister>
+    </v-container>
+  </v-content>
 </template>
 
 <script>
-    import FormRegister from "@/modules/auth-module/components/FormRegister";
+import FormRegister from "@/modules/client/auth/components/FormRegister";
 
-    export default {
-        name: 'Register',
-        components: {
-            FormRegister
-        }
-    }
+export default {
+  name: "Register",
+  components: {
+    FormRegister,
+  },
+};
 </script>

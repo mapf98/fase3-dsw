@@ -1,60 +1,67 @@
-import httpcustomer from './http-client';
-import { AxiosRequestConfig, AxiosResponse } from 'axios';
+import httpcustomer from "./http-client";
+import { AxiosRequestConfig, AxiosResponse } from "axios";
 
 export class HttpRepository {
+  protected createHeader(): Partial<AxiosRequestConfig["headers"]> {
+    const token: string = JSON.parse(localStorage.token);
+    return {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
+  }
 
-    protected createHeader(): Partial<AxiosRequestConfig['headers']> {
-        const token: any = localStorage.getItem('token');
-        return {
-            headers: {
-                Authorization: `Bearer ${JSON.parse(token)}`,
-            }
-        }
+  protected createUri(
+    path: string[],
+    queryString?: Record<string, any> | any
+  ): string {
+    let uri = "";
+
+    if (path) {
+      uri += "/" + path.join("/");
     }
 
-    protected createUri(
-        path: string[],
-        queryString?: Object | any
-    ): string {
-        let uri: string = '';
+    if (queryString) {
+      uri += "?";
+      const query: string[] = [];
 
-        if (path) {
-            uri += '/' + path.join('/');
-        }
+      for (const [key, value] of Object.entries(queryString)) {
+        query.push(`${key}=${value}`);
+      }
 
-        if (queryString) {
-            uri += '?';
-            const query: string[] = [];
-
-            for (const [key, value] of Object.entries(queryString)) {
-                query.push(`${key}=${value}`);
-            }
-
-            uri += query.join('&');
-        }
-
-        return uri;
+      uri += query.join("&");
     }
 
-    protected post(uri: string,
-        data: AxiosRequestConfig['data'],
-        header?: AxiosRequestConfig['headers'],
-    ): Promise<AxiosResponse<any>> {
-        return httpcustomer.post(uri, data, header);
-    }
+    return uri;
+  }
 
-    protected get(uri: string, header?: AxiosRequestConfig['headers'],): Promise<AxiosResponse<any>> {
-        return httpcustomer.get(uri, header);
-    }
+  protected post(
+    uri: string,
+    data: AxiosRequestConfig["data"],
+    header?: AxiosRequestConfig["headers"]
+  ): Promise<any> {
+    return httpcustomer.post(uri, data, header);
+  }
 
-    protected patch(uri: string,
-        data: AxiosRequestConfig['data'],
-        header?: AxiosRequestConfig['headers']
-    ): Promise<AxiosResponse<any>> {
-        return httpcustomer.patch(uri, data, header);
-    }
+  protected get(
+    uri: string,
+    header?: AxiosRequestConfig["headers"]
+  ): Promise<any> {
+    return httpcustomer.get(uri, header);
+  }
 
-    protected delete(uri: string, header?: AxiosRequestConfig['headers']): Promise<AxiosResponse<any>> {
-        return httpcustomer.delete(uri, header);
-    }
+  protected patch(
+    uri: string,
+    data: AxiosRequestConfig["data"],
+    header?: AxiosRequestConfig["headers"]
+  ): Promise<any> {
+    return httpcustomer.patch(uri, data, header);
+  }
+
+  protected delete(
+    uri: string,
+    header?: AxiosRequestConfig["headers"]
+  ): Promise<any> {
+    return httpcustomer.delete(uri, header);
+  }
 }
