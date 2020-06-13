@@ -98,9 +98,10 @@
             max-width="344"
             height="310"
             fill-height
-            :style="`border: ${
-              address.setDefault ? '2px solid #907F46' : 'none'
-            }`"
+            :style="
+              `border: ${address.setDefault ? '2px solid #907F46' : 'none'}`
+            "
+
           >
             <v-card-text class="font-weight-bold">
               <p class="ma-0 text-center subtitle text--primary">
@@ -223,6 +224,9 @@ import AddressTypes from "@/store/addresses/methods/address.methods";
 import CreateAddressForm from "@/modules/client/addresses/components/CreateAddressForm.vue";
 import { STATUS } from "@/config/constants";
 import rules from "@/utils/rules";
+import { CustomerInterface } from "@/modules/client/auth/interfaces/customer.interface";
+import { Address } from "@/modules/client/addresses/interfaces/address.interface";
+
 
 @Component({
   components: { CreateAddressForm },
@@ -251,10 +255,11 @@ export default class AddressManagement extends Vue {
   }
 
   createDefaultAddressObject(addressId: number) {
-    const defaultAddress = {
+    const defaultAddress : Address = {
       id: addressId,
       customer: {
-        id: this.GET_CLIENT_DATA.id,
+        id: this.GET_CLIENT_DATA.id!,
+
       },
     };
 
@@ -287,7 +292,8 @@ export default class AddressManagement extends Vue {
 
   async fetchAddresses() {
     const fetched: boolean = await this.FETCH_ADDRESSES(
-      this.GET_CLIENT_DATA.id
+      this.GET_CLIENT_DATA.id!
+
     );
 
     if (!fetched) {
@@ -316,14 +322,16 @@ export default class AddressManagement extends Vue {
   }
 
   createAddressObject() {
-    const address = {
+    const address: Address = {
+
       firstStreet: this.firstStreet,
       secondStreet: this.secondStreet,
       cityName: this.cityName,
       state: this.state,
       zipcode: this.zipCode,
       customer: {
-        id: this.GET_CLIENT_DATA.id,
+        id: this.GET_CLIENT_DATA.id!,
+
       },
       status: {
         id: STATUS.ACTIVE,
@@ -351,17 +359,19 @@ export default class AddressManagement extends Vue {
     }
   }
 
-  @authModule.Getter(AuthTypes.getters.GET_CLIENT_DATA) private GET_CLIENT_DATA;
-  @addresses.Action(AddressTypes.actions.CREATE_ADDRESS) private CREATE_ADDRESS;
-
+  @authModule.Getter(AuthTypes.getters.GET_CLIENT_DATA)
+  private GET_CLIENT_DATA!: CustomerInterface;
+  @addresses.Action(AddressTypes.actions.CREATE_ADDRESS)
+  private CREATE_ADDRESS!: (address: Address) => boolean;
   @addresses.Action(AddressTypes.actions.SHOW_CREATE_ADDRESS_DIALOG)
-  private SHOW_CREATE_ADDRESS_DIALOG;
+  private SHOW_CREATE_ADDRESS_DIALOG!: (display: boolean) => void;
   @addresses.Action(AddressTypes.actions.SET_DEFAULT_ADDRESS)
-  private SET_DEFAULT_ADDRESS;
-  @addresses.Action(AddressTypes.actions.DELETE_ADDRESS) private DELETE_ADDRESS;
+  private SET_DEFAULT_ADDRESS!: (defaultAddress: Address) => boolean;
+  @addresses.Action(AddressTypes.actions.DELETE_ADDRESS) private DELETE_ADDRESS!:(addressId: number)=>boolean;
   @addresses.Action(AddressTypes.actions.FETCH_ADDRESSES)
-  private FETCH_ADDRESSES;
-  @addresses.Getter(AddressTypes.getters.GET_ADDRESSES) private GET_ADDRESSES;
+  private FETCH_ADDRESSES!:(customerId: number)=>boolean;
+  @addresses.Getter(AddressTypes.getters.GET_ADDRESSES) private GET_ADDRESSES! : Address[];
+
 }
 </script>
 

@@ -81,7 +81,8 @@ const authModule: Module<CustomerStateInterface, any> = {
     async [AuthTypes.actions.REGISTER_CUSTOMER](
       { commit },
       customer: CustomerInterface
-    ): Promise<any> {
+    ): Promise<boolean> {
+
       try {
         const response = await AuthRepository.registerCustomer(customer);
         if (!response.error) {
@@ -162,7 +163,8 @@ const authModule: Module<CustomerStateInterface, any> = {
         return false;
       }
     },
-    [AuthTypes.actions.MODIFY_CLIENT_DATA]({ commit, state }, data): void {
+    [AuthTypes.actions.MODIFY_CLIENT_DATA]({ commit, state }, data : CustomerInterface): void {
+
       commit(AuthTypes.mutations.SET_CUSTOMER_DATA, data);
     },
   },

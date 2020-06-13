@@ -9,7 +9,8 @@ export interface CustomerInterface {
   birthDate?: string;
   email?: string;
   password?: string;
-  language?: number;
+  language?: string;
+
   uid?: string;
   id?: number;
   role?: Role;

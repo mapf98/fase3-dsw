@@ -74,11 +74,12 @@ export default class Catalogues extends Vue {
   }
 
   @catalogueModule.Action(CatalogueMethods.actions.FETCH_CATALOGUES)
-  FETCH_CATALOGUES;
+  FETCH_CATALOGUES!:(categoryId: string)=>boolean;
   @catalogueModule.Getter(CatalogueMethods.getters.GET_CATALOGUES)
   GET_CATALOGUES!: CataloguesInterface;
 
-  @layout.Action(LayoutTypes.actions.MODIFY_CATALOGUE) MODIFY_CATALOGUE;
+  @layout.Action(LayoutTypes.actions.MODIFY_CATALOGUE) MODIFY_CATALOGUE!:(catalogue: Catalogue)=>void;
+
 }
 </script>
 

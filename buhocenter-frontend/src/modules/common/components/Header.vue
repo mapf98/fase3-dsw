@@ -202,29 +202,30 @@ export default class Header extends Vue {
     return !!token;
   }
 
-  //tipear
-  @authModule.Action(AuthMethods.actions.LOGOUT) logout;
+  @authModule.Action(AuthMethods.actions.LOGOUT) logout!:()=>boolean;
+
   @authModule.Getter(AuthMethods.getters.GET_CLIENT_DATA)
   getClient!: CustomerInterface;
   @authModule.Getter(AuthMethods.getters.GET_AUTH_TOKEN) getToken!: string;
 
   @carts.Getter(CartMethods.getters.GET_CART_OBJECT)
   GET_CART_OBJECT!: CartInterface;
-  @carts.Action(CartMethods.actions.EMPTY_CART) EMPTY_CART;
+  @carts.Action(CartMethods.actions.EMPTY_CART) EMPTY_CART!:()=>void;
 
   @languageModule.Action(LanguageMethods.actions.API_GET_LANGUAGES)
-  apiGetLanguages;
+  apiGetLanguages!:()=>boolean;
   @languageModule.Action(LanguageMethods.actions.API_CHANGE_LANGUAGE)
-  apiChangeLanguage;
+  apiChangeLanguage!:(code: string)=>boolean;
   @languageModule.Getter(LanguageMethods.getters.GET_LANGUAGES) getLanguages;
   @languageModule.Getter(LanguageMethods.getters.GET_PLATFORM_LANGUAGE)
-  getLanguagePlatform;
+  getLanguagePlatform!: string;
   @languageModule.Getter(LanguageMethods.getters.GET_LANGUAGE_ERR)
-  getErrLanguages;
+  getErrLanguages!: boolean;
   @languageModule.Getter(LanguageMethods.getters.GET_PLATFORM_LANGUAGE_ERROR)
-  getErrLoadLanguage;
+  getErrLoadLanguage!: boolean;
   @languageModule.Getter(LanguageMethods.getters.GET_FETCH_PLATFORM_LANGUAGE)
-  getFetchLanguage;
+  getFetchLanguage!: string;
+
 }
 </script>
 

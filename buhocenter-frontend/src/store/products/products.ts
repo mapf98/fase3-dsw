@@ -109,7 +109,8 @@ const products: Module<ProductStateInterface, any> = {
     },
     async [ProductsTypes.actions.FETCH_PRODUCTS](
       { commit },
-      { page, catalogueId }
+      { page , catalogueId }
+
     ): Promise<boolean> {
       try {
         const products: Product[] = await productsHttpRepository.getProducts(
@@ -161,7 +162,8 @@ const products: Module<ProductStateInterface, any> = {
     async [ProductsTypes.actions.FETCH_PRODUCT_PHOTO_BY_NAME](
       { commit },
       products: Product[]
-    ): Promise<boolean | any> {
+    ): Promise<boolean> {
+
       try {
         for await (const element of products) {
           element.type = ITEM_TYPE.PRODUCT;
@@ -174,6 +176,8 @@ const products: Module<ProductStateInterface, any> = {
         }
         commit(ProductsTypes.mutations.SET_PRODUCTS, products);
         commit(ProductsTypes.mutations.SET_PRODUCT_AND_PHOTOS_LOADED, true);
+        return true
+
       } catch (e) {
         return false;
       }
@@ -181,7 +185,8 @@ const products: Module<ProductStateInterface, any> = {
     async [ProductsTypes.actions.UPDATE_PRODUCT](
       { commit },
       product: ProductCreate
-    ): Promise<boolean | any> {
+    ): Promise<boolean> {
+
       try {
         await productsHttpRepository.updateProductData(product);
         return true;
@@ -191,7 +196,8 @@ const products: Module<ProductStateInterface, any> = {
     },
     async [ProductsTypes.actions.FETCH_ALL_PRODUCTS]({
       commit,
-    }): Promise<boolean | any> {
+    }): Promise<boolean> {
+
       try {
         const products: Product[] = await productsHttpRepository.getAllProducts();
         commit(ProductsTypes.mutations.SET_PRODUCTS, products);
@@ -248,9 +254,10 @@ const products: Module<ProductStateInterface, any> = {
     async [ProductsTypes.actions.CREATE_PRODUCT](
       { commit },
       product: ProductCreate
-    ): Promise<any> {
+    ): Promise<Product | boolean> {
       try {
-        const response = await await productsHttpRepository.createProduct(
+        const response  : Product = await await productsHttpRepository.createProduct(
+
           product
         );
         return response;

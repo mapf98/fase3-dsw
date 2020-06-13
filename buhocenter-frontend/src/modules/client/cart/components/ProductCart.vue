@@ -163,7 +163,8 @@ export default class ProductCart extends Vue {
     const index = this.GET_CART_OBJECT.productCarts!.findIndex(
       (productCart) => productCart.id == this.item.id
     );
-    await this.DELETE_PRODUCT_CART({ productCartId: this.item.id, index });
+    await this.DELETE_PRODUCT_CART({ productCartId: this.item.id!, index });
+
   }
 
   @carts.Mutation(CartMethods.mutations.ADD_PRODUCT_CHECKOUT)
@@ -176,7 +177,8 @@ export default class ProductCart extends Vue {
   GET_PRODUCTS_CHECKOUT!: ProductCarts[];
   @carts.Getter(CartMethods.getters.GET_CART_OBJECT)
   GET_CART_OBJECT!: CartInterface;
-  @carts.Action(CartMethods.actions.DELETE_PRODUCT_CART) DELETE_PRODUCT_CART;
+  @carts.Action(CartMethods.actions.DELETE_PRODUCT_CART) DELETE_PRODUCT_CART!:( data: { productCartId: number; index: number })=>boolean;
+
 }
 </script>
 

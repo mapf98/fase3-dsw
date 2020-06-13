@@ -38,6 +38,8 @@ import { products, layout } from "@/store/namespaces";
 import ProductsTypes from "@/store/products/methods/products.methods";
 import LayoutTypes from "@/store/layout/methods/layout.methods";
 import { Watch } from "vue-property-decorator";
+import {Product} from "@/modules/client/products/interfaces/products.interface";
+
 
 @Component({
   components: {
@@ -90,12 +92,13 @@ export default class Catalogue extends Vue {
 
   @products.Action(ProductsTypes.actions.FETCH_PRODUCTS) private FETCH_PRODUCTS;
   @products.Action(ProductsTypes.actions.FETCH_PRODUCT_PHOTO_BY_NAME)
-  private FETCH_PRODUCT_PHOTO_BY_NAME;
+  private FETCH_PRODUCT_PHOTO_BY_NAME!:(products: Product[])=>boolean;
   @products.Action(ProductsTypes.actions.SET_PRODUCT_PHOTOS_NOT_LOADED)
-  private SET_PRODUCT_PHOTOS_NOT_LOADED;
-  @products.Getter(ProductsTypes.getters.GET_PRODUCTS) private GET_PRODUCTS;
+  private SET_PRODUCT_PHOTOS_NOT_LOADED!:(loaded: boolean)=>boolean;
+  @products.Getter(ProductsTypes.getters.GET_PRODUCTS) private GET_PRODUCTS!:Product[];
   @products.Getter(ProductsTypes.getters.GET_TOTAL_PRODUCTS)
-  private GET_TOTAL_PRODUCTS;
+  private GET_TOTAL_PRODUCTS!: number;
+
 
   @layout.Getter(LayoutTypes.getters.GET_CATALOGUE_ID)
   private GET_CATALOGUE_ID?: number;

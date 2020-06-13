@@ -1,14 +1,16 @@
 export interface Address {
-  firstStreet: string;
+  id?: number
+  firstStreet?: string;
   secondStreet?: string;
-  cityName: string;
-  state: string;
-  zipcode: string;
-  default: boolean;
-  customer: {
+  cityName?: string;
+  state?: string;
+  zipcode?: string;
+  default?: boolean;
+  customer?: {
     id: number;
   };
-  status: {
+  status?: {
+
     id: number;
   };
 }

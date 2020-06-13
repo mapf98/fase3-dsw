@@ -39,6 +39,8 @@ import LoaderTypes from "@/store/loader/methods/loader.methods";
 import { ITEM_TYPE, CURRENCY } from "../../../../config/constants";
 import PaymentsTypes from "@/store/payments/methods/payments.methods";
 import { CartInterface, ProductCarts } from "../interfaces/carts.interface";
+import {CustomerInterface} from "@/modules/client/auth/interfaces/customer.interface";
+
 
 @Component({
   components: { ProductCart },
@@ -49,7 +51,8 @@ export default class Cart extends Vue {
   async mounted() {
     if (this.GET_AUTH_TOKEN !== "") {
       this.FALSE_PHOTO_CART();
-      await this.GET_ITEMS_CARS(this.GET_CLIENT_DATA.id);
+      await this.GET_ITEMS_CARS(this.GET_CLIENT_DATA.id!);
+
 
       if (this.GET_CART_OBJECT.productCarts) {
         await this.FETCH_PRODUCT_CART_PHOTO_BY_NAME(
@@ -138,19 +141,21 @@ export default class Cart extends Vue {
       window.open(paymentUrl as string, "_blank");
     }
 
-    this.GET_ITEMS_CARS(this.GET_CLIENT_DATA.id);
+    this.GET_ITEMS_CARS(this.GET_CLIENT_DATA.id!);
+
 
     this.SHOW_LOADER(false);
   }
 
-  @loader.Action(LoaderTypes.actions.SHOW_LOADER) SHOW_LOADER;
+  @loader.Action(LoaderTypes.actions.SHOW_LOADER) SHOW_LOADER!:(loading: boolean)=>void;
 
-  @authModule.Getter(AuthMethods.getters.GET_AUTH_TOKEN) GET_AUTH_TOKEN;
-  @authModule.Getter(AuthMethods.getters.GET_CLIENT_DATA) GET_CLIENT_DATA;
+  @authModule.Getter(AuthMethods.getters.GET_AUTH_TOKEN) GET_AUTH_TOKEN! : string;
+  @authModule.Getter(AuthMethods.getters.GET_CLIENT_DATA) GET_CLIENT_DATA! : CustomerInterface;
 
-  @carts.Action(CartMethods.actions.GET_ITEMS_CARS) GET_ITEMS_CARS;
+  @carts.Action(CartMethods.actions.GET_ITEMS_CARS) GET_ITEMS_CARS!:(clientId: number)=>boolean;
   @carts.Action(CartMethods.actions.FETCH_PRODUCT_CART_PHOTO_BY_NAME)
-  FETCH_PRODUCT_CART_PHOTO_BY_NAME;
+  FETCH_PRODUCT_CART_PHOTO_BY_NAME!:(products: ProductCarts[])=>boolean;
+
   @carts.Getter(CartMethods.getters.GET_CART_OBJECT)
   GET_CART_OBJECT!: CartInterface;
   @carts.Getter(CartMethods.getters.GET_PRODUCTS_CART)

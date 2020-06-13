@@ -86,7 +86,8 @@ const carts: Module<CartsStateInterface, any> = {
         if (product!.offer.discountPrice) {
           price += parseFloat(product!.offer.discountPrice) * quantity!;
         } else {
-          price += parseFloat(product!.price!) * quantity!;
+          price += product!.price! * quantity!;
+
         }
       });
       return price;

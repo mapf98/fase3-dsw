@@ -101,6 +101,8 @@ import Categories from "@/modules/client/categories/components/Categories.vue";
 import AboutUs from "@/modules/client/about-us/components/AboutUs.vue";
 import { products } from "@/store/namespaces";
 import ProductsTypes from "@/store/products/methods/products.methods";
+import {Product} from "@/modules/client/products/interfaces/products.interface";
+
 
 @Component({
   components: { Categories, AboutUs },
@@ -138,15 +140,14 @@ export default class DailyRecommendation extends Vue {
     ProductsTypes.mutations.SET_PRODUCT_DAILY_AND_PHOTOS_LOADED
   )
   SET_PRODUCT_DAILY_AND_PHOTOS_LOADED;
-  @products.Action(ProductsTypes.actions.FETCH_PRODUCTS_DAILY_DETAIL)
-  FETCH_PRODUCTS_DAILY_DETAIL;
   @products.Action(ProductsTypes.actions.FETCH_PRODUCTS_DAILY)
-  FETCH_PRODUCTS_DAILY;
+  FETCH_PRODUCTS_DAILY!:()=>boolean;
   @products.Action(ProductsTypes.actions.FETCH_PRODUCTS_DAILY_DETAIL_PHOTOS)
-  FETCH_PRODUCTS_DAILY_DETAIL_PHOTOS;
-  @products.Getter(ProductsTypes.getters.GET_PRODUCTS_DAILY) GET_PRODUCTS_DAILY;
+  FETCH_PRODUCTS_DAILY_DETAIL_PHOTOS!:( products: Product[])=>boolean;
+  @products.Getter(ProductsTypes.getters.GET_PRODUCTS_DAILY) GET_PRODUCTS_DAILY!: Product[];
   @products.Getter(ProductsTypes.getters.GET_PRODUCTS_DAILY_AND_PHOTOS_LOADED)
-  GET_PRODUCTS_DAILY_AND_PHOTOS_LOADED;
+  GET_PRODUCTS_DAILY_AND_PHOTOS_LOADED! : boolean;
+
 }
 </script>
 

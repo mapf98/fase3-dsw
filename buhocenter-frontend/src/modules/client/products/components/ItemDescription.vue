@@ -55,6 +55,8 @@ import Component from "vue-class-component";
 import { products } from "@/store/namespaces";
 import ProductsTypes from "@/store/products/methods/products.methods";
 import { STATUS } from "@/config/constants";
+import { Product } from "@/modules/client/products/interfaces/products.interface";
+
 
 @Component
 export default class ItemDescription extends Vue {
@@ -64,7 +66,8 @@ export default class ItemDescription extends Vue {
 
   get getAvailableQuantity(): number {
     if (this.isProduct()) {
-      return this.GET_ITEM_DETAIL.productInventories[0].availableQuantity;
+      return this.GET_ITEM_DETAIL.productInventories![0].availableQuantity;
+
     }
 
     return 0;
@@ -73,44 +76,48 @@ export default class ItemDescription extends Vue {
   get getTotalRatings(): number {
     if (this.isProduct()) {
       return this.GET_ITEM_DETAIL.productRatings
-        ? this.GET_ITEM_DETAIL.productRatings[0].total
+        ? this.GET_ITEM_DETAIL.productRatings[0].total!
+
         : 0;
     }
 
     return this.GET_ITEM_DETAIL.serviceRatings
-      ? this.GET_ITEM_DETAIL.serviceRatings[0].total
+      ? this.GET_ITEM_DETAIL.serviceRatings[0].total!
+
       : 0;
   }
 
   get getRatings(): number {
     if (this.isProduct()) {
-      return parseFloat(
+      return (
         this.GET_ITEM_DETAIL.productRatings
-          ? this.GET_ITEM_DETAIL.productRatings[0].rating
+          ? this.GET_ITEM_DETAIL.productRatings[0].rating!
           : 0
-      );
+      )
     }
 
-    return parseFloat(
+    return (
       this.GET_ITEM_DETAIL.serviceRatings
-        ? this.GET_ITEM_DETAIL.serviceRatings[0].rating
+        ? this.GET_ITEM_DETAIL.serviceRatings[0].rating!
         : 0
-    );
+    )
   }
 
   get productDimensions(): string {
-    const width: string = this.GET_ITEM_DETAIL.productDimensions.width;
-    const height: string = this.GET_ITEM_DETAIL.productDimensions.height;
-    const long: string = this.GET_ITEM_DETAIL.productDimensions.long;
+    const width = this.GET_ITEM_DETAIL.productDimensions!.width;
+    const height = this.GET_ITEM_DETAIL.productDimensions!.height;
+    const long = this.GET_ITEM_DETAIL.productDimensions!.long;
+
 
     return `${long} x ${width} x ${height}`;
   }
 
   getProvider(): string {
     if (this.isProduct()) {
-      return this.GET_ITEM_DETAIL.productProvider[0].provider.name;
+      return this.GET_ITEM_DETAIL.productProvider![0].provider.name;
     } else {
-      return this.GET_ITEM_DETAIL.serviceProvider[0].provider.name;
+      return this.GET_ITEM_DETAIL.serviceProvider![0].provider.name;
+
     }
   }
 
@@ -136,7 +143,9 @@ export default class ItemDescription extends Vue {
     return false;
   }
 
-  @products.Getter(ProductsTypes.getters.GET_ITEM_DETAIL) GET_ITEM_DETAIL;
+  @products.Getter(ProductsTypes.getters.GET_ITEM_DETAIL)
+    GET_ITEM_DETAIL!: Product;
+
 }
 </script>
 

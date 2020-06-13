@@ -85,6 +85,7 @@ import Component from "vue-class-component";
 import { products } from "../../../../store/namespaces";
 import ProductsTypes from "@/store/products/methods/products.methods";
 import { ITEM_TYPE } from "../../../../config/constants";
+import {Product} from "@/modules/client/products/interfaces/products.interface";
 
 @Component
 export default class ProductCard extends Vue {
@@ -119,10 +120,11 @@ export default class ProductCard extends Vue {
   @products.Action(ProductsTypes.actions.FETCH_SERVICE_DETAIL)
   FETCH_SERVICE_DETAIL;
   @products.Action(ProductsTypes.actions.FETCH_PRODUCT_DETAIL)
-  FETCH_PRODUCT_DETAIL;
-  @products.Getter(ProductsTypes.getters.GET_PRODUCTS) GET_PRODUCTS;
+  FETCH_PRODUCT_DETAIL!:(productId: number)=>boolean;
+  @products.Getter(ProductsTypes.getters.GET_PRODUCTS) GET_PRODUCTS!: Product[];
   @products.Getter(ProductsTypes.getters.GET_PRODUCTS_AND_PHOTOS_LOADED)
-  GET_PRODUCTS_AND_PHOTOS_LOADED;
+  GET_PRODUCTS_AND_PHOTOS_LOADED!:boolean;
+
 }
 </script>
 <style scoped lang="scss">

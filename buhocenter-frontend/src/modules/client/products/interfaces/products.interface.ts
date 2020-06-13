@@ -1,6 +1,8 @@
 import { BrandInterface } from "../../brand/interfaces/brand.interface";
 import { Catalogue } from "../../catalogues/interfaces/catalogues.interface";
 import { Provider } from "../../provider/interfaces/provider.interface";
+import { Status } from '@/modules/common/interfaces/status.interface';
+
 
 export interface ProductCreate {
   id?: number;
@@ -38,11 +40,13 @@ export interface Product {
   offer?: any;
   offers?: any;
   photos?: Array<{ content: string; imageUrl?: string }>;
-  price?: string;
+  price?: number;
   productProvider?: ProductProvider[];
+  serviceProvider?: ProductProvider[]; // ELIMINAR
   shippingPrice?: string;
   productDimensions?: ProductDimentions;
-  status?: any;
+  status?: Status;
+
   questions?: Comment[];
   productInventories?: ProductInventorie;
   productCategories?: {
@@ -57,6 +61,8 @@ export interface Product {
     }[];
   }[];
   productRatings?: ProductRating[];
+  serviceRatings?: ProductRating[]; //Eliminar
+
   updatedAt?: string;
   createdAt?: string;
   quantity?: number;
@@ -65,8 +71,9 @@ export interface Product {
 }
 
 export interface ProductRating {
-  rating: string;
-  total?: string;
+  rating?:  number;
+  total?:  number;
+
 }
 
 export interface ProductDimentions {

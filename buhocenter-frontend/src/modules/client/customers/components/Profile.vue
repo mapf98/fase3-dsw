@@ -78,6 +78,8 @@ import Component from "vue-class-component";
 import { authModule } from "@/store/namespaces";
 import AuthMethods from "@/store/auth/methods/auth.methods";
 import { ROL } from "@/config/constants";
+import {CustomerInterface} from "@/modules/client/auth/interfaces/customer.interface";
+
 
 @Component
 export default class Profile extends Vue {
@@ -123,6 +125,7 @@ export default class Profile extends Vue {
     this.$router.push("/dashboard");
   }
 
-  @authModule.Getter(AuthMethods.getters.GET_CLIENT_DATA) getClient;
+  @authModule.Getter(AuthMethods.getters.GET_CLIENT_DATA) getClient!: CustomerInterface;
+
 }
 </script>

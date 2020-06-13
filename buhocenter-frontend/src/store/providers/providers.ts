@@ -26,7 +26,8 @@ const Providers: Module<ProviderStateInterface, any> = {
   actions: {
     async [ProvidersTypes.actions.FETCH_PROVIDERS]({
       commit,
-    }): Promise<boolean | any> {
+    }): Promise<boolean> {
+
       try {
         const response: Provider[] = await ProvidersHttpRepository.getProviders();
         commit(ProvidersTypes.mutations.GET_PROVIDERS_SUCCESS, response);
