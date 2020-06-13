@@ -5,7 +5,8 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
+    "lint": "vue-cli-service lint",
+    "test": "jest --passWithNoTests"
   },
   "dependencies": {
     "axios": "^0.19.2",
@@ -24,6 +25,9 @@
     "vuex-persistedstate": "^3.0.1"
   },
   "devDependencies": {
+    "@types/jest": "^25.1.2",
+    "jest": "^24.9.0",
+    "ts-jest": "^25.4.0",
     "@typescript-eslint/eslint-plugin": "^3.2.0",
     "@typescript-eslint/parser": "^3.2.0",
     "@vue/cli-plugin-babel": "~4.4.1",
@@ -49,5 +53,26 @@
     "> 1%",
     "last 2 versions",
     "not dead"
-  ]
+  ],
+  "jest": {
+    "moduleFileExtensions": [
+      "js",
+      "json",
+      "ts"
+    ],
+    "moduleNameMapper": {
+      "@/(.*)$": "<rootDir>/src/$1",
+      "^vue$": "vue/dist/vue.common.js"
+    },
+    "moduleDirectories": [
+      "node_modules",
+      "src"
+    ],
+    "testRegex": ".spec.ts$",
+    "transform": {
+      "^.+\\.(t|j)s$": "ts-jest"
+    },
+    "coverageDirectory": "../coverage",
+    "testEnvironment": "node"
+  }
 }
