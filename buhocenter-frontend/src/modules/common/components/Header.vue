@@ -81,6 +81,9 @@
           </v-list>
         </v-menu>
       </div>
+      <div class="mr-2 ml-2">
+        <CurrencySelector></CurrencySelector>
+      </div>
       <div class="mr-2 ml-2" v-if="getStatusLogin">
         <div class="text-xs-center">
           <v-menu
@@ -156,9 +159,10 @@ import { i18n } from "@/i18n/i18n";
 import { FETCHED, FETCHING } from "@/config/constants";
 import { CustomerInterface } from "@/modules/client/auth/interfaces/customer.interface";
 import { CartInterface } from "@/modules/client/cart/interfaces/carts.interface";
+import CurrencySelector from "@/modules/currency/components/CurrencySelector.vue";
 
 @Component({
-  components: { Cart },
+  components: {CurrencySelector, Cart },
 })
 export default class Header extends Vue {
   drawer = null;
