@@ -6,9 +6,7 @@ import * as ngrok from 'ngrok';
 export class ProxyService {
     private _url: string;
 
-    constructor (
-		@Inject(WINSTON_MODULE_PROVIDER) private readonly logger: Logger,
-    ) {}
+    constructor(@Inject(WINSTON_MODULE_PROVIDER) private readonly logger: Logger) {}
 
     /**
      * Returns the tunnel url created by ngrok
@@ -16,7 +14,7 @@ export class ProxyService {
     get url(): string {
         return this._url;
     }
-    
+
     /**
      * Connects localhost with ngrok in order to create the tunnel
      * @returns Promise<void>

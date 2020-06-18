@@ -82,7 +82,6 @@ const authModule: Module<CustomerStateInterface, any> = {
       { commit },
       customer: CustomerInterface
     ): Promise<boolean> {
-
       try {
         const response = await AuthRepository.registerCustomer(customer);
         if (!response.error) {
@@ -158,13 +157,16 @@ const authModule: Module<CustomerStateInterface, any> = {
       credentials: { email: string; psswd: string }
     ): Promise<boolean> {
       try {
-        return await AuthRepository.updateCustomerCredencials(credentials);
+        await AuthRepository.updateCustomerCredencials(credentials);
+        return true;
       } catch (e) {
         return false;
       }
     },
-    [AuthTypes.actions.MODIFY_CLIENT_DATA]({ commit, state }, data : CustomerInterface): void {
-
+    [AuthTypes.actions.MODIFY_CLIENT_DATA](
+      { commit, state },
+      data: CustomerInterface
+    ): void {
       commit(AuthTypes.mutations.SET_CUSTOMER_DATA, data);
     },
   },

@@ -25,7 +25,7 @@
           style="background: #ffffff;"
           :height="$vuetify.breakpoint.mdAndUp ? '115' : '50'"
           :width="$vuetify.breakpoint.mdAndUp ? '115' : '50'"
-          :src="item.product.photos[0].imageUrl"
+          :src="item.product.productPhotos[0].imageUrl"
           contain
           alt="Product Image"
         ></v-img>
@@ -110,7 +110,7 @@ export default class ProductCart extends Vue {
   ];
 
   getProvider(): string {
-    return this.item.product!.productProvider![0]!.provider.name;
+    return this.item.product!.provider.name;
   }
 
   hasOffer() {
@@ -128,8 +128,7 @@ export default class ProductCart extends Vue {
     const index_checkout = this.GET_PRODUCTS_CHECKOUT.findIndex(
       (productCart) => productCart.product!.id == this.item.product!.id
     );
-
-    const index = this.GET_CART_OBJECT.productCarts!.findIndex(
+    const index = this.GET_CART_OBJECT.findIndex(
       (productCart) => productCart.id == this.item.id
     );
     this.SET_QUANTITY_PRODUCT({
@@ -160,11 +159,10 @@ export default class ProductCart extends Vue {
   }
 
   async removeProductCart() {
-    const index = this.GET_CART_OBJECT.productCarts!.findIndex(
+    const index = this.GET_CART_OBJECT.findIndex(
       (productCart) => productCart.id == this.item.id
     );
     await this.DELETE_PRODUCT_CART({ productCartId: this.item.id!, index });
-
   }
 
   @carts.Mutation(CartMethods.mutations.ADD_PRODUCT_CHECKOUT)
@@ -176,9 +174,12 @@ export default class ProductCart extends Vue {
   @carts.Getter(CartMethods.getters.GET_PRODUCTS_CHECKOUT)
   GET_PRODUCTS_CHECKOUT!: ProductCarts[];
   @carts.Getter(CartMethods.getters.GET_CART_OBJECT)
-  GET_CART_OBJECT!: CartInterface;
-  @carts.Action(CartMethods.actions.DELETE_PRODUCT_CART) DELETE_PRODUCT_CART!:( data: { productCartId: number; index: number })=>boolean;
-
+  GET_CART_OBJECT!: ProductCarts[];
+  @carts.Action(CartMethods.actions.DELETE_PRODUCT_CART)
+  DELETE_PRODUCT_CART!: (data: {
+    productCartId: number;
+    index: number;
+  }) => boolean;
 }
 </script>
 

@@ -32,7 +32,7 @@
                     <v-img
                       height="200"
                       contain
-                      :src="product.photos[0]"
+                      :src="product.productPhotos[0]"
                     ></v-img>
                   </v-col>
                   <v-col cols="9" class="pl-0 pb-0">
@@ -42,7 +42,7 @@
                     >
                       <p>
                         {{ $t("BY") }}
-                        <b>{{ product.productProvider[0].provider.name }}</b>
+                        <b>{{ product.provider.name }}</b>
                       </p>
                     </v-row>
                   </v-col>
@@ -72,7 +72,7 @@
                       justify="center"
                     >
                       <v-rating
-                        :value="getRating(product.productRatings)"
+                        :value="product.rating"
                         background-color="orange lighten-3"
                         color="primary"
                         :small="$vuetify.breakpoint.mdAndUp"
@@ -101,8 +101,7 @@ import Categories from "@/modules/client/categories/components/Categories.vue";
 import AboutUs from "@/modules/client/about-us/components/AboutUs.vue";
 import { products } from "@/store/namespaces";
 import ProductsTypes from "@/store/products/methods/products.methods";
-import {Product} from "@/modules/client/products/interfaces/products.interface";
-
+import { Product } from "@/modules/client/products/interfaces/products.interface";
 
 @Component({
   components: { Categories, AboutUs },
@@ -141,13 +140,13 @@ export default class DailyRecommendation extends Vue {
   )
   SET_PRODUCT_DAILY_AND_PHOTOS_LOADED;
   @products.Action(ProductsTypes.actions.FETCH_PRODUCTS_DAILY)
-  FETCH_PRODUCTS_DAILY!:()=>boolean;
+  FETCH_PRODUCTS_DAILY!: () => boolean;
   @products.Action(ProductsTypes.actions.FETCH_PRODUCTS_DAILY_DETAIL_PHOTOS)
-  FETCH_PRODUCTS_DAILY_DETAIL_PHOTOS!:( products: Product[])=>boolean;
-  @products.Getter(ProductsTypes.getters.GET_PRODUCTS_DAILY) GET_PRODUCTS_DAILY!: Product[];
+  FETCH_PRODUCTS_DAILY_DETAIL_PHOTOS!: (products: Product[]) => boolean;
+  @products.Getter(ProductsTypes.getters.GET_PRODUCTS_DAILY)
+  GET_PRODUCTS_DAILY!: Product[];
   @products.Getter(ProductsTypes.getters.GET_PRODUCTS_DAILY_AND_PHOTOS_LOADED)
-  GET_PRODUCTS_DAILY_AND_PHOTOS_LOADED! : boolean;
-
+  GET_PRODUCTS_DAILY_AND_PHOTOS_LOADED!: boolean;
 }
 </script>
 

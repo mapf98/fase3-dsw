@@ -49,8 +49,8 @@ class ProductsHttpRepository extends HttpRepository {
     );
   }
 
-  public getProductsDailyRecommendation(): Promise<Product[]> {
-    return this.get(
+  public async getProductsDailyRecommendation(): Promise<Product[]> {
+    return await this.get(
       this.createUri([
         `${ProductsHttpRepository.RESOURCE}`,
         `daily-recommendation`,

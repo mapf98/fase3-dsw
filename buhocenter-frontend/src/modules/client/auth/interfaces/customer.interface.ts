@@ -14,7 +14,7 @@ export interface CustomerInterface {
   uid?: string;
   id?: number;
   role?: Role;
-  is_federated?: boolean;
+  is_federate?: boolean;
   addresses?: Address[];
   status?: any;
 }

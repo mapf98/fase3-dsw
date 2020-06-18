@@ -15,12 +15,12 @@ const carts: Module<CartsStateInterface, any> = {
   state: CARTS_EMPTY_STATE,
   mutations: {
     [CartTypes.mutations.SET_CART](state, data: CartInterface) {
-      // eslint-disable-next-line
-      // @ts-ignore
-      state.cart = data.cart;
-      state.checkout = [];
-      state.err_cart = false;
-      state.err_cart_message = "";
+      if (data.cart) {
+        state.cart = data.cart;
+        state.checkout = [];
+        state.err_cart = false;
+        state.err_cart_message = "";
+      }
     },
     [CartTypes.mutations.ADD_PRODUCT_CHECKOUT](
       state,
@@ -35,7 +35,6 @@ const carts: Module<CartsStateInterface, any> = {
       newCheckout.splice(index, 1);
       state.checkout = newCheckout;
     },
-    // tslint:disable-next-line:max-line-length
     [CartTypes.mutations.SET_QUANTITY_PRODUCT](
       state,
       data: {
@@ -46,7 +45,7 @@ const carts: Module<CartsStateInterface, any> = {
       }
     ) {
       const new_cart = state.cart;
-      new_cart.productCarts![data.index].quantity = data.quantity;
+      new_cart![data.index].quantity = data.quantity;
       if (data.inCheckout) {
         const new_checkout = state.checkout;
         new_checkout[data.index_checkout].quantity = data.quantity;
@@ -56,11 +55,11 @@ const carts: Module<CartsStateInterface, any> = {
     },
     [CartTypes.mutations.REMOVE_PRODUCT_CART](state, index: number) {
       const new_cart = state.cart;
-      new_cart.productCarts!.splice(index, 1);
+      new_cart!.splice(index, 1);
       state.cart = new_cart;
     },
     [CartTypes.mutations.SET_PRODUCTS_CART](state, products: ProductCarts[]) {
-      state.cart.productCarts = products;
+      state.cart = products;
       state.load_photo_cart = true;
     },
     [CartTypes.mutations.FALSE_PHOTO_CART](state) {
@@ -68,11 +67,11 @@ const carts: Module<CartsStateInterface, any> = {
     },
   },
   getters: {
-    [CartTypes.getters.GET_CART_OBJECT](state): CartInterface {
+    [CartTypes.getters.GET_CART_OBJECT](state): ProductCarts[] {
       return state.cart;
     },
     [CartTypes.getters.GET_PRODUCTS_CART](state): ProductCarts[] {
-      return state.cart.productCarts!;
+      return state.cart!;
     },
     [CartTypes.getters.GET_PRODUCTS_CHECKOUT](state): ProductCarts[] {
       return state.checkout;
@@ -83,11 +82,10 @@ const carts: Module<CartsStateInterface, any> = {
       checkout.map((productCart) => {
         const { product } = productCart;
         const { quantity } = productCart;
-        if (product!.offer.discountPrice) {
+        if (product!.offer && product!.offer.discountPrice) {
           price += parseFloat(product!.offer.discountPrice) * quantity!;
         } else {
           price += product!.price! * quantity!;
-
         }
       });
       return price;
@@ -144,9 +142,9 @@ const carts: Module<CartsStateInterface, any> = {
         for (let i = 0; i < products.length; i++) {
           products[
             i
-          ].product!.photos![0].imageUrl = await ProductsFirebaseRepository.getProductPhotoByName(
+          ].product!.productPhotos![0].imageUrl = await ProductsFirebaseRepository.getProductPhotoByName(
             products[i].product!.id!,
-            products[i].product!.photos![0].content
+            products[i].product!.productPhotos![0].content
           );
         }
 
@@ -164,7 +162,6 @@ const carts: Module<CartsStateInterface, any> = {
         const response = await cartsHttpRepository.deleteProductCart(
           data.productCartId
         );
-        // (response)
         if (response) {
           commit(CartTypes.mutations.REMOVE_PRODUCT_CART, data.index);
           return true;

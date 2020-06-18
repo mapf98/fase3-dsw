@@ -98,10 +98,9 @@
             max-width="344"
             height="310"
             fill-height
-            :style="
-              `border: ${address.setDefault ? '2px solid #907F46' : 'none'}`
-            "
-
+            :style="`border: ${
+              address.setDefault ? '2px solid #907F46' : 'none'
+            }`"
           >
             <v-card-text class="font-weight-bold">
               <p class="ma-0 text-center subtitle text--primary">
@@ -227,7 +226,6 @@ import rules from "@/utils/rules";
 import { CustomerInterface } from "@/modules/client/auth/interfaces/customer.interface";
 import { Address } from "@/modules/client/addresses/interfaces/address.interface";
 
-
 @Component({
   components: { CreateAddressForm },
 })
@@ -255,11 +253,10 @@ export default class AddressManagement extends Vue {
   }
 
   createDefaultAddressObject(addressId: number) {
-    const defaultAddress : Address = {
+    const defaultAddress: Address = {
       id: addressId,
-      customer: {
+      user: {
         id: this.GET_CLIENT_DATA.id!,
-
       },
     };
 
@@ -293,7 +290,6 @@ export default class AddressManagement extends Vue {
   async fetchAddresses() {
     const fetched: boolean = await this.FETCH_ADDRESSES(
       this.GET_CLIENT_DATA.id!
-
     );
 
     if (!fetched) {
@@ -323,15 +319,13 @@ export default class AddressManagement extends Vue {
 
   createAddressObject() {
     const address: Address = {
-
       firstStreet: this.firstStreet,
       secondStreet: this.secondStreet,
       cityName: this.cityName,
       state: this.state,
       zipcode: this.zipCode,
-      customer: {
+      user: {
         id: this.GET_CLIENT_DATA.id!,
-
       },
       status: {
         id: STATUS.ACTIVE,
@@ -367,11 +361,12 @@ export default class AddressManagement extends Vue {
   private SHOW_CREATE_ADDRESS_DIALOG!: (display: boolean) => void;
   @addresses.Action(AddressTypes.actions.SET_DEFAULT_ADDRESS)
   private SET_DEFAULT_ADDRESS!: (defaultAddress: Address) => boolean;
-  @addresses.Action(AddressTypes.actions.DELETE_ADDRESS) private DELETE_ADDRESS!:(addressId: number)=>boolean;
+  @addresses.Action(AddressTypes.actions.DELETE_ADDRESS)
+  private DELETE_ADDRESS!: (addressId: number) => boolean;
   @addresses.Action(AddressTypes.actions.FETCH_ADDRESSES)
-  private FETCH_ADDRESSES!:(customerId: number)=>boolean;
-  @addresses.Getter(AddressTypes.getters.GET_ADDRESSES) private GET_ADDRESSES! : Address[];
-
+  private FETCH_ADDRESSES!: (customerId: number) => boolean;
+  @addresses.Getter(AddressTypes.getters.GET_ADDRESSES)
+  private GET_ADDRESSES!: Address[];
 }
 </script>
 

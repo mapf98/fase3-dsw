@@ -6,5 +6,19 @@ export const PRODUCT_EMPTY_STATE: ProductStateInterface = {
   productsDaily: [],
   productsDailyAndPhotosLoaded: false,
   totalProducts: 0,
-  itemDetail: {},
+  itemDetail: {
+    productPhotos: {},
+    provider: {
+      createdAt: '',
+      id: 0,
+      name: '',
+      updatedAt: '',
+    },
+    productDimension: {
+      width: '',
+      height: '',
+      long: '',
+    },
+    rating: ''
+  },
 };

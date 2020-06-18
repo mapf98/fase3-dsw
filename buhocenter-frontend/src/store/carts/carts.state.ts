@@ -3,7 +3,7 @@ import { CartsStateInterface } from "@/store/carts/interfaces/carts.state.interf
 export const CARTS_EMPTY_STATE: CartsStateInterface = {
   err_cart: false,
   err_cart_message: "",
-  cart: {},
+  cart: [],
   checkout: [],
   load_photo_cart: false,
 };

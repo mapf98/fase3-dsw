@@ -39,8 +39,7 @@ import LoaderTypes from "@/store/loader/methods/loader.methods";
 import { ITEM_TYPE, CURRENCY } from "../../../../config/constants";
 import PaymentsTypes from "@/store/payments/methods/payments.methods";
 import { CartInterface, ProductCarts } from "../interfaces/carts.interface";
-import {CustomerInterface} from "@/modules/client/auth/interfaces/customer.interface";
-
+import { CustomerInterface } from "@/modules/client/auth/interfaces/customer.interface";
 
 @Component({
   components: { ProductCart },
@@ -48,18 +47,17 @@ import {CustomerInterface} from "@/modules/client/auth/interfaces/customer.inter
 export default class Cart extends Vue {
   public productsCart?: ProductCarts[] = [];
 
-  async mounted() {
+  async mounted(): Promise<void> {
     if (this.GET_AUTH_TOKEN !== "") {
       this.FALSE_PHOTO_CART();
       await this.GET_ITEMS_CARS(this.GET_CLIENT_DATA.id!);
-
-
-      if (this.GET_CART_OBJECT.productCarts) {
-        await this.FETCH_PRODUCT_CART_PHOTO_BY_NAME(
-          this.GET_CART_OBJECT.productCarts
-        );
+      console.log("HI");
+      console.log(this.GET_CART_OBJECT);
+      console.log(this.GET_PRODUCTS_CART);
+      if (this.GET_CART_OBJECT) {
+        await this.FETCH_PRODUCT_CART_PHOTO_BY_NAME(this.GET_CART_OBJECT);
       }
-      this.productsCart = this.GET_PRODUCTS_CART;
+      this.productsCart = this.GET_CART_OBJECT;
     }
   }
 
@@ -74,59 +72,7 @@ export default class Cart extends Vue {
   }
 
   createOrder() {
-    // FIX: Acomodar al implementar el dropdown multimoneda
-    const currencyISO = "USD";
-    const currencyId: number = CURRENCY.USD.id;
-
-    const items: any = [];
-    let total = 0;
-
-    const order: any = {
-      customer: {
-        id: this.GET_CLIENT_DATA.id,
-        firstName: this.GET_CLIENT_DATA.name,
-        lastName: this.GET_CLIENT_DATA.lastName,
-        email: this.GET_CLIENT_DATA.email,
-        country: "US",
-      },
-      currency: {
-        id: currencyId,
-        name: currencyISO,
-      },
-    };
-
-    this.GET_PRODUCTS_CHECKOUT.forEach((i) => {
-      total += parseFloat(this.getProductPrice(i));
-
-      const item = {
-        sku: `${i!.product!.id}`,
-        name: i!.product!.name,
-        price: `${this.getProductPrice(i)}`,
-        currency: currencyISO,
-        quantity: parseInt(`${i!.quantity}`),
-        type: {
-          id: ITEM_TYPE.PRODUCT,
-        },
-      };
-
-      items.push(item);
-    });
-
-    order.items = items;
-
-    order.amount = {
-      total: `${total}`,
-      currency: currencyISO,
-      details: {
-        subtotal: `${total}`,
-      },
-    };
-
-    order.cart = {
-      id: this.GET_CART_OBJECT.id,
-    };
-
-    return order;
+    //! FIX: Ajustar en lo que esté listo el checkout con CoinGate
   }
 
   async checkout() {
@@ -143,21 +89,26 @@ export default class Cart extends Vue {
 
     this.GET_ITEMS_CARS(this.GET_CLIENT_DATA.id!);
 
-
     this.SHOW_LOADER(false);
   }
 
-  @loader.Action(LoaderTypes.actions.SHOW_LOADER) SHOW_LOADER!:(loading: boolean)=>void;
+  @loader.Action(LoaderTypes.actions.SHOW_LOADER) SHOW_LOADER!: (
+    loading: boolean
+  ) => void;
 
-  @authModule.Getter(AuthMethods.getters.GET_AUTH_TOKEN) GET_AUTH_TOKEN! : string;
-  @authModule.Getter(AuthMethods.getters.GET_CLIENT_DATA) GET_CLIENT_DATA! : CustomerInterface;
+  @authModule.Getter(AuthMethods.getters.GET_AUTH_TOKEN)
+  GET_AUTH_TOKEN!: string;
+  @authModule.Getter(AuthMethods.getters.GET_CLIENT_DATA)
+  GET_CLIENT_DATA!: CustomerInterface;
 
-  @carts.Action(CartMethods.actions.GET_ITEMS_CARS) GET_ITEMS_CARS!:(clientId: number)=>boolean;
+  @carts.Action(CartMethods.actions.GET_ITEMS_CARS) GET_ITEMS_CARS!: (
+    clientId: number
+  ) => boolean;
   @carts.Action(CartMethods.actions.FETCH_PRODUCT_CART_PHOTO_BY_NAME)
-  FETCH_PRODUCT_CART_PHOTO_BY_NAME!:(products: ProductCarts[])=>boolean;
+  FETCH_PRODUCT_CART_PHOTO_BY_NAME!: (products: ProductCarts[]) => boolean;
 
   @carts.Getter(CartMethods.getters.GET_CART_OBJECT)
-  GET_CART_OBJECT!: CartInterface;
+  GET_CART_OBJECT!: ProductCarts[];
   @carts.Getter(CartMethods.getters.GET_PRODUCTS_CART)
   GET_PRODUCTS_CART!: ProductCarts[];
 

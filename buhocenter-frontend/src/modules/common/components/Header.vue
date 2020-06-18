@@ -134,8 +134,8 @@
           color="primary"
           :content="
             getToken !== ''
-              ? GET_CART_OBJECT.productCarts
-                ? GET_CART_OBJECT.productCarts.length.toString()
+              ? GET_CART_OBJECT
+                ? GET_CART_OBJECT.length.toString()
                 : '0'
               : '0'
           "
@@ -206,7 +206,7 @@ export default class Header extends Vue {
     return !!token;
   }
 
-  @authModule.Action(AuthMethods.actions.LOGOUT) logout!:()=>boolean;
+  @authModule.Action(AuthMethods.actions.LOGOUT) logout!: () => boolean;
 
   @authModule.Getter(AuthMethods.getters.GET_CLIENT_DATA)
   getClient!: CustomerInterface;
@@ -214,12 +214,12 @@ export default class Header extends Vue {
 
   @carts.Getter(CartMethods.getters.GET_CART_OBJECT)
   GET_CART_OBJECT!: CartInterface;
-  @carts.Action(CartMethods.actions.EMPTY_CART) EMPTY_CART!:()=>void;
+  @carts.Action(CartMethods.actions.EMPTY_CART) EMPTY_CART!: () => void;
 
   @languageModule.Action(LanguageMethods.actions.API_GET_LANGUAGES)
-  apiGetLanguages!:()=>boolean;
+  apiGetLanguages!: () => boolean;
   @languageModule.Action(LanguageMethods.actions.API_CHANGE_LANGUAGE)
-  apiChangeLanguage!:(code: string)=>boolean;
+  apiChangeLanguage!: (code: string) => boolean;
   @languageModule.Getter(LanguageMethods.getters.GET_LANGUAGES) getLanguages;
   @languageModule.Getter(LanguageMethods.getters.GET_PLATFORM_LANGUAGE)
   getLanguagePlatform!: string;
@@ -229,7 +229,6 @@ export default class Header extends Vue {
   getErrLoadLanguage!: boolean;
   @languageModule.Getter(LanguageMethods.getters.GET_FETCH_PLATFORM_LANGUAGE)
   getFetchLanguage!: string;
-
 }
 </script>
 

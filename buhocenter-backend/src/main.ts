@@ -1,17 +1,13 @@
 import { NestFactory } from '@nestjs/core';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
-import { AppModule } from './modules/app/app.module';
-import { join } from 'path';
+import { AppModule } from './app/app.module';
 import * as rTracer from 'cls-rtracer';
 import * as helmet from 'helmet';
-import * as express from 'express';
 
 declare const module: any;
 
 async function bootstrap() {
     const app = await NestFactory.create(AppModule);
-
-    // app.use(express.static(join('./templates')));
 
     app.useLogger(app.get(WINSTON_MODULE_NEST_PROVIDER));
 
@@ -26,7 +22,7 @@ async function bootstrap() {
 
     app.setGlobalPrefix('/api/v1');
 
-    await app.listen(3000);
+    await app.listen(process.env.API_PORT);
 
     if (module.hot) {
         module.hot.accept();

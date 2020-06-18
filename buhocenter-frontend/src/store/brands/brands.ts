@@ -20,7 +20,6 @@ const brands: Module<BrandsStateInterface, any> = {
   },
   actions: {
     async [BrandsTypes.actions.FETCH_BRANDS]({ commit }): Promise<boolean> {
-
       try {
         const response: BrandInterface[] = await BrandsHttpRepository.getBrands();
         commit(BrandsTypes.mutations.GET_BRANDS_SUCCESS, response);

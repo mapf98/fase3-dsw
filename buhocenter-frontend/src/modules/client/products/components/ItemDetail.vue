@@ -28,10 +28,7 @@
                   {{ $t(GET_CATEGORY) }} </RouterLink
                 >>
                 <RouterLink
-                  :to="
-                    `/products?category_id=${GET_CATEGORY_ID}&catalogue_id=${GET_CATALOGUE_ID}`
-                  "
-
+                  :to="`/products?category_id=${GET_CATEGORY_ID}&catalogue_id=${GET_CATALOGUE_ID}`"
                 >
                   {{ $t(GET_CATALOGUE) }}
                 </RouterLink>
@@ -41,7 +38,7 @@
           <v-row v-if="itemDetailLoaded" class="pa-0">
             <v-col cols="12" lg="1" md="1" sm="2" class="justify-center ma-0">
               <div
-                v-for="photo in GET_ITEM_DETAIL.photos"
+                v-for="photo in GET_ITEM_DETAIL.productPhotos"
                 :key="photo.imageUrl"
               >
                 <v-img
@@ -223,8 +220,11 @@ import { STATUS } from "@/config/constants";
 import DailyRecomendation from "@/modules/client/daily-recomendation/components/DailyRecomendation.vue";
 import { CustomerInterface } from "@/modules/client/auth/interfaces/customer.interface";
 import { Product } from "@/modules/client/products/interfaces/products.interface";
-import {CartInterface,ProductCarts,ServiceCart} from "@/modules/client/cart/interfaces/carts.interface";
-
+import {
+  CartInterface,
+  ProductCarts,
+  ServiceCart,
+} from "@/modules/client/cart/interfaces/carts.interface";
 
 @Component({
   components: {
@@ -284,7 +284,6 @@ export default class ItemDetail extends Vue {
       this.getDiscountPrice() !== 0
         ? this.getDiscountPrice() * quantity
         : this.GET_ITEM_DETAIL.price! * quantity
-
     }`;
 
     return {
@@ -353,22 +352,25 @@ export default class ItemDetail extends Vue {
     return discountPrice;
   }
 
-  private async addProductToCart() {
+  private async addProductToCart(): Promise<boolean> {
     const productCart: CART_INTERFACE.ProductCarts = {
       quantity: this.quantity,
-      customer: {
+      user: {
         id: this.GET_CLIENT_DATA.id!,
       },
       product: {
         id: this.GET_ITEM_DETAIL.id!,
-
+        provider: this.GET_ITEM_DETAIL.provider!,
+        productPhotos: this.GET_ITEM_DETAIL.productPhotos!,
+        productDimension: this.GET_ITEM_DETAIL.productDimension!,
+        rating: this.GET_ITEM_DETAIL.rating!,
       },
     };
 
     return await this.ADD_PRODUCT_TO_CART(productCart);
   }
 
-  async addItemToCart(quantity: number) {
+  async addItemToCart(quantity: number): Promise<void> {
     this.quantity = quantity;
     const created: boolean = await this.addProductToCart();
 
@@ -376,10 +378,7 @@ export default class ItemDetail extends Vue {
       this.itemAddedToCart = true;
       await this.GET_ITEMS_CARS(this.GET_CLIENT_DATA.id!);
       this.FALSE_PHOTO_CART();
-      await this.FETCH_PRODUCT_CART_PHOTO_BY_NAME(
-        this.GET_CART_OBJECT.productCarts!
-
-      );
+      await this.FETCH_PRODUCT_CART_PHOTO_BY_NAME(this.GET_CART_OBJECT);
     } else {
       this.errorAddingItemToCart = true;
     }
@@ -393,10 +392,6 @@ export default class ItemDetail extends Vue {
     return false;
   }
 
-  itemQuantity(quantity: number): void {
-    this.quantity = quantity;
-  }
-
   get imageSelected(): string {
     return this.principalImage;
   }
@@ -405,18 +400,17 @@ export default class ItemDetail extends Vue {
     this.principalImage = imageUrl;
   }
 
-  closeSnackbar() {
+  closeSnackbar(): void {
     this.errorLoadingContent = false;
   }
 
-  async mounted() {
+  async mounted(): Promise<void> {
     let fetched = false;
     let photosLoaded = false;
     if (this.isProduct()) {
       fetched = await this.FETCH_PRODUCT_DETAIL(Number(this.$route.query.id));
     } else {
       fetched = await this.FETCH_SERVICE_DETAIL(Number(this.$route.query.id));
-
     }
 
     if (fetched) {
@@ -432,8 +426,7 @@ export default class ItemDetail extends Vue {
         });
       }
 
-      this.principalImage = this.GET_ITEM_DETAIL.photos![0].imageUrl!;
-
+      this.principalImage = this.GET_ITEM_DETAIL.productPhotos[0].imageUrl!;
     } else {
       this.errorLoadingContent = true;
     }
@@ -448,14 +441,17 @@ export default class ItemDetail extends Vue {
     loading: boolean
   ) => boolean;
   @payments.Action(PaymentsTypes.actions.CREATE_ORDER) CREATE_ORDER;
-  @carts.Getter(CartMethods.getters.GET_CART_OBJECT) GET_CART_OBJECT!: CartInterface;
+  @carts.Getter(CartMethods.getters.GET_CART_OBJECT)
+  GET_CART_OBJECT!: ProductCarts[];
   @carts.Action(CartMethods.actions.ADD_PRODUCT_TO_CART)
-  ADD_PRODUCT_TO_CART!:( productCart: ProductCarts)=>boolean;
+  ADD_PRODUCT_TO_CART!: (productCart: ProductCarts) => boolean;
   @carts.Action(CartMethods.actions.ADD_SERVICE_TO_CART)
-  ADD_SERVICE_TO_CART!:(serviceCart: ServiceCart)=> boolean;
-  @carts.Action(CartMethods.actions.GET_ITEMS_CARS) GET_ITEMS_CARS!:( clientId: number)=>boolean;
+  ADD_SERVICE_TO_CART!: (serviceCart: ServiceCart) => boolean;
+  @carts.Action(CartMethods.actions.GET_ITEMS_CARS) GET_ITEMS_CARS!: (
+    clientId: number
+  ) => boolean;
   @carts.Action(CartMethods.actions.FETCH_PRODUCT_CART_PHOTO_BY_NAME)
-  FETCH_PRODUCT_CART_PHOTO_BY_NAME!:(products: ProductCarts[])=>boolean;
+  FETCH_PRODUCT_CART_PHOTO_BY_NAME!: (products: ProductCarts[]) => boolean;
 
   @products.Getter(ProductsTypes.getters.GET_ITEM_DETAIL)
   GET_ITEM_DETAIL!: Product;
@@ -478,7 +474,6 @@ export default class ItemDetail extends Vue {
 
   @authModule.Getter(AuthTypes.getters.GET_CLIENT_DATA)
   GET_CLIENT_DATA!: CustomerInterface;
-
 }
 </script>
 

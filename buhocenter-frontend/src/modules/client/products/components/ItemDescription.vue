@@ -15,7 +15,7 @@
         half-increments
         dense
       ></v-rating>
-      <p class="px-2 my-0 body-2 align-center">({{ getTotalRatings }})</p>
+      <p class="px-2 my-0 body-2 align-center">({{ getTotalRatings() }})</p>
     </v-row>
     <h3 class="body-2">
       {{ $t("PRICE") }}:
@@ -39,7 +39,7 @@
     <v-row v-if="isProduct()" class="mx-auto d-flex align-center">
       <h3>{{ $t("IN_STOCK") }}:</h3>
       <p class="body-1 mx-2 my-0">
-        {{ this.GET_ITEM_DETAIL.productInventories[0].availableQuantity }}
+        {{ this.GET_ITEM_DETAIL.productInventory.availableQuantity }}
       </p>
     </v-row>
     <v-row v-if="isProduct()" class="mx-auto d-flex align-center">
@@ -57,67 +57,34 @@ import ProductsTypes from "@/store/products/methods/products.methods";
 import { STATUS } from "@/config/constants";
 import { Product } from "@/modules/client/products/interfaces/products.interface";
 
-
 @Component
 export default class ItemDescription extends Vue {
   isProduct(): boolean {
     return this.$route.query.item === "product";
   }
 
-  get getAvailableQuantity(): number {
+  getTotalRatings(): number | undefined {
     if (this.isProduct()) {
-      return this.GET_ITEM_DETAIL.productInventories![0].availableQuantity;
-
+      return parseInt(this.GET_ITEM_DETAIL.rating);
     }
-
-    return 0;
   }
 
-  get getTotalRatings(): number {
+  getRatings(): number | undefined {
     if (this.isProduct()) {
-      return this.GET_ITEM_DETAIL.productRatings
-        ? this.GET_ITEM_DETAIL.productRatings[0].total!
-
-        : 0;
+      return parseInt(this.GET_ITEM_DETAIL.rating);
     }
-
-    return this.GET_ITEM_DETAIL.serviceRatings
-      ? this.GET_ITEM_DETAIL.serviceRatings[0].total!
-
-      : 0;
-  }
-
-  get getRatings(): number {
-    if (this.isProduct()) {
-      return (
-        this.GET_ITEM_DETAIL.productRatings
-          ? this.GET_ITEM_DETAIL.productRatings[0].rating!
-          : 0
-      )
-    }
-
-    return (
-      this.GET_ITEM_DETAIL.serviceRatings
-        ? this.GET_ITEM_DETAIL.serviceRatings[0].rating!
-        : 0
-    )
   }
 
   get productDimensions(): string {
-    const width = this.GET_ITEM_DETAIL.productDimensions!.width;
-    const height = this.GET_ITEM_DETAIL.productDimensions!.height;
-    const long = this.GET_ITEM_DETAIL.productDimensions!.long;
-
-
+    const width = this.GET_ITEM_DETAIL.productDimension.width;
+    const height = this.GET_ITEM_DETAIL.productDimension.height;
+    const long = this.GET_ITEM_DETAIL.productDimension.long;
     return `${long} x ${width} x ${height}`;
   }
 
-  getProvider(): string {
+  getProvider(): string | undefined {
     if (this.isProduct()) {
-      return this.GET_ITEM_DETAIL.productProvider![0].provider.name;
-    } else {
-      return this.GET_ITEM_DETAIL.serviceProvider![0].provider.name;
-
+      return this.GET_ITEM_DETAIL.provider.name;
     }
   }
 
@@ -133,7 +100,7 @@ export default class ItemDescription extends Vue {
     return discountPrice;
   }
 
-  hasOffer() {
+  hasOffer(): boolean {
     if (this.GET_ITEM_DETAIL.offers) {
       return this.GET_ITEM_DETAIL.offers.some(
         (element) => element.offer.status.id === STATUS.ACTIVE
@@ -144,8 +111,7 @@ export default class ItemDescription extends Vue {
   }
 
   @products.Getter(ProductsTypes.getters.GET_ITEM_DETAIL)
-    GET_ITEM_DETAIL!: Product;
-
+  GET_ITEM_DETAIL!: Product;
 }
 </script>
 

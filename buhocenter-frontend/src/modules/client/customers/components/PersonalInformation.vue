@@ -162,7 +162,6 @@ import LanguageMethods from "../../../../store/languages/methods/language.method
 import rules from "../../../../utils/rules";
 import { CustomerInterface } from "@/modules/client/auth/interfaces/customer.interface";
 
-
 @Component
 export default class PersonalInformation extends Vue {
   timeout = 5000;
@@ -212,14 +211,12 @@ export default class PersonalInformation extends Vue {
     this.modifiedLanguage = code;
   }
 
-  private createClientDataObject() : CustomerInterface {
-
+  private createClientDataObject(): CustomerInterface {
     return {
       id: this.GET_CLIENT_DATA.id,
       birthDate: this.GET_CLIENT_DATA.birthdate,
       email: this.modifiedEmail,
-      is_federated: this.GET_CLIENT_DATA.is_federated,
-
+      is_federate: this.GET_CLIENT_DATA.is_federate,
       language: this.modifiedLanguage,
       name: this.modifiedName,
       lastName: this.modifiedLastName,
@@ -234,8 +231,7 @@ export default class PersonalInformation extends Vue {
 
       let updatedInFirebase = true;
 
-      if (!this.GET_CLIENT_DATA.is_federated!) {
-
+      if (!this.GET_CLIENT_DATA.is_federate!) {
         updatedInFirebase = await this.UPDATE_CREDENTIALS({
           email: this.modifiedEmail,
           psswd: this.password,
@@ -275,17 +271,20 @@ export default class PersonalInformation extends Vue {
   @languageModule.Getter(LanguageMethods.getters.GET_LANGUAGES)
   private GET_LANGUAGES;
   @languageModule.Action(LanguageTypes.actions.API_GET_LANGUAGES)
-  private API_GET_LANGUAGES!:()=>boolean;
+  private API_GET_LANGUAGES!: () => boolean;
   @languageModule.Action(LanguageTypes.actions.API_CHANGE_LANGUAGE)
-  private API_CHANGE_LANGUAGE!:( code: string)=>boolean;
+  private API_CHANGE_LANGUAGE!: (code: string) => boolean;
   @authModule.Action(AuthTypes.actions.UPDATE_CREDENTIALS)
-  private UPDATE_CREDENTIALS!:( credentials: { email: string; psswd: string })=>boolean;
-  @authModule.Action(AuthTypes.actions.UPDATE_CUSTOMER) private UPDATE_CUSTOMER!:( data: CustomerInterface)=>boolean;
+  private UPDATE_CREDENTIALS!: (credentials: {
+    email: string;
+    psswd: string;
+  }) => boolean;
+  @authModule.Action(AuthTypes.actions.UPDATE_CUSTOMER)
+  private UPDATE_CUSTOMER!: (data: CustomerInterface) => boolean;
   @authModule.Action(AuthTypes.actions.MODIFY_CLIENT_DATA)
-  private MODIFY_CLIENT_DATA!:(data : CustomerInterface)=>void;
+  private MODIFY_CLIENT_DATA!: (data: CustomerInterface) => void;
   @authModule.Getter(AuthTypes.getters.GET_CLIENT_DATA)
   private GET_CLIENT_DATA!: CustomerInterface;
-
 }
 </script>
 <style scoped>

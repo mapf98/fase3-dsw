@@ -20,7 +20,7 @@ export class ProductCarts {
   product?: Product;
   quantity?: number;
   updatedAt?: string;
-  customer?: {
+  user?: {
     id: number;
   };
 }
@@ -28,6 +28,6 @@ export class ProductCarts {
 export interface CartInterface {
   createdAt?: string;
   id?: number;
-  productCarts?: ProductCarts[];
+  cart?: ProductCarts[];
   updatedAt?: string;
 }

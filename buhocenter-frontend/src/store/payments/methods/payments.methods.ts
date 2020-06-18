@@ -1,9 +1,7 @@
 export default {
-  mutations: {
-  },
-  getters: {
-  },
+  mutations: {},
+  getters: {},
   actions: {
-    CREATE_ORDER: "CREATE_ORDER"
+    CREATE_ORDER: "CREATE_ORDER",
   },
 };

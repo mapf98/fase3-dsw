@@ -1,12 +1,11 @@
-import { Injectable, HttpService, Inject } from "@nestjs/common";
-import { WINSTON_MODULE_PROVIDER } from "nest-winston";
-import { Logger } from "winston";
+import { Injectable, HttpService, Inject } from '@nestjs/common';
+import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
+import { Logger } from 'winston';
 import { map } from 'rxjs/operators';
-import { ProxyService } from "../services/proxy.service";
+import { ProxyService } from '../services/proxy.service';
 
 @Injectable()
 export class PaymentGatewayRepository {
-
     constructor(
         @Inject(WINSTON_MODULE_PROVIDER) private readonly logger: Logger,
         private readonly httpService: HttpService,
@@ -15,15 +14,14 @@ export class PaymentGatewayRepository {
 
     private createHeader() {
         const headers = {
-            "content-type": "application/vnd.api+json",
-            authorization: "Bearer " + process.env.UTRUST_API_KEY,
+            'content-type': 'application/vnd.api+json',
+            authorization: 'Bearer ' + process.env.UTRUST_API_KEY,
         };
 
         return headers;
     }
 
     async createOrder(order) {
-        
         if (!this.proxyService.url) {
             await this.proxyService.connect();
         }
@@ -34,9 +32,10 @@ export class PaymentGatewayRepository {
 
         // console.log('order.line_items', order.line_items);
 
-        return await this.httpService.post(
-            `${process.env.UTRUST_ENDPOINT}/stores/orders`, JSON.stringify(
-                {
+        return await this.httpService
+            .post(
+                `${process.env.UTRUST_ENDPOINT}/stores/orders`,
+                JSON.stringify({
                     data: {
                         type: 'orders',
                         attributes: {
@@ -52,9 +51,11 @@ export class PaymentGatewayRepository {
                             },
                             customer: order.customer,
                         },
-                    }
-                }    
-            ), { headers: this.createHeader() }
-        ).pipe(map(response => response.data)).toPromise();
+                    },
+                }),
+                { headers: this.createHeader() },
+            )
+            .pipe(map(response => response.data))
+            .toPromise();
     }
 }

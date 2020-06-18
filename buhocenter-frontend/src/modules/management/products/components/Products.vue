@@ -716,10 +716,11 @@ export default class DashboardProducts extends Vue {
     }
   }
 
-  @brands.Action(BrandsTypes.actions.FETCH_BRANDS) fetchBrands!: ()=>boolean;
+  @brands.Action(BrandsTypes.actions.FETCH_BRANDS) fetchBrands!: () => boolean;
   @brands.Getter(BrandsTypes.getters.GET_BRANDS) getBrands!: BrandInterface[];
 
-  @providers.Action(ProvidersTypes.actions.FETCH_PROVIDERS) fetchProviders!: ()=>boolean;
+  @providers.Action(ProvidersTypes.actions.FETCH_PROVIDERS)
+  fetchProviders!: () => boolean;
 
   @providers.Getter(ProvidersTypes.getters.GET_PROVIDERS)
   getProviders!: Provider[];
@@ -727,29 +728,37 @@ export default class DashboardProducts extends Vue {
   @products.Getter(ProductsTypes.getters.GET_PRODUCT_INDEX_ID)
   getProductIndexID!: number;
   @products.Getter(ProductsTypes.getters.GET_PRODUCTS) getProducts!: Product[];
-  @products.Action(ProductsTypes.actions.UPDATE_PRODUCT) updateProduct!: (product: ProductCreate)=>boolean;
-  @products.Action(ProductsTypes.actions.FETCH_ALL_PRODUCTS) fetchAllProducts!: ()=>boolean;
-  @products.Action(ProductsTypes.actions.DELETE_PRODUCT) deleteProduct!: (id: number)=>boolean;
-  @products.Action(ProductsTypes.actions.CREATE_PRODUCT) createProduct!:(product: ProductCreate)=>Product | boolean;
+  @products.Action(ProductsTypes.actions.UPDATE_PRODUCT) updateProduct!: (
+    product: ProductCreate
+  ) => boolean;
+  @products.Action(ProductsTypes.actions.FETCH_ALL_PRODUCTS)
+  fetchAllProducts!: () => boolean;
+  @products.Action(ProductsTypes.actions.DELETE_PRODUCT) deleteProduct!: (
+    id: number
+  ) => boolean;
+  @products.Action(ProductsTypes.actions.CREATE_PRODUCT) createProduct!: (
+    product: ProductCreate
+  ) => Product | boolean;
   @products.Action(ProductsTypes.actions.UPLOAD_IMAGE) uploadImage;
-  @products.Action(ProductsTypes.actions.SAVE_PRODUCT_PHOTOS) saveProductPhotos!: (imageAndProduct: ProductPhotoDto)=>boolean;
+  @products.Action(ProductsTypes.actions.SAVE_PRODUCT_PHOTOS)
+  saveProductPhotos!: (imageAndProduct: ProductPhotoDto) => boolean;
   @products.Action(ProductsTypes.actions.SAVE_PRODUCT_DIMENSION)
-  saveProductDimension!:(imageAndProduct: dimensionDto)=>boolean;
+  saveProductDimension!: (imageAndProduct: dimensionDto) => boolean;
 
   @products.Action(ProductsTypes.actions.SAVE_INVENTORY_QUANTITY) saveInventory;
   @products.Action(ProductsTypes.actions.UPDATE_INVENTORY_QUANTITY)
   updateInventory;
 
   @categoryModule.Action(CategoriesMethods.actions.FETCH_CATEGORIES)
-  private fetchCategories!:()=>boolean;
+  private fetchCategories!: () => boolean;
 
   @categoryModule.Getter(CategoriesMethods.getters.GET_CATEGORIES)
   private getCategories!: Category[];
 
   @catalogueModule.Action(CatalogueMethods.actions.FETCH_ALL_CATALOGUES)
-  private fetchAllCatalogues!:()=>boolean;
+  private fetchAllCatalogues!: () => boolean;
   @catalogueModule.Action(CatalogueMethods.actions.SAVE_CATALOGUE)
-  private saveCatalogues!:(data: ProductCatalogue)=>boolean;
+  private saveCatalogues!: (data: ProductCatalogue) => boolean;
 
   @catalogueModule.Getter(CatalogueMethods.getters.GET_CATALOGUES)
   private getCatalogues?: Catalogues;

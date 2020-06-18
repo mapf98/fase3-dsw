@@ -247,7 +247,6 @@ export default class Login extends Vue {
         email: this.email,
         password: this.password,
         language: this.language!,
-
       };
       const result = await this.registerCustomer(newClient);
       if (result) {
@@ -257,18 +256,20 @@ export default class Login extends Vue {
     this.isLoading = false;
   }
 
-  @authModule.Action(AuthMethods.actions.REGISTER_CUSTOMER) registerCustomer!:(customer: CustomerInterface)=>boolean;
-  @authModule.Getter(AuthMethods.getters.GET_AUTH_TOKEN) getToken! : string;
+  @authModule.Action(AuthMethods.actions.REGISTER_CUSTOMER) registerCustomer!: (
+    customer: CustomerInterface
+  ) => boolean;
+  @authModule.Getter(AuthMethods.getters.GET_AUTH_TOKEN) getToken!: string;
   @authModule.Getter(AuthMethods.getters.GET_ERR_REGISTER_MESSAGES)
-  getErrMessage! : string;
-  @authModule.Getter(AuthMethods.getters.GET_ERR_REGISTER) getErrRegister! : boolean;
+  getErrMessage!: string;
+  @authModule.Getter(AuthMethods.getters.GET_ERR_REGISTER)
+  getErrRegister!: boolean;
 
   @languageModule.Action(LanguageMethods.actions.API_GET_LANGUAGES)
-  apiGetLanguages!:()=>boolean;
+  apiGetLanguages!: () => boolean;
   @languageModule.Getter(LanguageMethods.getters.GET_LANGUAGES) getLanguages;
   @languageModule.Getter(LanguageMethods.getters.GET_LANGUAGE_ERR)
   getErrLanguages!: boolean;
-
 }
 </script>
 

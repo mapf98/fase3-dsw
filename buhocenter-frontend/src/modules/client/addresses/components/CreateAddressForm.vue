@@ -89,7 +89,7 @@ import Component from "vue-class-component";
 import { addresses, authModule } from "../../../../store/namespaces";
 import AuthTypes from "../../../../store/auth/methods/auth.methods";
 import AddressTypes from "@/store/addresses/methods/address.methods";
-import {CustomerInterface} from "@/modules/client/auth/interfaces/customer.interface";
+import { CustomerInterface } from "@/modules/client/auth/interfaces/customer.interface";
 import { Address } from "@/modules/client/addresses/interfaces/address.interface";
 
 import rules from "../../../../utils/rules";
@@ -131,16 +131,14 @@ export default class CreateAddressForm extends Vue {
   }
 
   createAddressObject() {
-    const address : Address = {
-
+    const address: Address = {
       firstStreet: this.firstStreet,
       secondStreet: this.secondStreet,
       cityName: this.cityName,
       state: this.state,
       zipcode: this.zipCode,
-      customer: {
+      user: {
         id: this.GET_CLIENT_DATA.id!,
-
       },
       status: {
         id: STATUS.ACTIVE,
@@ -167,8 +165,9 @@ export default class CreateAddressForm extends Vue {
     }
   }
 
-  @authModule.Getter(AuthTypes.getters.GET_CLIENT_DATA) private GET_CLIENT_DATA!: CustomerInterface ;
-  @addresses.Action(AddressTypes.actions.CREATE_ADDRESS) private CREATE_ADDRESS!:(address: Address)=>boolean;
-
+  @authModule.Getter(AuthTypes.getters.GET_CLIENT_DATA)
+  private GET_CLIENT_DATA!: CustomerInterface;
+  @addresses.Action(AddressTypes.actions.CREATE_ADDRESS)
+  private CREATE_ADDRESS!: (address: Address) => boolean;
 }
 </script>

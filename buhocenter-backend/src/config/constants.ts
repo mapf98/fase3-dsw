@@ -16,7 +16,7 @@ export const STATUS = Object.freeze({
     },
     RESERVED: {
         id: 6,
-    }
+    },
 });
 
 export const ROLE = Object.freeze({
@@ -49,14 +49,20 @@ export const UTRUST_PAYMENT_STATUS = Object.freeze({
     CANCELLED: {
         text: 'ORDER.PAYMENT.CANCELLED',
     },
-})
+});
 
 export const PLATFORM_PARAMETERS = Object.freeze({
     PAYMENT_COMMISSION: {
-        id: 1
+        id: 1,
     },
     ECOMMERCE_SERVICE_COMMISSION: {
-        id: 2
+        id: 2,
     },
-})
+});
 export const SUCCESS = 'success';
+
+export const FOREIGN_EXCHANGES = Object.freeze({
+    USD: {
+        id: 1
+    }
+})

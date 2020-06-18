@@ -8,7 +8,10 @@ const payments: Module<any, any> = {
   getters: {},
   mutations: {},
   actions: {
-    async [PaymentsTypes.actions.CREATE_ORDER]({ commit }, orderItems): Promise<string | boolean> {
+    async [PaymentsTypes.actions.CREATE_ORDER](
+      { commit },
+      orderItems
+    ): Promise<string | boolean> {
       try {
         const paymentResponse: Payment = await paymentsRepository.createOrder(
           orderItems

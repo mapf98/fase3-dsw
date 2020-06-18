@@ -1,16 +1,15 @@
 export interface Address {
-  id?: number
+  id?: number;
   firstStreet?: string;
   secondStreet?: string;
   cityName?: string;
   state?: string;
   zipcode?: string;
   default?: boolean;
-  customer?: {
+  user?: {
     id: number;
   };
   status?: {
-
     id: number;
   };
 }

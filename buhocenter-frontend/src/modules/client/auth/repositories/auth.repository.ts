@@ -120,7 +120,6 @@ class AuthRepository extends HttpRepository {
       return new Promise((resolve, reject) => {
         firebase.auth().onAuthStateChanged(async function (user) {
           if (user) {
-            ("user signed in");
             try {
               await user.updateEmail(email);
               await user.updatePassword(psswd);
@@ -129,7 +128,6 @@ class AuthRepository extends HttpRepository {
               reject(false);
             }
           } else {
-            ("user NOT signed in");
             reject(false);
           }
         });

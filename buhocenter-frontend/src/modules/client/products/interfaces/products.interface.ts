@@ -1,8 +1,7 @@
 import { BrandInterface } from "../../brand/interfaces/brand.interface";
 import { Catalogue } from "../../catalogues/interfaces/catalogues.interface";
 import { Provider } from "../../provider/interfaces/provider.interface";
-import { Status } from '@/modules/common/interfaces/status.interface';
-
+import { Status } from "@/modules/common/interfaces/status.interface";
 
 export interface ProductCreate {
   id?: number;
@@ -30,6 +29,7 @@ export interface ProductProvider {
 }
 
 export interface Product {
+  productPhotos: any;
   description?: string;
   id?: number;
   brand?: BrandInterface;
@@ -46,7 +46,18 @@ export interface Product {
   shippingPrice?: string;
   productDimensions?: ProductDimentions;
   status?: Status;
-
+  provider: {
+    createdAt: string;
+    id: number;
+    name: string;
+    updatedAt: string;
+  };
+  productDimension: {
+    width: string;
+    height: string;
+    long: string;
+  };
+  rating: string;
   questions?: Comment[];
   productInventories?: ProductInventorie;
   productCategories?: {
@@ -71,9 +82,8 @@ export interface Product {
 }
 
 export interface ProductRating {
-  rating?:  number;
-  total?:  number;
-
+  rating?: number;
+  total?: number;
 }
 
 export interface ProductDimentions {

@@ -109,8 +109,7 @@ const products: Module<ProductStateInterface, any> = {
     },
     async [ProductsTypes.actions.FETCH_PRODUCTS](
       { commit },
-      { page , catalogueId }
-
+      { page, catalogueId }
     ): Promise<boolean> {
       try {
         const products: Product[] = await productsHttpRepository.getProducts(
@@ -129,7 +128,7 @@ const products: Module<ProductStateInterface, any> = {
       { itemId, item }
     ): Promise<boolean> {
       try {
-        for await (const element of item.photos) {
+        for await (const element of item.productPhotos) {
           element.imageUrl = await productsFirebaseRepository.getProductPhotoByName(
             itemId,
             element.content
@@ -163,11 +162,10 @@ const products: Module<ProductStateInterface, any> = {
       { commit },
       products: Product[]
     ): Promise<boolean> {
-
       try {
         for await (const element of products) {
           element.type = ITEM_TYPE.PRODUCT;
-          const principalPhoto: string = element.photos![0].content;
+          const principalPhoto: string = element.productPhotos[0].content;
           const photo = await productsFirebaseRepository.getProductPhotoByName(
             element.id!,
             principalPhoto
@@ -176,8 +174,7 @@ const products: Module<ProductStateInterface, any> = {
         }
         commit(ProductsTypes.mutations.SET_PRODUCTS, products);
         commit(ProductsTypes.mutations.SET_PRODUCT_AND_PHOTOS_LOADED, true);
-        return true
-
+        return true;
       } catch (e) {
         return false;
       }
@@ -186,7 +183,6 @@ const products: Module<ProductStateInterface, any> = {
       { commit },
       product: ProductCreate
     ): Promise<boolean> {
-
       try {
         await productsHttpRepository.updateProductData(product);
         return true;
@@ -197,7 +193,6 @@ const products: Module<ProductStateInterface, any> = {
     async [ProductsTypes.actions.FETCH_ALL_PRODUCTS]({
       commit,
     }): Promise<boolean> {
-
       try {
         const products: Product[] = await productsHttpRepository.getAllProducts();
         commit(ProductsTypes.mutations.SET_PRODUCTS, products);
@@ -235,10 +230,9 @@ const products: Module<ProductStateInterface, any> = {
     ): Promise<boolean> {
       try {
         for (const product of products) {
-          // tslint:disable-next-line:max-line-length
-          product.photos![0] = await productsFirebaseRepository.getProductPhotoByName(
+          product.productPhotos[0] = await productsFirebaseRepository.getProductPhotoByName(
             product.id!,
-            product.photos![0].content
+            product.productPhotos[0].content
           );
         }
         commit(ProductsTypes.mutations.SET_PRODUCTS_DAILY, products);
@@ -256,8 +250,7 @@ const products: Module<ProductStateInterface, any> = {
       product: ProductCreate
     ): Promise<Product | boolean> {
       try {
-        const response  : Product = await await productsHttpRepository.createProduct(
-
+        const response: Product = await await productsHttpRepository.createProduct(
           product
         );
         return response;

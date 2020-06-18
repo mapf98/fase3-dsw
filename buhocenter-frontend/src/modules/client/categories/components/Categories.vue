@@ -100,11 +100,11 @@ export default class Categories extends Vue {
   }
 
   @categoryModule.Action(CategoriesMethods.actions.FETCH_CATEGORIES)
-  private FETCH_CATEGORIES!:()=>boolean;
+  private FETCH_CATEGORIES!: () => boolean;
   @categoryModule.Action(
     CategoriesMethods.actions.SET_CATEGORY_PHOTOS_NOT_LOADED
   )
-  private SET_CATEGORY_PHOTOS_NOT_LOADED!:(loaded: boolean)=>void;
+  private SET_CATEGORY_PHOTOS_NOT_LOADED!: (loaded: boolean) => void;
 
   @categoryModule.Getter(CategoriesMethods.getters.GET_CATEGORIES)
   private GET_CATEGORIES?: Category[];
@@ -115,7 +115,7 @@ export default class Categories extends Vue {
   )
   private GET_CATEGORIES_AND_PHOTOS_LOADED?: boolean;
 
-  @layout.Action(LayoutTypes.actions.MODIFY_CATEGORY) private MODIFY_CATEGORY!:(category: Category)=>void;
-
+  @layout.Action(LayoutTypes.actions.MODIFY_CATEGORY)
+  private MODIFY_CATEGORY!: (category: Category) => void;
 }
 </script>

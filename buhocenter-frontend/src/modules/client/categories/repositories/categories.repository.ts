@@ -4,8 +4,10 @@ import { Categories } from "../interfaces/categories.interface";
 class CategoriesHttpRepository extends HttpRepository {
   private static readonly RESOURCE = "categories";
 
-  public getCategories(): Promise<Categories> {
-    return this.get(this.createUri([`${CategoriesHttpRepository.RESOURCE}`]));
+  public async getCategories(): Promise<Categories> {
+    return await this.get(
+      this.createUri([`${CategoriesHttpRepository.RESOURCE}`])
+    );
   }
 }
 

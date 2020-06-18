@@ -6,7 +6,7 @@ import {
 export interface CartsStateInterface {
   err_cart: boolean;
   err_cart_message: string;
-  cart: CartInterface;
+  cart: ProductCarts[];
   checkout: ProductCarts[];
   load_photo_cart: boolean;
 }
