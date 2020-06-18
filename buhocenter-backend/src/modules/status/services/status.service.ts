@@ -33,6 +33,7 @@ export class StatusService {
      * @param statusHistory entidad a almacenar como parte del historial del status
      * @param transactionalEntityManager entity manager encargado de la ejecución de la transacción
      */
+
     public async createStatusHistory(
         statusHistory,
         transactionalEntityManager: EntityManager,

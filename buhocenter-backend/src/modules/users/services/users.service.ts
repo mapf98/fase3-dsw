@@ -41,10 +41,9 @@ export class UsersService {
      * @returns Promise<User>
      */
     public async updateUser(user: Partial<User>): Promise<User> {
-        this.logger.debug(
-            `updateUser: update user information [user=${JSON.stringify(user)}]`,
-            { context: UsersService.name },
-        );
+        this.logger.debug(`updateUser: update user information [user=${JSON.stringify(user)}]`, {
+            context: UsersService.name,
+        });
         return await this.customerRepository.save(user);
     }
 

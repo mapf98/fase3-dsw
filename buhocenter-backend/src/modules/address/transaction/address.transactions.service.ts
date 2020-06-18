@@ -1,4 +1,4 @@
-import { Injectable, Inject , BadRequestException } from '@nestjs/common';
+import { Injectable, Inject, BadRequestException } from '@nestjs/common';
 import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
 import { InjectConnection } from '@nestjs/typeorm';
 import { Logger } from 'winston';
@@ -6,7 +6,6 @@ import { Connection, Repository } from 'typeorm';
 import { AddressService } from '../services/address.service';
 import { AddressUDDto } from '../dto/AddressVerification.dto';
 import { Address } from '../entities/address.entity';
-
 
 @Injectable()
 export class AddressTransactionsRepository {
@@ -38,8 +37,10 @@ export class AddressTransactionsRepository {
                     address.user.id,
                     addressTransactionRepository,
                 );
-            } catch(e) {
-                this.logger.error(`Error setting default address [e=${e}]`, { context: AddressTransactionsRepository.name });
+            } catch (e) {
+                this.logger.error(`Error setting default address [e=${e}]`, {
+                    context: AddressTransactionsRepository.name,
+                });
             }
         });
     }
@@ -50,7 +51,7 @@ export class AddressTransactionsRepository {
      */
     public async validateAddress(address): Promise<any> {
         this.logger.info(
-            `validateAddress: validating address... [address=${JSON.stringify(address,)}]`,
+            `validateAddress: validating address... [address=${JSON.stringify(address)}]`,
             { context: AddressTransactionsRepository.name },
         );
 
@@ -59,9 +60,14 @@ export class AddressTransactionsRepository {
                 const addressTransactionRepository: Repository<Address> = transactionalEntityManager.getRepository(
                     Address,
                 );
-                return await this.addressService.addressControl(address, addressTransactionRepository);
-            } catch(e) {
-                this.logger.error(`Error validating address [e=${e}]`, { context: AddressTransactionsRepository.name });
+                return await this.addressService.addressControl(
+                    address,
+                    addressTransactionRepository,
+                );
+            } catch (e) {
+                this.logger.error(`Error validating address [e=${e}]`, {
+                    context: AddressTransactionsRepository.name,
+                });
                 throw new BadRequestException('Invalid address');
             }
         });

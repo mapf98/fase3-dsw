@@ -3,9 +3,7 @@ import { map } from 'rxjs/operators';
 
 @Injectable()
 export class AddressHttpRepository {
-    constructor(
-        private readonly httpService: HttpService,
-    ) {}
+    constructor(private readonly httpService: HttpService) {}
 
     /**
      * Validates the provided address with SmartyStreets

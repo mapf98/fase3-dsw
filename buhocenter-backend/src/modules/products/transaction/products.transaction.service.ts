@@ -11,6 +11,8 @@ import {
     categoryDto,
     InventoryProductDto,
 } from '../dto/products.dto';
+import { OfferAssignProductDto } from '../dto/offers.dto';
+
 import { Product } from '../entities/product.entity';
 import { Brand } from '../entities/brand.entity';
 import { Provider } from '../entities/provider.entity';
@@ -183,6 +185,33 @@ export class ProductTransactionsRepository {
 
         return await this.connection.transaction(async transactionalEntityManage => {
             return await this.productsService.updateInventory(data.quantity, data.product.id);
+        });
+    }
+
+    public async assingOfferToProduct(offerToProduct: OfferAssignProductDto): Promise<boolean> {
+        this.logger.debug(
+            `assingOfferToProduct: starting process to assign a parcitular offer to a product`,
+            {
+                context: ProductTransactionsRepository.name,
+            },
+        );
+
+        return await this.connection.transaction(async transactionalEntityManager => {
+            return await this.productsService.assignOffer(
+                offerToProduct.product.id,
+                offerToProduct.offer.id,
+                transactionalEntityManager,
+            );
+        });
+    }
+
+    public async deleteOfferToProduct(productId: number): Promise<boolean> {
+        this.logger.debug(`deleteOfferToProducts: starting process to delete offer form product`, {
+            context: ProductTransactionsRepository.name,
+        });
+
+        return await this.connection.transaction(async transactionalEntityManager => {
+            return await this.productsService.deleteOffer(productId, transactionalEntityManager);
         });
     }
 }

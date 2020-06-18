@@ -428,4 +428,49 @@ export class ProductsService {
     public async findOffer(offer: Offer): Promise<Offer> {
         return await this.offerRepository.findOne(offer);
     }
+
+    public async assignOffer(
+        productId: number,
+        offerId: number,
+        transactionalEntityManager: EntityManager,
+    ): Promise<boolean> {
+        try {
+            let ProductRepository: Repository<Product> = await transactionalEntityManager.getRepository(
+                Product,
+            );
+            await ProductRepository.update({ id: productId }, { offer: { id: offerId } });
+
+            return true;
+        } catch (e) {
+            this.logger.error(
+                `assignOffer: error when trying to assign the offer to product [offerId=${offerId}| productId=${productId}|error=${JSON.stringify(
+                    e.message,
+                )}]`,
+            );
+
+            return false;
+        }
+    }
+
+    public async deleteOffer(
+        productId: number,
+        transactionalEntityManager: EntityManager,
+    ): Promise<boolean> {
+        try {
+            let ProductRepository: Repository<Product> = await transactionalEntityManager.getRepository(
+                Product,
+            );
+            await ProductRepository.update({ id: productId }, { offer: null });
+
+            return true;
+        } catch (e) {
+            this.logger.error(
+                `assignOffer: error when trying to delete the offer to product [productId=${productId}|error=${JSON.stringify(
+                    e.message,
+                )}]`,
+            );
+
+            return false;
+        }
+    }
 }

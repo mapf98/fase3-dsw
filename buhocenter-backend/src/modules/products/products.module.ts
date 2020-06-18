@@ -13,6 +13,9 @@ import { CataloguesService } from './services/catalogues.service';
 import { CategoriesController } from './controllers/categories.controller';
 import { CataloguesController } from './controllers/catalogues.controllers';
 import { entities } from './entities';
+import { OffersService } from './services/offers.service';
+import { OffersController } from './controllers/offers.controller';
+import { OffersTransactionsRepository } from './transaction/offers.transaction.service';
 
 @Module({
     imports: [TypeOrmModule.forFeature(entities), StatussModule],
@@ -22,6 +25,7 @@ import { entities } from './entities';
         ProvidersController,
         CategoriesController,
         CataloguesController,
+        OffersController,
     ],
     providers: [
         ProductsService,
@@ -30,6 +34,8 @@ import { entities } from './entities';
         ProductTransactionsRepository,
         CataloguesService,
         CategoriesService,
+        OffersService,
+        OffersTransactionsRepository,
     ],
     exports: [ProductsService],
 })

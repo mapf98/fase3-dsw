@@ -1,6 +1,7 @@
 import { Entity, Column, OneToMany, ManyToOne, JoinColumn } from 'typeorm';
 import { PrimalEntity } from '../../../app/entities/base-entity';
 import { Product } from './product.entity';
+import { Status } from '../../status/entities/status.entity';
 
 @Entity('offers')
 export class Offer extends PrimalEntity {
@@ -18,4 +19,12 @@ export class Offer extends PrimalEntity {
         products => products.offer,
     )
     products: Product[];
+
+    @JoinColumn({ name: 'status_id' })
+    @ManyToOne(
+        type => Status,
+        status => status.statusOffers,
+        { nullable: false },
+    )
+    status: Status;
 }

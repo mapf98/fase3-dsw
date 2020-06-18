@@ -1,10 +1,9 @@
-import {AuthService} from '../services/auth.service';
-import {Test} from '@nestjs/testing';
-import {User} from '../../users/entities/user.entity';
-import {authMockModuleMetadata} from './mocks/auth.mock';
+import { AuthService } from '../services/auth.service';
+import { Test } from '@nestjs/testing';
+import { User } from '../../users/entities/user.entity';
+import { authMockModuleMetadata } from './mocks/auth.mock';
 
 describe('auth service', () => {
-
     let service: AuthService;
 
     beforeEach(async () => {
@@ -15,15 +14,14 @@ describe('auth service', () => {
     });
 
     describe('login', () => {
-
         it('must return the token', async () => {
-            const r = await service.login({id: 1, uid: '1', email: 'a@a.com'} as User);
+            const r = await service.login({ id: 1, uid: '1', email: 'a@a.com' } as User);
             expect(r.length).toBeGreaterThan(20);
         });
 
         it('must return an error', async () => {
             try {
-                await service.login({id: 1, uid: '1', email: undefined} as User);
+                await service.login({ id: 1, uid: '1', email: undefined } as User);
                 fail('Must return an error');
             } catch (e) {
                 expect(e.message.statusCode).toEqual(400);
@@ -31,13 +29,12 @@ describe('auth service', () => {
             }
 
             try {
-                await service.login({id: undefined, uid: '1', email: 'a@a.com'} as User);
+                await service.login({ id: undefined, uid: '1', email: 'a@a.com' } as User);
                 fail('Must return an error');
             } catch (e) {
                 expect(e.message.statusCode).toEqual(400);
                 expect(e.message.message).toEqual('Must specify id and email');
             }
-
         });
     });
 });

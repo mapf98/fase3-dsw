@@ -1,4 +1,4 @@
-import {Repository} from 'typeorm';
+import { Repository } from 'typeorm';
 
 export interface MockFunctionInterface {
     find: jest.Mock<any, any>;

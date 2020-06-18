@@ -211,7 +211,7 @@ insert into product_inventories (quantity_available, minimum_quantity_available,
 insert into product_inventories (quantity_available, minimum_quantity_available, product_id) VALUES (50, 28, 14);
 insert into product_inventories (quantity_available, minimum_quantity_available, product_id) VALUES (70, 29, 15);
 
-insert into offers (name, description) VALUES
-    ('Semester offer', 'Oferta para los estudiantes como parte del incio del semestre'),
-    ('Birth offer', 'Oferta para los estudiantes como parte del fin del semestre'),
-    ('Holliday offer', 'Oferta para los estudiantes como parte del mitad del semestre');
+insert into offers (name, description, percentage, status_id) VALUES
+    ('Semester offer', 'Oferta para los estudiantes como parte del incio del semestre',10,1),
+    ('Birth offer', 'Oferta para los estudiantes como parte del fin del semestre',20,1),
+    ('Holliday offer', 'Oferta para los estudiantes como parte del mitad del semestre',30,1);

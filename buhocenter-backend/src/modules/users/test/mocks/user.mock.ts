@@ -1,10 +1,26 @@
-import {User} from '../../entities/user.entity';
+import { User } from '../../entities/user.entity';
 
-function createUser(id: number, name: string, lastName: string, birthdate: Date,
-                    email: string, is_federate: boolean, uid: string, token: string,
-                    language: string): User {
+function createUser(
+    id: number,
+    name: string,
+    lastName: string,
+    birthdate: Date,
+    email: string,
+    is_federate: boolean,
+    uid: string,
+    token: string,
+    language: string,
+): User {
     return {
-        id, name, language, lastName, birthdate, email, is_federate, uid, token,
+        id,
+        name,
+        language,
+        lastName,
+        birthdate,
+        email,
+        is_federate,
+        uid,
+        token,
     } as User;
 }
 

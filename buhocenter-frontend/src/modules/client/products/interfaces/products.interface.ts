@@ -46,7 +46,7 @@ export interface Product {
   shippingPrice?: string;
   productDimensions?: ProductDimentions;
   status?: Status;
-  provider: {
+  provider:{
     createdAt: string;
     id: number;
     name: string;

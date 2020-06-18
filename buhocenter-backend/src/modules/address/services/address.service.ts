@@ -37,7 +37,7 @@ export class AddressService {
         this.logger.debug(`userHasDefaultAddress: checking user addresses [userId=${userId}]`, {
             context: AddressService.name,
         });
-        
+
         const defaultAddress: Address = await this.addressesRepository.findOne({
             where: [{ user: userId, status: { id: STATUS.ACTIVE.id } }],
         });
@@ -64,7 +64,7 @@ export class AddressService {
 
         try {
             const hasDefaultAddress: boolean = await this.userHasDefaultAddress(address.user.id);
-            
+
             const newAddress: Partial<Address> = {
                 firstStreet: address.firstStreet,
                 secondStreet: address.secondStreet,
@@ -74,7 +74,7 @@ export class AddressService {
                 user: await this.usersService.findUser(address.user.id),
                 status: await this.statusService.getStatus(STATUS.ACTIVE.id),
                 setDefault: hasDefaultAddress ? false : true,
-            }
+            };
 
             await addressEntityManager.save(newAddress);
 
@@ -108,11 +108,14 @@ export class AddressService {
         addressSendByTheUser: AddressVerificationDto,
         addressEntityManager: Repository<Address>,
     ) {
-        this.logger.debug(`checkAddress: checking address [address=${JSON.stringify(addressSendByTheUser)}]`, {
-            context: AddressService.name,
-        });  
-        
-        if (this.addressValificationAnalysis(addressRecibeByAPIValidator)){
+        this.logger.debug(
+            `checkAddress: checking address [address=${JSON.stringify(addressSendByTheUser)}]`,
+            {
+                context: AddressService.name,
+            },
+        );
+
+        if (this.addressValificationAnalysis(addressRecibeByAPIValidator)) {
             await this.saveAddress(addressSendByTheUser, addressEntityManager);
             return addressRecibeByAPIValidator;
         } else {
@@ -122,7 +125,7 @@ export class AddressService {
                 )}]|addressSendByTheUser=${JSON.stringify(addressSendByTheUser)}]`,
                 { context: AddressService.name },
             );
-            throw new BadRequestException('Invalid address');            
+            throw new BadRequestException('Invalid address');
         }
     }
 
@@ -208,7 +211,10 @@ export class AddressService {
             context: AddressService.name,
         });
 
-        return await this.addressesRepository.update({ id }, { status: { id: STATUS.INACTIVE.id } });
+        return await this.addressesRepository.update(
+            { id },
+            { status: { id: STATUS.INACTIVE.id } },
+        );
     }
 
     /**
@@ -225,17 +231,17 @@ export class AddressService {
         });
     }
 
-    addressValificationAnalysis(address): boolean{        
-        if(address){
-            if(address.length){                      
-                if(address[0].metadata.precision === 'Unknown'){
+    addressValificationAnalysis(address): boolean {
+        if (address) {
+            if (address.length) {
+                if (address[0].metadata.precision === 'Unknown') {
                     return false;
-                }else{
+                } else {
                     return true;
-                } 
-            }else{
+                }
+            } else {
                 return false;
-            }                
+            }
         }
     }
 }

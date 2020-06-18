@@ -1,4 +1,4 @@
-import { AddressService } from '../services/address.service';
+import { AddressService } from '../../services/address.service';
 
 describe('AddressService', () => {
     describe('save address', () => {

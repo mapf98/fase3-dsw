@@ -63,6 +63,7 @@ export default class ItemDescription extends Vue {
     return this.$route.query.item === "product";
   }
 
+
   getTotalRatings(): number | undefined {
     if (this.isProduct()) {
       return parseInt(this.GET_ITEM_DETAIL.rating);

@@ -1,10 +1,10 @@
-import {ModuleMetadata} from '@nestjs/common/interfaces/modules/module-metadata.interface';
-import {AuthService} from '../../services/auth.service';
-import {JwtStrategy} from '../../strategies/jwt.strategy';
-import {PassportModule} from '@nestjs/passport';
-import {JwtModule} from '@nestjs/jwt';
-import {WinstonModule} from 'nest-winston';
-import {LoggerSettingsService} from '../../../settings/services/logger.service';
+import { ModuleMetadata } from '@nestjs/common/interfaces/modules/module-metadata.interface';
+import { AuthService } from '../../services/auth.service';
+import { JwtStrategy } from '../../strategies/jwt.strategy';
+import { PassportModule } from '@nestjs/passport';
+import { JwtModule } from '@nestjs/jwt';
+import { WinstonModule } from 'nest-winston';
+import { LoggerSettingsService } from '../../../settings/services/logger.service';
 
 export const authMockModuleMetadata: ModuleMetadata = {
     providers: [AuthService, JwtStrategy],
@@ -20,6 +20,7 @@ export const authMockModuleMetadata: ModuleMetadata = {
         }),
         WinstonModule.forRootAsync({
             useClass: LoggerSettingsService,
-        })],
+        }),
+    ],
     exports: [AuthService],
 };

@@ -78,7 +78,7 @@ export class CartsService {
             const findProduct: Product = await this.ProductsService.findProduct(
                 ProductRes.product.id,
             );
-            
+
             const newProductCart: Cart = new Cart();
             let active = await this.StatusService.getStatus(STATUS.ACTIVE.id);
             let productQuantity: number = parseInt(ProductRes.quantity);
@@ -87,15 +87,13 @@ export class CartsService {
             newProductCart.user = findUser;
             newProductCart.status = active;
             newProductCart.product = findProduct;
-            
-            let productOffer: Offer = await this.ProductsService.findOffer(findProduct.offer);            
+
+            let productOffer: Offer = await this.ProductsService.findOffer(findProduct.offer);
             newProductCart.offerPrice =
                 newProductCart.productPrice -
                 (newProductCart.productPrice * productOffer.percentage) / 100;
-            console.log(newProductCart.offerPrice);
 
             await this.cartRepository.save(newProductCart);
-            console.log(4);
             this.logger.debug(`createProductCart: product associate to users cart`, {
                 context: CartsService.name,
             });

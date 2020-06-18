@@ -63,6 +63,6 @@ export const SUCCESS = 'success';
 
 export const FOREIGN_EXCHANGES = Object.freeze({
     USD: {
-        id: 1
-    }
-})
+        id: 1,
+    },
+});
