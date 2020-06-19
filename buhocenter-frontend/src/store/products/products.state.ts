@@ -9,16 +9,16 @@ export const PRODUCT_EMPTY_STATE: ProductStateInterface = {
   itemDetail: {
     productPhotos: {},
     provider: {
-      createdAt: '',
+      createdAt: "",
       id: 0,
-      name: '',
-      updatedAt: '',
+      name: "",
+      updatedAt: "",
     },
     productDimension: {
-      width: '',
-      height: '',
-      long: '',
+      width: "",
+      height: "",
+      long: "",
     },
-    rating: ''
+    rating: "",
   },
 };

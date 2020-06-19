@@ -5,19 +5,19 @@
         cols="12"
         lg="4"
         md="6"
-        sm="12"
+        sm="6"
         v-for="item in GET_PRODUCTS"
         :key="item.id"
         class="mb-4 contenedor-product"
       >
         <v-card
           class="d-inline-block"
-          style="width: 100%;"
+          style="width: 100%; height: 500px;"
           @click="getItemDetail(item)"
           v-if="GET_PRODUCTS_AND_PHOTOS_LOADED"
         >
           <v-container>
-            <v-row justify="center" style="height: 520px;">
+            <v-row justify="center" style="height: 400px;">
               <v-col cols="12">
                 <v-img height="200" contain :src="item.imageUrl"></v-img>
               </v-col>
@@ -37,7 +37,7 @@
                   class="flex-column ma-0 fill-height caption"
                   justify="center"
                 >
-                  {{ item.name }}
+                  {{ getName(item) }}
                 </v-row>
               </v-col>
 
@@ -100,6 +100,12 @@ export default class ProductCard extends Vue {
         query: { item: "service", id: item.id },
       });
     }
+  }
+
+  getName(product: Product): string | undefined {
+    return product.name!.length < 70
+      ? product.name
+      : product.name!.substr(0,70)! + "...";
   }
 
   getProvider(item): string {
@@ -173,6 +179,10 @@ export default class ProductCard extends Vue {
 .product-name:hover {
   text-decoration: underline;
   color: #907f46;
+}
+
+.contenedor-producy {
+  height: 100px;
 }
 
 @media only screen and (max-width: 768px) {

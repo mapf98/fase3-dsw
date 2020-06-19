@@ -1,6 +1,6 @@
 <template>
   <v-row align="center" justify="center">
-    <v-col class="container-login" cols="12" lg="4" sm="12" md="6">
+    <v-col class="container-login" cols="12" lg="8" md="8" sm="8">
       <v-snackbar v-model="snackbar" top :timeout="timeout" color="error">
         Error occurred while getting the languages
         <v-btn color="white" text @click="snackbar = false">Cerrar</v-btn>
@@ -14,17 +14,22 @@
         @submit.prevent="submitRegister"
         class="login100-form validate-form flex-sb flex-w"
       >
-        <v-img
-          src="../../../../assets/Logo-completo.png"
-          width="300"
-          class="img-header-form"
-        >
-        </v-img>
-        <span class="login100-form-title p-b-53 mb-4">
-          {{ $t("REGISTER") }}
-        </span>
+        <v-row class="logo-header mb-10">
+          <img
+            src="../../../../assets/Logo-completo.png"
+            class="logo-header__img"
+          />
+          <span class="login100-form-title p-b-53 mb-4">
+            Register into Buhocenter
+          </span>
+        </v-row>
+
         <v-row>
-          <v-col cols="12" lg="6" md="12">
+          <v-col cols="12" lg="6" md="6" sm="12">
+            <span class="login100-form-subtitle p-b-53 mb-4">
+              Personal information
+            </span>
+            <div class="divider"></div>
             <div class="validate-input mb-4" data-validate="Name is required">
               <v-text-field
                 :label="$t('FIRST-NAME')"
@@ -35,8 +40,7 @@
             <v-alert type="error" v-if="errorInputs.name">
               Valid name is required.
             </v-alert>
-          </v-col>
-          <v-col cols="12" lg="6" md="12">
+
             <div class="validate-input mb-4" data-validate="Name is required">
               <v-text-field
                 :label="$t('LAST-NAME')"
@@ -47,132 +51,143 @@
             <v-alert type="error" v-if="errorInputs.lastName">
               Valid name is required.
             </v-alert>
+
+            <v-col cols="12" lg="12" md="12">
+              <v-dialog
+                ref="dialog"
+                v-model="modal"
+                :return-value.sync="birthdate"
+                persistent
+                primary
+                width="290px"
+              >
+                <template v-slot:activator="{ on }">
+                  <div class="p-t-31 mb-4">
+                    <span class="txt1">
+                      {{ $t("BIRTHDATE") }}
+                    </span>
+                  </div>
+                  <div
+                    class="validate-input mb-4"
+                    data-validate="birthdate is required"
+                  >
+                    <v-btn primary class="input100 btn-date" v-on="on">
+                      {{ birthdate }}
+                    </v-btn>
+                    <span class="focus-input100"></span>
+                  </div>
+                </template>
+                <v-date-picker v-model="birthdate" scrollable>
+                  <v-spacer></v-spacer>
+                  <v-btn text color="primary" dark @click="modal = false"
+                    >Cancel</v-btn
+                  >
+                  <v-btn
+                    text
+                    color="primary"
+                    dark
+                    @click="$refs.dialog.save(birthdate)"
+                    >Save</v-btn
+                  >
+                </v-date-picker>
+              </v-dialog>
+              <v-alert type="error" v-if="errorInputs.birthdate">
+                You must be of legal age
+              </v-alert>
+            </v-col>
+            <v-col lg="12" md="12">
+              <div class="p-t-31 mb-4">
+                <span class="txt1">
+                  {{ $t("LANGUAGE-OF-PLATFORM") }}
+                </span>
+              </div>
+              <v-select
+                :items="getLanguages"
+                name="category"
+                v-model="language"
+                item-text="name"
+                item-value="code"
+              ></v-select>
+              <v-alert type="error" v-if="errorInputs.language">
+                Language is required.
+              </v-alert>
+            </v-col>
           </v-col>
-        </v-row>
-        <v-row>
-          <v-col cols="12" lg="12" md="12">
-            <v-dialog
-              ref="dialog"
-              v-model="modal"
-              :return-value.sync="birthdate"
-              persistent
-              primary
-              width="290px"
-            >
-              <template v-slot:activator="{ on }">
-                <div class="p-t-31 mb-4">
-                  <span class="txt1">
-                    {{ $t("BIRTHDATE") }}
-                  </span>
-                </div>
-                <div
-                  class="validate-input mb-4"
-                  data-validate="birthdate is required"
-                >
-                  <v-btn primary class="input100 btn-date" v-on="on">
-                    {{ birthdate }}
-                  </v-btn>
-                  <span class="focus-input100"></span>
-                </div>
-              </template>
-              <v-date-picker v-model="birthdate" scrollable>
-                <v-spacer></v-spacer>
-                <v-btn text color="primary" dark @click="modal = false"
-                  >Cancel</v-btn
-                >
-                <v-btn
-                  text
-                  color="primary"
-                  dark
-                  @click="$refs.dialog.save(birthdate)"
-                  >Save</v-btn
-                >
-              </v-date-picker>
-            </v-dialog>
-            <v-alert type="error" v-if="errorInputs.birthdate">
-              You must be of legal age
-            </v-alert>
-          </v-col>
-          <v-col lg="12" md="12">
-            <div class="p-t-31 mb-4">
-              <span class="txt1">
-                {{ $t("LANGUAGE-OF-PLATFORM") }}
-              </span>
+          <v-col cols="12" lg="6" md="6" sm="12">
+            <span class="login100-form-subtitle p-b-53 mb-4">
+              User Account
+            </span>
+            <div class="divider"></div>
+            <div class="validate-input mb-4" data-validate="Email is required">
+              <v-text-field
+                :label="$t('EMAIL')"
+                v-model="email"
+                :rules="[() => !!email || 'This field is required']"
+              ></v-text-field>
             </div>
-            <v-select
-              :items="getLanguages"
-              name="category"
-              v-model="language"
-              item-text="name"
-              item-value="code"
-            ></v-select>
-            <v-alert type="error" v-if="errorInputs.language">
-              Language is required.
+            <v-alert type="error" v-if="errorInputs.email">
+              Valid email is required.
+            </v-alert>
+
+            <div
+              class="validate-input mb-4"
+              data-validate="Password is required"
+            >
+              <v-text-field
+                :label="$t('PASSWORD')"
+                v-model="password"
+                :append-icon="showPass ? 'mdi-eye' : 'mdi-eye-off'"
+                :type="showPass ? 'text' : 'password'"
+                @click:append="showPass = !showPass"
+                :rules="[() => !!password || 'This field is required']"
+              ></v-text-field>
+            </div>
+            <v-alert type="error" v-if="errorInputs.password">
+              Password must be at least 6 characters
+            </v-alert>
+
+            <div
+              class="validate-input mb-4"
+              data-validate="Password is required"
+            >
+              <v-text-field
+                :label="$t('CONFIRM-PASSWORD')"
+                v-model="confirmPassword"
+                :append-icon="showRepeatPass ? 'mdi-eye' : 'mdi-eye-off'"
+                :type="showRepeatPass ? 'text' : 'password'"
+                @click:append="showRepeatPass = !showRepeatPass"
+                :rules="[() => !!confirmPassword || 'This field is required']"
+              ></v-text-field>
+            </div>
+            <v-alert type="error" v-if="errorInputs.passwordEquals">
+              passwords must match
             </v-alert>
           </v-col>
         </v-row>
+        <div class="center">
+          <div class="container-login100-form-btn mb-4">
+            <button class="login100-form-btn" v-if="isLoading">
+              <v-progress-circular
+                :size="40"
+                color="white"
+                indeterminate
+              ></v-progress-circular>
+            </button>
 
-        <div class="validate-input mb-4" data-validate="Email is required">
-          <v-text-field
-            :label="$t('EMAIL')"
-            v-model="email"
-            :rules="[() => !!email || 'This field is required']"
-          ></v-text-field>
-        </div>
-        <v-alert type="error" v-if="errorInputs.email">
-          Valid email is required.
-        </v-alert>
+            <button type="submit" v-else class="login100-form-btn primary">
+              {{ $t("REGISTER") }}
+            </button>
+          </div>
 
-        <div class="validate-input mb-4" data-validate="Password is required">
-          <v-text-field
-            :label="$t('PASSWORD')"
-            v-model="password"
-            :append-icon="showPass ? 'mdi-eye' : 'mdi-eye-off'"
-            :type="showPass ? 'text' : 'password'"
-            @click:append="showPass = !showPass"
-            :rules="[() => !!password || 'This field is required']"
-          ></v-text-field>
-        </div>
-        <v-alert type="error" v-if="errorInputs.password">
-          Password must be at least 6 characters
-        </v-alert>
+          <div class="w-full text-center p-t-55">
+            <span class="txt2">
+              {{ $t("YOU-HAVE-ACCOUNT?") }}
+            </span>
 
-        <div class="validate-input mb-4" data-validate="Password is required">
-          <v-text-field
-            :label="$t('CONFIRM-PASSWORD')"
-            v-model="confirmPassword"
-            :append-icon="showRepeatPass ? 'mdi-eye' : 'mdi-eye-off'"
-            :type="showRepeatPass ? 'text' : 'password'"
-            @click:append="showRepeatPass = !showRepeatPass"
-            :rules="[() => !!confirmPassword || 'This field is required']"
-          ></v-text-field>
-        </div>
-        <v-alert type="error" v-if="errorInputs.passwordEquals">
-          passwords must match
-        </v-alert>
-
-        <div class="container-login100-form-btn m-t-17 mb-4">
-          <button class="login100-form-btn" v-if="isLoading">
-            <v-progress-circular
-              :size="40"
-              color="white"
-              indeterminate
-            ></v-progress-circular>
-          </button>
-
-          <button type="submit" v-else class="login100-form-btn primary">
-            {{ $t("REGISTER") }}
-          </button>
-        </div>
-
-        <div class="w-full text-center p-t-55">
-          <span class="txt2">
-            {{ $t("YOU-HAVE-ACCOUNT?") }}
-          </span>
-
-          <RouterLink to="/sign-in" class="txt2 bo1">
-            {{ $t("SIGN-IN") }}
-          </RouterLink>
+            <RouterLink to="/sign-in" class="txt2 bo1">
+              {{ $t("SIGN-IN") }}
+            </RouterLink>
+          </div>
         </div>
       </form>
     </v-col>
@@ -273,11 +288,36 @@ export default class Login extends Vue {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+.divider {
+  margin: 0 auto;
+  background-color: var(--v-primary-base);
+  height: 3px;
+  width: 40%;
+  border-radius: 50%;
+}
+
+.logo-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  &__img {
+    height: 110px;
+    width: auto;
+  }
+}
 .container-login {
   background: #fff;
   border-radius: 10px;
   padding: 50px;
+}
+
+.center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-items: center;
 }
 
 .txt1 {
@@ -290,6 +330,7 @@ export default class Login extends Vue {
   font-size: 14px;
   color: #999999;
   line-height: 1.5;
+  text-decoration: none;
 }
 
 .bo1 {
@@ -309,14 +350,21 @@ export default class Login extends Vue {
 }
 
 .login100-form-title {
-  width: 100%;
-  display: block;
-  font-size: 39px;
+  display: flex;
+  align-items: center;
+  font-size: 25px;
   color: #555555;
   line-height: 1.2;
   text-align: center;
 }
-
+.login100-form-subtitle {
+  width: 100%;
+  display: block;
+  font-size: 18px;
+  color: #555555;
+  line-height: 1.2;
+  text-align: center;
+}
 /*------------------------------------------------------------------
     [ Button sign in with ]*/
 .btn-face,
@@ -410,9 +458,10 @@ export default class Login extends Vue {
 }
 
 .container-login100-form-btn {
-  width: 100%;
+  width: 50%;
   display: flex;
   flex-wrap: wrap;
+  margin-top: 50px;
 }
 
 .login100-form-btn {

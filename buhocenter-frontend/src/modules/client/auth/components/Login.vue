@@ -1,5 +1,5 @@
 <template>
-  <v-row align="center" justify="center">
+  <v-row justify="center">
     <v-col class="container-login" cols="12" lg="4" sm="12" md="6">
       <v-alert v-if="getErrAuth" prominent type="error">
         <v-row align="center">
@@ -10,33 +10,34 @@
         class="login100-form validate-form flex-sb flex-w"
         @submit.prevent="submitLogin"
       >
-        <v-img
-          src="../../../../assets/Logo-completo.png"
-          class="img-header-form"
-        >
-        </v-img>
-        <span class="login100-form-title p-b-53">
+        <v-row class="logo-header">
+          <img
+            src="../../../../assets/Logo-completo.png"
+            class="logo-header__img"
+          />
+        </v-row>
+        <!-- <span class="login100-form-title p-b-53">
           {{ $t("SIGN-IN-WITH") }}
-        </span>
-        <div class="row">
+        </span> -->
+        <div class="buttons">
           <v-col lg="12" md="12" sm="12">
             <a
               href="#"
-              class="btn-face m-b-20 btn-icons d-flex justify-center"
+              class="btn-signIn btn-signIn__face m-b-20 btn-icons d-flex justify-center"
               @click="loginWithSocial('facebook')"
             >
-              <v-icon class="mr-2 icon-facebook pa-2">fab fa-facebook</v-icon>
-              Facebook
+              <v-icon class="mr-2 icon-face pa-2">fab fa-facebook</v-icon>
+              Sign in with Facebook
             </a>
           </v-col>
           <v-col lg="12" md="12" sm="12">
             <a
               href="#"
-              class="btn-google m-b-20 btn-icons d-flex justify-center"
+              class="btn-signIn btn-signIn__google m-b-20 btn-icons d-flex justify-center"
               @click="loginWithSocial('google')"
             >
               <v-icon class="mr-2 icon-google pa-2">fab fa-google</v-icon>
-              Google
+              Sign in with Google
             </a>
           </v-col>
         </div>
@@ -49,7 +50,7 @@
           <span class="focus-input100"></span>
         </div>
 
-        <div class="validate-input mb-4" data-validate="Password is required">
+        <div class="validate-input mb-2" data-validate="Password is required">
           <v-text-field
             :label="$t('PASSWORD')"
             v-model="password"
@@ -60,12 +61,12 @@
 
           <span class="focus-input100"></span>
         </div>
-        <div class="p-t-13 mb-4">
+        <div class="mb-4 right">
           <a href="#" class="txt2 bo1 m-l-5">
             {{ $t("FORGOT?") }}
           </a>
         </div>
-        <div class="container-login100-form-btn m-t-17 mb-4">
+        <div class="m-t-17 mb-4">
           <button class="login100-form-btn primary" v-if="isLoading">
             <v-progress-circular
               :size="40"
@@ -103,6 +104,7 @@ export default class Login extends Vue {
   password = "";
   isLoading = false;
   showPass = false;
+  snackbar = false;
 
   async loginWithSocial(social: string) {
     await this.loginSocial(social);
@@ -142,11 +144,20 @@ export default class Login extends Vue {
   @authModule.Getter(AuthMethods.getters.GET_AUTH_TOKEN) getToken!: string;
   @authModule.Getter(AuthMethods.getters.GET_ERR_MESSAGES)
   getErrMessage!: string;
-  @authModule.Getter(AuthMethods.getters.GET_ERR_AUTH) getErrAuth!: string;
+  @authModule.Getter(AuthMethods.getters.GET_ERR_AUTH) getErrAuth!: boolean;
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+.logo-header {
+  display: flex;
+  justify-content: center;
+  &__img {
+    height: 110px;
+    width: auto;
+  }
+}
+
 .icon-facebook {
   color: #ffffff !important;
 }
@@ -154,7 +165,7 @@ export default class Login extends Vue {
 .container-login {
   background: #fff;
   border-radius: 10px;
-  padding: 50px;
+  padding: 25px 50px;
 }
 
 a {
@@ -165,6 +176,10 @@ a {
   transition: all 0.4s;
 }
 
+.buttons {
+  width: 80%;
+  align-self: center;
+}
 a:focus {
   outline: none !important;
 }
@@ -178,6 +193,7 @@ a:focus {
 .txt2 {
   font-size: 14px;
   color: #999999;
+  text-decoration: none;
   line-height: 1.5;
 }
 
@@ -189,15 +205,23 @@ a:focus {
   border-bottom: 1px solid #999999;
 }
 
+.right {
+  justify-self: end;
+  align-self: flex-end;
+}
+
 .login100-form {
   width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .login100-form-title {
   width: 100%;
   display: block;
   font-family: "Questrial", sans-serif;
-  font-size: 20px;
+  font-size: 16px;
   color: #555555;
   line-height: 1.2;
   text-align: center;
@@ -205,66 +229,45 @@ a:focus {
 
 /*------------------------------------------------------------------
     [ Button sign in with ]*/
-.btn-face,
-.btn-google {
-  font-size: 18px;
+.btn-signIn {
+  color: black;
   line-height: 1.2;
   display: flex;
   justify-content: center;
   align-items: center;
   padding: 15px;
   width: 100%;
-  height: 40px;
+  height: 35px;
   border-radius: 10px;
   box-shadow: 0 1px 5px 0px rgba(0, 0, 0, 0.2);
   transition: all 0.4s;
   position: relative;
   z-index: 1;
+
+  &__google {
+    font-size: 16px;
+    font-family: "Noto Sans JP", sans-serif;
+  }
+
+  &__face {
+    font-size: 18px;
+    font-family: "PT Sans Narrow", sans-serif;
+  }
+  &:hover {
+    transform: translateY(-2px);
+  }
 }
 
-.btn-face {
-  color: #3b5998;
-  background: none;
-}
-
-.btn-face i {
+.icon-face {
   color: #3b5998 !important;
 }
 
-.btn-google i {
+.icon-google {
   color: #db4a39;
-}
-
-.btn-face::after {
-  display: block;
-  position: absolute;
-  z-index: -1;
-  width: 100%;
-  height: 100%;
-  border-radius: 10px;
-  top: 0;
-  left: 0;
-  opacity: 0;
-  transition: all 0.4s;
 }
 
 .btn-icons {
   text-decoration: none;
-}
-
-.btn-face i {
-  font-size: 30px;
-  margin-right: 17px;
-}
-
-.btn-google {
-  color: #555555;
-  background-color: #fff;
-}
-
-.btn-face:hover:before,
-.btn-google:hover:before {
-  opacity: 1;
 }
 
 .wrap-input100 {
@@ -295,12 +298,6 @@ a:focus {
   visibility: visible;
   opacity: 1;
   transform: scale(1);
-}
-
-.container-login100-form-btn {
-  width: 100%;
-  display: flex;
-  flex-wrap: wrap;
 }
 
 .login100-form-btn {
@@ -335,6 +332,10 @@ a:focus {
   transition: all 0.4s;
 }
 
+.login100-form-btn:hover:before {
+  opacity: 1;
+}
+</style>
 .login100-form-btn:hover:before {
   opacity: 1;
 }

@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-container class="mt-8">
-      <h3 class="text-center">{{ $t("CATEGORIES").toUpperCase() }}</h3>
+      <h2 class="text-center">{{ $t("CATEGORIES").toUpperCase() }}</h2>
       <v-row dense>
         <v-col
           v-for="card in GET_CATEGORIES"
@@ -23,7 +23,7 @@
                     <v-card
                       :elevation="hover ? 16 : 2"
                       class="mx-auto"
-                      height="100"
+                      height="120"
                       max-width="350"
                     >
                       <v-card-text
@@ -94,7 +94,7 @@ export default class Categories extends Vue {
     await this.fetchCategories();
   }
 
-  setCategory(category: Category) {
+  setCategory(category: Category): void {
     this.MODIFY_CATEGORY(category);
     this.$router.push(`/catalogues?category_id=${category.id}`);
   }

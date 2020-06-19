@@ -86,7 +86,7 @@ const routes: RouteConfig[] = [
             name: "dashboard-home",
             component: DashboardHome,
             meta: {
-              admin: true
+              admin: true,
             },
           },
           {
@@ -94,7 +94,7 @@ const routes: RouteConfig[] = [
             name: "dashboard-catalogues",
             component: DashboardCatalogues,
             meta: {
-              admin: true
+              admin: true,
             },
           },
           {
@@ -102,7 +102,7 @@ const routes: RouteConfig[] = [
             name: "dashboard-categories",
             component: DashboardCategories,
             meta: {
-              admin: true
+              admin: true,
             },
           },
           {
@@ -110,7 +110,7 @@ const routes: RouteConfig[] = [
             name: "dashboard-clients",
             component: DashboardClients,
             meta: {
-              admin: true
+              admin: true,
             },
           },
           {
@@ -118,7 +118,7 @@ const routes: RouteConfig[] = [
             name: "dashboard-emails",
             component: DashboardEmails,
             meta: {
-              admin: true
+              admin: true,
             },
           },
           {
@@ -126,7 +126,7 @@ const routes: RouteConfig[] = [
             name: "dashboard-emails",
             component: DashboardOrders,
             meta: {
-              admin: true
+              admin: true,
             },
           },
           {
@@ -134,7 +134,7 @@ const routes: RouteConfig[] = [
             name: "dashboard-platform",
             component: DashboardPlatform,
             meta: {
-              admin: true
+              admin: true,
             },
           },
           {
@@ -142,7 +142,7 @@ const routes: RouteConfig[] = [
             name: "dashboard-products",
             component: DashboardProducts,
             meta: {
-              admin: true
+              admin: true,
             },
           },
           {
@@ -150,7 +150,7 @@ const routes: RouteConfig[] = [
             name: "dashboard-promotions",
             component: DashboardPromotions,
             meta: {
-              admin: true
+              admin: true,
             },
           },
           {
@@ -158,7 +158,7 @@ const routes: RouteConfig[] = [
             name: "dashboard-servies",
             component: DashboardServices,
             meta: {
-              admin: true
+              admin: true,
             },
           },
         ],

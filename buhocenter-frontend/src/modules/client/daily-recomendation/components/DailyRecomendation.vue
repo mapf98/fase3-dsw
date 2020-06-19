@@ -1,6 +1,6 @@
 <template>
   <v-container fluid style="background: #ffffff;" class="pt-8 pb-8">
-    <h3 class="text-center">{{ $t("DAILY_RECOMMENDATION").toUpperCase() }}</h3>
+    <h2 class="text-center">{{ $t("DAILY_RECOMMENDATION").toUpperCase() }}</h2>
     <v-slide-group
       class="pa-4"
       center-active
@@ -15,8 +15,8 @@
         <v-card
           :color="active ? 'primary' : 'grey lighten-1'"
           class="ma-4"
-          height="600"
-          width="300"
+          height="450"
+          width="250"
           @click="getItemDetail(product)"
         >
           <v-row
@@ -35,7 +35,7 @@
                       :src="product.productPhotos[0]"
                     ></v-img>
                   </v-col>
-                  <v-col cols="9" class="pl-0 pb-0">
+                  <v-col cols="9" class="pl-0 pb-0 pt-0">
                     <v-row
                       class="flex-column ma-0 fill-height caption"
                       justify="center"
@@ -52,11 +52,11 @@
                       class="flex-column ma-0 fill-height caption product-name"
                       justify="center"
                     >
-                      {{ product.name }}
+                      {{ getName(product) }}
                     </v-row>
                   </v-col>
 
-                  <v-col cols="9" class="pl-0 pb-0">
+                  <v-col cols="9" class="pl-0 pb-0 pt-0">
                     <v-row
                       class="flex-column ma-0 fill-height title"
                       justify="center"
@@ -65,7 +65,7 @@
                     </v-row>
                   </v-col>
 
-                  <v-col cols="9" class="pl-0">
+                  <v-col cols="9" class="pr-0">
                     <v-row
                       class="flex-column ma-0 fill-height title ml-0 mr-0"
                       justify="center"
@@ -108,7 +108,7 @@ import { Product } from "@/modules/client/products/interfaces/products.interface
 export default class DailyRecommendation extends Vue {
   errorLoadingContent = false;
 
-  async fetchProductsDaily() {
+  async fetchProductsDaily() : Promise<void> {
     this.SET_PRODUCT_DAILY_AND_PHOTOS_LOADED(false);
     const fetched: boolean = await this.FETCH_PRODUCTS_DAILY();
     if (!fetched) {
@@ -126,7 +126,13 @@ export default class DailyRecommendation extends Vue {
     this.$router.go(0);
   }
 
-  getRating(productRatings): number {
+  getName(product: Product): string | undefined {
+    return product.name!.length < 70
+      ? product.name
+      : product.name!.substr(0, 70)! + "...";
+  }
+
+  getRating(productRatings: Product): number {
     return productRatings[0] ? parseInt(productRatings[0].rating) : 0;
   }
 

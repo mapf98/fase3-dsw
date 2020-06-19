@@ -1,7 +1,7 @@
 <template>
   <div style="background: #f3f3f3;">
     <v-container class="mt-8">
-      <h3 class="text-center">{{ $t("ABOUT_US").toUpperCase() }}</h3>
+      <h2 class="text-center">{{ $t("ABOUT_US").toUpperCase() }}</h2>
       <v-row dense>
         <v-col
           cols="12"
@@ -27,7 +27,7 @@
               {{ $t("PAY_CRYPTOCURRENCIES_INFO") }}
             </v-card-subtitle>
 
-            <v-card-actions class="justify-center">
+            <v-card-actions class="justify-center" v-if="!getStatusLogin">
               <RouterLink to="/sign-in" style="text-decoration: none;"
                 ><v-btn color="primary">{{ $t("SIGN-IN") }}</v-btn></RouterLink
               >
@@ -89,7 +89,7 @@
               {{ $t("MULTI_LANGUAGE_SITE_INFO") }}
             </v-card-subtitle>
 
-            <v-card-actions class="justify-center">
+            <v-card-actions class="justify-center" v-if="!getStatusLogin">
               <v-btn color="primary">{{ $t("SIGN-IN") }}</v-btn>
             </v-card-actions>
           </v-card>
@@ -102,9 +102,18 @@
 <script lang="ts">
 import Vue from "vue";
 import Component from "vue-class-component";
+import { authModule } from "@/store/namespaces";
+import AuthMethods from "@/store/auth/methods/auth.methods";
 
 @Component
 export default class AboutUs extends Vue {
   show = true;
+
+  get getStatusLogin(): boolean {
+    const token: string = this.getToken;
+    return !!token;
+  }
+
+  @authModule.Getter(AuthMethods.getters.GET_AUTH_TOKEN) getToken!: string;
 }
 </script>
