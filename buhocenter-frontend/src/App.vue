@@ -1,7 +1,5 @@
 <template>
-  <v-app>
-    <router-view class="app-font-global"></router-view>
-  </v-app>
+  <router-view class="app-font-global"></router-view>
 </template>
 
 <script lang="ts">

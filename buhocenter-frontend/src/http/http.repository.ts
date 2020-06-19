@@ -3,7 +3,7 @@ import { AxiosRequestConfig, AxiosResponse } from "axios";
 
 export class HttpRepository {
   protected createHeader(): Partial<AxiosRequestConfig["headers"]> {
-    const token: string = JSON.parse(localStorage.token);
+    const token: string | null = localStorage.getItem("token");
     return {
       headers: {
         Authorization: `Bearer ${token}`,

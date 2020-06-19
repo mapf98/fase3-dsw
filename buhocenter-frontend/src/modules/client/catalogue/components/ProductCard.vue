@@ -13,6 +13,7 @@
         <v-card
           class="d-inline-block"
           style="width: 100%;"
+          @click="getItemDetail(item)"
           v-if="GET_PRODUCTS_AND_PHOTOS_LOADED"
         >
           <v-container>
@@ -31,11 +32,7 @@
                 </v-row>
               </v-col>
 
-              <v-col
-                cols="9"
-                class="pl-0 product-name"
-                @click="getItemDetail(item)"
-              >
+              <v-col cols="9" class="pl-0 product-name">
                 <v-row
                   class="flex-column ma-0 fill-height caption"
                   justify="center"

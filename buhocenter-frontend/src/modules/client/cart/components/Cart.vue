@@ -51,9 +51,6 @@ export default class Cart extends Vue {
     if (this.GET_AUTH_TOKEN !== "") {
       this.FALSE_PHOTO_CART();
       await this.GET_ITEMS_CARS(this.GET_CLIENT_DATA.id!);
-      console.log("HI");
-      console.log(this.GET_CART_OBJECT);
-      console.log(this.GET_PRODUCTS_CART);
       if (this.GET_CART_OBJECT) {
         await this.FETCH_PRODUCT_CART_PHOTO_BY_NAME(this.GET_CART_OBJECT);
       }

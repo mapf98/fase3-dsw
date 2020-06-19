@@ -26,18 +26,6 @@
         <p class="ma-0 d-none d-lg-block">{{ $t("ADD_TO_CART") }}</p>
       </v-btn>
     </v-container>
-    <v-container class="overline mt-3 d-flex justify-center">
-      <v-btn
-        @click="buyItem()"
-        block
-        outlined
-        color="primary"
-        :x-small="$vuetify.breakpoint.mdAndDown"
-      >
-        <v-icon left class="d-flex align-center">mdi-play-box-outline</v-icon>
-        <p class="ma-0 d-none d-lg-block">{{ $t("BUY_NOW") }}</p>
-      </v-btn>
-    </v-container>
     <v-divider></v-divider>
     <v-container class="overline mt-3 justify-center">
       <v-icon small color="black"> mdi-map-marker-outline </v-icon>
@@ -51,7 +39,7 @@
 <script lang="ts">
 import Vue from "vue";
 import { Emit, Component } from "vue-property-decorator";
-import { authModule, products } from "../../../../store/namespaces";
+import { authModule } from "../../../../store/namespaces";
 import AuthTypes from "../../../../store/auth/methods/auth.methods";
 import SocialIcons from "@/modules/client/social/components/SocialIcons.vue";
 import rules from "../../../../utils/rules";
@@ -106,19 +94,6 @@ export default class ShoppingBar extends Vue {
     }
 
     return false;
-  }
-
-  @Emit("buyItem")
-  buyItem() {
-    if (!this.GET_CLIENT_DATA.id) {
-      this.$router.push({ name: "Sign in" });
-    } else if (this.$refs.form.validate()) {
-      if (!this.quantity) {
-        return;
-      }
-
-      this.$emit("buyItem", this.quantity);
-    }
   }
 
   @Emit("addToCart")

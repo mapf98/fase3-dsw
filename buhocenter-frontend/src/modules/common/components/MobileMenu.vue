@@ -1,84 +1,14 @@
 <template>
-  <div>
-    <v-navigation-drawer
-      v-model="drawer"
-      :clipped="$vuetify.breakpoint.lgAndUp"
-      app
-      width="400px"
-      right
-      temporary
-    >
-      <Cart></Cart>
-    </v-navigation-drawer>
-
-    <v-snackbar v-model="snackbar" top :timeout="6000" color="error">
-      <b v-if="getErrLoadLanguage">
-        Unexpected error loading languages
-      </b>
-      <b v-else>
-        Error occurred while getting the languages
-      </b>
-
-      <v-btn color="white" text @click="snackbar = false">Close</v-btn>
-    </v-snackbar>
-
-    <v-app-bar clipped-left app color="white" light>
-      <v-app-bar-nav-icon
-        class="hidden-md-and-up"
-        @click="openSideMenu"
-      ></v-app-bar-nav-icon>
-
-      <v-spacer class="hidden-md-and-up" />
-
-      <v-toolbar-title
-        class="ml-0 overline title-logo cursorNavbar"
-        style="height: 64px;"
-        @click="goToHome()"
-      >
-        <v-img
-          src="../../../assets/logo-header.png"
-          width="250"
-          height="64"
-        ></v-img>
-      </v-toolbar-title>
-
-      <v-spacer />
-
-      <div class="searc d-none d-xl-block d-lg-block pr-3 hidden-sm-and-down">
-        <input type="search" class="search" />
-      </div>
-      <div class="mr-2 ml-2 hidden-sm-and-down">
-        <v-menu transition="slide-x-transition" bottom right>
-          <template v-slot:activator="{ on }">
-            <v-btn color="primary" dark v-on="on">
-              {{ getLanguagePlatform }}
-            </v-btn>
-          </template>
-          <v-list>
-            <v-list-item
-              v-for="(item, i) in getLanguages"
-              :key="i"
-              @click="changeLanguagePlatform(item.code)"
-            >
-              <v-row>
-                <v-col cols="4"
-                  ><v-img
-                    :src="require(`../../../assets/flags/${item.code}.png`)"
-                    height="18"
-                    width="18"
-                  ></v-img
-                ></v-col>
-                <v-col cols="8">{{ item.name }}</v-col>
-              </v-row>
-            </v-list-item>
-          </v-list>
-        </v-menu>
-      </div>
-      <div class="mr-2 ml-2 hidden-sm-and-down">
-        <CurrencySelector></CurrencySelector>
-      </div>
-      <div class="mr-2 ml-2 hidden-sm-and-down" v-if="getStatusLogin">
-        <div class="text-xs-center">
+  <v-navigation-drawer v-model="readyOpen" fixed temporary>
+    <v-row>
+      <v-col class="d-flex justify-center align-center mt-2 align-center">
+        <p class="mb-0 headline">Menu</p>
+      </v-col>
+    </v-row>
+    <v-row>
+      <v-col>
+        <!-- Search box will be here -->
+        <div v-if="getStatusLogin" class="d-flex justify-center">
           <v-menu
             v-model="menu"
             :close-on-content-click="true"
@@ -114,37 +44,67 @@
             </v-card>
           </v-menu>
         </div>
-      </div>
-      <div class="mr-2 ml-2 hidden-sm-and-down" v-else>
-        <router-link to="/sign-in">
-          <v-btn text>
-            {{ $t("SIGN-IN") }}
-          </v-btn>
-        </router-link>
-      </div>
-      <div
-        class="pr-4 cursorNavbar hidden-sm-and-down"
-        @click.stop="drawer = !drawer"
-        v-if="getStatusLogin"
-      >
-        <v-badge
-          color="primary"
-          :content="getToken !== '' ? GET_CART_OBJECT.length : '0'"
-          :value="getToken !== '' ? GET_CART_OBJECT.length : '0'"
+        <div v-else class="d-flex justify-center">
+          <router-link to="/sign-in">
+            <v-btn text>
+              {{ $t("SIGN-IN") }}
+            </v-btn>
+          </router-link>
+        </div>
+        <div
+          class="d-flex justify-center cursorNavbar mt-8"
+          @click="openCart"
+          v-if="getStatusLogin"
         >
-          <v-icon color="primary">mdi-cart</v-icon>
-        </v-badge>
-      </div>
-    </v-app-bar>
-  </div>
+          <v-badge
+            color="primary"
+            :content="getToken !== '' ? GET_CART_OBJECT.length : '0'"
+            :value="getToken !== '' ? GET_CART_OBJECT.length : '0'"
+          >
+            <v-icon color="primary">mdi-cart</v-icon>
+          </v-badge>
+        </div>
+        <div class="d-flex justify-center mx-10 mt-12">
+          <v-menu transition="slide-x-transition" bottom right>
+            <template v-slot:activator="{ on }">
+              <v-btn color="primary" dark v-on="on" block>
+                {{ getLanguagePlatform }}
+              </v-btn>
+            </template>
+            <v-list>
+              <v-list-item
+                v-for="(item, i) in getLanguages"
+                :key="i"
+                @click="changeLanguagePlatform(item.code)"
+              >
+                <v-row>
+                  <v-col cols="4"
+                    ><v-img
+                      :src="require(`../../../assets/flags/${item.code}.png`)"
+                      height="18"
+                      width="18"
+                    ></v-img
+                  ></v-col>
+                  <v-col cols="8">{{ item.name }}</v-col>
+                </v-row>
+              </v-list-item>
+            </v-list>
+          </v-menu>
+        </div>
+        <div class="d-flex justify-center mx-3 mt-3">
+          <CurrencySelector></CurrencySelector>
+        </div>
+      </v-col>
+    </v-row>
+  </v-navigation-drawer>
 </template>
 
 <script lang="ts">
 import Vue from "vue";
 import Component from "vue-class-component";
+import { Watch, Prop } from "vue-property-decorator";
 import Cart from "@/modules/client/cart/components/Cart.vue";
 import { authModule, carts, languageModule } from "@/store/namespaces";
-import { Watch, Prop } from "vue-property-decorator";
 import CartMethods from "@/store/carts/methods/cart.methods";
 import AuthMethods from "@/store/auth/methods/auth.methods";
 import LanguageMethods from "@/store/languages/methods/language.methods";
@@ -157,15 +117,10 @@ import CurrencySelector from "@/modules/currency/components/CurrencySelector.vue
 @Component({
   components: { CurrencySelector, Cart },
 })
-export default class Header extends Vue {
-  @Prop() openCart!: boolean;
-
-  @Watch("openCart")
-  draw(): void {
-    this.drawer = !this.drawer;
-  }
-
-  drawer = false;
+export default class MobileSidebar extends Vue {
+  @Prop() openSideMenu!: boolean;
+  readyOpen = false;
+  cartDrawer = null;
   dialog = false;
   menu = false;
   message = false;
@@ -174,15 +129,20 @@ export default class Header extends Vue {
   fetched = FETCHED;
   snackbar = false;
 
+  @Watch("openSideMenu")
+  drawer(): void {
+    this.readyOpen = !this.readyOpen;
+  }
+
+  openCart(): void {
+    this.readyOpen = false;
+    this.$emit("openCart");
+  }
+
   async signOut() {
     await this.logout();
     this.EMPTY_CART();
     this.$router.push({ name: "home" });
-  }
-
-  openSideMenu(): void {
-    this.drawer = false;
-    this.$emit("openSideMenu");
   }
 
   goToHome(): void {
@@ -243,38 +203,4 @@ export default class Header extends Vue {
 }
 </script>
 
-<style>
-.container-main {
-  background-color: #f4f4f4;
-}
-.search {
-  outline: none;
-  border: 1px #f8f8f8;
-  background: #ededed url("../../../assets/search.png") no-repeat 5px center;
-  padding: 5px 8px 0px 26px;
-  width: 200px;
-  border-radius: 10em;
-  transition: all 0.5s;
-  margin-right: 10px;
-}
-.search:focus {
-  width: 400px;
-  border: solid 1px #ccc;
-  background-color: #fff;
-  border-color: #98ccfd;
-  -webkit-box-shadow: 0 0 5px rgba(109, 207, 246, 0.5);
-  -moz-box-shadow: 0 0 5px rgba(109, 207, 246, 0.5);
-  box-shadow: 0 0 5px rgba(109, 207, 246, 0.5);
-  backface-visibility: hidden;
-}
-
-.container-principal {
-  position: relative;
-  top: 66px;
-  padding: 0px 0px 0px 0px !important;
-}
-
-.cursorNavbar {
-  cursor: pointer;
-}
-</style>
+<style lang="scss"></style>

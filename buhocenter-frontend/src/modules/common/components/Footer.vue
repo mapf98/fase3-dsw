@@ -1,5 +1,5 @@
 <template>
-  <v-footer primary padless>
+  <v-footer app absolute class="pa-0">
     <v-card
       flat
       tile

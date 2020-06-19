@@ -10,14 +10,14 @@
       <v-slide-item
         v-for="product of GET_PRODUCTS_DAILY"
         :key="product.id"
-        v-slot:default="{ active, toggle }"
+        v-slot:default="{ active }"
       >
         <v-card
           :color="active ? 'primary' : 'grey lighten-1'"
           class="ma-4"
           height="600"
           width="300"
-          @click="toggle"
+          @click="getItemDetail(product)"
         >
           <v-row
             class="fill-height card-product-recomendation"
@@ -51,7 +51,6 @@
                     <v-row
                       class="flex-column ma-0 fill-height caption product-name"
                       justify="center"
-                      @click="getItemDetail(product)"
                     >
                       {{ product.name }}
                     </v-row>
@@ -72,7 +71,7 @@
                       justify="center"
                     >
                       <v-rating
-                        :value="product.rating"
+                        :value="parseInt(product.rating)"
                         background-color="orange lighten-3"
                         color="primary"
                         :small="$vuetify.breakpoint.mdAndUp"

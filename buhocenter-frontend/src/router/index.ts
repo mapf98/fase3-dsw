@@ -85,51 +85,81 @@ const routes: RouteConfig[] = [
             path: "/dashboard/home",
             name: "dashboard-home",
             component: DashboardHome,
+            meta: {
+              admin: true
+            },
           },
           {
             path: "/dashboard/catalogues",
             name: "dashboard-catalogues",
             component: DashboardCatalogues,
+            meta: {
+              admin: true
+            },
           },
           {
             path: "/dashboard/categories",
             name: "dashboard-categories",
             component: DashboardCategories,
+            meta: {
+              admin: true
+            },
           },
           {
             path: "/dashboard/clients",
             name: "dashboard-clients",
             component: DashboardClients,
+            meta: {
+              admin: true
+            },
           },
           {
             path: "/dashboard/emails",
             name: "dashboard-emails",
             component: DashboardEmails,
+            meta: {
+              admin: true
+            },
           },
           {
             path: "/dashboard/orders",
             name: "dashboard-emails",
             component: DashboardOrders,
+            meta: {
+              admin: true
+            },
           },
           {
             path: "/dashboard/platform",
             name: "dashboard-platform",
             component: DashboardPlatform,
+            meta: {
+              admin: true
+            },
           },
           {
             path: "/dashboard/products",
             name: "dashboard-products",
             component: DashboardProducts,
+            meta: {
+              admin: true
+            },
           },
           {
             path: "/dashboard/promotions",
             name: "dashboard-promotions",
             component: DashboardPromotions,
+            meta: {
+              admin: true
+            },
           },
           {
             path: "/dashboard/services",
             name: "dashboard-servies",
             component: DashboardServices,
+            meta: {
+              admin: true
+            },
           },
         ],
       },
