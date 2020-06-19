@@ -9,6 +9,9 @@ import { ProductsModule } from '../products/products.module';
 import { PaymentsTransactionsRepository } from './transactions/payments.transactions.service';
 import { StatussModule } from '../status/status.module';
 import { CartsModule } from '../carts/carts.module';
+import { CommissionsController } from './controllers/commission.controller';
+import { CommissionsService } from './services/commissions.service';
+import { CommissionsTransactionsRepository } from './transactions/commissions.transactions.service'
 
 @Module({
     imports: [
@@ -26,7 +29,9 @@ import { CartsModule } from '../carts/carts.module';
         PaymentGatewayRepository,
         PaymentsService,
         ProxyService,
+        CommissionsService,
+        CommissionsTransactionsRepository
     ],
-    controllers: [PaymentsController],
+    controllers: [PaymentsController,CommissionsController],
 })
 export class PaymentsModule {}
