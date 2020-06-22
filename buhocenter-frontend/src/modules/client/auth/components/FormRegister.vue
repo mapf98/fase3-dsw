@@ -5,14 +5,23 @@
         Error occurred while getting the languages
         <v-btn color="white" text @click="snackbar = false">Cerrar</v-btn>
       </v-snackbar>
+      <v-img
+        src="../../../../assets/Logo-completo.png"
+        width="400"
+        class="img-header-form align-center"
+      >
+      </v-img>
       <v-alert v-if="getErrRegister" prominent type="error">
         <v-row align="center">
           <v-col class="grow">{{ getErrMessage }}</v-col>
         </v-row>
       </v-alert>
-      <form
+      <v-form
         @submit.prevent="submitRegister"
         class="login100-form validate-form flex-sb flex-w"
+        ref="form"
+        v-model="valid"
+        lazy-validation
       >
         <v-row class="logo-header mb-10">
           <img
@@ -37,10 +46,6 @@
                 :rules="[() => !!name || 'This field is required']"
               ></v-text-field>
             </div>
-            <v-alert type="error" v-if="errorInputs.name">
-              Valid name is required.
-            </v-alert>
-
             <div class="validate-input mb-4" data-validate="Name is required">
               <v-text-field
                 :label="$t('LAST-NAME')"
@@ -48,10 +53,6 @@
                 :rules="[() => !!lastName || 'This field is required']"
               ></v-text-field>
             </div>
-            <v-alert type="error" v-if="errorInputs.lastName">
-              Valid name is required.
-            </v-alert>
-
             <v-col cols="12" lg="12" md="12">
               <v-dialog
                 ref="dialog"
@@ -91,9 +92,6 @@
                   >
                 </v-date-picker>
               </v-dialog>
-              <v-alert type="error" v-if="errorInputs.birthdate">
-                You must be of legal age
-              </v-alert>
             </v-col>
             <v-col lg="12" md="12">
               <div class="p-t-31 mb-4">
@@ -108,9 +106,6 @@
                 item-text="name"
                 item-value="code"
               ></v-select>
-              <v-alert type="error" v-if="errorInputs.language">
-                Language is required.
-              </v-alert>
             </v-col>
           </v-col>
           <v-col cols="12" lg="6" md="6" sm="12">
@@ -125,10 +120,6 @@
                 :rules="[() => !!email || 'This field is required']"
               ></v-text-field>
             </div>
-            <v-alert type="error" v-if="errorInputs.email">
-              Valid email is required.
-            </v-alert>
-
             <div
               class="validate-input mb-4"
               data-validate="Password is required"
@@ -142,10 +133,6 @@
                 :rules="[() => !!password || 'This field is required']"
               ></v-text-field>
             </div>
-            <v-alert type="error" v-if="errorInputs.password">
-              Password must be at least 6 characters
-            </v-alert>
-
             <div
               class="validate-input mb-4"
               data-validate="Password is required"
@@ -159,9 +146,6 @@
                 :rules="[() => !!confirmPassword || 'This field is required']"
               ></v-text-field>
             </div>
-            <v-alert type="error" v-if="errorInputs.passwordEquals">
-              passwords must match
-            </v-alert>
           </v-col>
         </v-row>
         <div class="center">
@@ -189,8 +173,18 @@
             </RouterLink>
           </div>
         </div>
-      </form>
+      </v-form>
     </v-col>
+    <v-snackbar v-model="snackbarError" color="error" class="mb-5 my-5" top>
+      <ul>
+        <li class="body-1" v-for="error in errors" :key="error.id">
+          {{ error }}
+        </li>
+      </ul>
+      <v-btn color="white" text @click="snackbarError = false" small>
+        Close
+      </v-btn>
+    </v-snackbar>
   </v-row>
 </template>
 
@@ -213,6 +207,9 @@ export default class Login extends Vue {
   birthdate: string = new Date().toISOString().substr(0, 10);
   languages: string[] = [];
   language = "en";
+  snackbarError = false;
+  errors: Array<string> = [];
+  valid = true;
 
   email = "";
   password = "";
@@ -234,6 +231,23 @@ export default class Login extends Vue {
       await this.apiGetLanguages();
       this.snackbar = this.getErrLanguages;
     }
+  }
+
+  showErrors(errorInputs: any): void {
+    if (errorInputs.birthdate) {
+      this.errors.push("You must be of legal age");
+    }
+    if (errorInputs.email) {
+      this.errors.push("Valid email is required.");
+    }
+    if (errorInputs.passwordEquals) {
+      this.errors.push("passwords must match.");
+    }
+    if (errorInputs.password) {
+      this.errors.push("Password must be at least 6 characters.");
+    }
+    (this.$refs.form as Vue & { validate: () => boolean }).validate();
+    this.snackbarError = true;
   }
 
   async submitRegister() {
@@ -267,6 +281,9 @@ export default class Login extends Vue {
       if (result) {
         await this.$router.push("/sign-in");
       }
+    } else {
+      this.errors.splice(0);
+      this.showErrors(this.errorInputs);
     }
     this.isLoading = false;
   }

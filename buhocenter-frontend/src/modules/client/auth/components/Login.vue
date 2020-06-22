@@ -1,11 +1,6 @@
 <template>
   <v-row justify="center">
     <v-col class="container-login" cols="12" lg="4" sm="12" md="6">
-      <v-alert v-if="getErrAuth" prominent type="error">
-        <v-row align="center">
-          <v-col class="grow">{{ getErrMessage }}</v-col>
-        </v-row>
-      </v-alert>
       <form
         class="login100-form validate-form flex-sb flex-w"
         @submit.prevent="submitLogin"
@@ -88,11 +83,21 @@
         </div>
       </form>
     </v-col>
+    <v-snackbar v-model="snackbarError" color="error" class="mb-5 my-5" top>
+      <ul>
+        <li class="body-1" v-for="error in errors" :key="error.id">
+          {{ error }}
+        </li>
+      </ul>
+      <v-btn color="white" text @click="snackbarError = false" small>
+        Close
+      </v-btn>
+    </v-snackbar>
   </v-row>
 </template>
 
 <script lang="ts">
-import { Component, Vue } from "vue-property-decorator";
+import { Component, Vue, Watch } from "vue-property-decorator";
 import AuthMethods from "@/store/auth/methods/auth.methods";
 import { authModule, carts } from "@/store/namespaces";
 import CartMethods from "@/store/carts/methods/cart.methods";
@@ -104,6 +109,17 @@ export default class Login extends Vue {
   password = "";
   isLoading = false;
   showPass = false;
+  snackbarError = false;
+  errors: Array<string> = [];
+
+  @Watch("getErrMessage")
+  showErrors(): void {
+    this.errors.splice(0);
+    if (this.getErrAuth) {
+      this.errors.push(this.getErrMessage);
+      this.snackbarError = true;
+    }
+  }
   snackbar = false;
 
   async loginWithSocial(social: string) {
@@ -116,6 +132,7 @@ export default class Login extends Vue {
   }
 
   async submitLogin() {
+    this.showErrors();
     this.isLoading = true;
     await this.login({
       email: this.email,
@@ -335,7 +352,11 @@ a:focus {
 .login100-form-btn:hover:before {
   opacity: 1;
 }
-</style>
+
+.login100-form-btn:hover:before {
+  opacity: 1;
+}
+
 .login100-form-btn:hover:before {
   opacity: 1;
 }

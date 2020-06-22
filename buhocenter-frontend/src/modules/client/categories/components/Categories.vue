@@ -17,7 +17,7 @@
             <template>
               <!-- VERIFICAR 2 -->
               <!-- eslint-disable-next-line vue/no-unused-vars -->
-              <v-hover v-slot:default="{ hover }">
+              <v-hover>
                 <v-card class="mx-auto" color="grey lighten-4" max-width="600">
                   <v-hover v-slot:default="{ hover }" close-delay="200">
                     <v-card

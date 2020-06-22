@@ -47,7 +47,7 @@
             :items="quantityValues"
             @change="changeQuantity()"
             :x-small="$vuetify.breakpoint.mdAndDown"
-            label="Qty"
+            :label="item.quantity"
             height="30"
             primary
             dense
@@ -79,6 +79,7 @@ import { ProductCarts, CartInterface } from "../interfaces/carts.interface";
 export default class ProductCart extends Vue {
   @Prop() item!: ProductCarts;
   @Prop() index!: number;
+
   checkbox = false;
   quantityValues: string[] = [
     "1",

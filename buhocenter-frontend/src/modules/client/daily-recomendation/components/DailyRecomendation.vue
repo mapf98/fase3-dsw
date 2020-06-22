@@ -28,7 +28,7 @@
             <v-scale-transition>
               <v-container>
                 <v-row justify="center">
-                  <v-col cols="12">
+                  <v-col cols="12" lg="12" md="6" sm="4">
                     <v-img
                       height="200"
                       contain
@@ -108,7 +108,7 @@ import { Product } from "@/modules/client/products/interfaces/products.interface
 export default class DailyRecommendation extends Vue {
   errorLoadingContent = false;
 
-  async fetchProductsDaily() : Promise<void> {
+  async fetchProductsDaily(): Promise<void> {
     this.SET_PRODUCT_DAILY_AND_PHOTOS_LOADED(false);
     const fetched: boolean = await this.FETCH_PRODUCTS_DAILY();
     if (!fetched) {

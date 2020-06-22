@@ -105,7 +105,7 @@ export default class ProductCard extends Vue {
   getName(product: Product): string | undefined {
     return product.name!.length < 70
       ? product.name
-      : product.name!.substr(0,70)! + "...";
+      : product.name!.substr(0, 70)! + "...";
   }
 
   getProvider(item): string {

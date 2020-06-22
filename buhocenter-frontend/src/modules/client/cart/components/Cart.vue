@@ -28,6 +28,7 @@
             color="primary"
             outlined
             class="btn-remove"
+            :disabled="onCheckout"
             >{{ $t("PROCEED_CHECKOUT") }}</v-btn
           >
         </v-card-actions>
@@ -37,7 +38,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from "vue-property-decorator";
+import { Component, Vue, Watch } from "vue-property-decorator";
 import { authModule, carts, payments, loader } from "@/store/namespaces";
 import ProductCart from "@/modules/client/cart/components/ProductCart.vue";
 import AuthMethods from "@/store/auth/methods/auth.methods";
@@ -53,7 +54,33 @@ import { CustomerInterface } from "@/modules/client/auth/interfaces/customer.int
 })
 export default class Cart extends Vue {
   public productsCart?: ProductCarts[] = [];
+  public productsCheckout?: ProductCarts[] = [];
+  public onCheckout = true;
+  item: any;
   public errorCheckout?: boolean = false;
+
+  @Watch("GET_PRODUCTS_CHECKOUT.length")
+  check(): void {
+    var ischecked = false;
+    this.productsCheckout = this.GET_PRODUCTS_CHECKOUT;
+    this.productsCheckout.forEach((products: ProductCarts) => {
+      if (products.quantity! > 0) {
+        ischecked = true;
+      }
+    });
+    if (this.GET_PRODUCTS_CHECKOUT.length > 0 && ischecked) {
+      this.onCheckout = false;
+    } else {
+      this.onCheckout = true;
+    }
+  }
+
+  @Watch("GET_CART_OBJECT")
+  @Watch("GET_PRODUCTS_CART")
+  getProducts(): void {
+    this.productsCart = this.GET_CART_OBJECT;
+  }
+
 
   async mounted(): Promise<void> {
     if (this.GET_AUTH_TOKEN !== "") {
@@ -64,6 +91,10 @@ export default class Cart extends Vue {
       }
       this.productsCart = this.GET_CART_OBJECT;
     }
+  }
+
+  onCheckoutTrue() {
+    this.onCheckout = false;
   }
 
   getProductPrice(item) {
