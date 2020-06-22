@@ -26,13 +26,14 @@ import { Response } from 'express';
 import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
 import { Logger } from 'winston';
 import { ProductTransactionsRepository } from '../transaction/products.transaction.service';
+import { ProductParameters } from '../interfaces/product-parameters';
+import { PaginatedProducts } from '../interfaces/paginated-products';
 
 @Controller('products')
 export class ProductsController {
     constructor(
         private readonly productsService: ProductsService,
         @Inject(WINSTON_MODULE_PROVIDER) private readonly logger: Logger,
-        public service: ProductsService,
         @Inject(ProductTransactionsRepository)
         private readonly productTransactionsRepository: ProductTransactionsRepository,
     ) {}
@@ -79,24 +80,12 @@ export class ProductsController {
     }
 
     @Get()
-    async getProducts(
-        @Res() res: Response,
-        @Query('page', new ParseIntPipe()) page: number,
-        @Query('catalogueId') catalogueId: number,
-    ): Promise<Response> {
-        this.logger.info(`getProducts: [page=${page}|catalogueId=${catalogueId}]`, {
-            context: ProductsController.name,
+    getProducts(@Query() parameters: ProductParameters): Promise<PaginatedProducts> {
+        this.logger.info('getProducts: Getting products by a set of parameters', {
+            context: ProductsController.name
         });
-        try {
-            const [products, total]: [Product[], number] = await this.productsService.getProducts(
-                page,
-                catalogueId,
-            );
-            return res.status(HttpStatus.OK).send([products, total]);
-        } catch (e) {
-            this.logger.error(`Exception ${e}`);
-            return res.status(HttpStatus.INTERNAL_SERVER_ERROR).send();
-        }
+
+        return this.productsService.getProducts(parameters);
     }
 
     @Patch()

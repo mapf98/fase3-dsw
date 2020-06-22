@@ -1,4 +1,4 @@
-import { Repository, EntityManager } from 'typeorm';
+import { Repository, EntityManager, SelectQueryBuilder } from 'typeorm';
 import { Injectable, Inject, BadRequestException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
@@ -14,6 +14,9 @@ import { BrandsService } from '../services/brands.service';
 import { CategoriesService } from '../services/categories.service';
 import { ProductPhoto } from '../entities/product-photo.entity';
 import { Offer } from '../entities/offer.entity';
+import { ProductParameters } from '../interfaces/product-parameters';
+import { PaginatedProducts } from '../interfaces/paginated-products';
+import { DEFAULT_PRODUCT_START_INDEX, MAX_PRODUCTS_BY_PAGE } from '../product.constans';
 
 @Injectable()
 export class ProductsService {
@@ -127,53 +130,49 @@ export class ProductsService {
     }
 
     /**
-     * Returns the products according the parameters received
-     * @param page page to start listing products
-     * @param catalogueId catalogue id which products must belong to
-     */
-    public async getProducts(page: number = 1, catalogueId: number = 1): Promise<[Product[], number]> {
-        this.logger.debug(`getProducts: [page=${page}|catalogueId=${catalogueId}]`, {
-            context: ProductsService.name,
+
+     * getProducts
+     * @param parameters: ProductParameters
+     * @returns Promise<PaginatedProducts>
+    */
+    async getProducts(parameters: ProductParameters): Promise<PaginatedProducts> {
+        this.logger.debug(`getProducts:  Getting products by a set of parameters [parameters:${JSON.stringify(parameters)}]`,{
+            context: ProductsService.name
         });
 
-        const take: number = 8;
+        parameters.start = parameters.start || DEFAULT_PRODUCT_START_INDEX;
+        parameters.limit = parameters.limit || MAX_PRODUCTS_BY_PAGE;
 
-        let [products, total]: [Product[], number] = await this.productsRepository.findAndCount({
-            where: `catalogues.catalogue_id = ${catalogueId} AND status.id = ${STATUS.ACTIVE.id}`,
-            join: {
-                alias: 'products',
-                innerJoinAndSelect: {
-                    photos: 'products.productPhotos',
-                    productProvider: 'products.provider',
-                    provider: 'products.provider',
-                    catalogues: 'products.productCatalogues',
-                    catalogue: 'catalogues.catalogue',
-                    category: 'catalogue.category',
+        parameters.start = parameters.start * parameters.limit - parameters.limit;
+        let query: SelectQueryBuilder<Product> = this.productsRepository
+            .createQueryBuilder('product')
+            .innerJoinAndSelect('product.productPhotos', 'productPhotos')
+            .innerJoinAndSelect('product.brand', 'brand')
+            .innerJoinAndSelect('product.provider', 'provider')
+            .innerJoin('product.productInventory', 'productInventory')
+            .innerJoin('product.productCatalogues', 'productCatalogues')
+            .innerJoin('productCatalogues.catalogue', 'catalogue')
+            .innerJoin('catalogue.category', 'category')
+            .leftJoin('product.offer', 'offer')
 
-                    status: 'products.status',
-                },
-            },
-            order: {
-                id: 'ASC',
-            },
-            skip: take * (page - 1),
-            take,
-        });
+        !(parameters.name) || query.andWhere('UPPER(product.name) LIKE :name', { name: `%${parameters.name.toUpperCase()}%` });
+        !(parameters.rating) || query.andWhere('FLOOR(product.rating) = :rating', { rating: parameters.rating });
+        !(parameters.price) || query.andWhere('product.price <= :price', { price: parameters.price });
+        !(parameters.brandId) || query.andWhere('brand.id = :brandId ', { brandId: parameters.brandId });
+        !(parameters.providerId) || query.andWhere('provider.id = :providerId ', { providerId: parameters.providerId });
+        !(parameters.offerId) || query.andWhere('offer.id = :offerId ', { offerId: parameters.offerId });
+        !(parameters.catalogueId) || query.andWhere('catalogue.id = :catalogueId', { catalogueId: parameters.catalogueId });
+        !(parameters.categoryId) || query.andWhere('category.id = :categoryId', { categoryId: parameters.categoryId });
+        query.andWhere('productInventory.availableQuantity - productInventory.minimumAvailableQuantity > 0');
 
-        let productsFiltered: Product[] = [];
-
-        for await (const i of products) {
-            const inventoryAvailable: ProductInventory = await this.getProductInventoryAvailability(i.id);
-
-            if (inventoryAvailable.availableQuantity > inventoryAvailable.minimumAvailableQuantity) {
-                productsFiltered.push(i);
-            }
+        return {
+            products: await query
+                .skip(parameters.start)
+                .take(parameters.limit)
+                .getMany(),
+            productsNumber: await query.getCount()
         }
-
-        await this.getProductAverageRating(productsFiltered);
-
-        return [productsFiltered, total];
-    } 
+    }
 
     async findProduct(ProductID: number): Promise<Product> {
         return await this.productsRepository.findOne(ProductID);
