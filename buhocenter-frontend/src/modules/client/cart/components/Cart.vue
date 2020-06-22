@@ -12,6 +12,13 @@
     <v-list-item>
       <v-card margin="0px">
         <v-card-actions>
+          <v-card-actions v-if="errorCheckout">
+            <v-alert type="error">
+              {{$t('ERROR_NOT_CHECKOUT_PRODUCTS')}}
+            </v-alert>
+          </v-card-actions>
+        </v-card-actions>
+        <v-card-actions>
           Subtotal({{ GET_PRODUCTS_CHECKOUT.length }} items):{{ " "
           }}<b>{{ GET_TOTAL_PRICE_CHECKOUT.toFixed(2) }}$</b>
         </v-card-actions>
@@ -46,6 +53,7 @@ import { CustomerInterface } from "@/modules/client/auth/interfaces/customer.int
 })
 export default class Cart extends Vue {
   public productsCart?: ProductCarts[] = [];
+  public errorCheckout?: boolean = false;
 
   async mounted(): Promise<void> {
     if (this.GET_AUTH_TOKEN !== "") {
@@ -73,20 +81,12 @@ export default class Cart extends Vue {
   }
 
   async checkout() {
-    const order = this.createOrder();
-
-    this.SHOW_LOADER(true);
-
-    const paymentUrl: string | boolean = await this.CREATE_ORDER(order);
-
-    if (paymentUrl) {
-      this.SHOW_LOADER(false);
-      window.open(paymentUrl as string, "_blank");
+    if(this.GET_PRODUCTS_CHECKOUT.length > 0){
+      this.errorCheckout = false;
+      this.$router.push('/checkout');
+    }else{
+      this.errorCheckout = true;
     }
-
-    this.GET_ITEMS_CARS(this.GET_CLIENT_DATA.id!);
-
-    this.SHOW_LOADER(false);
   }
 
   @loader.Action(LoaderTypes.actions.SHOW_LOADER) SHOW_LOADER!: (

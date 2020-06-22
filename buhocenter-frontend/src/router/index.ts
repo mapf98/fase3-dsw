@@ -22,6 +22,7 @@ import DashboardProducts from "@/modules/management/products/components/Products
 import DashboardPromotions from "@/modules/management/promotions/components/Promotions.vue";
 import DashboardServices from "@/modules/management/services/components/Services.vue";
 import PersonalInformation from "@/modules/client/customers/components/PersonalInformation.vue";
+import Checkout from '../views/Checkout.vue';
 
 Vue.use(VueRouter);
 
@@ -169,6 +170,10 @@ const routes: RouteConfig[] = [
         component: PersonalInformation,
       },
     ],
+  },
+  {
+    path: '/checkout',
+    component: Checkout,
   },
 ];
 

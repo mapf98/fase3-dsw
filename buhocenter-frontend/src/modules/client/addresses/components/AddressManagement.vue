@@ -168,7 +168,7 @@
       :timeout="timeout"
       color="error"
     >
-      {{ $t("ERROR_PUT_ADDRESS") }}
+      {{ $t("ERROR_CREATE_ADDRESS") }}
       <v-btn color="white" text @click="defaultAddressError = false">{{
         $t("CLOSE")
       }}</v-btn>

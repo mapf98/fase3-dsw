@@ -136,4 +136,8 @@ export const terms = {
     "An error occurred while getting the categories. Try again.",
   ERROR_LOAD_BRANDS: "An error occurred while getting the brands. Try again.",
   PRODUCT_UPDATED_SUCCESS: "Product Updated successfully!",
+  SHIPPING_ADDRESS: "Shipping Address",
+  SELECT_SHIPPING_ADDRESS: "Select or create the shipping address of the order",
+  ERROR_CREATE_ADDRESS: "Invalid or wrong address",
+  ERROR_NOT_CHECKOUT_PRODUCTS: "Select the products you want to buy"
 };

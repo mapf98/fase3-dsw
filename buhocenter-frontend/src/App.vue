@@ -1,5 +1,8 @@
 <template>
-  <router-view class="app-font-global"></router-view>
+  <v-app id="inspire">
+    <router-view class="app-font-global"></router-view>
+  </v-app>
+
 </template>
 
 <script lang="ts">
