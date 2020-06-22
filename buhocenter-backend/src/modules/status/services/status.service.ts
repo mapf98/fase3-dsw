@@ -23,12 +23,9 @@ export class StatusService {
      * @returns Promise<Status>
      */
     public async getStatusById(statusId: number): Promise<Status> {
-        this._logger.debug(
-            `getStatusById: Getting a status by Id [statusId=${statusId}]`,
-            {
-                context: StatusService.name,
-            },
-        );
+        this._logger.debug(`getStatusById: Getting a status by Id [statusId=${statusId}]`, {
+            context: StatusService.name,
+        });
 
         return await this._statusRepository.findOne(statusId);
     }
@@ -39,12 +36,9 @@ export class StatusService {
      * @returns Promise<Status>
      */
     async getStatusByName(statusName: string): Promise<Status> {
-        this._logger.debug(
-            `getStatusByName: Getting a status by name [statusName=${statusName}]`,
-            {
-                context: StatusService.name,
-            },
-        );
+        this._logger.debug(`getStatusByName: Getting a status by name [statusName=${statusName}]`, {
+            context: StatusService.name,
+        });
 
         return await this._statusRepository
             .createQueryBuilder('status')

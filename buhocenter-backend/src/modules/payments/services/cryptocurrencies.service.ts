@@ -19,12 +19,9 @@ export class CryptocurrenciesService {
      * @retuns Promise<Cryptocurrency>
      */
     async getCryptotocurrencyByIso(iso: string): Promise<Cryptocurrency> {
-        this._logger.debug(
-            `getCryptotocurrencyByIso: Getting a cryptocurrency by ISO code [iso=${iso}]`,
-            {
-                context: CryptocurrenciesService.name,
-            },
-        );
+        this._logger.debug(`getCryptotocurrencyByIso: Getting a cryptocurrency by ISO code [iso=${iso}]`, {
+            context: CryptocurrenciesService.name,
+        });
 
         return await this._cryptocurrencyRepository.findOne({ iso: iso });
     }

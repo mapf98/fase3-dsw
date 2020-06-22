@@ -48,9 +48,7 @@ export class LoggerSettingsService implements WinstonModuleOptionsFactory {
     public static consoleLoggerFormat(info: any) {
         const requestId: string = rTracer.id() ? `[${rTracer.id()}]` : '';
         const tzoffset: number = new Date().getTimezoneOffset() * 60000;
-        const localISOTime: string = new Date(Date.now() - tzoffset)
-            .toISOString()
-            .slice(0, -1);
+        const localISOTime: string = new Date(Date.now() - tzoffset).toISOString().slice(0, -1);
         const level = format.colorize(info.level.toUpperCase());
         const context: string = info.context ? info.context : 'N/D';
         const msg = format.colorize(info.message ? info.message : '');
@@ -61,9 +59,7 @@ export class LoggerSettingsService implements WinstonModuleOptionsFactory {
     public static dailyFileLoggerFormat(info: any) {
         const requestId: string = rTracer.id() ? `[${rTracer.id()}]` : '';
         const tzoffset: number = new Date().getTimezoneOffset() * 60000;
-        const localISOTime: string = new Date(Date.now() - tzoffset)
-            .toISOString()
-            .slice(0, -1);
+        const localISOTime: string = new Date(Date.now() - tzoffset).toISOString().slice(0, -1);
         const level = format.colorize(info.level.toUpperCase());
         const context: string = info.context ? info.context : 'N/D';
         const msg: string = info.message ? info.message : '';

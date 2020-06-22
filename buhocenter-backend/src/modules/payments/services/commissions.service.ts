@@ -1,6 +1,6 @@
 import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
 import { Repository, EntityManager } from 'typeorm';
-import { Injectable, Inject,  BadRequestException } from '@nestjs/common';
+import { Injectable, Inject, BadRequestException } from '@nestjs/common';
 import { Logger } from 'winston';
 import { StatusService } from '../../status/services/status.service';
 import { STATUS } from '../../../config/constants';
@@ -13,8 +13,8 @@ export class CommissionsService {
     constructor(
         @Inject(WINSTON_MODULE_PROVIDER) private readonly _logger: Logger,
         @InjectRepository(Commission)
-		private readonly _commissionRepository: Repository<Commission>,
-		private readonly _statusService: StatusService
+        private readonly _commissionRepository: Repository<Commission>,
+        private readonly _statusService: StatusService,
     ) {}
 
     /**
@@ -31,23 +31,25 @@ export class CommissionsService {
             .createQueryBuilder('commission')
             .innerJoin('commission.status', 'status')
             .where('status.id = :statusId', { statusId: STATUS.ACTIVE.id })
-			.getOne();
-	}
-   
-    public async createCommission(CommissionData: CommissionDto, transactionalEntityManage: EntityManager){
-    	try{
-    		let newCommission = new Commission();
-    		newCommission.serviceFee = CommissionData.serviceFee;
-    		newCommission.processorFee = CommissionData.processorFee;
-    		newCommission.status = await this._statusService.getStatusById(STATUS.ACTIVE.id);
+            .getOne();
+    }
 
-            let CommissionTransactionalRepository = await transactionalEntityManage.getRepository(Commission);
+    public async createCommission(CommissionData: CommissionDto, transactionalEntityManage: EntityManager) {
+        try {
+            const newCommission = new Commission();
+            newCommission.serviceFee = CommissionData.serviceFee;
+            newCommission.processorFee = CommissionData.processorFee;
+            newCommission.status = await this._statusService.getStatusById(STATUS.ACTIVE.id);
+
+            const CommissionTransactionalRepository = await transactionalEntityManage.getRepository(
+                Commission,
+            );
             await CommissionTransactionalRepository.save(newCommission);
-    		return newCommission;
-    	}catch(e){
+            return newCommission;
+        } catch (e) {
             this._logger.error(
-	            `createCommision: error when trying to create the commission [commisionsInfo=${JSON.stringify(
-                    CommissionData
+                `createCommision: error when trying to create the commission [commisionsInfo=${JSON.stringify(
+                    CommissionData,
                 )}]`,
                 { context: CommissionsService.name },
             );
@@ -79,7 +81,7 @@ export class CommissionsService {
         CommissionData: CommissionUpdateDto,
         transactionalEntityManage: EntityManager,
     ): Promise<string> {
-        let CommissionTransactionalRepository = await transactionalEntityManage.getRepository(Commission);
+        const CommissionTransactionalRepository = await transactionalEntityManage.getRepository(Commission);
 
         if (CommissionData.serviceFee > 0) {
             await this.updateServiceFee(
@@ -99,14 +101,19 @@ export class CommissionsService {
         return 'Commission updated';
     }
 
-    public async deleteCommission(commissionId: number,transactionalEntityManage: EntityManager): Promise<boolean>{
-    	try{
-    		  let inactive = await this._statusService.getStatusById(STATUS.INACTIVE.id);
-	    	  let CommissionTransactionalRepository: Repository<Commission> = await transactionalEntityManage.getRepository(Commission);
-	    	  await CommissionTransactionalRepository.update( {id:commissionId}, {status:inactive} );
+    public async deleteCommission(
+        commissionId: number,
+        transactionalEntityManage: EntityManager,
+    ): Promise<boolean> {
+        try {
+            const inactive = await this._statusService.getStatusById(STATUS.INACTIVE.id);
+            const CommissionTransactionalRepository: Repository<Commission> = await transactionalEntityManage.getRepository(
+                Commission,
+            );
+            await CommissionTransactionalRepository.update({ id: commissionId }, { status: inactive });
             return true;
         } catch (e) {
-            this.logger.error(
+            this._logger.error(
                 `deleteCommision: error when trying to delete the commission [commisionsId=${commissionId}]`,
                 { context: CommissionsService.name },
             );
@@ -114,15 +121,15 @@ export class CommissionsService {
     }
 
     public async getCommissionById(commissionId: number): Promise<Commission> {
-        let active = await this.statusService.getStatus(STATUS.ACTIVE.id);
-        return await this.commissionRepository.findOne({
+        const active = await this._statusService.getStatusById(STATUS.ACTIVE.id);
+        return await this._commissionRepository.findOne({
             where: { id: commissionId, status: active },
         });
     }
 
     public async getCommission(): Promise<Commission[]> {
-        let active = STATUS.ACTIVE.id;
-        return await this.commissionRepository.find({
+        const active = STATUS.ACTIVE.id;
+        return await this._commissionRepository.find({
             where: { status: active },
         });
     }

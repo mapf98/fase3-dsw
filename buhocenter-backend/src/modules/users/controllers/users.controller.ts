@@ -49,9 +49,8 @@ export class UsersController {
     async registerUser(@Body() user: Partial<User>): Promise<User> {
         this.logger.info(`registerUser: [uid=${user.uid}]`, { context: UsersController.name });
         return await this.usersService.registerUser(user);
-
     }
-  
+
     @Post('/login')
     async login(@Body() data: { token: string; uid: string }, @Res() res): Promise<Response> {
         try {
@@ -73,9 +72,7 @@ export class UsersController {
             loginSocial: federated login by user [uid=${data.clientData.uid}|token=${data.token}]`,
                 { context: UsersController.name },
             );
-            const dataResponse: ResponseAuth = await this.usersService.validateRegisterSocial(
-                data,
-            );
+            const dataResponse: ResponseAuth = await this.usersService.validateRegisterSocial(data);
             return res.status(HttpStatus.OK).send(dataResponse);
         } catch (e) {
             return res.status(HttpStatus.NOT_FOUND).send();

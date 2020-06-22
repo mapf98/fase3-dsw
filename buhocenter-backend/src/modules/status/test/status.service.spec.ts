@@ -40,22 +40,22 @@ describe('status service', () => {
     describe('get status', () => {
         it('must return the status by id', async () => {
             statusRepository.findOne.mockResolvedValue(statusMockDB[0]);
-            expect((await service.getStatus(1)).id).toEqual(STATUS.ACTIVE.id);
+            expect((await service.getStatusById(1)).id).toEqual(STATUS.ACTIVE.id);
             statusRepository.findOne.mockResolvedValue(statusMockDB[1]);
-            expect((await service.getStatus(2)).id).toEqual(STATUS.INACTIVE.id);
+            expect((await service.getStatusById(2)).id).toEqual(STATUS.INACTIVE.id);
             statusRepository.findOne.mockResolvedValue(statusMockDB[2]);
-            expect((await service.getStatus(3)).id).toEqual(STATUS.TO_PROCESS.id);
+            expect((await service.getStatusById(3)).id).toEqual(STATUS.NEW.id);
             statusRepository.findOne.mockResolvedValue(statusMockDB[3]);
-            expect((await service.getStatus(4)).id).toEqual(STATUS.PROCESSED.id);
+            expect((await service.getStatusById(4)).id).toEqual(STATUS.PENDING.id);
             statusRepository.findOne.mockResolvedValue(statusMockDB[4]);
-            expect((await service.getStatus(5)).id).toEqual(STATUS.REJECTED.id);
+            expect((await service.getStatusById(5)).id).toEqual(STATUS.CONFIRMING.id);
             statusRepository.findOne.mockResolvedValue(statusMockDB[5]);
-            expect((await service.getStatus(6)).id).toEqual(STATUS.RESERVED.id);
+            expect((await service.getStatusById(6)).id).toEqual(STATUS.PAID.id);
         });
         it('if not found, must return undefined', async () => {
             statusRepository.findOne.mockResolvedValue(undefined);
-            expect(await service.getStatus(8)).toBeUndefined();
-            expect(await service.getStatus(undefined)).toBeUndefined();
+            expect(await service.getStatusById(1000)).toBeUndefined();
+            expect(await service.getStatusById(undefined)).toBeUndefined();
         });
     });
 

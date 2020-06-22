@@ -14,6 +14,7 @@ import { HttpModule, HttpService } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { JwtStrategy } from '../../auth/strategies/jwt.strategy';
+import {NotificationsModule} from "../../notifications/notifications.module";
 
 describe('user service', () => {
     let service: UsersService;
@@ -36,6 +37,7 @@ describe('user service', () => {
             ],
             imports: [
                 PassportModule,
+                NotificationsModule,
                 JwtModule.registerAsync({
                     useFactory: async () => ({
                         secret: process.env.JWT_SECRET,

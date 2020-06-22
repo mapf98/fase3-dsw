@@ -31,13 +31,9 @@ export class LanguagesService {
                 `getTermsLanguage: Implementando peticion a poeditor para obtener terminos del lenguaje`,
                 { context: LanguagesService.name },
             );
-            const responseTerms: any = await this.languageRepository.getTermsLanguage(
-                code,
-            );
+            const responseTerms: any = await this.languageRepository.getTermsLanguage(code);
             if (responseTerms.response.status === SUCCESS) {
-                return this.destructureResponseTerms(
-                    responseTerms.result.terms,
-                );
+                return this.destructureResponseTerms(responseTerms.result.terms);
             }
             return Response.error();
         } catch (e) {

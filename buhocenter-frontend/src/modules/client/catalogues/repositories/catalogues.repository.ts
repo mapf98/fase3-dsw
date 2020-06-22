@@ -1,35 +1,24 @@
-import { HttpRepository } from "@/http/http.repository";
-import {
-  Catalogues,
-  ProductCatalogue,
-} from "@/modules/client/catalogues/interfaces/catalogues.interface";
+import { HttpRepository } from '@/http/http.repository';
+import { Catalogues, ProductCatalogue } from '@/modules/client/catalogues/interfaces/catalogues.interface';
 
 class CataloguesHttpRepository extends HttpRepository {
-  private static readonly RESOURCE = "categories";
-  private static readonly RESOURCECATALOGUE = "catalogues";
+    private static readonly RESOURCE = 'categories';
+    private static readonly RESOURCECATALOGUE = 'catalogues';
 
-  public getCataloguesByCategory(categoryId: string): Promise<Catalogues> {
-    return this.get(
-      this.createUri([
-        `${CataloguesHttpRepository.RESOURCE}/catalogues?category_id=${categoryId}`,
-      ])
-    );
-  }
+    public getCataloguesByCategory(categoryId: string): Promise<Catalogues> {
+        return this.get(
+            this.createUri([`${CataloguesHttpRepository.RESOURCE}/catalogues?category_id=${categoryId}`]),
+        );
+    }
 
-  public getAllCatalogues(): Promise<Catalogues> {
-    return this.get(
-      this.createUri([`${CataloguesHttpRepository.RESOURCECATALOGUE}`])
-    );
-  }
+    public getAllCatalogues(): Promise<Catalogues> {
+        return this.get(this.createUri([`${CataloguesHttpRepository.RESOURCECATALOGUE}`]));
+    }
 
-  // VER TIPO DE RETORNO
-  public saveCatalogue(data: ProductCatalogue) {
-    return this.post(
-      this.createUri([`${CataloguesHttpRepository.RESOURCECATALOGUE}`]),
-      data,
-      false
-    );
-  }
+    // VER TIPO DE RETORNO
+    public saveCatalogue(data: ProductCatalogue) {
+        return this.post(this.createUri([`${CataloguesHttpRepository.RESOURCECATALOGUE}`]), data, false);
+    }
 }
 
 export default new CataloguesHttpRepository();

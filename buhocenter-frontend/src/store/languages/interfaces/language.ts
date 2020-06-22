@@ -1,6 +1,6 @@
 export interface Language {
-  id: number;
-  iso: string;
-  name: string;
-  flag: string;
+    id: number;
+    iso: string;
+    name: string;
+    flag: string;
 }

@@ -1,7 +1,7 @@
-import { Category } from "@/modules/client/categories/interfaces/categories.interface";
+import { Category } from '@/modules/client/categories/interfaces/categories.interface';
 
 export interface CategoryStateInterface {
-  categories?: Category[];
-  categoriesAndPhotosLoaded: boolean;
-  totalCategories: number;
+    categories?: Category[];
+    categoriesAndPhotosLoaded: boolean;
+    totalCategories: number;
 }

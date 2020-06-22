@@ -37,7 +37,7 @@ import { ProductInventoriesService } from './services/product-inventories.servic
         CategoriesService,
         OffersService,
         OffersTransactionsRepository,
-        ProductInventoriesService
+        ProductInventoriesService,
     ],
     exports: [ProductsService, ProductInventoriesService],
 })

@@ -1,3 +1,3 @@
 export interface LoaderStateInterface {
-  loading: boolean;
+    loading: boolean;
 }

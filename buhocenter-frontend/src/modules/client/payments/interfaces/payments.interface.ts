@@ -1,3 +1,3 @@
 export interface Payment {
-  redirectUrl: string;
+    redirectUrl: string;
 }

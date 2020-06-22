@@ -1,6 +1,6 @@
-import { Address } from "@/modules/client/addresses/interfaces/address.interface";
+import { Address } from '@/modules/client/addresses/interfaces/address.interface';
 
 export interface AddressesStateInterface {
-  display: boolean;
-  addresses: Address[];
+    display: boolean;
+    addresses: Address[];
 }

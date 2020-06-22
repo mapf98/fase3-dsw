@@ -46,19 +46,12 @@ export class PaymentsService {
             context: PaymentsService.name,
         });
 
-        const price = this._cartService.getPriceForCarts(
-            checkout.cartsForPayment,
-        );
+        const price = this._cartService.getPriceForCarts(checkout.cartsForPayment);
         const activeCommission = await this._commissionService.getActiveCommission();
-        const newOrderStatus = await this._statusService.getStatusById(
-            STATUS.NEW.id,
-        );
+        const newOrderStatus = await this._statusService.getStatusById(STATUS.NEW.id);
 
         let payment: Payment = new Payment();
-        payment.total =
-            price +
-            price * activeCommission.serviceFee +
-            price * activeCommission.processorFee;
+        payment.total = price + price * activeCommission.serviceFee + price * activeCommission.processorFee;
         payment.address = checkout.address;
         payment.commission = activeCommission;
         payment.foreignExchange = checkout.foreignExchange;
@@ -72,18 +65,12 @@ export class PaymentsService {
 
         await getManager().transaction(async transactionEntityManager => {
             try {
-                await this._cartService.reserveCarts(
-                    checkout.cartsForPayment,
-                    transactionEntityManager,
-                );
+                await this._cartService.reserveCarts(checkout.cartsForPayment, transactionEntityManager);
                 const paymentTransactionRepository: Repository<Payment> = transactionEntityManager.getRepository(
                     Payment,
                 );
                 await paymentTransactionRepository.save(payment);
-                order = await this._paymentClient.createOrder(
-                    payment.id,
-                    payment.total,
-                );
+                order = await this._paymentClient.createOrder(payment.id, payment.total);
                 payment.transaction = order.id;
                 await paymentTransactionRepository.save(payment);
             } catch (error) {
@@ -145,12 +132,9 @@ export class PaymentsService {
      * @returns Promise<Payment>
      */
     async getPaymentById(paymentId: number): Promise<Payment> {
-        this._logger.debug(
-            `getPaymentById: Getting a payment by id [paymentId=${paymentId}]`,
-            {
-                context: PaymentsService.name,
-            },
-        );
+        this._logger.debug(`getPaymentById: Getting a payment by id [paymentId=${paymentId}]`, {
+            context: PaymentsService.name,
+        });
 
         return await this._paymentRepository
             .createQueryBuilder('payment')
@@ -188,11 +172,7 @@ export class PaymentsService {
      * @param cryptocurrencyIso: string
      * @returns void
      */
-    async setPaymentCryptocurrency(
-        payment: Payment,
-        totalCryptocurrency: number,
-        cryptocurrencyIso: string,
-    ) {
+    async setPaymentCryptocurrency(payment: Payment, totalCryptocurrency: number, cryptocurrencyIso: string) {
         this._logger.debug(
             `setPaymentCryptocurrency: Setting cryptocurrency of a payment [paymentId=${payment.id}|cryptocurrencyIso=${cryptocurrencyIso}]`,
             {
@@ -200,9 +180,7 @@ export class PaymentsService {
             },
         );
 
-        const cryptocurrency = await this._cryptocurrencyService.getCryptotocurrencyByIso(
-            cryptocurrencyIso,
-        );
+        const cryptocurrency = await this._cryptocurrencyService.getCryptotocurrencyByIso(cryptocurrencyIso);
         payment.totalCryptocurrency = totalCryptocurrency;
         payment.cryptocurrency = cryptocurrency;
 

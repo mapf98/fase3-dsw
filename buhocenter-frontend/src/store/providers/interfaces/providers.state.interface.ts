@@ -1,6 +1,6 @@
-import { Provider } from "@/modules/client/provider/interfaces/provider.interface";
+import { Provider } from '@/modules/client/provider/interfaces/provider.interface';
 
 export interface ProviderStateInterface {
-  Providers: Provider[];
-  err_Providers: boolean;
+    Providers: Provider[];
+    err_Providers: boolean;
 }

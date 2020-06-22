@@ -10,9 +10,7 @@ export class ProductInventoriesService {
     constructor(
         @Inject(WINSTON_MODULE_PROVIDER) private readonly _logger: Logger,
         @InjectRepository(ProductInventory)
-        private readonly _productInventoryRepository: Repository<
-            ProductInventory
-        >,
+        private readonly _productInventoryRepository: Repository<ProductInventory>,
     ) {}
 
     /**
@@ -20,9 +18,7 @@ export class ProductInventoriesService {
      * @param cartId: number
      * @retuns Promise<ProductInventory>
      */
-    async getProductInventoryByCartId(
-        cartId: number,
-    ): Promise<ProductInventory> {
+    async getProductInventoryByCartId(cartId: number): Promise<ProductInventory> {
         this._logger.debug(
             `getProductInventoryByCartId: Getting a Product Inventory by cart id [cartId=${cartId}]`,
             {
@@ -57,10 +53,7 @@ export class ProductInventoriesService {
             },
         );
 
-        if (
-            productInventory.availableQuantity - quantity >=
-            productInventory.minimumAvailableQuantity
-        ) {
+        if (productInventory.availableQuantity - quantity >= productInventory.minimumAvailableQuantity) {
             const productInventoryTransactionRepository: Repository<ProductInventory> = transactionEntityManager.getRepository(
                 ProductInventory,
             );

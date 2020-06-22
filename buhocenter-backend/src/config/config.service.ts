@@ -1,20 +1,24 @@
 import * as fs from 'fs';
 import { parse } from 'dotenv';
+import {logger} from '@anchan828/nest-sendgrid/dist/sendgrid.logger';
 
 export class ConfigService {
     private readonly envConfig: { [key: string]: string };
 
     constructor() {
-        const isDevelopmentEnvironment = process.env.NODE_ENV !== 'production';
+        const isDevelopmentEnvironment = process.env.NODE_ENV === 'development';
+        const isProductionEnvironment = process.env.NODE_ENV === 'production';
+
         if (isDevelopmentEnvironment) {
             const envFilePath = __dirname + '/../../.env';
             const exist = fs.existsSync(envFilePath);
             if (exist) {
                 this.envConfig = parse(fs.readFileSync(envFilePath));
             } else {
+                logger.log('No se ha encontrado el archivo dot env', 'ConfigService');
                 process.exit(0);
             }
-        } else {
+        } else if (isProductionEnvironment) {
             const envFilePath = __dirname + '/../../.env';
             const exist = fs.existsSync(envFilePath);
             if (exist) {
@@ -30,6 +34,15 @@ export class ConfigService {
                     JWT_SECRET: process.env.JWT_SECRET,
                     SEND_GRID_API_KEY: process.env.SG_API_KEY,
                 };
+            }
+        } else {
+            const envFilePath = __dirname + '/../../.env.test';
+            const exist = fs.existsSync(envFilePath);
+            if (exist) {
+                this.envConfig = parse(fs.readFileSync(envFilePath));
+            } else {
+                logger.log('No se ha encontrado el archivo .env.test', 'ConfigService');
+                process.exit(0);
             }
         }
     }

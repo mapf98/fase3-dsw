@@ -33,7 +33,7 @@ import { CommissionsTransactionsRepository } from './transactions/commissions.tr
         ProxyService,
         CommissionsService,
         CryptocurrenciesService,
-        CommissionsTransactionsRepository
+        CommissionsTransactionsRepository,
     ],
     controllers: [PaymentsController, CommissionsController],
 })

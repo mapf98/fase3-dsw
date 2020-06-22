@@ -27,9 +27,7 @@ export class ProductsService {
         @InjectRepository(ProductRating)
         private readonly productRatingsRepository: Repository<ProductRating>,
         @InjectRepository(ProductInventory)
-        private readonly productInventoriesRepository: Repository<
-            ProductInventory
-        >,
+        private readonly productInventoriesRepository: Repository<ProductInventory>,
         @InjectRepository(ProductDimension)
         private readonly productDimensionRepository: Repository<ProductDimension>,
         @InjectRepository(Offer)

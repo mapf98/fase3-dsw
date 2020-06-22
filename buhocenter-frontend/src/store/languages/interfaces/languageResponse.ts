@@ -1,5 +1,5 @@
-import { Language } from "@/store/languages/interfaces/Language";
+import { Language } from '@/store/languages/interfaces/language';
 
 export interface LanguageResponse {
-  data: Language[];
+    data: Language[];
 }

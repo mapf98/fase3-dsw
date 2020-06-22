@@ -24,5 +24,6 @@ module.exports = {
     "@typescript-eslint/class-name-casing": "off", //Se puede revisar después del tipado.
     "@typescript-eslint/explicit-module-boundary-types": "warn", //Eliminar después de tipar.
     "@typescript-eslint/ban-ts-comment": "off", //Se puede quitar después de eliminar los ts-ignore.
+    "@typescript-eslint/no-inferrable-types": "off"
   },
 };

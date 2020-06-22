@@ -17,7 +17,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 @Injectable()
 export class AddressService {
     constructor(
-        @Inject(WINSTON_MODULE_PROVIDER) private readonly logger: Logger,
+        @Inject(WINSTON_MODULE_PROVIDER) private readonly _logger: Logger,
         @Inject(UsersService)
         private readonly usersService: UsersService,
         @Inject(StatusService)
@@ -34,7 +34,7 @@ export class AddressService {
      * @param addressEntityManager transactional address repository
      */
     private async userHasDefaultAddress(userId: number) {
-        this.logger.debug(`userHasDefaultAddress: checking user addresses [userId=${userId}]`, {
+        this._logger.debug(`userHasDefaultAddress: checking user addresses [userId=${userId}]`, {
             context: AddressService.name,
         });
 
@@ -58,7 +58,7 @@ export class AddressService {
         address: AddressVerificationDto,
         addressEntityManager: Repository<Address>,
     ): Promise<void> {
-        this.logger.debug(`saveAddress: saving address [address=${JSON.stringify(address)}]`, {
+        this._logger.debug(`saveAddress: saving address [address=${JSON.stringify(address)}]`, {
             context: AddressService.name,
         });
 
@@ -72,23 +72,21 @@ export class AddressService {
                 state: address.state,
                 zipcode: address.zipcode,
                 user: await this.usersService.getUserById(address.user.id),
-                status: await this.statusService.getStatus(STATUS.ACTIVE.id),
-                setDefault: hasDefaultAddress ? false : true,
+                status: await this.statusService.getStatusById(STATUS.ACTIVE.id),
+                setDefault: !hasDefaultAddress,
             };
 
             await addressEntityManager.save(newAddress);
 
-            this.logger.debug(`saveAddress: address saved!`, {
+            this._logger.debug(`saveAddress: address saved!`, {
                 context: AddressService.name,
             });
         } catch (e) {
-            this.logger.error(`saveAddress: failed saving address in database [error=${e.message}]`, {
+            this._logger.error(`saveAddress: failed saving address in database [error=${e.message}]`, {
                 context: AddressService.name,
             });
 
-            throw new BadRequestException(
-                'Error when saving address in database',
-            );
+            throw new BadRequestException('Error when saving address in database');
         }
     }
 
@@ -97,7 +95,7 @@ export class AddressService {
      * @param body address to verify
      */
     private async verificateAddress(body: AddressVerificationSO) {
-        this.logger.debug(`verificateAddress: verifying address [address=${JSON.stringify(body)}]`, {
+        this._logger.debug(`verificateAddress: verifying address [address=${JSON.stringify(body)}]`, {
             context: AddressService.name,
         });
         return await this.addressHttpRepository.postAddressUri(body);
@@ -108,7 +106,7 @@ export class AddressService {
         addressSent: AddressVerificationDto,
         addressEntityManager: Repository<Address>,
     ) {
-        this.logger.debug(`checkAddress: checking address [address=${JSON.stringify(addressSent)}]`, {
+        this._logger.debug(`checkAddress: checking address [address=${JSON.stringify(addressSent)}]`, {
             context: AddressService.name,
         });
 
@@ -116,7 +114,7 @@ export class AddressService {
             await this.saveAddress(addressSent, addressEntityManager);
             return addressRecibeByAPIValidator;
         } else {
-            this.logger.debug(
+            this._logger.debug(
                 `checkAddress: invalid address [address=${JSON.stringify(
                     addressRecibeByAPIValidator,
                 )}]|addressSent=${JSON.stringify(addressSent)}]`,
@@ -129,15 +127,16 @@ export class AddressService {
     /**
      * Send the request to verify the customer provided address
      * @param body address to verify
+     * @param addressEntityManager
      * @returns string
      */
     public async addressControl(body: AddressVerificationDto, addressEntityManager) {
-        this.logger.debug(
+        this._logger.debug(
             `addressControl: address sending request to validate address [address= ${JSON.stringify(body)}]`,
             { context: AddressService.name },
         );
 
-        let addressSO: AddressVerificationSO = {
+        const addressSO: AddressVerificationSO = {
             candidates: 1,
             match: 'strict',
             street: `${body.firstStreet}`,
@@ -149,7 +148,7 @@ export class AddressService {
 
         const addressDetail: AddressVerificationRO = await this.verificateAddress(addressSO);
 
-        this.logger.debug(
+        this._logger.debug(
             `addressControl: address verified [addressDetail=${JSON.stringify(addressDetail)}]`,
             { context: AddressService.name },
         );
@@ -167,19 +166,19 @@ export class AddressService {
         customerId: number,
         addressEntityManager: Repository<Address>,
     ) {
-        this.logger.info(
+        this._logger.info(
             `updateAddressDefault: modifying default address [addressId=${addressId}|customerId=${customerId}]`,
             { context: AddressService.name },
         );
 
-        let active = STATUS.ACTIVE.id;
+        const active = STATUS.ACTIVE.id;
 
-        let verifyDefault = await addressEntityManager.findOne({
+        const verifyDefault = await addressEntityManager.findOne({
             where: [{ user: customerId, status: active, setDefault: true }],
         });
 
         if (verifyDefault) {
-            this.logger.info(
+            this._logger.info(
                 `updateAddressDefault: user previous default address [address=${JSON.stringify(
                     verifyDefault,
                 )}]`,
@@ -190,7 +189,7 @@ export class AddressService {
             await addressEntityManager.save(verifyDefault);
         }
 
-        let addressCurrentDefault = await addressEntityManager.findOne(addressId);
+        const addressCurrentDefault = await addressEntityManager.findOne(addressId);
         addressCurrentDefault.setDefault = true;
         await addressEntityManager.save(addressCurrentDefault);
 
@@ -202,7 +201,7 @@ export class AddressService {
      * @param id address id to delete
      */
     async deleteAddress(id: number): Promise<UpdateResult> {
-        this.logger.info(`deleteAddress: deleting address [id=${id}]`, {
+        this._logger.info(`deleteAddress: deleting address [id=${id}]`, {
             context: AddressService.name,
         });
 
@@ -214,7 +213,7 @@ export class AddressService {
      * @param userId logged in user id
      */
     async getAddresses(userId: number) {
-        this.logger.info(`getAddress: getting addresses [userId=${userId}]`, {
+        this._logger.info(`getAddress: getting addresses [userId=${userId}]`, {
             context: AddressService.name,
         });
 

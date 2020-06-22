@@ -13,33 +13,34 @@
                 half-increments
                 dense
             ></v-rating>
-            <p class="px-2 my-0 body-2 align-center"> 
-                ({{ getTotalRatings }})
-            </p>
+            <p class="px-2 my-0 body-2 align-center">({{ getTotalRatings }})</p>
         </v-row>
-        <h3 class="body-2"> {{$t('PRICE')}}:
-            <span :class="{ 'title': true, 'item-offer__title': hasOffer() }">${{ GET_ITEM_DETAIL.price }}</span>
+        <h3 class="body-2">
+            {{ $t('PRICE') }}:
+            <span :class="{ title: true, 'item-offer__title': hasOffer() }"
+                >${{ GET_ITEM_DETAIL.price }}</span
+            >
             <span v-if="hasOffer()" class="title"> ${{ getDiscountPrice() }} </span>
         </h3>
         <v-row class="mx-auto d-flex align-center">
-            <h3>{{$t('BY')}}: </h3>
+            <h3>{{ $t('BY') }}:</h3>
             <div>
-                <p class="body-1 mx-2 my-0"> {{ getProvider() }} </p>
+                <p class="body-1 mx-2 my-0">{{ getProvider() }}</p>
             </div>
         </v-row>
         <v-row class="mx-auto d-flex align-center">
-            <h3 class="mr-2">{{$t('DESCRIPTION')}}: </h3>
+            <h3 class="mr-2">{{ $t('DESCRIPTION') }}:</h3>
             <div>
-                <p class="body-1 my-0"> {{ GET_ITEM_DETAIL.description }} </p>
+                <p class="body-1 my-0">{{ GET_ITEM_DETAIL.description }}</p>
             </div>
         </v-row>
         <v-row v-if="isProduct()" class="mx-auto d-flex align-center">
-            <h3>{{$t('IN_STOCK')}}: </h3>
-            <p class="body-1 mx-2 my-0"> {{ this.GET_ITEM_DETAIL.productInventories[0].availableQuantity }} </p>
+            <h3>{{ $t('IN_STOCK') }}:</h3>
+            <p class="body-1 mx-2 my-0">{{ this.GET_ITEM_DETAIL.productInventories[0].availableQuantity }}</p>
         </v-row>
         <v-row v-if="isProduct()" class="mx-auto d-flex align-center">
-            <h3>{{$t('PRODUCT_DIMENSIONS')}}: </h3>
-            <p class="body-1 mx-2 my-0"> {{ productDimensions }} inches </p>
+            <h3>{{ $t('PRODUCT_DIMENSIONS') }}:</h3>
+            <p class="body-1 mx-2 my-0">{{ productDimensions }} inches</p>
         </v-row>
     </v-col>
 </template>
@@ -47,22 +48,19 @@
 <script lang="ts">
 import Vue from 'vue';
 import Component from 'vue-class-component';
-import { products } from "@/store/namespaces";
-import {
-    GET_ITEM_DETAIL,
-} from '@/store/products/methods/products.getters';
+import { products } from '@/store/namespaces';
+import ProductsTypes from '@/store/products/methods/products.methods';
 import { STATUS } from '@/config/constants';
 
 @Component
 export default class ItemDescription extends Vue {
-
     isProduct(): boolean {
         return this.$route.query.item === 'product';
     }
 
     get getAvailableQuantity(): number {
         if (this.isProduct()) {
-            return this.GET_ITEM_DETAIL.productInventories[0].availableQuantity
+            return this.GET_ITEM_DETAIL.productInventories[0].availableQuantity;
         }
 
         return 0;
@@ -78,10 +76,14 @@ export default class ItemDescription extends Vue {
 
     get getRatings(): number {
         if (this.isProduct()) {
-            return parseFloat(this.GET_ITEM_DETAIL.productRatings ? this.GET_ITEM_DETAIL.productRatings[0].rating : 0);
+            return parseFloat(
+                this.GET_ITEM_DETAIL.productRatings ? this.GET_ITEM_DETAIL.productRatings[0].rating : 0,
+            );
         }
 
-        return parseFloat(this.GET_ITEM_DETAIL.serviceRatings ? this.GET_ITEM_DETAIL.serviceRatings[0].rating : 0);
+        return parseFloat(
+            this.GET_ITEM_DETAIL.serviceRatings ? this.GET_ITEM_DETAIL.serviceRatings[0].rating : 0,
+        );
     }
 
     get productDimensions(): string {
@@ -93,12 +95,11 @@ export default class ItemDescription extends Vue {
     }
 
     getProvider(): string {
-        if (this.isProduct()) {
+        if (this.isProduct()) {
             return this.GET_ITEM_DETAIL.productProvider[0].provider.name;
         } else {
             return this.GET_ITEM_DETAIL.serviceProvider[0].provider.name;
         }
-
     }
 
     getDiscountPrice(): string {
@@ -121,7 +122,7 @@ export default class ItemDescription extends Vue {
         return false;
     }
 
-    @products.Getter(GET_ITEM_DETAIL) GET_ITEM_DETAIL;
+    @products.Getter(ProductsTypes.getters.GET_ITEM_DETAIL) GET_ITEM_DETAIL;
 }
 </script>
 

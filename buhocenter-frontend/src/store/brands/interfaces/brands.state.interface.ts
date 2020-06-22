@@ -1,6 +1,6 @@
-import { BrandInterface } from "@/modules/client/brand/interfaces/brand.interface";
+import { BrandInterface } from '@/modules/client/brand/interfaces/brand.interface';
 
 export interface BrandsStateInterface {
-  brands?: BrandInterface[];
-  err_brands: boolean;
+    brands?: BrandInterface[];
+    err_brands: boolean;
 }

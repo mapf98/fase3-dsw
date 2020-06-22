@@ -33,10 +33,9 @@ export class CartsService {
      * @param statusId status id which will be set to the provided cart
      */
     public async updateCartStatus(cartId: number, statusId: number): Promise<UpdateResult> {
-        this._logger.debug(
-            `updateCartStatus: updating cart status [cartId=${cartId}|statusId=${statusId}]`,
-            { context: CartsService.name },
-        );
+        this._logger.debug(`updateCartStatus: updating cart status [cartId=${cartId}|statusId=${statusId}]`, {
+            context: CartsService.name,
+        });
 
         return this._cartRepository.update({ id: cartId }, { status: { id: statusId } });
     }
@@ -67,9 +66,7 @@ export class CartsService {
      */
     public async asociateProductCart(ProductRes: CartProductDTO): Promise<string> {
         this._logger.debug(
-            `asociateProductCart: saving product in costumer cart [productRes=${JSON.stringify(
-                ProductRes,
-            )}]`,
+            `asociateProductCart: saving product in costumer cart [productRes=${JSON.stringify(ProductRes)}]`,
             { context: CartsService.name },
         );
         try {
@@ -139,18 +136,15 @@ export class CartsService {
     }
 
     cleanStatusOfferProducts(productsCart: any): any {
-        this._logger.debug(
-            `cleanStatusOfferProducts: [productsCart=${JSON.stringify(productsCart)}]`,
-            { context: CartsService.name },
-        );
+        this._logger.debug(`cleanStatusOfferProducts: [productsCart=${JSON.stringify(productsCart)}]`, {
+            context: CartsService.name,
+        });
 
         const cleanProductsCartOffer: any[] = [];
         productsCart.map((productCart, index) => {
             const product = productCart.product;
             // tslint:disable-next-line:no-shadowed-variable
-            const offer = product.offers.find(
-                offer => offer.id === STATUS.ACTIVE.id,
-            );
+            const offer = product.offers.find(offer => offer.id === STATUS.ACTIVE.id);
             delete product.offers;
             if (offer) {
                 product.offer = offer;
@@ -171,23 +165,18 @@ export class CartsService {
      * @returns void
      */
     async reserveCarts(carts: Cart[], transactionEntityManager: EntityManager) {
-        this._logger.debug(
-            `reserveCarts: Reserving a set of carts due a new payment`,
-            { context: CartsService.name },
-        );
+        this._logger.debug(`reserveCarts: Reserving a set of carts due a new payment`, {
+            context: CartsService.name,
+        });
 
-        const reservedStatus = await this._statusService.getStatusById(
-            STATUS.RESERVED.id,
-        );
+        const reservedStatus = await this._statusService.getStatusById(STATUS.RESERVED.id);
 
         carts.forEach(cart => {
             cart.status = reservedStatus;
         });
 
         for await (let cart of carts) {
-            let productInventory = await this._productInventoryService.getProductInventoryByCartId(
-                cart.id,
-            );
+            let productInventory = await this._productInventoryService.getProductInventoryByCartId(cart.id);
             await this._productInventoryService.updateProductInventoryQuantity(
                 productInventory,
                 cart.quantity,
@@ -195,9 +184,7 @@ export class CartsService {
             );
         }
 
-        const cartTransactionRepository: Repository<Cart> = transactionEntityManager.getRepository(
-            Cart,
-        );
+        const cartTransactionRepository: Repository<Cart> = transactionEntityManager.getRepository(Cart);
         await cartTransactionRepository.save(carts);
     }
 
@@ -207,14 +194,11 @@ export class CartsService {
      * @returns void
      */
     async giveBackCarts(carts: Cart[]) {
-        this._logger.debug(
-            `giveBackCarts: give back a set of carts due a invalid payment`,
-            { context: CartsService.name },
-        );
+        this._logger.debug(`giveBackCarts: give back a set of carts due a invalid payment`, {
+            context: CartsService.name,
+        });
 
-        const activeStatus = await this._statusService.getStatusById(
-            STATUS.ACTIVE.id,
-        );
+        const activeStatus = await this._statusService.getStatusById(STATUS.ACTIVE.id);
 
         carts.forEach(cart => {
             cart.status = activeStatus;
@@ -250,10 +234,9 @@ export class CartsService {
      * @returns void
      */
     async payCarts(carts: Cart[], paidStatus: Status) {
-        this._logger.debug(
-            `payCarts: paying a set of carts due a paid payment`,
-            { context: CartsService.name },
-        );
+        this._logger.debug(`payCarts: paying a set of carts due a paid payment`, {
+            context: CartsService.name,
+        });
 
         carts.forEach(cart => {
             cart.status = paidStatus;
@@ -268,10 +251,9 @@ export class CartsService {
      * @returns number
      */
     getPriceForCarts(carts: Cart[]): number {
-        this._logger.debug(
-            `getPriceForCarts: Getting a price for a set of carts`,
-            { context: CartsService.name },
-        );
+        this._logger.debug(`getPriceForCarts: Getting a price for a set of carts`, {
+            context: CartsService.name,
+        });
 
         let price = 0;
         carts.forEach(cart => {

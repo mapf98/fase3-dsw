@@ -1,6 +1,6 @@
 export interface BrandInterface {
-  createdAt?: string;
-  id: number;
-  name?: string;
-  updatedAt?: string;
+    createdAt?: string;
+    id: number;
+    name?: string;
+    updatedAt?: string;
 }

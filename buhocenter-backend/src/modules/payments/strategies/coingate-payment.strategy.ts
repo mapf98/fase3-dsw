@@ -20,19 +20,11 @@ export class CoingatePaymentStrategy implements IPaymentClient {
 
     constructor(configService: ConfigService) {
         if (configService.get(ConfigKeys.BLOCKCHAIN_MODE) === MODE_TEST) {
-            this._client = testClient(
-                configService.get(ConfigKeys.COINGATE_API_KEY),
-            );
+            this._client = testClient(configService.get(ConfigKeys.COINGATE_API_KEY));
         }
-        this._callbackURL = `${configService.get(
-            ConfigKeys.PRODUCTION_URL,
-        )}${PREFIX_CALLBACK_URL}`;
-        this._cancelURL = `${configService.get(
-            ConfigKeys.PRODUCTION_URL,
-        )}${PREFIX_CANCEL_URL}`;
-        this._successURL = `${configService.get(
-            ConfigKeys.PRODUCTION_URL,
-        )}${PREFIX_SUCCESS_URL}`;
+        this._callbackURL = `${configService.get(ConfigKeys.PRODUCTION_URL)}${PREFIX_CALLBACK_URL}`;
+        this._cancelURL = `${configService.get(ConfigKeys.PRODUCTION_URL)}${PREFIX_CANCEL_URL}`;
+        this._successURL = `${configService.get(ConfigKeys.PRODUCTION_URL)}${PREFIX_SUCCESS_URL}`;
     }
 
     async createOrder(orderId: number, price: number) {
