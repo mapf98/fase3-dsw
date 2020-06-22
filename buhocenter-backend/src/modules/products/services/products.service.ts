@@ -25,7 +25,9 @@ export class ProductsService {
         @InjectRepository(ProductRating)
         private readonly productRatingsRepository: Repository<ProductRating>,
         @InjectRepository(ProductInventory)
-        private readonly productInventoriesRepository: Repository<ProductInventory>,
+        private readonly productInventoriesRepository: Repository<
+            ProductInventory
+        >,
         @InjectRepository(ProductDimension)
         private readonly productDimensionRepository: Repository<ProductDimension>,
         @InjectRepository(Offer)
@@ -188,7 +190,7 @@ export class ProductsService {
         await this.getProductAverageRating(productsFiltered);
 
         return [productsFiltered, total];
-    }
+    } 
 
     async findProduct(ProductID: number): Promise<Product> {
         return await this.productsRepository.findOne(ProductID);
@@ -334,7 +336,7 @@ export class ProductsService {
         if (!findProduct) {
             throw new BadRequestException('product not found or not accesable');
         } else {
-            let unaccesable = await this.statusService.getStatus(STATUS.INACTIVE.id);
+            let unaccesable = await this.statusService.getStatusById(STATUS.INACTIVE.id);
             findProduct.status = unaccesable;
 
             await this.productsRepository.save(findProduct);
@@ -370,7 +372,7 @@ export class ProductsService {
         newProduct.description = product.description;
         newProduct.price = product.price;
 
-        newProduct.status = await this.statusService.getStatus(active);
+        newProduct.status = await this.statusService.getStatusById(active);
         newProduct.brand = await this.brandsService.getBrand(product.brand.id);
         await this.productsRepository.save(newProduct);
 

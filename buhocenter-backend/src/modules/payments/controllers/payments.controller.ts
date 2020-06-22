@@ -8,22 +8,39 @@ import {
     HttpStatus,
     Post,
     Body,
+    HttpCode,
 } from '@nestjs/common';
 import { Response } from 'express';
 import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
 import { Logger } from 'winston';
-import { ProxyService } from '../services/proxy.service';
 import { PaymentsService } from '../services/payments.service';
-import { UTRUST_PAYMENT_STATUS } from '../../../config/constants';
-import { PaymentsTransactionsRepository } from '../transactions/payments.transactions.service';
-import { PaymentOrderDto } from '../dto/payments.dto';
-import { join } from 'path';
+import { NewPayment } from '../interfaces/new-payment';
+import { Checkout } from '../interfaces/checkout';
+import { OrderStatus } from '../interfaces/order-status';
 
 @Controller('payments')
 export class PaymentsController {
     constructor(
-        @Inject(WINSTON_MODULE_PROVIDER) private readonly logger: Logger,
-        private readonly paymentsService: PaymentsService,
-        private readonly paymentsTransactionRepository: PaymentsTransactionsRepository,
+        @Inject(WINSTON_MODULE_PROVIDER) private readonly _logger: Logger,
+        private readonly _paymentsService: PaymentsService,
     ) {}
+
+    @Post('/orders')
+    createOrder(@Body() checkout: Checkout): Promise<NewPayment> {
+        this._logger.info(`createOrder: Creating a new order`, {
+            context: PaymentsController.name,
+        });
+
+        return this._paymentsService.createOrder(checkout);
+    }
+
+    @HttpCode(200)
+    @Post('/orders/callback')
+    callbackOrders(@Body() order: OrderStatus): Promise<OrderStatus> {
+        this._logger.info(`callbackOrders: receiving the status of a payment`, {
+            context: PaymentsController.name,
+        });
+
+        return this._paymentsService.callbackOrders(order);
+    }
 }

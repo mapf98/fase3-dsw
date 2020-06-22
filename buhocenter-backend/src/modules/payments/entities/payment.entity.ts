@@ -12,11 +12,11 @@ export class Payment extends PrimalEntity {
     @Column({ type: 'decimal', nullable: false })
     total: number;
 
-    @Column({ name: 'total_cryptocurrency', type: 'decimal', nullable: false })
+    @Column({ name: 'total_cryptocurrency', type: 'decimal', nullable: true })
     totalCryptocurrency: number;
 
-    @Column({ name: 'transaction_id', type: 'text', nullable: false })
-    transaction: string;
+    @Column({ name: 'transaction_id', type: 'integer', nullable: true })
+    transaction: number;
 
     @JoinColumn({ name: 'address_id' })
     @ManyToOne(
@@ -38,7 +38,7 @@ export class Payment extends PrimalEntity {
     @ManyToOne(
         type => Cryptocurrency,
         cryptocurrency => cryptocurrency.payments,
-        { nullable: false },
+        { nullable: true },
     )
     cryptocurrency: Cryptocurrency;
 
@@ -53,6 +53,7 @@ export class Payment extends PrimalEntity {
     @OneToMany(
         type => StatusHistory,
         statusHistories => statusHistories.payment,
+        { cascade: true },
     )
     statusHistories: StatusHistory[];
 

@@ -1,13 +1,24 @@
 insert into statuses (name, description) VALUES ('Active', 'Indicates that the resource is available to the system');
 insert into statuses (name, description) VALUES ('Inactive', 'Indicates that the resource is not available to the system');
-insert into statuses (name, description) VALUES ('In process', 'Indicates that the order is waiting for payment confirmation');
-insert into statuses (name, description) VALUES ('Processed', 'Indicates that the order has been confirmed and your payment has been approved.');
-insert into statuses (name, description) VALUES ('Rejected', 'Indicates that the order cannot be processed');
+
+insert into statuses (name, description) VALUES ('New','Indicates that a new order was create');
+insert into statuses (name, description) VALUES ('Pending','Indicates that the order is pending to pay');
+insert into statuses (name, description) VALUES ('Confirming','Indicates that the order is being confirming');
+insert into statuses (name, description) VALUES ('Paid','Indicates that the order was paid');
+insert into statuses (name, description) VALUES ('Invalid','Indicates that the order was invalid');
+insert into statuses (name, description) VALUES ('Expired','Indicates that the order expired its time to pay');
+insert into statuses (name, description) VALUES ('Canceled','Indicates that the order was canceled');
 insert into statuses (name, description) VALUES ('Reserved', 'Indicates that the quantity of the product is reserved');
 
 insert into roles (name, priority) values ('Customer', 1), ('Admin', 1);
 
 insert into foreign_exchanges (name, symbol, exchange, iso) VALUES ('Dólar', '$', 1, 'USD'), ('Euro', '€', 0.89, 'EUR');
+
+insert  into commissions (service_fee, processor_fee, status_id) values (0.01,0.01,1);
+
+insert into cryptocurrencies(name, iso) values ('Bitcoin', 'BTC');
+insert into cryptocurrencies(name, iso) values ('Litecoin', 'LTC');
+insert into cryptocurrencies(name, iso) values ('Bitcoin Cash', 'BCH');
 
 insert into users
     (name, last_name, birthdate, email, is_federate, uid, status_id, role_id, foreign_exchange_id) VALUES
@@ -210,6 +221,7 @@ insert into product_inventories (quantity_available, minimum_quantity_available,
 insert into product_inventories (quantity_available, minimum_quantity_available, product_id) VALUES (40, 72, 13);
 insert into product_inventories (quantity_available, minimum_quantity_available, product_id) VALUES (50, 28, 14);
 insert into product_inventories (quantity_available, minimum_quantity_available, product_id) VALUES (70, 29, 15);
+
 
 insert into offers (name, description, percentage, status_id) VALUES
     ('Semester offer', 'Oferta para los estudiantes como parte del incio del semestre',10,1),

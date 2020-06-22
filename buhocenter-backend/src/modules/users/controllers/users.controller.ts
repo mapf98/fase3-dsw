@@ -36,7 +36,9 @@ export class UsersController {
     }
 
     @Get(':id')
-    async getHello(@Param('id', new ParseIntPipe()) id: number): Promise<number> {
+    async getHello(
+        @Param('id', new ParseIntPipe()) id: number,
+    ): Promise<number> {
         return this.usersService.getUsers(id);
     }
 
@@ -48,7 +50,9 @@ export class UsersController {
             register: registrando customer [uid=${data.uid}]`,
                 { context: UsersController.name },
             );
-            const dataResponse: ResponseRegister = await this.usersService.registerCustomer(data);
+            const dataResponse: ResponseRegister = await this.usersService.registerCustomer(
+                data,
+            );
             return res.status(HttpStatus.CREATED).send(dataResponse);
         } catch (e) {
             return res.status(HttpStatus.NOT_FOUND).send();
@@ -78,7 +82,9 @@ export class UsersController {
             loginSocial: Logeando customer con gmail o facebook [uid=${data.clientData.uid}] | [token=${data.token}]`,
                 { context: UsersController.name },
             );
-            const dataResponse: ResponseAuth = await this.usersService.validateRegisterSocial(data);
+            const dataResponse: ResponseAuth = await this.usersService.validateRegisterSocial(
+                data,
+            );
             return res.status(HttpStatus.OK).send(dataResponse);
         } catch (e) {
             return res.status(HttpStatus.NOT_FOUND).send();

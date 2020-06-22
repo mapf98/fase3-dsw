@@ -1,21 +1,43 @@
 export const STATUS = Object.freeze({
     ACTIVE: {
         id: 1,
+        name: 'active',
     },
     INACTIVE: {
         id: 2,
+        name: 'inactive',
     },
-    TO_PROCESS: {
+    NEW: {
         id: 3,
+        name: 'new',
     },
-    PROCESSED: {
+    PENDING: {
         id: 4,
+        name: 'pending',
     },
-    REJECTED: {
+    CONFIRMING: {
         id: 5,
+        name: 'confirming',
+    },
+    PAID: {
+        id: 6,
+        name: 'paid',
+    },
+    INVALID: {
+        id: 7,
+        name: 'invalid',
+    },
+    EXPIRED: {
+        id: 8,
+        name: 'expired',
+    },
+    CANCELED: {
+        id: 9,
+        name: 'canceled',
     },
     RESERVED: {
-        id: 6,
+        id: 10,
+        name: 'reserved',
     },
 });
 

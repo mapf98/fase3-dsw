@@ -72,7 +72,7 @@ export class AddressService {
                 state: address.state,
                 zipcode: address.zipcode,
                 user: await this.usersService.findUser(address.user.id),
-                status: await this.statusService.getStatus(STATUS.ACTIVE.id),
+                status: await this.statusService.getStatusById(STATUS.ACTIVE.id),
                 setDefault: hasDefaultAddress ? false : true,
             };
 
@@ -87,7 +87,9 @@ export class AddressService {
                 { context: AddressService.name },
             );
 
-            throw new BadRequestException('Error when saving address in database');
+            throw new BadRequestException(
+                'Error when saving address in database',
+            );
         }
     }
 

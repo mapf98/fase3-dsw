@@ -16,6 +16,7 @@ import { entities } from './entities';
 import { OffersService } from './services/offers.service';
 import { OffersController } from './controllers/offers.controller';
 import { OffersTransactionsRepository } from './transaction/offers.transaction.service';
+import { ProductInventoriesService } from './services/product-inventories.service';
 
 @Module({
     imports: [TypeOrmModule.forFeature(entities), StatussModule],
@@ -36,7 +37,8 @@ import { OffersTransactionsRepository } from './transaction/offers.transaction.s
         CategoriesService,
         OffersService,
         OffersTransactionsRepository,
+        ProductInventoriesService
     ],
-    exports: [ProductsService],
+    exports: [ProductsService, ProductInventoriesService],
 })
 export class ProductsModule {}

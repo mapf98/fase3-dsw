@@ -39,7 +39,7 @@ export class Cart extends PrimalEntity {
     @ManyToOne(
         type => Payment,
         payment => payment.carts,
-        { nullable: true },
+        { nullable: true, onUpdate: 'CASCADE' },
     )
     payment: Payment;
 

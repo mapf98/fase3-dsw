@@ -56,7 +56,9 @@ export class LanguageRepository {
                 .toPromise();
             // tslint:disable-next-line:max-line-length
             this.logger.debug(
-                `getTermsLanguage: Optenidos terminos [response=${JSON.stringify(response)}]`,
+                `getTermsLanguage: Optenidos terminos [response=${JSON.stringify(
+                    response,
+                )}]`,
                 { context: LanguageRepository.name },
             );
             return response;

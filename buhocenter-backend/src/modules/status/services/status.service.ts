@@ -9,23 +9,49 @@ import { Logger } from 'winston';
 @Injectable()
 export class StatusService {
     constructor(
-        @Inject(WINSTON_MODULE_PROVIDER) private readonly logger: Logger,
+        @Inject(WINSTON_MODULE_PROVIDER) private readonly _logger: Logger,
         @InjectRepository(Status)
-        private readonly statusRepository: Repository<Status>,
+        private readonly _statusRepository: Repository<Status>,
         @InjectRepository(StatusHistory)
         private readonly statusHistoryRepository: Repository<StatusHistory>,
     ) {}
 
     /**
-     * Permite obtener el status dado un id
-     * @param id id del status del cual se desea obtener su entidad
+     * getStatusById
+     * Allows get a status by Id
+     * @param statusId
+     * @returns Promise<Status>
      */
-    public async getStatus(id: number): Promise<Status> {
-        this.logger.debug(`getStatus: [id=${id}]`, {
-            context: StatusHistory.name,
-        });
+    public async getStatusById(statusId: number): Promise<Status> {
+        this._logger.debug(
+            `getStatusById: Getting a status by Id [statusId=${statusId}]`,
+            {
+                context: StatusService.name,
+            },
+        );
 
-        return await this.statusRepository.findOne(id);
+        return await this._statusRepository.findOne(statusId);
+    }
+
+    /**
+     * getStatusByName
+     * @param statusName: string
+     * @returns Promise<Status>
+     */
+    async getStatusByName(statusName: string): Promise<Status> {
+        this._logger.debug(
+            `getStatusByName: Getting a status by name [statusName=${statusName}]`,
+            {
+                context: StatusService.name,
+            },
+        );
+
+        return await this._statusRepository
+            .createQueryBuilder('status')
+            .where('UPPER(status.name) LIKE :statusName', {
+                statusName: `${statusName.toUpperCase()}`,
+            })
+            .getOne();
     }
 
     /**
@@ -38,7 +64,7 @@ export class StatusService {
         statusHistory,
         transactionalEntityManager: EntityManager,
     ): Promise<StatusHistory> {
-        this.logger.debug(`createStatusHistory: [statusHistory=${JSON.stringify(statusHistory)}]`, {
+        this._logger.debug(`createStatusHistory: [statusHistory=${JSON.stringify(statusHistory)}]`, {
             context: StatusHistory.name,
         });
 
@@ -53,7 +79,7 @@ export class StatusService {
         checkoutId: number,
         statusId: number,
     ): Promise<StatusHistory> {
-        this.logger.debug(
+        this._logger.debug(
             `getStatusHistoryByCheckoutIdAndStatusId: [checkoutId=${checkoutId}|statusId=${statusId}]`,
             { context: StatusHistory.name },
         );

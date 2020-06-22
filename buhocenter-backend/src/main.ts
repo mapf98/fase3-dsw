@@ -14,7 +14,13 @@ async function bootstrap() {
     app.enableCors({
         origin: '*',
         methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'DELETE', 'POST'],
-        allowedHeaders: ['Origin', 'X-Requested-With', 'Content-Type', 'Accept', 'Authorization'],
+        allowedHeaders: [
+            'Origin',
+            'X-Requested-With',
+            'Content-Type',
+            'Accept',
+            'Authorization',
+        ],
     });
 
     app.use(rTracer.expressMiddleware());

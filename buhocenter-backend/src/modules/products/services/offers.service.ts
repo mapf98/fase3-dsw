@@ -35,7 +35,7 @@ export class OffersService {
         transactionalEntityManager: EntityManager,
     ): Promise<Offer> {
         try {
-            let active = await this.statusService.getStatus(STATUS.ACTIVE.id);
+            let active = await this.statusService.getStatusById(STATUS.ACTIVE.id);
 
             let newOffer: Offer = new Offer();
             newOffer.name = offerDescriptions.name;

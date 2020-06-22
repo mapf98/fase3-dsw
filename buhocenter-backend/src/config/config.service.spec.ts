@@ -18,7 +18,7 @@ describe('ConfigService', () => {
     });
 
     it('Obtener claves', () => {
-        expect(service.get(ConfigKeys.PORT)).toBe('3000');
+        expect(service.get(ConfigKeys.API_PORT)).toBe('3000');
         expect(service.get(ConfigKeys.HOST)).toBe('localhost');
     });
 });

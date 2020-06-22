@@ -7,6 +7,9 @@ export class Cryptocurrency extends PrimalEntity {
     @Column({ name: 'name', type: 'varchar', length: 100, nullable: false })
     name: string;
 
+    @Column({ name: 'iso', type: 'varchar', nullable: false })
+    iso: string;
+
     @OneToMany(
         type => Payment,
         payments => payments.cryptocurrency,
