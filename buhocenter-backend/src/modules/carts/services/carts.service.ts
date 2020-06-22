@@ -51,7 +51,7 @@ export class CartsService {
             context: CartsService.name,
         });
 
-        let thisUser = await this.UsersService.getUsers(userId);
+        let thisUser = await this.UsersService.getUserById(userId);
 
         let active = await this._statusService.getStatusById(STATUS.ACTIVE.id);
 
@@ -73,24 +73,21 @@ export class CartsService {
             { context: CartsService.name },
         );
         try {
-            const findUser: User = await this.UsersService.findUser(ProductRes.user.id);
-            const findProduct: Product = await this.ProductsService.findProduct(
-                ProductRes.product.id,
-            );
+            const user: User = await this.UsersService.getUserById(ProductRes.user.id);
+            const findProduct: Product = await this.ProductsService.findProduct(ProductRes.product.id);
 
             const newProductCart: Cart = new Cart();
             let active = await this._statusService.getStatusById(STATUS.ACTIVE.id);
             let productQuantity: number = parseInt(ProductRes.quantity);
             newProductCart.quantity = productQuantity;
             newProductCart.productPrice = findProduct.price;
-            newProductCart.user = findUser;
+            newProductCart.user = user;
             newProductCart.status = active;
             newProductCart.product = findProduct;
 
             let productOffer: Offer = await this.ProductsService.findOffer(findProduct.offer);
             newProductCart.offerPrice =
-                newProductCart.productPrice -
-                (newProductCart.productPrice * productOffer.percentage) / 100;
+                newProductCart.productPrice - (newProductCart.productPrice * productOffer.percentage) / 100;
 
             await this._cartRepository.save(newProductCart);
             this._logger.debug(`createProductCart: product associate to users cart`, {
@@ -105,7 +102,7 @@ export class CartsService {
                 )}])`,
                 { context: CartsService.name },
             );
-            throw new BadRequestException('error saving product in the users cart');
+            throw new BadRequestException('Error saving product in the users cart');
         }
     }
 
@@ -129,10 +126,7 @@ export class CartsService {
                 'product.offer',
             ],
         });
-        //cart = await this.cleanStatusOfferProducts(cart);
-        cart = cart.filter(
-            i => i.product && i.product.status && i.product.status.id !== STATUS.INACTIVE.id,
-        );
+        cart = cart.filter(i => i.product && i.product.status && i.product.status.id !== STATUS.INACTIVE.id);
         return cart;
     }
 

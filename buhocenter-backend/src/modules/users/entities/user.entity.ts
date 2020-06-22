@@ -39,6 +39,7 @@ export class User extends PrimalEntity {
     @Column({ name: 'language_id', type: 'varchar', length: 4, nullable: true })
     language: string;
 
+    @Column({ name: 'status_id', type: 'int', default: 1 })
     @JoinColumn({ name: 'status_id' })
     @ManyToOne(
         type => Status,
@@ -56,6 +57,7 @@ export class User extends PrimalEntity {
     role: Role;
 
     @JoinColumn({ name: 'foreign_exchange_id' })
+    @Column({ name: 'foreign_exchange_id', type: 'int', default: 1 })
     @ManyToOne(
         type => ForeignExchange,
         foreignExchange => foreignExchange.users,

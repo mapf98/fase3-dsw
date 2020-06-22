@@ -26,9 +26,7 @@ export class LanguageRepository {
                 .toPromise();
             // tslint:disable-next-line:max-line-length
             this.logger.debug(
-                `getLanguages: Lenguajes de poeditor obtenidos [response=${JSON.stringify(
-                    response,
-                )}]`,
+                `getLanguages: Lenguajes de poeditor obtenidos [response=${JSON.stringify(response)}]`,
                 { context: LanguageRepository.name },
             );
             return response;
@@ -55,12 +53,10 @@ export class LanguageRepository {
                 .pipe(map(response => response.data))
                 .toPromise();
             // tslint:disable-next-line:max-line-length
-            this.logger.debug(
-                `getTermsLanguage: Optenidos terminos [response=${JSON.stringify(
-                    response,
-                )}]`,
-                { context: LanguageRepository.name },
-            );
+            this.logger.debug(`getTermsLanguage: Optenidos terminos [response=${JSON.stringify(response)}]`, {
+                context: LanguageRepository.name,
+            });
+
             return response;
         } catch (e) {
             this.logger.error(`getLanguages: catch error [error=${e.message}]`, {

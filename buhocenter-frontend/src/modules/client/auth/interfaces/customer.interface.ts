@@ -10,7 +10,6 @@ export interface CustomerInterface {
   email?: string;
   password?: string;
   language?: string;
-
   uid?: string;
   id?: number;
   role?: Role;

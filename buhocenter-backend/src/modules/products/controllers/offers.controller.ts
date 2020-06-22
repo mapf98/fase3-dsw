@@ -40,9 +40,7 @@ export class OffersController {
             return res.status(HttpStatus.OK).send(response);
         } catch (e) {
             this.logger.info(
-                `createOffer: error when trying to create the offer [error=${JSON.stringify(
-                    offerData,
-                )}]`,
+                `createOffer: error when trying to create the offer [error=${JSON.stringify(offerData)}]`,
                 { context: OffersController.name },
             );
             return res.status(HttpStatus.BAD_REQUEST).send();
@@ -115,10 +113,7 @@ export class OffersController {
     }
 
     @Delete('product/:id')
-    async deleteOfferFromProduct(
-        @Res() res: Response,
-        @Param('id') productId: number,
-    ): Promise<Response> {
+    async deleteOfferFromProduct(@Res() res: Response, @Param('id') productId: number): Promise<Response> {
         this.logger.info(
             ` deleteOfferFromProduct: starting process assign a offer to product with id [prorductId=${productId}]`,
             {
@@ -126,9 +121,7 @@ export class OffersController {
             },
         );
         try {
-            let response: boolean = await this.productTransactionsRepository.deleteOfferToProduct(
-                productId,
-            );
+            let response: boolean = await this.productTransactionsRepository.deleteOfferToProduct(productId);
             return res.status(HttpStatus.OK).send(response);
         } catch (e) {
             this.logger.info(

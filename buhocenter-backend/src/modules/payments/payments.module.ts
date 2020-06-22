@@ -13,7 +13,7 @@ import { ConfigModule } from 'src/config/config.module';
 import { CryptocurrenciesService } from './services/cryptocurrencies.service';
 import { CommissionsController } from './controllers/commission.controller';
 import { CommissionsService } from './services/commissions.service';
-import { CommissionsTransactionsRepository } from './transactions/commissions.transactions.service'
+import { CommissionsTransactionsRepository } from './transactions/commissions.transactions.service';
 
 @Module({
     imports: [
@@ -35,6 +35,6 @@ import { CommissionsTransactionsRepository } from './transactions/commissions.tr
         CryptocurrenciesService,
         CommissionsTransactionsRepository
     ],
-    controllers: [PaymentsController,CommissionsController],
+    controllers: [PaymentsController, CommissionsController],
 })
 export class PaymentsModule {}

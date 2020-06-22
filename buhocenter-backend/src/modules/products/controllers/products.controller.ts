@@ -110,15 +110,11 @@ export class ProductsController {
 				updateProductData : updating the product [updateProduct=${JSON.stringify(updateProduct)}]`,
                 { context: ProductsController.name },
             );
-            let response = await this.productTransactionsRepository.updateProductData(
-                updateProduct,
-            );
+            let response = await this.productTransactionsRepository.updateProductData(updateProduct);
             return res.status(HttpStatus.OK).send(response);
         } catch (e) {
             this.logger.error(
-                `updateProductData: error when loading the object[error=${JSON.stringify(
-                    e.message,
-                )}]`,
+                `updateProductData: error when loading the object[error=${JSON.stringify(e.message)}]`,
                 { context: ProductsController.name },
             );
 
@@ -127,10 +123,7 @@ export class ProductsController {
     }
 
     @Delete(':id')
-    async deleteProduct(
-        @Res() res: Response,
-        @Param('id') deleteProductId: number,
-    ): Promise<Response> {
+    async deleteProduct(@Res() res: Response, @Param('id') deleteProductId: number): Promise<Response> {
         try {
             this.logger.info(
                 `deleteProduct: deleting the product with id [deleteProductId=${deleteProductId}]`,
@@ -188,15 +181,11 @@ export class ProductsController {
     @Post('image')
     async saveProductImage(@Res() res: Response, @Body() data: ImageProductDto): Promise<Response> {
         try {
-            this.logger.info(
-                `saveProductImage:creating the imageName [product=${JSON.stringify(data)}]`,
-                { context: ProductsController.name },
-            );
+            this.logger.info(`saveProductImage:creating the imageName [product=${JSON.stringify(data)}]`, {
+                context: ProductsController.name,
+            });
 
-            let response = await this.productTransactionsRepository.saveProductImage(
-                data.imageName,
-                data.id,
-            );
+            let response = await this.productTransactionsRepository.saveProductImage(data.imageName, data.id);
             return res.status(HttpStatus.OK).send(response);
         } catch (e) {
             this.logger.error(
@@ -214,9 +203,7 @@ export class ProductsController {
     async saveProductDimension(@Res() res: Response, @Body() data: DimensionProductDto) {
         try {
             this.logger.info(
-                `saveProductDimension:creating the dimension for producto [product=${JSON.stringify(
-                    data,
-                )}]`,
+                `saveProductDimension:creating the dimension for producto [product=${JSON.stringify(data)}]`,
                 { context: ProductsController.name },
             );
 
@@ -238,15 +225,11 @@ export class ProductsController {
     }
 
     @Post('inventory')
-    async saveInventary(
-        @Res() res: Response,
-        @Body() data: InventoryProductDto,
-    ): Promise<Response> {
+    async saveInventary(@Res() res: Response, @Body() data: InventoryProductDto): Promise<Response> {
         try {
-            this.logger.info(
-                `saveInventary:saving the inventory with id [product=${JSON.stringify(data)}]`,
-                { context: ProductsController.name },
-            );
+            this.logger.info(`saveInventary:saving the inventory with id [product=${JSON.stringify(data)}]`, {
+                context: ProductsController.name,
+            });
 
             let response = await this.productTransactionsRepository.saveInventary(data);
             return res.status(HttpStatus.OK).send(response);
@@ -263,10 +246,7 @@ export class ProductsController {
     }
 
     @Patch('inventory')
-    async updateInventory(
-        @Res() res: Response,
-        @Body() data: InventoryProductDto,
-    ): Promise<Response> {
+    async updateInventory(@Res() res: Response, @Body() data: InventoryProductDto): Promise<Response> {
         try {
             this.logger.info(
                 `updateInventory:updating the inventory with id [product=${JSON.stringify(data)}]`,
@@ -277,9 +257,7 @@ export class ProductsController {
             return res.status(HttpStatus.OK).send(response);
         } catch (e) {
             this.logger.error(
-                `updateInventory: error when trying to update inventory=${JSON.stringify(
-                    e.message,
-                )}`,
+                `updateInventory: error when trying to update inventory=${JSON.stringify(e.message)}`,
                 { context: ProductsController.name },
             );
 

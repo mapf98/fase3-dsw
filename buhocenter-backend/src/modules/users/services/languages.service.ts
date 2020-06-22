@@ -13,10 +13,9 @@ export class LanguagesService {
 
     async getAllLanguages(): Promise<Response> {
         try {
-            this.logger.debug(
-                `getAllLanguages: Implementando peticion a poeditor para obtener lenguajes`,
-                { context: LanguagesService.name },
-            );
+            this.logger.debug(`getAllLanguages: Implementando peticion a poeditor para obtener lenguajes`, {
+                context: LanguagesService.name,
+            });
             return await this.languageRepository.getLanguages();
         } catch (e) {
             this.logger.error(`getAllLanguages: catch error: ${e.messages}`, {

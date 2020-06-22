@@ -7,9 +7,10 @@ import { LanguagesController } from './controllers/languages.controller';
 import { LanguageRepository } from './repositories/language.repository';
 import { AuthModule } from '../auth/auth.module';
 import { entities } from './entities/index';
+import { NotificationsModule } from '../notifications/notifications.module';
 
 @Module({
-    imports: [TypeOrmModule.forFeature(entities), HttpModule, AuthModule],
+    imports: [TypeOrmModule.forFeature(entities), HttpModule, AuthModule, NotificationsModule],
     controllers: [UsersController, LanguagesController],
     providers: [UsersService, LanguagesService, LanguageRepository],
     exports: [UsersService],

@@ -21,9 +21,7 @@ export class AddressTransactionsRepository {
      */
     public async setDefaultAddress(address: AddressUDDto): Promise<string> {
         this.logger.info(
-            `updateAddressDefault: setting default address process [address=${JSON.stringify(
-                address,
-            )}]`,
+            `updateAddressDefault: setting default address process [address=${JSON.stringify(address)}]`,
             { context: AddressTransactionsRepository.name },
         );
 
@@ -50,20 +48,16 @@ export class AddressTransactionsRepository {
      * @param address address to verify
      */
     public async validateAddress(address): Promise<any> {
-        this.logger.info(
-            `validateAddress: validating address... [address=${JSON.stringify(address)}]`,
-            { context: AddressTransactionsRepository.name },
-        );
+        this.logger.info(`validateAddress: validating address... [address=${JSON.stringify(address)}]`, {
+            context: AddressTransactionsRepository.name,
+        });
 
         return this.connection.transaction(async transactionalEntityManager => {
             try {
                 const addressTransactionRepository: Repository<Address> = transactionalEntityManager.getRepository(
                     Address,
                 );
-                return await this.addressService.addressControl(
-                    address,
-                    addressTransactionRepository,
-                );
+                return await this.addressService.addressControl(address, addressTransactionRepository);
             } catch (e) {
                 this.logger.error(`Error validating address [e=${e}]`, {
                     context: AddressTransactionsRepository.name,

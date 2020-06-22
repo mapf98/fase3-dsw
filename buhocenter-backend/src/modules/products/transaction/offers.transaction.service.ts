@@ -27,12 +27,9 @@ export class OffersTransactionsRepository {
     }
 
     public async deleteOffer(offerId: number): Promise<any> {
-        this.logger.debug(
-            `deleteOffer: starting process to delete the offer with id [id=${offerId}]`,
-            {
-                context: OffersTransactionsRepository.name,
-            },
-        );
+        this.logger.debug(`deleteOffer: starting process to delete the offer with id [id=${offerId}]`, {
+            context: OffersTransactionsRepository.name,
+        });
 
         return await this.connection.transaction(async transactionalEntityManager => {
             return await this.offersService.deleteOffer(offerId, transactionalEntityManager);

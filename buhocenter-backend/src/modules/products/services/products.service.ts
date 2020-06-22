@@ -11,7 +11,6 @@ import { ProductInventory } from '../entities/product-inventory.entity';
 import { ProductDimension } from '../entities/product-dimension.entity';
 import { StatusService } from '../../status/services/status.service';
 import { BrandsService } from '../services/brands.service';
-import { ProvidersService } from '../services/providers.service';
 import { CategoriesService } from '../services/categories.service';
 import { ProductPhoto } from '../entities/product-photo.entity';
 import { Offer } from '../entities/offer.entity';
@@ -48,21 +47,13 @@ export class ProductsService {
      */
     private async getProductAverageRating(products: Product[]): Promise<void> {
         for await (const product of products) {
-            try {
-                product.productRatings = await this.productRatingsRepository.query(
-                    `
-                SELECT ROUND(AVG(CP.rating)) as rating, COUNT(*) as total
+            product.productRatings = await this.productRatingsRepository.query(
+                `SELECT ROUND(AVG(CP.rating)) as rating, COUNT(*) as total
                     FROM product_ratings CP
                     WHERE CP.product_id = ${product.id}
                 `.trim(),
-                );
-            } catch (e) {
-                this.logger.error(
-                    `getProductAverageRating: the product doesnt have a rating [id=${
-                        product.id
-                    }|productRatings=${JSON.stringify(product.productRatings)}]`,
-                );
-            }
+            );
+
             this.logger.debug(
                 `getProductAverageRating [id=${product.id}|productRatings=${JSON.stringify(
                     product.productRatings,
@@ -96,10 +87,9 @@ export class ProductsService {
         productInventory,
         transactionalEntityManager: EntityManager,
     ): Promise<any> {
-        this.logger.debug(
-            `updateProductInventory: [productInventory=${JSON.stringify(productInventory)}]`,
-            { context: ProductsService.name },
-        );
+        this.logger.debug(`updateProductInventory: [productInventory=${JSON.stringify(productInventory)}]`, {
+            context: ProductsService.name,
+        });
 
         const productInventoryTransactionRepository: Repository<ProductInventory> = transactionalEntityManager.getRepository(
             ProductInventory,
@@ -141,10 +131,7 @@ export class ProductsService {
      * @param page page to start listing products
      * @param catalogueId catalogue id which products must belong to
      */
-    public async getProducts(
-        page: number = 1,
-        catalogueId: number = 1,
-    ): Promise<[Product[], number]> {
+    public async getProducts(page: number = 1, catalogueId: number = 1): Promise<[Product[], number]> {
         this.logger.debug(`getProducts: [page=${page}|catalogueId=${catalogueId}]`, {
             context: ProductsService.name,
         });
@@ -176,13 +163,9 @@ export class ProductsService {
         let productsFiltered: Product[] = [];
 
         for await (const i of products) {
-            const inventoryAvailable: ProductInventory = await this.getProductInventoryAvailability(
-                i.id,
-            );
+            const inventoryAvailable: ProductInventory = await this.getProductInventoryAvailability(i.id);
 
-            if (
-                inventoryAvailable.availableQuantity > inventoryAvailable.minimumAvailableQuantity
-            ) {
+            if (inventoryAvailable.availableQuantity > inventoryAvailable.minimumAvailableQuantity) {
                 productsFiltered.push(i);
             }
         }
@@ -249,10 +232,9 @@ export class ProductsService {
                 switch (keys[i][0]) {
                     case 'productName':
                         if ((keys[i][1] as string) == '') {
-                            this.logger.info(
-                                `updateUsersProduct: name not declare, not updating name..`,
-                                { context: ProductsService.name },
-                            );
+                            this.logger.info(`updateUsersProduct: name not declare, not updating name..`, {
+                                context: ProductsService.name,
+                            });
                         } else {
                             verifyProduct.name = keys[i][1] as string;
                         }
@@ -273,10 +255,9 @@ export class ProductsService {
 
                     case 'price':
                         if ((keys[i][1] as number) == 0) {
-                            this.logger.info(
-                                `updateUsersProduct: price not declare, not updating price..`,
-                                { context: ProductsService.name },
-                            );
+                            this.logger.info(`updateUsersProduct: price not declare, not updating price..`, {
+                                context: ProductsService.name,
+                            });
                         } else {
                             verifyProduct.price = keys[i][1] as number;
                         }
@@ -301,14 +282,11 @@ export class ProductsService {
 
                     case 'brand':
                         if ((keys[i][1] as number) == 0) {
-                            this.logger.info(
-                                `updateUsersProduct: brand not declare, not updating brand...`,
-                                { context: ProductsService.name },
-                            );
+                            this.logger.info(`updateUsersProduct: brand not declare, not updating brand...`, {
+                                context: ProductsService.name,
+                            });
                         } else {
-                            verifyProduct.brand = await this.brandsService.getBrand(
-                                keys[i][1] as number,
-                            );
+                            verifyProduct.brand = await this.brandsService.getBrand(keys[i][1] as number);
                         }
 
                         break;
@@ -340,10 +318,9 @@ export class ProductsService {
             findProduct.status = unaccesable;
 
             await this.productsRepository.save(findProduct);
-            this.logger.info(
-                `deleteProduct: product deleted succesfully [verifyProduct=${productId}]`,
-                { context: ProductsService.name },
-            );
+            this.logger.info(`deleteProduct: product deleted succesfully [verifyProduct=${productId}]`, {
+                context: ProductsService.name,
+            });
             return 'product deleted sucesfully';
         }
     }
@@ -454,10 +431,7 @@ export class ProductsService {
         }
     }
 
-    public async deleteOffer(
-        productId: number,
-        transactionalEntityManager: EntityManager,
-    ): Promise<boolean> {
+    public async deleteOffer(productId: number, transactionalEntityManager: EntityManager): Promise<boolean> {
         try {
             let ProductRepository: Repository<Product> = await transactionalEntityManager.getRepository(
                 Product,

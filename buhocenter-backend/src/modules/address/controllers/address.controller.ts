@@ -31,18 +31,14 @@ export class AddressController {
 
     @Post('verification')
     async validateAddress(@Body() address: AddressVerificationDto): Promise<Response> {
-        this.logger.info(
-            `validateAddress: validating address [address=${JSON.stringify(address)}]`,
-            { context: AddressController.name },
-        );
+        this.logger.info(`validateAddress: validating address [address=${JSON.stringify(address)}]`, {
+            context: AddressController.name,
+        });
         return await this.addressTransactionRepository.validateAddress(address);
     }
 
     @Patch()
-    async setDefaultAddress(
-        @Res() res: Response,
-        @Body() address: AddressUDDto,
-    ): Promise<Response> {
+    async setDefaultAddress(@Res() res: Response, @Body() address: AddressUDDto): Promise<Response> {
         this.logger.info(`setDefaultAddress: [address=${JSON.stringify(address)}]`, {
             context: AddressController.name,
         });
@@ -52,9 +48,7 @@ export class AddressController {
             return res.status(HttpStatus.OK).send(response);
         } catch (e) {
             this.logger.error(
-                `setDefaultAddress: error setting default address [error=${JSON.stringify(
-                    e.message,
-                )}]`,
+                `setDefaultAddress: error setting default address [error=${JSON.stringify(e.message)}]`,
                 { context: AddressController.name },
             );
 
@@ -84,10 +78,7 @@ export class AddressController {
     }
 
     @Get()
-    async getAddresses(
-        @Res() res: Response,
-        @Query('customerId') customerId: number,
-    ): Promise<Response> {
+    async getAddresses(@Res() res: Response, @Query('customerId') customerId: number): Promise<Response> {
         this.logger.info(`getAddresses: [customerId=${customerId}]`, {
             context: AddressController.name,
         });

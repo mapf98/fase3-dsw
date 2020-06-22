@@ -35,10 +35,9 @@ export class BrandsController {
             let response: Brand[] = await this.productTransactionsRepository.getAllBrands();
             return res.status(HttpStatus.OK).send(response);
         } catch (e) {
-            this.logger.info(
-                `getBrands: error when trying to get all available brands[error=${e.message}]`,
-                { context: BrandsController.name },
-            );
+            this.logger.info(`getBrands: error when trying to get all available brands[error=${e.message}]`, {
+                context: BrandsController.name,
+            });
             return res.status(HttpStatus.BAD_REQUEST).send();
         }
     }

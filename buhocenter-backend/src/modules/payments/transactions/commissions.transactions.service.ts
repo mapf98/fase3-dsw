@@ -5,7 +5,7 @@ import { InjectConnection } from '@nestjs/typeorm';
 import { Logger } from 'winston';
 import { Connection } from 'typeorm';
 import { CommissionsService } from '../services/commissions.service';
-import { CommissionDto, CommissionUpdateDto } from '../dto/commissions.dto'
+import { CommissionDto, CommissionUpdateDto } from '../dto/commissions.dto';
 
 @Injectable()
 export class CommissionsTransactionsRepository {

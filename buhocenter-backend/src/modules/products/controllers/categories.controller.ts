@@ -37,9 +37,7 @@ export class CategoriesController {
                 `getCataloguesByCategory: Obteniendo catalogues por la category: [id= ${query.category_id}]`,
                 { context: CategoriesController.name },
             );
-            const catalogues: any = await this.categoriesService.getCataloguesByCatergory(
-                query.category_id,
-            );
+            const catalogues: any = await this.categoriesService.getCataloguesByCatergory(query.category_id);
             return res.status(HttpStatus.OK).send({ catalogues });
         } catch (e) {
             this.logger.error(`getCataloguesByCategory: try catch error [error= ${e.messages}]`, {

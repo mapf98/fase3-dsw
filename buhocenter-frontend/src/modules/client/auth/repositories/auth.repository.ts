@@ -6,6 +6,7 @@ import {
   ResponseAuth,
   ResponseRegister,
 } from "@/modules/client/auth/interfaces/customer.interface";
+import { ROL, STATUS } from '@/config/constants';
 
 class AuthRepository extends HttpRepository {
   private _USER;
@@ -39,9 +40,8 @@ class AuthRepository extends HttpRepository {
         };
         try {
           return await this.post(
-            this.createUri(["users", "login-social"], false),
+            this.createUri(["users", "login-social"]),
             registerData,
-            false
           );
         } catch (e) {
           return false;
@@ -101,11 +101,13 @@ class AuthRepository extends HttpRepository {
       if (result) {
         const data: CustomerInterface = {
           name: customer.name!,
-          lastname: customer.lastName!,
+          lastName: customer.lastName!,
           birthdate: customer.birthDate!,
           uid: result.user!.uid,
+          is_federate: false,
           language: customer.language!,
           email: customer.email!,
+          role: { id: ROL.customer },
         };
         return await this.post(this.createUri(["users", "register"]), data);
       }

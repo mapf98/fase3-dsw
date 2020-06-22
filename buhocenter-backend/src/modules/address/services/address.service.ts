@@ -71,8 +71,8 @@ export class AddressService {
                 city: address.cityName,
                 state: address.state,
                 zipcode: address.zipcode,
-                user: await this.usersService.findUser(address.user.id),
-                status: await this.statusService.getStatusById(STATUS.ACTIVE.id),
+                user: await this.usersService.getUserById(address.user.id),
+                status: await this.statusService.getStatus(STATUS.ACTIVE.id),
                 setDefault: hasDefaultAddress ? false : true,
             };
 
@@ -82,10 +82,9 @@ export class AddressService {
                 context: AddressService.name,
             });
         } catch (e) {
-            this.logger.error(
-                `saveAddress: failed saving address in database [error=${e.message}]`,
-                { context: AddressService.name },
-            );
+            this.logger.error(`saveAddress: failed saving address in database [error=${e.message}]`, {
+                context: AddressService.name,
+            });
 
             throw new BadRequestException(
                 'Error when saving address in database',
@@ -98,33 +97,29 @@ export class AddressService {
      * @param body address to verify
      */
     private async verificateAddress(body: AddressVerificationSO) {
-        this.logger.debug(
-            `verificateAddress: verifying address [address=${JSON.stringify(body)}]`,
-            { context: AddressService.name },
-        );
+        this.logger.debug(`verificateAddress: verifying address [address=${JSON.stringify(body)}]`, {
+            context: AddressService.name,
+        });
         return await this.addressHttpRepository.postAddressUri(body);
     }
 
     async checkAddress(
         addressRecibeByAPIValidator: AddressVerificationRO,
-        addressSendByTheUser: AddressVerificationDto,
+        addressSent: AddressVerificationDto,
         addressEntityManager: Repository<Address>,
     ) {
-        this.logger.debug(
-            `checkAddress: checking address [address=${JSON.stringify(addressSendByTheUser)}]`,
-            {
-                context: AddressService.name,
-            },
-        );
+        this.logger.debug(`checkAddress: checking address [address=${JSON.stringify(addressSent)}]`, {
+            context: AddressService.name,
+        });
 
-        if (this.addressValificationAnalysis(addressRecibeByAPIValidator)) {
-            await this.saveAddress(addressSendByTheUser, addressEntityManager);
+        if (this.addressValidationAnalysis(addressRecibeByAPIValidator)) {
+            await this.saveAddress(addressSent, addressEntityManager);
             return addressRecibeByAPIValidator;
         } else {
             this.logger.debug(
                 `checkAddress: invalid address [address=${JSON.stringify(
                     addressRecibeByAPIValidator,
-                )}]|addressSendByTheUser=${JSON.stringify(addressSendByTheUser)}]`,
+                )}]|addressSent=${JSON.stringify(addressSent)}]`,
                 { context: AddressService.name },
             );
             throw new BadRequestException('Invalid address');
@@ -138,9 +133,7 @@ export class AddressService {
      */
     public async addressControl(body: AddressVerificationDto, addressEntityManager) {
         this.logger.debug(
-            `addressControl: address sending request to validate address [address= ${JSON.stringify(
-                body,
-            )}]`,
+            `addressControl: address sending request to validate address [address= ${JSON.stringify(body)}]`,
             { context: AddressService.name },
         );
 
@@ -213,10 +206,7 @@ export class AddressService {
             context: AddressService.name,
         });
 
-        return await this.addressesRepository.update(
-            { id },
-            { status: { id: STATUS.INACTIVE.id } },
-        );
+        return await this.addressesRepository.update({ id }, { status: { id: STATUS.INACTIVE.id } });
     }
 
     /**
@@ -233,7 +223,7 @@ export class AddressService {
         });
     }
 
-    addressValificationAnalysis(address): boolean {
+    private addressValidationAnalysis(address): boolean {
         if (address) {
             if (address.length) {
                 if (address[0].metadata.precision === 'Unknown') {

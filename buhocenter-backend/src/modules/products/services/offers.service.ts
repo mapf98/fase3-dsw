@@ -49,21 +49,14 @@ export class OffersService {
             return newOffer;
         } catch (e) {
             this.logger.error(
-                `createOffer: error when trying to create the offer [error=${JSON.stringify(
-                    e.message,
-                )}]`,
+                `createOffer: error when trying to create the offer [error=${JSON.stringify(e.message)}]`,
             );
         }
     }
 
-    public async deleteOffer(
-        offerId: number,
-        transactionalEntityManager: EntityManager,
-    ): Promise<boolean> {
+    public async deleteOffer(offerId: number, transactionalEntityManager: EntityManager): Promise<boolean> {
         try {
-            let OfferRepository: Repository<Offer> = await transactionalEntityManager.getRepository(
-                Offer,
-            );
+            let OfferRepository: Repository<Offer> = await transactionalEntityManager.getRepository(Offer);
             await OfferRepository.update({ id: offerId }, { status: { id: STATUS.INACTIVE.id } });
 
             return true;

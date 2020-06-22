@@ -4,13 +4,7 @@ import { InjectConnection } from '@nestjs/typeorm';
 import { Logger } from 'winston';
 import { Connection } from 'typeorm';
 import { ProductsService } from '../services/products.service';
-import {
-    ProductDTO,
-    ProductsAO,
-    dimensionDto,
-    categoryDto,
-    InventoryProductDto,
-} from '../dto/products.dto';
+import { ProductDTO, ProductsAO, dimensionDto, categoryDto, InventoryProductDto } from '../dto/products.dto';
 import { OfferAssignProductDto } from '../dto/offers.dto';
 
 import { Product } from '../entities/product.entity';
@@ -108,10 +102,9 @@ export class ProductTransactionsRepository {
     }
 
     public async createProduct(product: ProductsAO): Promise<Product> {
-        this.logger.info(
-            `createProduct: creating the product: product=${JSON.stringify(product)}]`,
-            { context: ProductTransactionsRepository.name },
-        );
+        this.logger.info(`createProduct: creating the product: product=${JSON.stringify(product)}]`, {
+            context: ProductTransactionsRepository.name,
+        });
 
         return await this.connection.transaction(async transactionalEntityManage => {
             return await this.productsService.createProduct(product);
@@ -119,10 +112,9 @@ export class ProductTransactionsRepository {
     }
 
     public async saveProductImage(imageName: string, productId: number): Promise<string> {
-        this.logger.info(
-            `createProduct: creating the product: product=${JSON.stringify(productId)}]`,
-            { context: ProductTransactionsRepository.name },
-        );
+        this.logger.info(`createProduct: creating the product: product=${JSON.stringify(productId)}]`, {
+            context: ProductTransactionsRepository.name,
+        });
 
         return await this.connection.transaction(async transactionalEntityManage => {
             return await this.productsService.saveProductImage(imageName, productId);
@@ -130,10 +122,9 @@ export class ProductTransactionsRepository {
     }
 
     public async saveProductDimension(dimension: dimensionDto, productId): Promise<any> {
-        this.logger.info(
-            `createProduct: creating the product: product=${JSON.stringify(productId)}]`,
-            { context: ProductTransactionsRepository.name },
-        );
+        this.logger.info(`createProduct: creating the product: product=${JSON.stringify(productId)}]`, {
+            context: ProductTransactionsRepository.name,
+        });
 
         return await this.connection.transaction(async transactionalEntityManage => {
             return await this.productsService.createDimension(
@@ -161,9 +152,7 @@ export class ProductTransactionsRepository {
         });
 
         return await this.connection.transaction(async transactionalEntityManage => {
-            let productObj: Product = await this.productsService.findProduct(
-                catalogueData.product.id,
-            );
+            let productObj: Product = await this.productsService.findProduct(catalogueData.product.id);
             return await this.categoriesService.findCategory(catalogueData.category.id);
         });
     }

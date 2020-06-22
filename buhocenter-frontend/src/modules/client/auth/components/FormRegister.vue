@@ -146,6 +146,9 @@
                 :rules="[() => !!confirmPassword || 'This field is required']"
               ></v-text-field>
             </div>
+            <v-alert type="error" v-if="errorInputs.passwordEquals">
+              Passwords must match
+            </v-alert>
           </v-col>
         </v-row>
         <div class="center">

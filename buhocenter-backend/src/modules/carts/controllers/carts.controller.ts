@@ -29,10 +29,7 @@ export class CartsController {
     ) {}
 
     @Post('products')
-    async associateProductsCart(
-        @Res() res: Response,
-        @Body() body: CartProductDTO,
-    ): Promise<Response> {
+    async associateProductsCart(@Res() res: Response, @Body() body: CartProductDTO): Promise<Response> {
         try {
             const response = await this.service.asociateProductCart(body);
             return res.status(HttpStatus.OK).send(response);
@@ -42,10 +39,7 @@ export class CartsController {
     }
 
     @Get('client/:id')
-    async getCartProductsBycustomerID(
-        @Res() res: Response,
-        @Param('id', new ParseIntPipe()) id: number,
-    ) {
+    async getCartProductsBycustomerID(@Res() res: Response, @Param('id', new ParseIntPipe()) id: number) {
         try {
             this.logger.info(
                 `getCartProductsBycustomerID: obteniendo el carrito y products, customer [id=${id}]`,

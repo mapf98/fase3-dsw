@@ -35,10 +35,9 @@ export class CategoriesService {
         // newCategoryProduct.catalogue = await this.categoriesRepository.findOne(
         //     categoryId,
         // );
-        this.logger.debug(
-            `createCategoryProduct: ${JSON.stringify(newCategoryProduct.catalogue)}`,
-            { context: CategoriesService.name },
-        );
+        this.logger.debug(`createCategoryProduct: ${JSON.stringify(newCategoryProduct.catalogue)}`, {
+            context: CategoriesService.name,
+        });
         newCategoryProduct.product = product;
         await this.productCategoryRepository.save(newCategoryProduct);
     }
