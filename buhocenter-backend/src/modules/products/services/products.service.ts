@@ -134,9 +134,14 @@ export class ProductsService {
      * @returns Promise<PaginatedProducts>
     */
     async getProducts(parameters: ProductParameters): Promise<PaginatedProducts> {
-        this.logger.debug(`getProducts:  Getting products by a set of parameters [parameters:${JSON.stringify(parameters)}]`,{
-            context: ProductsService.name
-        });
+        this.logger.debug(
+            `getProducts:  Getting products by a set of parameters [parameters:${JSON.stringify(
+                parameters,
+            )}]`,
+            {
+                context: ProductsService.name,
+            },
+        );
 
         parameters.start = parameters.start || DEFAULT_PRODUCT_START_INDEX;
         parameters.limit = parameters.limit || MAX_PRODUCTS_BY_PAGE;
@@ -151,16 +156,21 @@ export class ProductsService {
             .innerJoin('product.productCatalogues', 'productCatalogues')
             .innerJoin('productCatalogues.catalogue', 'catalogue')
             .innerJoin('catalogue.category', 'category')
-            .leftJoin('product.offer', 'offer')
+            .leftJoin('product.offer', 'offer');
 
-        !(parameters.name) || query.andWhere('UPPER(product.name) LIKE :name', { name: `%${parameters.name.toUpperCase()}%` });
-        !(parameters.rating) || query.andWhere('FLOOR(product.rating) = :rating', { rating: parameters.rating });
-        !(parameters.price) || query.andWhere('product.price <= :price', { price: parameters.price });
-        !(parameters.brandId) || query.andWhere('brand.id = :brandId ', { brandId: parameters.brandId });
-        !(parameters.providerId) || query.andWhere('provider.id = :providerId ', { providerId: parameters.providerId });
-        !(parameters.offerId) || query.andWhere('offer.id = :offerId ', { offerId: parameters.offerId });
-        !(parameters.catalogueId) || query.andWhere('catalogue.id = :catalogueId', { catalogueId: parameters.catalogueId });
-        !(parameters.categoryId) || query.andWhere('category.id = :categoryId', { categoryId: parameters.categoryId });
+        !parameters.name ||
+            query.andWhere('UPPER(product.name) LIKE :name', { name: `%${parameters.name.toUpperCase()}%` });
+        !parameters.rating ||
+            query.andWhere('FLOOR(product.rating) = :rating', { rating: parameters.rating });
+        !parameters.price || query.andWhere('product.price <= :price', { price: parameters.price });
+        !parameters.brandId || query.andWhere('brand.id = :brandId ', { brandId: parameters.brandId });
+        !parameters.providerId ||
+            query.andWhere('provider.id = :providerId ', { providerId: parameters.providerId });
+        !parameters.offerId || query.andWhere('offer.id = :offerId ', { offerId: parameters.offerId });
+        !parameters.catalogueId ||
+            query.andWhere('catalogue.id = :catalogueId', { catalogueId: parameters.catalogueId });
+        !parameters.categoryId ||
+            query.andWhere('category.id = :categoryId', { categoryId: parameters.categoryId });
         query.andWhere('productInventory.availableQuantity - productInventory.minimumAvailableQuantity > 0');
 
         return {
@@ -168,8 +178,8 @@ export class ProductsService {
                 .skip(parameters.start)
                 .take(parameters.limit)
                 .getMany(),
-            productsNumber: await query.getCount()
-        }
+            productsNumber: await query.getCount(),
+        };
     }
 
     async findProduct(ProductID: number): Promise<Product> {

@@ -1,6 +1,6 @@
 import * as fs from 'fs';
 import { parse } from 'dotenv';
-import {logger} from '@anchan828/nest-sendgrid/dist/sendgrid.logger';
+import { logger } from '@anchan828/nest-sendgrid/dist/sendgrid.logger';
 
 export class ConfigService {
     private readonly envConfig: { [key: string]: string };
@@ -9,14 +9,13 @@ export class ConfigService {
         const isDevelopmentEnvironment = process.env.NODE_ENV === 'development';
         const isProductionEnvironment = process.env.NODE_ENV === 'production';
 
-        if (isDevelopmentEnvironment) {
+        if (isDevelopmentEnvironment || !process.env.NODE_ENV) {
             const envFilePath = __dirname + '/../../.env';
             const exist = fs.existsSync(envFilePath);
             if (exist) {
                 this.envConfig = parse(fs.readFileSync(envFilePath));
             } else {
                 logger.log('No se ha encontrado el archivo dot env', 'ConfigService');
-                process.exit(0);
             }
         } else if (isProductionEnvironment) {
             const envFilePath = __dirname + '/../../.env';

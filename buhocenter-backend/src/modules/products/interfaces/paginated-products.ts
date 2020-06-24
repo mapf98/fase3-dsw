@@ -1,6 +1,6 @@
-import { Product } from "../entities/product.entity";
+import { Product } from '../entities/product.entity';
 
 export interface PaginatedProducts {
-    products: Product[],
-    productsNumber: number
+    products: Product[];
+    productsNumber: number;
 }

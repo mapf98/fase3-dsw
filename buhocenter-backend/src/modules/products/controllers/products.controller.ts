@@ -82,7 +82,7 @@ export class ProductsController {
     @Get()
     getProducts(@Query() parameters: ProductParameters): Promise<PaginatedProducts> {
         this.logger.info('getProducts: Getting products by a set of parameters', {
-            context: ProductsController.name
+            context: ProductsController.name,
         });
 
         return this.productsService.getProducts(parameters);
