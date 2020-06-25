@@ -186,4 +186,58 @@ export class PaymentsService {
 
         await this._paymentRepository.save(payment);
     }
+
+    /**
+     * getPaymentsByUserId
+     * @param userId: number
+     * @returns Payment[]
+     */
+    async getPaymentsByUserId(userId: number): Promise<Payment[]> {
+        this._logger.debug(`getPaymentsByUserId: Getting the payments of a user [userId=${userId}]`, {
+            context: PaymentsService.name,
+        });
+
+        return await this._paymentRepository
+            .createQueryBuilder('payment')
+            .innerJoinAndSelect('payment.statusHistories', 'statusHistories')
+            .innerJoinAndSelect('statusHistories.status', 'status')
+            .where('status.id <> :id', { id: STATUS.CANCELED.id })
+            .andWhere('status.id <> :id', { id: STATUS.EXPIRED })
+            .andWhere('status.id <> :id', { id: STATUS.INVALID })
+            .innerJoinAndSelect('payment.commission', 'commission')
+            .innerJoinAndSelect('payment.foreignExchange', 'foreignExchange')
+            .leftJoinAndSelect('payment.cryptocurrency', 'cryptocurrency')
+            .innerJoin('payment.carts', 'carts')
+            .innerJoin('carts.user', 'user')
+            .andWhere('user.id = :id', { id: userId })
+            .getMany();
+    }
+
+    /**
+     * getPaymentsById
+     * @param paymentId: number
+     * @returns Paymen
+     */
+    async getPaymentsById(paymentId: number): Promise<Payment> {
+        this._logger.debug(`getPaymentsById: Getting a payment by its id [paymentId=${paymentId}]`, {
+            context: PaymentsService.name,
+        });
+
+        return await this._paymentRepository
+            .createQueryBuilder('payment')
+            .innerJoinAndSelect('payment.commission', 'commission')
+            .innerJoinAndSelect('payment.statusHistories', 'statusHistories')
+            .innerJoinAndSelect('statusHistories.status', 'status')
+            .innerJoinAndSelect('payment.foreignExchange', 'foreignExchange')
+            .leftJoinAndSelect('payment.cryptocurrency', 'cryptocurrency')
+            .innerJoinAndSelect('payment.carts', 'carts')
+            .innerJoinAndSelect('carts.product', 'product')
+            .innerJoinAndSelect('product.productPhotos', 'productPhotos')
+            .innerJoinAndSelect('product.brand', 'brand')
+            .innerJoinAndSelect('product.provider', 'provider')
+            .leftJoinAndSelect('product.productRatings', 'productRatings')
+            .andWhere('payment.id = :id', { id: paymentId })
+            .andWhere('carts.user = productRatings.user')
+            .getOne();
+    }
 }

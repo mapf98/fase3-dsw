@@ -17,10 +17,12 @@ import { OffersService } from './services/offers.service';
 import { OffersController } from './controllers/offers.controller';
 import { OffersTransactionsRepository } from './transaction/offers.transaction.service';
 import { ProductInventoriesService } from './services/product-inventories.service';
-import { UsersModule } from '../users/users.module'
+import { ProductRatingsController } from './controllers/product-rating.controller';
+import { ProductRatingsService } from './services/product-ratings.service';
+import { UsersModule } from '../users/users.module';
 
 @Module({
-    imports: [TypeOrmModule.forFeature(entities), StatussModule,UsersModule],
+    imports: [TypeOrmModule.forFeature(entities), StatussModule, UsersModule],
     controllers: [
         ProductsController,
         BrandsController,
@@ -28,6 +30,7 @@ import { UsersModule } from '../users/users.module'
         CategoriesController,
         CataloguesController,
         OffersController,
+        ProductRatingsController,
     ],
     providers: [
         ProductsService,
@@ -39,7 +42,7 @@ import { UsersModule } from '../users/users.module'
         OffersService,
         OffersTransactionsRepository,
         ProductInventoriesService,
-        
+        ProductRatingsService,
     ],
     exports: [ProductsService, ProductInventoriesService],
 })

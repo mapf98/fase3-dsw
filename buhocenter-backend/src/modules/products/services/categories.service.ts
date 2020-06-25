@@ -59,19 +59,21 @@ export class CategoriesService {
     }
 
     /**
-     * Obtiene el listado de categorias
+     * getCategories
+     * Get a set og categories
+     * @returns  Promise<Category[]>
      */
-    public async getCategories(): Promise<any> {
+    public async getCategories(): Promise<Category[]> {
         try {
             this.logger.debug(`getCategories: executting query to get all categories`, {
                 context: CategoriesService.name,
             });
-            return await this.categoriesRepository.find();
+            return await this.categoriesRepository.find({ relations: ['catalogues'] });
         } catch (e) {
             this.logger.error(`getCategories: catch error [error:${e.message}]`, {
                 context: CategoriesService.name,
             });
-            return Response.error();
+            throw e;
         }
     }
 

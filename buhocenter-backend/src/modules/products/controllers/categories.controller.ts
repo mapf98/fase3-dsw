@@ -5,6 +5,7 @@ import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
 import { Logger } from 'winston';
 import { CategoriesService } from '../services/categories.service';
 import { Catalogue } from '../entities/catalogue.entity';
+import { Category } from '../entities/category.entity';
 
 @Controller('categories')
 export class CategoriesController {
@@ -20,7 +21,7 @@ export class CategoriesController {
             context: CategoriesController.name,
         });
         try {
-            const categories: Catalogue[] = await this.categoriesService.getCategories();
+            const categories: Category[] = await this.categoriesService.getCategories();
             return res.status(HttpStatus.OK).send({ categories });
         } catch (e) {
             this.logger.error(`getCategories: try catch error [error= ${e.messages}]`, {

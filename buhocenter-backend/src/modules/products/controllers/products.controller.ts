@@ -35,7 +35,7 @@ export class ProductsController {
         private readonly productsService: ProductsService,
         @Inject(WINSTON_MODULE_PROVIDER) private readonly logger: Logger,
         @Inject(ProductTransactionsRepository)
-        private readonly productTransactionsRepository: ProductTransactionsRepository,        
+        private readonly productTransactionsRepository: ProductTransactionsRepository,
     ) {}
 
     @Get('daily-recommendation')
@@ -255,12 +255,11 @@ export class ProductsController {
     }
 
     @Post('/question')
-    async addQuestionToProduct(
-        @Res() res:Response,
-        @Body() questionAndProduct
-    ):Promise<Response>{
+    async addQuestionToProduct(@Res() res: Response, @Body() questionAndProduct): Promise<Response> {
         this.logger.info(
-            `addQuestionToProduct:adding the question to the product with id [questionAndProduct=${JSON.stringify(questionAndProduct)}]`,
+            `addQuestionToProduct:adding the question to the product with id [questionAndProduct=${JSON.stringify(
+                questionAndProduct,
+            )}]`,
             { context: ProductsController.name },
         );
 
@@ -270,24 +269,20 @@ export class ProductsController {
 
     @Delete()
     async deleteQuestionInProduct(
-        @Res() res:Response,
-        @Query('questionId', new ParseIntPipe()) questionId:number
-    ):Promise<Response>{
+        @Res() res: Response,
+        @Query('questionId', new ParseIntPipe()) questionId: number,
+    ): Promise<Response> {
         console.log(questionId);
-        this.logger.info(
-            `deleteQuestionInProduct:deleting the question with id [questionId=${questionId}]`,
-            { context: ProductsController.name },
-        );
+        this.logger.info(`deleteQuestionInProduct:deleting the question with id [questionId=${questionId}]`, {
+            context: ProductsController.name,
+        });
 
         let response = await this.productsService.deleteQuestionInProduct(questionId);
         return res.status(HttpStatus.OK).send(response);
     }
 
     @Get('/question/:id')
-    async getAllQuestionsInProduct(
-        @Res() res:Response,
-        @Param('id') productId:number
-    ):Promise<Response>{
+    async getAllQuestionsInProduct(@Res() res: Response, @Param('id') productId: number): Promise<Response> {
         this.logger.info(
             `deleteQuestionInProduct:getting all the questions in the product with id [productId=${productId}]`,
             { context: ProductsController.name },
@@ -296,5 +291,4 @@ export class ProductsController {
         let response = await this.productsService.getAllQuestionsInProduct(productId);
         return res.status(HttpStatus.OK).send(response);
     }
-
 }
