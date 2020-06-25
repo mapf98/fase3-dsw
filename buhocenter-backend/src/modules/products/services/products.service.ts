@@ -17,6 +17,9 @@ import { Offer } from '../entities/offer.entity';
 import { ProductParameters } from '../interfaces/product-parameters';
 import { PaginatedProducts } from '../interfaces/paginated-products';
 import { DEFAULT_PRODUCT_START_INDEX, MAX_PRODUCTS_BY_PAGE } from '../product.constans';
+import { ProductQuestion } from '../entities/product-question.entity';
+import { UsersService } from '../../users/services/users.service';
+import { ProductQuestions } from '../interfaces/product-questions';
 
 @Injectable()
 export class ProductsService {
@@ -40,6 +43,10 @@ export class ProductsService {
         private readonly categoriesService: CategoriesService,
         @InjectRepository(ProductPhoto)
         private readonly productPhotoRepository: Repository<ProductPhoto>,
+        @InjectRepository(ProductQuestion)
+        private readonly productQuestionRepository: Repository<ProductQuestion>,
+        @Inject(UsersService)
+        private readonly usersService: UsersService,
     ) {}
 
     /**
@@ -456,4 +463,75 @@ export class ProductsService {
             return false;
         }
     }
+
+    public async addQuestionToProduct(productAndQuestion: ProductQuestions): Promise<boolean>{
+        try {            
+            let newProductQuestion = new ProductQuestion();
+            newProductQuestion.comment = productAndQuestion.comment;
+            newProductQuestion.product = await this.findProduct(productAndQuestion.product.id);
+            newProductQuestion.user = await this.usersService.getUserById(productAndQuestion.user.id);
+
+            await this.productQuestionRepository.save(newProductQuestion);
+
+            return true;
+        } catch (e) {
+            this.logger.error(
+                `addQuestionToProduct: error when trying to save the comment to product [productAndQuestion=${JSON.stringify(
+                    productAndQuestion
+                )}|error=${JSON.stringify(
+                    e.message,
+                )}]`,
+            );
+
+            throw new BadRequestException('error when trying to to save the comment to product');
+            return false;
+        }        
+    }
+
+    public async deleteQuestionInProduct(questionId: number): Promise<boolean>{
+        try {                       
+            await this.productQuestionRepository.delete({ 
+                id:questionId 
+            });
+
+            return true;
+        } catch (e) {
+            this.logger.error(
+                `deleteQuestionInProduct: error when trying to delete the comment in the product [questionId=${questionId}|error=${JSON.stringify(
+                    e.message,
+                )}]`,
+            );
+
+            throw new BadRequestException('error when trying to delete the comment in the product');
+            return false;
+        }        
+    }
+
+    public async getAllQuestionsInProduct(productId: number): Promise<any>{
+        try {                       
+            let foundProduct = await this.findProduct(productId);
+            return await this.productQuestionRepository.find({
+                where:{ product:foundProduct },
+                join: {
+                    alias: 'productsQuestions',
+                    innerJoinAndSelect: {
+                        user: 'productsQuestions.user',                       
+                    },
+                },
+            });
+          
+        } catch (e) {
+            this.logger.error(
+                `getAllQuestionsInProduct: error when trying to get all comments in the product [productId=${
+                    productId
+                }|error=${JSON.stringify(
+                    e.message,
+                )}]`,
+            );
+
+            throw new BadRequestException('error when trying to get all comments in the product');
+            return false;
+        }        
+    }
+
 }
