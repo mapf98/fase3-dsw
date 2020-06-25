@@ -19,6 +19,7 @@ import { OffersTransactionsRepository } from '../transaction/offers.transaction.
 import { OfferDto, OfferAssignProductDto } from '../dto/offers.dto';
 import { Offer } from '../entities/offer.entity';
 import { ProductTransactionsRepository } from '../transaction/products.transaction.service';
+import { OffersRO } from '../interfaces/offers';
 
 @Controller('offers')
 export class OffersController {
@@ -28,6 +29,8 @@ export class OffersController {
         private readonly offersTransactionsRepository: OffersTransactionsRepository,
         @Inject(ProductTransactionsRepository)
         private readonly productTransactionsRepository: ProductTransactionsRepository,
+        @Inject(OffersService)
+        private readonly offersService: OffersService,
     ) {}
 
     @Post()
@@ -35,16 +38,9 @@ export class OffersController {
         this.logger.info(`createOffer: starting to create the offer`, {
             context: OffersController.name,
         });
-        try {
-            let response: Offer = await this.offersTransactionsRepository.createOffer(offerData);
-            return res.status(HttpStatus.OK).send(response);
-        } catch (e) {
-            this.logger.info(
-                `createOffer: error when trying to create the offer [error=${JSON.stringify(offerData)}]`,
-                { context: OffersController.name },
-            );
-            return res.status(HttpStatus.BAD_REQUEST).send();
-        }
+
+        let response: Offer = await this.offersTransactionsRepository.createOffer(offerData);
+        return res.status(HttpStatus.OK).send(response);
     }
 
     @Delete('/:id')
@@ -52,37 +48,21 @@ export class OffersController {
         this.logger.info(`createOffer: starting to create the offer`, {
             context: OffersController.name,
         });
-        try {
-            let response: Offer = await this.offersTransactionsRepository.deleteOffer(offerId);
-            return res.status(HttpStatus.OK).send(response);
-        } catch (e) {
-            this.logger.info(
-                `createOffer: error when trying to delete a offer with id [id=${offerId}|error=${JSON.stringify(
-                    offerId,
-                )}]`,
-                { context: OffersController.name },
-            );
-            return res.status(HttpStatus.BAD_REQUEST).send();
-        }
+        let response: Offer = await this.offersTransactionsRepository.deleteOffer(offerId);
+        return res.status(HttpStatus.OK).send(response);
     }
 
-    @Get()
-    async getAllOffers(@Res() res: Response): Promise<Response> {
+    @Get('/:start/:limit')
+    async getAllOffers(
+        @Res() res: Response,
+        @Param('start') start: number,
+        @Param('limit') limit: number,
+    ): Promise<Response> {
         this.logger.info(`getAllOffers: starting process to get all available offers`, {
             context: OffersController.name,
         });
-        try {
-            let response: Offer[] = await this.offersTransactionsRepository.getOffers();
-            return res.status(HttpStatus.OK).send(response);
-        } catch (e) {
-            this.logger.info(
-                `createOffer: error when trying to delete a offer with id [error=${JSON.stringify(
-                    e.message,
-                )}]`,
-                { context: OffersController.name },
-            );
-            return res.status(HttpStatus.BAD_REQUEST).send();
-        }
+        let response: OffersRO = await this.offersService.getOffers(start, limit);
+        return res.status(HttpStatus.OK).send(response);
     }
 
     @Post('product')
@@ -96,20 +76,11 @@ export class OffersController {
                 context: OffersController.name,
             },
         );
-        try {
-            let response: boolean = await this.productTransactionsRepository.assingOfferToProduct(
-                OfferForProduct,
-            );
-            return res.status(HttpStatus.OK).send(response);
-        } catch (e) {
-            this.logger.info(
-                `createOffer: error when trying to assign a offer with id to the product with id [offerId=${
-                    OfferForProduct.product.id
-                } | productId=${OfferForProduct.offer.id} | error=${JSON.stringify(e.message)}]`,
-                { context: OffersController.name },
-            );
-            return res.status(HttpStatus.BAD_REQUEST).send();
-        }
+
+        let response: boolean = await this.productTransactionsRepository.assingOfferToProduct(
+            OfferForProduct,
+        );
+        return res.status(HttpStatus.OK).send(response);
     }
 
     @Delete('product/:id')
@@ -120,17 +91,8 @@ export class OffersController {
                 context: OffersController.name,
             },
         );
-        try {
-            let response: boolean = await this.productTransactionsRepository.deleteOfferToProduct(productId);
-            return res.status(HttpStatus.OK).send(response);
-        } catch (e) {
-            this.logger.info(
-                `createOffer: error when trying to delete a offer with id to the product with id [offerId=${productId} | error=${JSON.stringify(
-                    e.message,
-                )}]`,
-                { context: OffersController.name },
-            );
-            return res.status(HttpStatus.BAD_REQUEST).send();
-        }
+
+        let response: boolean = await this.productTransactionsRepository.deleteOfferToProduct(productId);
+        return res.status(HttpStatus.OK).send(response);
     }
 }

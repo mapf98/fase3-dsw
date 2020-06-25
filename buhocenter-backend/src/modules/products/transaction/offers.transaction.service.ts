@@ -35,12 +35,4 @@ export class OffersTransactionsRepository {
             return await this.offersService.deleteOffer(offerId, transactionalEntityManager);
         });
     }
-
-    public async getOffers(): Promise<Offer[]> {
-        this.logger.debug(`getOffers: starting process to get all availables offers`, {
-            context: OffersTransactionsRepository.name,
-        });
-
-        return await this.offersService.getOffers();
-    }
 }

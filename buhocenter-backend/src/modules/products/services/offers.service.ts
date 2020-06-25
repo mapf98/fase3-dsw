@@ -7,6 +7,7 @@ import { Offer } from '../entities/offer.entity';
 import { StatusService } from '../../status/services/status.service';
 import { STATUS } from '../../../config/constants';
 import { OfferDto } from '../dto/offers.dto';
+import { OffersRO } from '../interfaces/offers';
 
 @Injectable()
 export class OffersService {
@@ -18,11 +19,20 @@ export class OffersService {
         private readonly statusService: StatusService,
     ) {}
 
-    public async getOffers(): Promise<Offer[]> {
+    public async getOffers(start: number, limit: number): Promise<OffersRO> {
         try {
-            return await this.OfferRepository.find({
+            let offersGot: Offer[], quantity;
+            [offersGot, quantity] = await this.OfferRepository.findAndCount({
                 where: { status: STATUS.ACTIVE.id },
+                skip: start,
+                take: limit,
             });
+            let offersRo: OffersRO = {
+                offers: offersGot,
+                quantity: quantity,
+            };
+
+            return offersRo;
         } catch (e) {
             this.logger.error(
                 `getOffers: error when trying to get all available offers [error=${e.message}]`,

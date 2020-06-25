@@ -19,10 +19,12 @@ import DashboardEmails from '@/modules/management/emails/components/Emails.vue';
 import DashboardOrders from '@/modules/management/orders/components/Orders.vue';
 import DashboardPlatform from '@/modules/management/platform/components/Platform.vue';
 import DashboardProducts from '@/modules/management/products/components/Products.vue';
-import DashboardPromotions from '@/modules/management/promotions/components/Promotions.vue';
+import DashboardOffers from '@/modules/management/promotions/components/DashboardOffers.vue';
 import DashboardServices from '@/modules/management/services/components/Services.vue';
 import PersonalInformation from '@/modules/client/customers/components/PersonalInformation.vue';
 import Checkout from '../views/Checkout.vue';
+import DashboardCreateOffer from '@/modules/management/promotions/components/CreateOffer.vue';
+import DashboardAllOffers from '@/modules/management/promotions/components/AllOffers.vue';
 
 Vue.use(VueRouter);
 
@@ -149,10 +151,28 @@ const routes: RouteConfig[] = [
                     {
                         path: '/dashboard/promotions',
                         name: 'dashboard-promotions',
-                        component: DashboardPromotions,
+                        component: DashboardOffers,
                         meta: {
                             admin: true,
                         },
+                        children: [
+                            {
+                                path: 'all',
+                                name: 'dashboard-promotions-all',
+                                component: DashboardAllOffers,
+                                meta: {
+                                    admin: true,
+                                },
+                            },
+                            {
+                                path: 'create',
+                                name: 'dashboard-promotions-create',
+                                component: DashboardCreateOffer,
+                                meta: {
+                                    admin: true,
+                                },
+                            },
+                        ],
                     },
                     {
                         path: '/dashboard/services',
