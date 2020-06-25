@@ -13,6 +13,7 @@ import loader from '@/store/loader/loader';
 import categoryModule from '@/store/categories/categories';
 import catalogueModule from '@/store/catalogue/catalogue';
 import addresses from '@/store/addresses/addresses';
+import clients from '@/store/clients/clients';
 import offers from '@/store/offers/offers';
 
 Vue.use(Vuex);
@@ -31,6 +32,7 @@ export default new Vuex.Store({
         providers,
         categoryModule,
         catalogueModule,
+        clients,
         offers,
     },
     plugins: [createPersistedState({ storage: window.sessionStorage })],

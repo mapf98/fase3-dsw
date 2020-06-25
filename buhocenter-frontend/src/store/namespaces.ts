@@ -13,4 +13,5 @@ export const languageModule = namespace('languageModule');
 export const brands = namespace('brands');
 export const providers = namespace('providers');
 export const catalogueModule = namespace('catalogueModule');
+export const clientsModule = namespace('clients');
 export const offers = namespace('offers');

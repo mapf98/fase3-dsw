@@ -285,11 +285,24 @@ export default class ItemDetail extends Vue {
     private async addProductToCart() {
         const productCart: ProductCarts = {
             quantity: this.quantity,
-            customer: {
+            user: {
                 id: this.GET_CLIENT_DATA.id,
             },
             product: {
                 id: this.GET_ITEM_DETAIL.id,
+                productPhotos: '',
+                provider: {
+                    createdAt: '',
+                    id: 0,
+                    name: '',
+                    updatedAt: '',
+                },
+                productDimension: {
+                    width: '',
+                    height: '',
+                    long: '',
+                },
+                rating: '',
             },
         };
 
@@ -301,9 +314,6 @@ export default class ItemDetail extends Vue {
             quantity: this.quantity,
             customer: {
                 id: this.GET_CLIENT_DATA.id,
-            },
-            service: {
-                id: this.GET_ITEM_DETAIL.id,
             },
         };
 

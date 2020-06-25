@@ -1,5 +1,11 @@
 import { HttpRepository } from '@/http/http.repository';
-import { Product, dimensionDto, ProductPhotoDto, ProductCreate, Products } from '../interfaces/products.interface';
+import {
+    Product,
+    dimensionDto,
+    ProductPhotoDto,
+    ProductCreate,
+    Products,
+} from '../interfaces/products.interface';
 
 //hay cosas por arreglar
 class ProductsHttpRepository extends HttpRepository {

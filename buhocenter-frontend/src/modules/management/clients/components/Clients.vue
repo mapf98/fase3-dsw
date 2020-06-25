@@ -1,11 +1,16 @@
 <template>
-    <div class="container-page" style="position: relative;">
-        <h2>Clients</h2>
-    </div>
+    <v-container>
+        <ClientsInfo />
+    </v-container>
 </template>
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
-@Component
+import ClientsInfo from './ClientsInfo.vue';
+@Component({
+    components: {
+        ClientsInfo,
+    },
+})
 export default class DashboardClients extends Vue {}
 </script>
 <style>

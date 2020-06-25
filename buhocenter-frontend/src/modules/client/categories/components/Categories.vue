@@ -58,7 +58,6 @@ import LayoutTypes from '@/store/layout/methods/layout.methods';
 import { Category } from '../interfaces/categories.interface';
 
 @Component
-
 export default class Categories extends Vue {
     page = 1;
     productsDisplayed = 8;
