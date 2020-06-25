@@ -4,6 +4,7 @@
         <v-list rounded style="padding: 30px 0px;">
             <h2 style="margin-left: 80px;" class="title">{{ $t('CATALOGUES') }}</h2>
             <v-row style="padding-left: 70px; padding-right: 80px;">
+                <EmptyState v-if="this.GET_CATALOGUES.length == 0" :message="emptyMessage" />
                 <v-col cols="12" lg="3" md="4" sm="6" xs="12" v-for="(item, i) in GET_CATALOGUES" :key="i">
                     <a href="#" class="link-router-catalogue" @click="setCatalogue(item)">
                         <v-row class="list-item-catalogue">
@@ -29,9 +30,16 @@ import CatalogueMethods from '@/store/catalogue/methods/catalogue.methods';
 import LayoutTypes from '@/store/layout/methods/layout.methods';
 import { Catalogues as CataloguesInterface } from '../interfaces/catalogues.interface';
 import { Catalogue } from '../interfaces/catalogues.interface';
+import EmptyState from '@/modules/common/components/EmptyState.vue';
 
-@Component
+@Component({
+    components: {
+        EmptyState,
+    },
+})
 export default class Catalogues extends Vue {
+    emptyMessage = 'NO_CATALOGUES';
+
     async fetchCatalogues(id) {
         await this.FETCH_CATALOGUES(id);
     }
@@ -45,6 +53,7 @@ export default class Catalogues extends Vue {
         if (this.$route.query.category_id) {
             await this.fetchCatalogues(this.$route.query.category_id);
         }
+        console.log('catalogos:  ', this.GET_CATALOGUES);
     }
 
     get_categoryId() {

@@ -1,5 +1,5 @@
 import { HttpRepository } from '@/http/http.repository';
-import { Product, dimensionDto, ProductPhotoDto, ProductCreate } from '../interfaces/products.interface';
+import { Product, dimensionDto, ProductPhotoDto, ProductCreate, Products } from '../interfaces/products.interface';
 
 //hay cosas por arreglar
 class ProductsHttpRepository extends HttpRepository {
@@ -8,10 +8,9 @@ class ProductsHttpRepository extends HttpRepository {
     private static readonly RESOURCEIMAGE = 'products/image';
     private static readonly RESOURCEINVENTORY = 'products/inventory';
 
-    public getProducts(page: number, catalogueId = 1): Promise<Product[]> {
+    public getProducts(page: number, catalogueId: number): Promise<Products> {
         return this.get(
             this.createUri([`${ProductsHttpRepository.RESOURCE}`], {
-                page,
                 catalogueId,
             }),
         );

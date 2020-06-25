@@ -136,4 +136,7 @@ export const terms = {
     SELECT_SHIPPING_ADDRESS: 'Select or create the shipping address of the order',
     ERROR_CREATE_ADDRESS: 'Invalid or wrong address',
     ERROR_NOT_CHECKOUT_PRODUCTS: 'Select the products you want to buy',
+    NO_PRODUCTS: 'There are no products in this category',
+    NO_CATALOGUES: 'There are no catalogues in this category',
+    LOADING_PRODUCTS: 'Loading products',
 };

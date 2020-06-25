@@ -12,6 +12,7 @@ import {
     ProductPhotoDto,
     dimensionDto,
     ProductCreate,
+    Products,
 } from '@/modules/client/products/interfaces/products.interface';
 
 const products: Module<ProductStateInterface, any> = {
@@ -85,9 +86,9 @@ const products: Module<ProductStateInterface, any> = {
         },
         async [ProductsTypes.actions.FETCH_PRODUCTS]({ commit }, { page, catalogueId }): Promise<boolean> {
             try {
-                const products: Product[] = await productsHttpRepository.getProducts(page, catalogueId);
-                commit(ProductsTypes.mutations.SET_PRODUCTS, products[0]);
-                commit(ProductsTypes.mutations.SET_TOTAL_PRODUCTS, products[1]);
+                const products: Products = await productsHttpRepository.getProducts(page, catalogueId);
+                commit(ProductsTypes.mutations.SET_PRODUCTS, products.products);
+                commit(ProductsTypes.mutations.SET_TOTAL_PRODUCTS, products.productsNumber);
                 return true;
             } catch (e) {
                 return false;

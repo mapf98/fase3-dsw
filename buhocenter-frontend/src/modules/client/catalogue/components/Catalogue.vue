@@ -1,12 +1,14 @@
 <template>
-    <v-row style="height: auto;">
+    <v-row>
         <div style="width: auto; position: relative;" class="d-none d-md-flex d-lg-flex">
             <Aside> </Aside>
         </div>
         <v-col cols="12" lg="9" md="9" sm="12">
             <v-container fluid>
+                <EmptyState class="mt-12" v-if="this.GET_TOTAL_PRODUCTS == 0" :message="emptyMessage" />
                 <ProductCard />
                 <v-pagination
+                    v-if="this.GET_TOTAL_PRODUCTS > 0 && this.GET_PRODUCTS_AND_PHOTOS_LOADED"
                     color="primary"
                     v-model="page"
                     :length="getLength"
@@ -25,6 +27,7 @@
 import Vue from 'vue';
 import Component from 'vue-class-component';
 import ProductCard from './ProductCard.vue';
+import EmptyState from '@/modules/common/components/EmptyState.vue';
 import Aside from './Aside.vue';
 import { products, layout } from '@/store/namespaces';
 import ProductsTypes from '@/store/products/methods/products.methods';
@@ -36,6 +39,7 @@ import { Product } from '@/modules/client/products/interfaces/products.interface
     components: {
         ProductCard,
         Aside,
+        EmptyState,
     },
 })
 export default class Catalogue extends Vue {
@@ -43,6 +47,7 @@ export default class Catalogue extends Vue {
     productsDisplayed = 8;
     timeout = 5000;
     errorLoadingContent = false;
+    emptyMessage = 'NO_PRODUCTS';
 
     @Watch('page')
     async changePage() {
@@ -90,6 +95,8 @@ export default class Catalogue extends Vue {
     private GET_PRODUCTS!: Product[];
     @products.Getter(ProductsTypes.getters.GET_TOTAL_PRODUCTS)
     private GET_TOTAL_PRODUCTS!: number;
+    @products.Getter(ProductsTypes.getters.GET_PRODUCTS_AND_PHOTOS_LOADED)
+    GET_PRODUCTS_AND_PHOTOS_LOADED!: boolean;
 
     @layout.Getter(LayoutTypes.getters.GET_CATALOGUE_ID)
     private GET_CATALOGUE_ID?: number;

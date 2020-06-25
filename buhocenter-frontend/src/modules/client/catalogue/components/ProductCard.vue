@@ -3,6 +3,27 @@
         <v-row>
             <v-col
                 cols="12"
+                class="d-flex justify-center align-center"
+                v-if="!GET_PRODUCTS_AND_PHOTOS_LOADED"
+            >
+                <v-progress-circular
+                    class="justify-center mt-12"
+                    :size="70"
+                    :width="7"
+                    color="primary"
+                    indeterminate
+                >
+                </v-progress-circular>
+            </v-col>
+            <v-col
+                cols="12"
+                class="d-flex justify-center align-center"
+                v-if="!GET_PRODUCTS_AND_PHOTOS_LOADED"
+            >
+                <p class="primary--text">{{ $t('LOADING_PRODUCTS') }}</p>
+            </v-col>
+            <v-col
+                cols="12"
                 lg="4"
                 md="6"
                 sm="6"
@@ -44,7 +65,7 @@
                             <v-col cols="9" class="pl-0">
                                 <v-row class="flex-column ma-0 fill-height title ml-0 mr-0" justify="center">
                                     <v-rating
-                                        :value="getRating(item.productRatings)"
+                                        :value="item.rating"
                                         background-color="orange lighten-3"
                                         color="primary"
                                         :small="$vuetify.breakpoint.mdAndUp"
@@ -100,10 +121,6 @@ export default class ProductCard extends Vue {
         }
 
         return item.serviceProvider[0].provider.name;
-    }
-
-    getRating(productRatings): number {
-        return productRatings[0] ? parseInt(productRatings[0].rating) : 0;
     }
 
     @products.Action(ProductsTypes.actions.FETCH_SERVICE_DETAIL)

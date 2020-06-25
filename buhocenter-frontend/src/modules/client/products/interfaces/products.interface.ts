@@ -28,6 +28,11 @@ export interface ProductProvider {
     updatedAt?: string;
 }
 
+export interface Products {
+    products?: Product;
+    productsNumber?: number;
+}
+
 export interface Product {
     productPhotos: any;
     description?: string;

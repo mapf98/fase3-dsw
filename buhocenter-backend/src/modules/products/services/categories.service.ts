@@ -87,10 +87,8 @@ export class CategoriesService {
             return await this.categoriesRepository.query(
                 `
             SELECT distinct ca.id AS id, ca.name AS name, ca.term AS term
-            FROM catalogues ca, product_catalogues pctlg, categories cate
-            WHERE ca.id = pctlg.catalogue_id 
-                AND cate.id = ca.category_id               
-                AND cate.id = ${id}
+            FROM catalogues ca
+            WHERE ca.category_id = ${id}
             `.trim(),
             );
         } catch (e) {

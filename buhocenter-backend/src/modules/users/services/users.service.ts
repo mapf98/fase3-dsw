@@ -84,7 +84,7 @@ export class UsersService {
         if (customer) {
             const newcustomer: User = this.usersRepository.merge(customer, {
                 token: data.token,
-                foreignExchange: { id: FOREIGN_EXCHANGES.USD.id },
+                //foreignExchange: { id: FOREIGN_EXCHANGES.USD.id },
             });
             customerSave = await this.usersRepository.save(newcustomer);
             customerSave = await this.usersRepository.findOne({

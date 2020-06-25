@@ -58,6 +58,7 @@ import LayoutTypes from '@/store/layout/methods/layout.methods';
 import { Category } from '../interfaces/categories.interface';
 
 @Component
+
 export default class Categories extends Vue {
     page = 1;
     productsDisplayed = 8;
@@ -69,11 +70,11 @@ export default class Categories extends Vue {
         await this.fetchCategories();
     }
 
-    closeSnackbar() {
+    closeSnackbar(): void {
         this.errorLoadingContent = false;
     }
 
-    get getLength() {
+    get getLength(): number {
         const length: number = this.GET_TOTAL_CATEGORIES! - this.productsDisplayed + 1;
 
         if (length < 0) {
@@ -85,6 +86,8 @@ export default class Categories extends Vue {
 
     async fetchCategories() {
         await this.FETCH_CATEGORIES();
+        console.log('total', this.GET_TOTAL_CATEGORIES);
+        console.log(this.GET_CATEGORIES);
     }
 
     async mounted() {
