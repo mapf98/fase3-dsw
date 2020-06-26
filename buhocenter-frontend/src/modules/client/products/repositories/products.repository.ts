@@ -6,20 +6,16 @@ import {
     ProductCreate,
     Products,
 } from '../interfaces/products.interface';
+import { Filter } from '@/utils/filter';
 
-//hay cosas por arreglar
 class ProductsHttpRepository extends HttpRepository {
     private static readonly RESOURCE = 'products';
     private static readonly RESOURCEDIMENSION = 'products/dimension';
     private static readonly RESOURCEIMAGE = 'products/image';
     private static readonly RESOURCEINVENTORY = 'products/inventory';
 
-    public getProducts(page: number, catalogueId: number): Promise<Products> {
-        return this.get(
-            this.createUri([`${ProductsHttpRepository.RESOURCE}`], {
-                catalogueId,
-            }),
-        );
+    public getProducts(filter: Filter): Promise<Products> {
+        return this.get(`${ProductsHttpRepository.RESOURCE}?` + filter.get());
     }
 
     public getProductById(id: number): Promise<Product> {

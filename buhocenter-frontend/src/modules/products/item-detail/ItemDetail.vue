@@ -290,7 +290,7 @@ export default class ItemDetail extends Vue {
             },
             product: {
                 id: this.GET_ITEM_DETAIL.id,
-                productPhotos: '',
+                productPhotos: [],
                 provider: {
                     createdAt: '',
                     id: 0,

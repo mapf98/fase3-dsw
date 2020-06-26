@@ -12,12 +12,19 @@ export interface ServiceCart {
     };
     createdAt?: string;
     updatedAt?: string;
+
+    service?: {
+        id: number;
+    };
 }
 
 export class ProductCarts {
     createdAt?: string;
     id?: number;
     product?: Product;
+    customer?: {
+        id: number;
+    };
     quantity?: number;
     updatedAt?: string;
     user?: {

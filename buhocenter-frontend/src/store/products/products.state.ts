@@ -7,7 +7,7 @@ export const PRODUCT_EMPTY_STATE: ProductStateInterface = {
     productsDailyAndPhotosLoaded: false,
     totalProducts: 0,
     itemDetail: {
-        productPhotos: {},
+        productPhotos: [],
         provider: {
             createdAt: '',
             id: 0,

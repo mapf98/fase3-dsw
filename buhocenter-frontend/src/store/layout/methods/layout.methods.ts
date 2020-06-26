@@ -12,5 +12,6 @@ export default {
     actions: {
         MODIFY_CATEGORY: 'MODIFY_CATEGORY',
         MODIFY_CATALOGUE: 'MODIFY_CATALOGUE',
+        EMPTY_CATEGORY: 'EMPTY_CATEGORY',
     },
 };

@@ -1,3 +1,5 @@
+import { Catalogue } from '../../catalogues/interfaces/catalogues.interface';
+
 export interface Category {
     createdAt?: string;
     icon?: string;
@@ -5,6 +7,7 @@ export interface Category {
     name?: string;
     term?: string;
     updatedAt?: string;
+    catalogues?: Catalogue[];
 }
 
 export interface Categories {

@@ -1,6 +1,8 @@
 export const terms = {
     HOME: 'Home',
     PRODUCTS: 'Products',
+    ALL_PRODUCTS: 'All products',
+    ALL: 'All',
     SERVICES: 'Services',
     'SIGN-IN': 'Sign in',
     'LOG-OUT': 'Log out',
@@ -62,6 +64,7 @@ export const terms = {
     MUSIC_INSTRUMENTS: 'Music instruments',
     CONSOLES: 'Consoles',
     PRICE: 'Price',
+    PRICES: 'Prices',
     UP_TO: 'Up to',
     TO: 'To',
     MORE_THAN: 'More than',

@@ -7,7 +7,9 @@
             <MobileMenu v-bind:open-side-menu="drawer" @openCart="openCart" />
             <Header v-bind:open-cart="drawerSC" @openSideMenu="openSideMenu" />
             <v-content>
-                <router-view></router-view>
+                <v-fade-transition hide-on-leave>
+                    <router-view></router-view>
+                </v-fade-transition>
             </v-content>
             <Footer v-if="!this.$route.meta.admin" />
         </v-container>

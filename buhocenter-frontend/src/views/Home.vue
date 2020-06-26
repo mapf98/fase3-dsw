@@ -1,5 +1,5 @@
 <template>
-    <div class="container-page" style="position: relative;">
+    <div class="container-page">
         <v-carousel hide-delimiters height="300">
             <v-carousel-item
                 class="carrousel-home"
@@ -38,7 +38,6 @@ export default class Home extends Vue {
 </script>
 <style>
 .container-page {
-    position: relative;
     width: 100%;
     padding: 0;
 }

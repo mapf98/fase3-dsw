@@ -1,113 +1,103 @@
 <template>
     <v-navigation-drawer v-model="drawer" :mini-variant.sync="mini" permanent>
-        <v-list-item class="px-2" v-if="!mini">
-            <v-list-item-title class="overline ml-3" v-if="getCategory !== '' && getCategory">
+        <v-list-item class="px-2" v-if="this.$route.query.category_id">
+            <v-list-item-title class="overline ml-3 pa-4" v-if="getCategory !== '' && getCategory">
                 <RouterLink :to="`/catalogues?category_id=${getCategoryId}`">
-                    {{ $t(getCategory) }} </RouterLink
-                >> {{ $t(getCatalogue) }}
+                    {{ $t(getCategory) }}
+                </RouterLink>
+                <a class="pa-2 inline" v-if="getCatalogue !== '' && getCatalogue">
+                    > {{ $t(getCatalogue) }}
+                </a>
             </v-list-item-title>
         </v-list-item>
 
         <v-divider></v-divider>
         <v-list dense>
-            <v-list-item class="mb-4">
-                <v-list-item-icon style="margin-right: 10px;">
-                    <v-icon class="iconos-aside mr-2" v-if="mini" style="color: #907f46; font-weight: bold;"
-                        >fas fa-dollar-sign</v-icon
+            <v-list-item link @click="searchAll()">
+                <v-list-item-action class="ml-2">
+                    <v-icon color="primary" style="font-size: 20px !important;"
+                        >mdi-calendar-text-outline</v-icon
                     >
-                </v-list-item-icon>
+                </v-list-item-action>
                 <v-list-item-content>
-                    <v-list-item-title class="title-aside mb-4" style="color: #907f46; font-weight: bold;">
-                        <v-icon class="iconos-aside-litle mr-2" style="color: #907f46; font-weight: bold;"
-                            >fas fa-dollar-sign</v-icon
+                    <v-list-item-title class="fs-sp">
+                        {{ $t('ALL_PRODUCTS') }}
+                    </v-list-item-title>
+                </v-list-item-content>
+            </v-list-item>
+            <div v-for="(item, w) in list" :key="w">
+                <div class="ml-6 pa-2 subheader">{{ item.title }}</div>
+                <v-list-group v-for="(sec, j) in item.section" :key="j" @click="showCategory(sec)">
+                    <template v-slot:appendIcon>
+                        <v-icon style="font-size: 15px !important;">mdi-chevron-down</v-icon>
+                    </template>
+                    <template v-slot:activator>
+                        <v-list-item-action>
+                            <v-icon x-small class="ml-2">{{ sec.icon }}</v-icon>
+                        </v-list-item-action>
+                        <v-list-item-content class="ml-n4">
+                            <v-list-item-title class="fs-sp">
+                                {{ $t(sec.term) }}
+                            </v-list-item-title>
+                        </v-list-item-content>
+                    </template>
+
+                    <v-list-item-group>
+                        <v-list-item
+                            v-for="(sub, k) in sec.catalogues"
+                            :key="k"
+                            class="pl-2"
+                            @click="showCatalogue(sub)"
                         >
-                        {{ $t('PRICE') }}
-                    </v-list-item-title>
-                    <p class="body-2 my-1 text-price">{{ $t('UP_TO') }} <b style="color: #907f46;">$25</b></p>
-                    <p class="body-2 my-1 text-price">
-                        <b style="color: #907f46;">$25</b> {{ $t('TO') }}
-                        <b style="color: #907f46;">$50</b>
-                    </p>
-                    <p class="body-2 my-1 text-price">
-                        <b style="color: #907f46;">$50</b> {{ $t('TO') }}
-                        <b style="color: #907f46;">$100</b>
-                    </p>
-                    <p class="body-2 my-1 text-price">
-                        <b style="color: #907f46;">$100</b> {{ $t('TO') }}
-                        <b style="color: #907f46;">$150</b>
-                    </p>
-                    <p class="body-2 my-1 text-price">
-                        {{ $t('MORE_THAN') }} <b style="color: #907f46;">$150</b>
-                    </p>
-                </v-list-item-content>
-            </v-list-item>
-            <v-list-item>
-                <v-list-item-icon style="margin-right: 10px;">
-                    <v-icon class="iconos-aside mr-2" v-if="mini" style="color: #907f46; font-weight: bold;"
-                        >fas fa-star</v-icon
+                            <v-list-item-action>
+                                <v-icon style="font-size: 10px !important;" class="ml-4"
+                                    >mdi-square-small</v-icon
+                                >
+                            </v-list-item-action>
+                            <v-list-item-content>
+                                <v-list-item-title class="fs-sp"> {{ $t(sub.term) }}</v-list-item-title>
+                            </v-list-item-content>
+                        </v-list-item>
+                    </v-list-item-group>
+                </v-list-group>
+
+                <v-list-item-group mandatory v-model="model[0]">
+                    <v-list-item
+                        color="primary"
+                        v-for="(child, i) in item.types"
+                        :key="i"
+                        @click="getProductsByPrice(child.price)"
+                        link
                     >
-                </v-list-item-icon>
-                <v-list-item-content>
-                    <v-list-item-title class="title-aside mb-4" style="color: #907f46; font-weight: bold;">
-                        <v-list-item-title class="title-aside" style="color: #907f46; font-weight: bold;">
-                            <v-icon class="iconos-aside-litle mr-2" style="color: #907f46; font-weight: bold;"
-                                >fas fa-star</v-icon
+                        <v-list-item-content>
+                            <v-list-item-title class="fs-sp ml-10"
+                                >{{ child.type }} {{ child.price }} {{ child.currency }}</v-list-item-title
                             >
-                            {{ $t('RATING') }}
-                        </v-list-item-title>
-                    </v-list-item-title>
-                    <v-row style="padding: 0px 10px;">
-                        <v-col cols="12" style="padding: 0px;">
-                            <v-rating
-                                size="15"
-                                :value="1"
-                                background-color="lighten-3"
-                                color="primary"
-                            ></v-rating>
-                        </v-col>
-                    </v-row>
-                    <v-row style="padding: 0px 10px;">
-                        <v-col cols="12" style="padding: 0px;">
-                            <v-rating
-                                size="15"
-                                :value="2"
-                                background-color="lighten-3"
-                                color="primary"
-                            ></v-rating>
-                        </v-col>
-                    </v-row>
-                    <v-row style="padding: 0px 10px;">
-                        <v-col cols="12" style="padding: 0px;">
-                            <v-rating
-                                size="15"
-                                :value="3"
-                                background-color="lighten-3"
-                                color="primary"
-                            ></v-rating>
-                        </v-col>
-                    </v-row>
-                    <v-row style="padding: 0px 10px;">
-                        <v-col cols="12" style="padding: 0px;">
-                            <v-rating
-                                size="15"
-                                :value="4"
-                                background-color="lighten-3"
-                                color="primary"
-                            ></v-rating>
-                        </v-col>
-                    </v-row>
-                    <v-row style="padding: 0px 10px;">
-                        <v-col cols="12" style="padding: 0px;">
-                            <v-rating
-                                size="15"
-                                :value="5"
-                                background-color="lighten-3"
-                                color="primary"
-                            ></v-rating>
-                        </v-col>
-                    </v-row>
-                </v-list-item-content>
-            </v-list-item>
+                        </v-list-item-content>
+                    </v-list-item>
+                </v-list-item-group>
+                <v-list-item-group mandatory v-model="model[1]">
+                    <v-list-item
+                        v-for="(child, i) in item.rating"
+                        :key="i"
+                        link
+                        class="ml-4"
+                        color="primary"
+                        @click="getProductsByRating(child.value)"
+                    >
+                        <v-rating
+                            v-if="child.value"
+                            small
+                            v-model="child.value"
+                            readonly
+                            background-color="primary"
+                        ></v-rating>
+                        <v-list-item-content v-else>
+                            <v-list-item-title class="fs-sp ml-10">{{ child.type }}</v-list-item-title>
+                        </v-list-item-content>
+                    </v-list-item>
+                </v-list-item-group>
+            </div>
         </v-list>
     </v-navigation-drawer>
 </template>
@@ -115,13 +105,22 @@
 <script lang="ts">
 import Vue from 'vue';
 import Component from 'vue-class-component';
-import { layout } from '@/store/namespaces';
+import { catalogueModule, layout, categoryModule } from '@/store/namespaces';
+import CatalogueMethods from '@/store/catalogue/methods/catalogue.methods';
+import CategoriesMethods from '@/store/categories/methods/categories.methods';
+import { Catalogues as CataloguesInterface } from '@/modules/client/catalogues/interfaces/catalogues.interface';
+import { Catalogue } from '@/modules/client/catalogues/interfaces/catalogues.interface';
+import { Category } from '@/modules/client/categories/interfaces/categories.interface';
 import LayoutTypes from '@/store/layout/methods/layout.methods';
+import { ProductFilters } from '../../products/interfaces/products.interface';
+import { Watch } from 'vue-property-decorator';
+
 @Component
 export default class Aside extends Vue {
-    ratings: number[] = [4, 3, 2, 1];
     valor!: string;
+    model = [0, 0];
     drawer = true;
+    filter: ProductFilters = new ProductFilters();
     items = [
         { title: 'Home', icon: 'mdi-home-city' },
         { title: 'My Account', icon: 'mdi-account' },
@@ -141,6 +140,113 @@ export default class Aside extends Vue {
         return this.GET_CATALOGUE!;
     }
 
+    get actualCatalogue(): any {
+        if (this.$route.query.catalogue_id) {
+            return this.$route.query.catalogue_id;
+        } else {
+            return 0;
+        }
+    }
+
+    xyz(sec: number): boolean {
+        if (sec === 1) return true;
+        else return false;
+    }
+
+    async showCategory(category: Category) {
+        await this.MODIFY_CATEGORY(category);
+        await this.MODIFY_CATALOGUE({});
+        this.$router.push(`/products?category_id=${category.id}`);
+    }
+
+    async showCatalogue(catalogue: Catalogue) {
+        await this.MODIFY_CATALOGUE(catalogue);
+        this.$router.push(
+            `/products?category_id=${this.GET_CATEGORY_ID}&catalogue_id=${this.GET_CATALOGUE_ID}`,
+        );
+        this.filter.catalogueId = this.GET_CATALOGUE_ID;
+        this.$emit('refreshProducts', this.filter);
+    }
+
+    searchAll(): void {
+        this.model = [0, 0];
+        this.filter.price = undefined;
+        this.filter.rating = undefined;
+        this.$router.push(`/products`);
+        this.$emit('refreshProducts', {});
+    }
+
+    getProductsByPrice(productPrice: number): void {
+        if (productPrice !== undefined) this.filter.price = productPrice;
+        else this.filter.price = undefined;
+        this.$emit('refreshProducts', this.filter);
+    }
+
+    getProductsByRating(productRating: number): void {
+        if (productRating !== undefined) this.filter.rating = productRating;
+        else this.filter.rating = undefined;
+        this.$emit('refreshProducts', this.filter);
+    }
+
+    setCatalogue(catalogue: Catalogue): void {
+        this.MODIFY_CATALOGUE(catalogue);
+        const data: ProductFilters = { catalogueId: this.GET_CATALOGUE_ID };
+        this.$router.push(`/products?category_id=${this.getCategoryId}&catalogue_id=${catalogue.id}`);
+        this.$emit('refreshProducts', data);
+    }
+
+    get list(): any {
+        return [
+            {
+                title: this.$t('CATEGORIES'),
+                section: this.GET_CATEGORIES!,
+            },
+            {
+                title: this.$t('PRICES'),
+                types: [
+                    {
+                        type: this.$t('ALL') + '...',
+                    },
+                    {
+                        type: this.$t('UP_TO'),
+                        price: 100,
+                        currency: '$',
+                    },
+                    {
+                        type: this.$t('UP_TO'),
+                        price: 200,
+                        currency: '$',
+                    },
+                    {
+                        type: this.$t('UP_TO'),
+                        price: 300,
+                        currency: '$',
+                    },
+                    {
+                        type: this.$t('UP_TO'),
+                        price: 500,
+                        currency: '$',
+                    },
+                ],
+            },
+            {
+                title: this.$t('RATING'),
+                rating: [
+                    { type: this.$t('ALL') + '...' },
+                    { value: 1 },
+                    { value: 2 },
+                    { value: 3 },
+                    { value: 4 },
+                    { value: 5 },
+                ],
+            },
+        ];
+    }
+
+    async mounted() {
+        await this.FETCH_CATEGORIES();
+    }
+
     @layout.Getter(LayoutTypes.getters.GET_CATEGORY)
     private GET_CATEGORY?: string;
 
@@ -149,13 +255,42 @@ export default class Aside extends Vue {
 
     @layout.Getter(LayoutTypes.getters.GET_CATALOGUE)
     private GET_CATALOGUE?: string;
+
+    @layout.Getter(LayoutTypes.getters.GET_CATALOGUE_ID)
+    private GET_CATALOGUE_ID?: number;
+
+    @catalogueModule.Getter(CatalogueMethods.getters.GET_CATALOGUES)
+    GET_CATALOGUES!: CataloguesInterface;
+
+    @categoryModule.Action(CategoriesMethods.actions.FETCH_CATEGORIES)
+    private FETCH_CATEGORIES!: () => boolean;
+
+    @categoryModule.Getter(CategoriesMethods.getters.GET_CATEGORIES)
+    private GET_CATEGORIES?: Category[];
+    @layout.Action(LayoutTypes.actions.MODIFY_CATALOGUE) MODIFY_CATALOGUE!: (catalogue: Catalogue) => void;
+    @layout.Action(LayoutTypes.actions.MODIFY_CATEGORY) MODIFY_CATEGORY!: (category: Category) => void;
 }
 </script>
 
 <style scoped>
+.text-title-aside {
+    color: #907f46;
+    font-size: 16px;
+}
+
+.text-catalogues {
+    font-size: 16px !important;
+    cursor: pointer;
+}
+
+.text-catalogues:hover {
+    color: #f09774 !important;
+}
+
 .iconos-aside {
     font-size: 20px !important;
 }
+
 .iconos-aside-litle {
     font-size: 12px !important;
 }
@@ -168,8 +303,19 @@ export default class Aside extends Vue {
     cursor: pointer !important;
 }
 
+.subheader {
+    font-size: 18px !important;
+    color: #907f46;
+    font-weight: 700;
+    padding: 5px;
+}
+
 .text-price:hover,
 .text-price:hover b {
     color: #f1cabb !important;
+}
+
+.link_selected {
+    color: #907f46;
 }
 </style>

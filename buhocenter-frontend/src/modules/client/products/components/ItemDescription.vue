@@ -65,26 +65,26 @@ export default class ItemDescription extends Vue {
 
     getTotalRatings(): number | undefined {
         if (this.isProduct()) {
-            return parseInt(this.GET_ITEM_DETAIL.rating);
+            return parseInt(this.GET_ITEM_DETAIL.rating!);
         }
     }
 
     getRatings(): number | undefined {
         if (this.isProduct()) {
-            return parseInt(this.GET_ITEM_DETAIL.rating);
+            return parseInt(this.GET_ITEM_DETAIL.rating!);
         }
     }
 
     get productDimensions(): string {
-        const width = this.GET_ITEM_DETAIL.productDimension.width;
-        const height = this.GET_ITEM_DETAIL.productDimension.height;
-        const long = this.GET_ITEM_DETAIL.productDimension.long;
+        const width = this.GET_ITEM_DETAIL.productDimension!.width;
+        const height = this.GET_ITEM_DETAIL.productDimension!.height;
+        const long = this.GET_ITEM_DETAIL.productDimension!.long;
         return `${long} x ${width} x ${height}`;
     }
 
     getProvider(): string | undefined {
         if (this.isProduct()) {
-            return this.GET_ITEM_DETAIL.provider.name;
+            return this.GET_ITEM_DETAIL.provider!.name;
         }
     }
 

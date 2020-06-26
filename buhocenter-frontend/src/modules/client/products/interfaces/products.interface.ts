@@ -34,35 +34,35 @@ export interface Products {
 }
 
 export interface Product {
-    productPhotos: any;
+    productPhotos?: ProductPhotos[];
     description?: string;
     id?: number;
     brand?: BrandInterface;
     minimumQuantityAvailable?: number;
     name?: string;
-    imageUrl?: string; // eliminar
+    imageUrl?: string;
     //revisar offer y offerss
     offer?: any;
     offers?: any;
-    photos?: Array<{ content: string; imageUrl?: string }>;
     price?: number;
     productProvider?: ProductProvider[];
     serviceProvider?: ProductProvider[]; // ELIMINAR
     shippingPrice?: string;
     productDimensions?: ProductDimentions;
     status?: Status;
-    provider: {
+    provider?: {
         createdAt: string;
         id: number;
         name: string;
         updatedAt: string;
     };
-    productDimension: {
+    productDimension?: {
+        //
         width: string;
         height: string;
         long: string;
     };
-    rating: string;
+    rating?: string;
     questions?: Comment[];
     productInventories?: ProductInventorie;
     productCategories?: {
@@ -84,6 +84,13 @@ export interface Product {
     quantity?: number;
     //quitar
     type?: number;
+}
+
+export interface ProductPhotos {
+    id?: 17;
+    createdAt?: string;
+    updatedAt?: string;
+    content?: string;
 }
 
 export interface ProductRating {
@@ -133,4 +140,15 @@ export interface dimensionDto {
 export interface ProductPhotoDto {
     id: number;
     imageName: string;
+}
+
+export class ProductFilters {
+    name?: string;
+    rating?: number;
+    new?: boolean;
+    categoryId?: number;
+    catalogueId?: number;
+    limit?: number;
+    start?: number;
+    price?: number;
 }

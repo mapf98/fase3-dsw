@@ -359,7 +359,7 @@ export default class ItemDetail extends Vue {
                 });
             }
 
-            this.principalImage = this.GET_ITEM_DETAIL.productPhotos[0].imageUrl!;
+            this.principalImage = this.GET_ITEM_DETAIL.imageUrl!;
         } else {
             this.errorLoadingContent = true;
         }

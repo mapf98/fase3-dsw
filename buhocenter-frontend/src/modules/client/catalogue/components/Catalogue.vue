@@ -1,14 +1,14 @@
 <template>
     <v-row>
-        <div style="width: auto; position: relative;" class="d-none d-md-flex d-lg-flex">
-            <Aside> </Aside>
+        <div class="d-none d-md-flex d-lg-flex">
+            <Aside @refreshProducts="refreshProducts" />
         </div>
         <v-col cols="12" lg="9" md="9" sm="12">
             <v-container fluid>
                 <EmptyState class="mt-12" v-if="this.GET_TOTAL_PRODUCTS == 0" :message="emptyMessage" />
                 <ProductCard />
                 <v-pagination
-                    v-if="this.GET_TOTAL_PRODUCTS > 0 && this.GET_PRODUCTS_AND_PHOTOS_LOADED"
+                    v-if="HowManyPages > 0"
                     color="primary"
                     v-model="page"
                     :length="getLength"
@@ -34,6 +34,7 @@ import ProductsTypes from '@/store/products/methods/products.methods';
 import LayoutTypes from '@/store/layout/methods/layout.methods';
 import { Watch } from 'vue-property-decorator';
 import { Product } from '@/modules/client/products/interfaces/products.interface';
+import { ProductFilters } from '../../products/interfaces/products.interface';
 
 @Component({
     components: {
@@ -44,14 +45,18 @@ import { Product } from '@/modules/client/products/interfaces/products.interface
 })
 export default class Catalogue extends Vue {
     page = 1;
-    productsDisplayed = 8;
+    productsDisplayed = 9;
     timeout = 5000;
     errorLoadingContent = false;
     emptyMessage = 'NO_PRODUCTS';
 
     @Watch('page')
     async changePage() {
-        await this.fetchProducts();
+        await this.fetchProducts({ start: this.page });
+    }
+
+    async refreshProducts(data: ProductFilters): Promise<any> {
+        await this.fetchProducts(data);
     }
 
     closeSnackbar() {
@@ -59,7 +64,7 @@ export default class Catalogue extends Vue {
     }
 
     get getLength() {
-        const length: number = this.GET_TOTAL_PRODUCTS - this.productsDisplayed + 1;
+        const length: number = this.HowManyPages + 1;
 
         if (length < 0) {
             return 1;
@@ -68,13 +73,15 @@ export default class Catalogue extends Vue {
         return length;
     }
 
-    async fetchProducts() {
+    get HowManyPages() {
+        return Math.floor(this.GET_TOTAL_PRODUCTS / this.productsDisplayed);
+    }
+
+    async fetchProducts(data: ProductFilters) {
         this.SET_PRODUCT_PHOTOS_NOT_LOADED(false);
         const fetched: boolean = await this.FETCH_PRODUCTS({
-            page: this.page,
-            catalogueId: this.GET_CATALOGUE_ID,
+            data,
         });
-
         if (!fetched) {
             this.errorLoadingContent = true;
         } else {
@@ -83,7 +90,8 @@ export default class Catalogue extends Vue {
     }
 
     async mounted() {
-        await this.fetchProducts();
+        if (this.$route.query.category_id) await this.fetchProducts({ catalogueId: this.GET_CATALOGUE_ID });
+        else await this.fetchProducts({});
     }
 
     @products.Action(ProductsTypes.actions.FETCH_PRODUCTS) private FETCH_PRODUCTS;

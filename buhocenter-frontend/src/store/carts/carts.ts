@@ -129,11 +129,9 @@ const carts: Module<CartsStateInterface, any> = {
         ): Promise<boolean> {
             try {
                 for (let i = 0; i < products.length; i++) {
-                    products[
-                        i
-                    ].product!.productPhotos![0].imageUrl = await ProductsFirebaseRepository.getProductPhotoByName(
+                    products[i].product!.imageUrl = await ProductsFirebaseRepository.getProductPhotoByName(
                         products[i].product!.id!,
-                        products[i].product!.productPhotos![0].content,
+                        products[i].product!.productPhotos![0].content!,
                     );
                 }
 

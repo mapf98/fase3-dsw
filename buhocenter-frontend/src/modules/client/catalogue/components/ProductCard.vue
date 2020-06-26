@@ -37,8 +37,8 @@
                     @click="getItemDetail(item)"
                     v-if="GET_PRODUCTS_AND_PHOTOS_LOADED"
                 >
-                    <v-container>
-                        <v-row justify="center" style="height: 400px;">
+                    <v-container style="height: 100%;">
+                        <v-row justify="center">
                             <v-col cols="12">
                                 <v-img height="200" contain :src="item.imageUrl"></v-img>
                             </v-col>
@@ -65,7 +65,7 @@
                             <v-col cols="9" class="pl-0">
                                 <v-row class="flex-column ma-0 fill-height title ml-0 mr-0" justify="center">
                                     <v-rating
-                                        :value="item.rating"
+                                        :value="parseInt(item.rating)"
                                         background-color="orange lighten-3"
                                         color="primary"
                                         :small="$vuetify.breakpoint.mdAndUp"
@@ -73,7 +73,6 @@
                                         readonly
                                         :size="$vuetify.breakpoint.mdAndDown ? '3' : '30'"
                                         :dense="$vuetify.breakpoint.mdAndDown"
-                                        half-increments
                                     ></v-rating>
                                 </v-row>
                             </v-col>
@@ -182,15 +181,5 @@ export default class ProductCard extends Vue {
 .product-name:hover {
     text-decoration: underline;
     color: #907f46;
-}
-
-.contenedor-producy {
-    height: 100px;
-}
-
-@media only screen and (max-width: 768px) {
-    .contenedor-product {
-        max-height: 500px;
-    }
 }
 </style>

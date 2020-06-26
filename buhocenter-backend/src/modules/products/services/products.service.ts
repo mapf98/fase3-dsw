@@ -17,6 +17,7 @@ import { Offer } from '../entities/offer.entity';
 import { ProductParameters } from '../interfaces/product-parameters';
 import { PaginatedProducts } from '../interfaces/paginated-products';
 import { DEFAULT_PRODUCT_START_INDEX, MAX_PRODUCTS_BY_PAGE } from '../product.constans';
+import { throws } from 'assert';
 import { ProductQuestion } from '../entities/product-question.entity';
 import { UsersService } from '../../users/services/users.service';
 import { ProductQuestions } from '../interfaces/product-questions';

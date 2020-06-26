@@ -14,6 +14,7 @@ import {
     ProductCreate,
     Products,
 } from '@/modules/client/products/interfaces/products.interface';
+import { Filter } from '@/utils/filter';
 
 const products: Module<ProductStateInterface, any> = {
     namespaced: true,
@@ -84,11 +85,13 @@ const products: Module<ProductStateInterface, any> = {
         [ProductsTypes.actions.SET_PRODUCT_PHOTOS_NOT_LOADED]({ commit }, loaded: boolean): void {
             commit(ProductsTypes.mutations.SET_PRODUCT_AND_PHOTOS_LOADED, loaded);
         },
-        async [ProductsTypes.actions.FETCH_PRODUCTS]({ commit }, { page, catalogueId }): Promise<boolean> {
+        async [ProductsTypes.actions.FETCH_PRODUCTS]({ commit }, { data }): Promise<boolean> {
             try {
-                const products: Products = await productsHttpRepository.getProducts(page, catalogueId);
+                const filter: Filter = new Filter(data);
+                const products: Products = await productsHttpRepository.getProducts(filter);
                 commit(ProductsTypes.mutations.SET_PRODUCTS, products.products);
                 commit(ProductsTypes.mutations.SET_TOTAL_PRODUCTS, products.productsNumber);
+
                 return true;
             } catch (e) {
                 return false;
@@ -136,7 +139,7 @@ const products: Module<ProductStateInterface, any> = {
             try {
                 for await (const element of products) {
                     element.type = ITEM_TYPE.PRODUCT;
-                    const principalPhoto: string = element.productPhotos[0].content;
+                    const principalPhoto: string = element.productPhotos![0].content!;
                     const photo = await productsFirebaseRepository.getProductPhotoByName(
                         element.id!,
                         principalPhoto,
@@ -191,9 +194,9 @@ const products: Module<ProductStateInterface, any> = {
         ): Promise<boolean> {
             try {
                 for (const product of products) {
-                    product.productPhotos[0] = await productsFirebaseRepository.getProductPhotoByName(
+                    product.productPhotos![0] = await productsFirebaseRepository.getProductPhotoByName(
                         product.id!,
-                        product.productPhotos[0].content,
+                        product.productPhotos![0].content!,
                     );
                 }
                 commit(ProductsTypes.mutations.SET_PRODUCTS_DAILY, products);

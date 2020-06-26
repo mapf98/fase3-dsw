@@ -37,10 +37,10 @@
 
             <v-spacer />
 
-            <div class="searc d-none d-xl-block d-lg-block pr-3 hidden-sm-and-down">
-                <input type="search" class="search" />
+            <div class="pr-3 hidden-sm-and-down">
+                <SearchBar size="large" />
             </div>
-            <div class="mr-2 ml-2 hidden-sm-and-down">
+            <div class="mr-2 ml-4 hidden-sm-and-down">
                 <v-menu transition="slide-x-transition" bottom right>
                     <template v-slot:activator="{ on }">
                         <v-btn color="primary" dark v-on="on">
@@ -135,9 +135,10 @@ import { FETCHED, FETCHING } from '@/config/constants';
 import { CustomerInterface } from '@/modules/client/auth/interfaces/customer.interface';
 import { CartInterface } from '@/modules/client/cart/interfaces/carts.interface';
 import CurrencySelector from '@/modules/currency/components/CurrencySelector.vue';
+import SearchBar from './SearchBar.vue';
 
 @Component({
-    components: { CurrencySelector, Cart },
+    components: { CurrencySelector, Cart, SearchBar },
 })
 export default class Header extends Vue {
     @Prop() openCart!: boolean;
@@ -244,12 +245,6 @@ export default class Header extends Vue {
     -moz-box-shadow: 0 0 5px rgba(109, 207, 246, 0.5);
     box-shadow: 0 0 5px rgba(109, 207, 246, 0.5);
     backface-visibility: hidden;
-}
-
-.container-principal {
-    position: relative;
-    top: 66px;
-    padding: 0px 0px 0px 0px !important;
 }
 
 .cursorNavbar {

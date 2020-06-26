@@ -99,7 +99,7 @@ export default class ProductCart extends Vue {
     ];
 
     getProvider(): string {
-        return this.item.product!.provider.name;
+        return this.item.product!.provider!.name;
     }
 
     hasOffer() {

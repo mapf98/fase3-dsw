@@ -1,5 +1,5 @@
 <template>
-    <v-navigation-drawer v-model="readyOpen" fixed temporary>
+    <v-navigation-drawer v-model="readyOpen" fixed temporary width="300">
         <v-row>
             <v-col class="d-flex justify-center align-center mt-2 align-center">
                 <p class="mb-0 headline">Menu</p>
@@ -7,7 +7,7 @@
         </v-row>
         <v-row>
             <v-col>
-                <!-- Search box will be here -->
+                <SearchBar size="mobile" />
                 <div v-if="getStatusLogin" class="d-flex justify-center">
                     <v-menu v-model="menu" :close-on-content-click="true" :nudge-width="200" offset-x>
                         <template v-slot:activator="{ on }">
@@ -98,9 +98,9 @@ import { FETCHED, FETCHING } from '@/config/constants';
 import { CustomerInterface } from '@/modules/client/auth/interfaces/customer.interface';
 import { CartInterface } from '@/modules/client/cart/interfaces/carts.interface';
 import CurrencySelector from '@/modules/currency/components/CurrencySelector.vue';
-
+import SearchBar from '@/modules/common/components/SearchBar.vue';
 @Component({
-    components: { CurrencySelector, Cart },
+    components: { CurrencySelector, Cart, SearchBar },
 })
 export default class MobileSidebar extends Vue {
     @Prop() openSideMenu!: boolean;
