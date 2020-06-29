@@ -19,6 +19,7 @@ import { CommissionsTransactionsRepository } from './transactions/commissions.tr
     imports: [
         CartsModule,
         StatussModule,
+        ProductsModule,
         ConfigModule,
         TypeOrmModule.forFeature(purchasesEntities),
         HttpModule.register({

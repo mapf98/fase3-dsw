@@ -10,6 +10,8 @@ import { ProductsService } from './products.service';
 export class ProductRatingsService {
     constructor(
         @Inject(WINSTON_MODULE_PROVIDER) private readonly logger: Logger,
+        @InjectRepository(ProductRating)
+        private readonly productRatingRepository: Repository<ProductRating>,
         private readonly productService: ProductsService,
     ) {}
 
@@ -40,6 +42,38 @@ export class ProductRatingsService {
             } catch (error) {
                 throw error;
             }
+        });
+    }
+
+    /**
+     * getProductRatingsByProductId
+     * @param productId: number
+     * @returns Promise<ProductRating[]>
+     */
+    async getProductRatingsByProductId(productId: number): Promise<ProductRating[]> {
+        this.logger.debug(
+            `getProductRatingsByProductId: Getting a set of product ratings by its productId [productId=${productId}]`,
+            {
+                context: ProductRatingsService.name,
+            },
+        );
+
+        return await this.productRatingRepository.find({
+            relations: ['user'],
+            where: { product: productId },
+        });
+    }
+
+    async getProductRatingByUserIdAndProductId(userId: number, productId: number): Promise<ProductRating> {
+        this.logger.debug(
+            `getProductRatingByUserIdAndProductId: Getting a product rating by its userId and productId [userId=${userId}|productId=${productId}]`,
+            {
+                context: ProductRatingsService.name,
+            },
+        );
+
+        return await this.productRatingRepository.findOne({
+            where: { user: userId, product: productId },
         });
     }
 }

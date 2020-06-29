@@ -44,6 +44,6 @@ import { UsersModule } from '../users/users.module';
         ProductInventoriesService,
         ProductRatingsService,
     ],
-    exports: [ProductsService, ProductInventoriesService],
+    exports: [ProductsService, ProductInventoriesService, ProductRatingsService],
 })
 export class ProductsModule {}

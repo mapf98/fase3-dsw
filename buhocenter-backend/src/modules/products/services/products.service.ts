@@ -16,7 +16,7 @@ import { ProductPhoto } from '../entities/product-photo.entity';
 import { Offer } from '../entities/offer.entity';
 import { ProductParameters } from '../interfaces/product-parameters';
 import { PaginatedProducts } from '../interfaces/paginated-products';
-import { DEFAULT_PRODUCT_START_INDEX, MAX_PRODUCTS_BY_PAGE } from '../product.constans';
+import { PAGINATE } from '../../../config/constants';
 import { throws } from 'assert';
 import { ProductQuestion } from '../entities/product-question.entity';
 import { UsersService } from '../../users/services/users.service';
@@ -151,8 +151,8 @@ export class ProductsService {
             },
         );
 
-        parameters.start = parameters.start || DEFAULT_PRODUCT_START_INDEX;
-        parameters.limit = parameters.limit || MAX_PRODUCTS_BY_PAGE;
+        parameters.start = parameters.start || PAGINATE.START;
+        parameters.limit = parameters.limit || PAGINATE.LIMIT;
 
         parameters.start = parameters.start * parameters.limit - parameters.limit;
         let query: SelectQueryBuilder<Product> = this.productsRepository

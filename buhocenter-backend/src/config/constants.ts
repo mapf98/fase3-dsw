@@ -88,3 +88,32 @@ export const FOREIGN_EXCHANGES = Object.freeze({
         id: 1,
     },
 });
+
+export const BLOCKCHAIN_MODE = Object.freeze({
+    TEST: 'TEST',
+    MAIN: 'MAIN',
+});
+
+export const PREFIX = Object.freeze({
+    ORDERS: '/api/v1/payments/orders',
+});
+
+export const URL = Object.freeze({
+    CALLBACK: `${PREFIX.ORDERS}/callback`,
+    CANCEL: `${PREFIX.ORDERS}/cancel`,
+    SUCCESS: `${PREFIX.ORDERS}/success`,
+});
+
+export const TITLE = Object.freeze({
+    PAYMENT: 'New Order',
+});
+
+export const CURRENCY = Object.freeze({
+    PRICE: 'USD',
+    RECEIVE: 'BTC',
+});
+
+export const PAGINATE = Object.freeze({
+    START: 1,
+    LIMIT: 10,
+});

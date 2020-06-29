@@ -257,7 +257,7 @@ export class CartsService {
 
         let price = 0;
         carts.forEach(cart => {
-            price += cart.quantity * cart.offerPrice;
+            price += cart.quantity * cart.productPrice;
         });
 
         return price;

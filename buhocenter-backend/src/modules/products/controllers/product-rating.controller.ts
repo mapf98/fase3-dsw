@@ -1,4 +1,4 @@
-import { Controller, Inject, Post, Body } from '@nestjs/common';
+import { Controller, Inject, Post, Body, Get, ParseIntPipe, Query } from '@nestjs/common';
 import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
 import { Logger } from 'winston';
 import { ProductRatingsService } from '../services/product-ratings.service';
@@ -18,5 +18,16 @@ export class ProductRatingsController {
         });
 
         return await this.productRatingsService.createProductRating(productRating);
+    }
+
+    @Get()
+    async getProductRatingsByProductId(
+        @Query('productId', new ParseIntPipe()) productId: number,
+    ): Promise<ProductRating[]> {
+        this.logger.info(`getProductRatingsByProductId: Getting a set of product ratings by its productId`, {
+            context: ProductRatingsController.name,
+        });
+
+        return await this.productRatingsService.getProductRatingsByProductId(productId);
     }
 }

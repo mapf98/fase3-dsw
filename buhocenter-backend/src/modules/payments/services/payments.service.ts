@@ -18,22 +18,24 @@ import { NewOrder } from '../interfaces/new-order';
 import { OrderStatus } from '../interfaces/order-status';
 import { Status } from 'src/modules/status/entities/status.entity';
 import { CryptocurrenciesService } from './cryptocurrencies.service';
+import { ProductRatingsService } from 'src/modules/products/services/product-ratings.service';
 
 @Injectable()
 export class PaymentsService {
-    private _paymentClient: IPaymentClient;
+    private paymentClient: IPaymentClient;
 
     constructor(
-        @Inject(WINSTON_MODULE_PROVIDER) private readonly _logger: Logger,
+        @Inject(WINSTON_MODULE_PROVIDER) private readonly logger: Logger,
         @InjectRepository(Payment)
-        private readonly _paymentRepository: Repository<Payment>,
-        private readonly _cartService: CartsService,
-        private readonly _commissionService: CommissionsService,
-        private readonly _cryptocurrencyService: CryptocurrenciesService,
-        private readonly _statusService: StatusService,
-        private readonly _configService: ConfigService,
+        private readonly paymentRepository: Repository<Payment>,
+        private readonly cartService: CartsService,
+        private readonly commissionService: CommissionsService,
+        private readonly cryptocurrencyService: CryptocurrenciesService,
+        private readonly statusService: StatusService,
+        private readonly productRatingService: ProductRatingsService,
+        private readonly configService: ConfigService,
     ) {
-        this._paymentClient = new CoingatePaymentStrategy(this._configService);
+        this.paymentClient = new CoingatePaymentStrategy(this.configService);
     }
 
     /**
@@ -42,16 +44,18 @@ export class PaymentsService {
      * @returns Promise<NewPayment>
      */
     async createOrder(checkout: Checkout): Promise<NewPayment> {
-        this._logger.debug(`createOrder: Creating a new order`, {
+        this.logger.debug(`createOrder: Creating a new order`, {
             context: PaymentsService.name,
         });
 
-        const price = this._cartService.getPriceForCarts(checkout.cartsForPayment);
-        const activeCommission = await this._commissionService.getActiveCommission();
-        const newOrderStatus = await this._statusService.getStatusById(STATUS.NEW.id);
+        const price = this.cartService.getPriceForCarts(checkout.cartsForPayment);
+        const activeCommission = await this.commissionService.getActiveCommission();
+        const newOrderStatus = await this.statusService.getStatusById(STATUS.NEW.id);
 
         let payment: Payment = new Payment();
-        payment.total = price + price * activeCommission.serviceFee + price * activeCommission.processorFee;
+        payment.total = parseFloat(
+            (price + price * activeCommission.serviceFee + price * activeCommission.processorFee).toFixed(2),
+        );
         payment.address = checkout.address;
         payment.commission = activeCommission;
         payment.foreignExchange = checkout.foreignExchange;
@@ -65,12 +69,12 @@ export class PaymentsService {
 
         await getManager().transaction(async transactionEntityManager => {
             try {
-                await this._cartService.reserveCarts(checkout.cartsForPayment, transactionEntityManager);
+                await this.cartService.reserveCarts(checkout.cartsForPayment, transactionEntityManager);
                 const paymentTransactionRepository: Repository<Payment> = transactionEntityManager.getRepository(
                     Payment,
                 );
                 await paymentTransactionRepository.save(payment);
-                order = await this._paymentClient.createOrder(payment.id, payment.total);
+                order = await this.paymentClient.createOrder(payment.id, payment.total);
                 payment.transaction = order.id;
                 await paymentTransactionRepository.save(payment);
             } catch (error) {
@@ -90,15 +94,12 @@ export class PaymentsService {
      * @returns Promise<OrderStatus>
      */
     async callbackOrders(order: OrderStatus): Promise<OrderStatus> {
-        this._logger.debug(
-            `callbackOrders: Receiving the status of a payment [paymentId=${order.order_id}]`,
-            {
-                context: PaymentsService.name,
-            },
-        );
+        this.logger.debug(`callbackOrders: Receiving the status of a payment [paymentId=${order.order_id}]`, {
+            context: PaymentsService.name,
+        });
 
         const payment = await this.getPaymentById(parseInt(order.order_id));
-        const status = await this._statusService.getStatusByName(order.status);
+        const status = await this.statusService.getStatusByName(order.status);
 
         try {
             switch (order.status) {
@@ -110,12 +111,12 @@ export class PaymentsService {
                     );
                     break;
                 case STATUS.PAID.name:
-                    await this._cartService.payCarts(payment.carts, status);
+                    await this.cartService.payCarts(payment.carts, status);
                     break;
                 case STATUS.INVALID.name:
                 case STATUS.CANCELED.name:
                 case STATUS.EXPIRED.name:
-                    await this._cartService.giveBackCarts(payment.carts);
+                    await this.cartService.giveBackCarts(payment.carts);
                     break;
             }
         } catch (error) {
@@ -132,11 +133,11 @@ export class PaymentsService {
      * @returns Promise<Payment>
      */
     async getPaymentById(paymentId: number): Promise<Payment> {
-        this._logger.debug(`getPaymentById: Getting a payment by id [paymentId=${paymentId}]`, {
+        this.logger.debug(`getPaymentById: Getting a payment by id [paymentId=${paymentId}]`, {
             context: PaymentsService.name,
         });
 
-        return await this._paymentRepository
+        return await this.paymentRepository
             .createQueryBuilder('payment')
             .innerJoinAndSelect('payment.carts', 'carts')
             .innerJoinAndSelect('payment.statusHistories', 'statusHistories')
@@ -151,7 +152,7 @@ export class PaymentsService {
      * @retuns void
      */
     async updatePaymentStatus(payment: Payment, status: Status) {
-        this._logger.debug(
+        this.logger.debug(
             `updatePaymentStatus: Updating de status of a payment [paymentId=${payment.id}|statusName=${status.name}]`,
             {
                 context: PaymentsService.name,
@@ -162,7 +163,7 @@ export class PaymentsService {
         statusHistory.status = status;
         payment.statusHistories.push(statusHistory);
 
-        await this._paymentRepository.save(payment);
+        await this.paymentRepository.save(payment);
     }
 
     /**
@@ -173,18 +174,18 @@ export class PaymentsService {
      * @returns void
      */
     async setPaymentCryptocurrency(payment: Payment, totalCryptocurrency: number, cryptocurrencyIso: string) {
-        this._logger.debug(
+        this.logger.debug(
             `setPaymentCryptocurrency: Setting cryptocurrency of a payment [paymentId=${payment.id}|cryptocurrencyIso=${cryptocurrencyIso}]`,
             {
                 context: PaymentsService.name,
             },
         );
 
-        const cryptocurrency = await this._cryptocurrencyService.getCryptotocurrencyByIso(cryptocurrencyIso);
+        const cryptocurrency = await this.cryptocurrencyService.getCryptotocurrencyByIso(cryptocurrencyIso);
         payment.totalCryptocurrency = totalCryptocurrency;
         payment.cryptocurrency = cryptocurrency;
 
-        await this._paymentRepository.save(payment);
+        await this.paymentRepository.save(payment);
     }
 
     /**
@@ -193,23 +194,22 @@ export class PaymentsService {
      * @returns Payment[]
      */
     async getPaymentsByUserId(userId: number): Promise<Payment[]> {
-        this._logger.debug(`getPaymentsByUserId: Getting the payments of a user [userId=${userId}]`, {
+        this.logger.debug(`getPaymentsByUserId: Getting the payments of a user [userId=${userId}]`, {
             context: PaymentsService.name,
         });
 
-        return await this._paymentRepository
+        return await this.paymentRepository
             .createQueryBuilder('payment')
             .innerJoinAndSelect('payment.statusHistories', 'statusHistories')
             .innerJoinAndSelect('statusHistories.status', 'status')
             .where('status.id <> :id', { id: STATUS.CANCELED.id })
-            .andWhere('status.id <> :id', { id: STATUS.EXPIRED })
-            .andWhere('status.id <> :id', { id: STATUS.INVALID })
+            .andWhere('status.id <> :id', { id: STATUS.EXPIRED.id })
+            .andWhere('status.id <> :id', { id: STATUS.INVALID.id })
             .innerJoinAndSelect('payment.commission', 'commission')
             .innerJoinAndSelect('payment.foreignExchange', 'foreignExchange')
             .leftJoinAndSelect('payment.cryptocurrency', 'cryptocurrency')
             .innerJoin('payment.carts', 'carts')
-            .innerJoin('carts.user', 'user')
-            .andWhere('user.id = :id', { id: userId })
+            .andWhere('carts.user = :id', { id: userId })
             .getMany();
     }
 
@@ -219,25 +219,41 @@ export class PaymentsService {
      * @returns Paymen
      */
     async getPaymentsById(paymentId: number): Promise<Payment> {
-        this._logger.debug(`getPaymentsById: Getting a payment by its id [paymentId=${paymentId}]`, {
+        this.logger.debug(`getPaymentsById: Getting a payment by its id [paymentId=${paymentId}]`, {
             context: PaymentsService.name,
         });
 
-        return await this._paymentRepository
-            .createQueryBuilder('payment')
-            .innerJoinAndSelect('payment.commission', 'commission')
-            .innerJoinAndSelect('payment.statusHistories', 'statusHistories')
-            .innerJoinAndSelect('statusHistories.status', 'status')
-            .innerJoinAndSelect('payment.foreignExchange', 'foreignExchange')
-            .leftJoinAndSelect('payment.cryptocurrency', 'cryptocurrency')
-            .innerJoinAndSelect('payment.carts', 'carts')
-            .innerJoinAndSelect('carts.product', 'product')
-            .innerJoinAndSelect('product.productPhotos', 'productPhotos')
-            .innerJoinAndSelect('product.brand', 'brand')
-            .innerJoinAndSelect('product.provider', 'provider')
-            .leftJoinAndSelect('product.productRatings', 'productRatings')
-            .andWhere('payment.id = :id', { id: paymentId })
-            .andWhere('carts.user = productRatings.user')
-            .getOne();
+        let payment = await this.paymentRepository.findOne({
+            relations: [
+                'address',
+                'address.user',
+                'commission',
+                'statusHistories',
+                'statusHistories.status',
+                'foreignExchange',
+                'cryptocurrency',
+                'carts',
+                'carts.product',
+                'carts.product.productPhotos',
+                'carts.product.brand',
+                'carts.product.provider',
+            ],
+            where: { id: paymentId },
+        });
+
+        const userId = payment.address.user.id;
+
+        const CartsNumber = Array.from({ length: payment.carts.length }, (array, index) => index);
+
+        for await (let index of CartsNumber) {
+            payment.carts[index].product.productRatings = [
+                await this.productRatingService.getProductRatingByUserIdAndProductId(
+                    userId,
+                    payment.carts[index].product.id,
+                ),
+            ];
+        }
+
+        return payment;
     }
 }
