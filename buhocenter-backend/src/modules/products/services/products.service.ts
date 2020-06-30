@@ -488,7 +488,6 @@ export class ProductsService {
 
         await productTransactionRepository.update({ id: product.id }, { rating: avgRating });
     }
-
     public async addQuestionToProduct(productAndQuestion: ProductQuestions): Promise<boolean> {
         try {
             let newProductQuestion = new ProductQuestion();

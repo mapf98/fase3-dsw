@@ -52,7 +52,7 @@
 
                             <v-col cols="9" class="pl-0 product-name">
                                 <v-row class="flex-column ma-0 fill-height caption" justify="center">
-                                    {{ getName(item) }}
+                                    {{ getName(item.name) }}
                                 </v-row>
                             </v-col>
 
@@ -91,6 +91,7 @@ import { products } from '../../../../store/namespaces';
 import ProductsTypes from '@/store/products/methods/products.methods';
 import { ITEM_TYPE } from '../../../../config/constants';
 import { Product } from '@/modules/client/products/interfaces/products.interface';
+import { getShortName } from '@/utils/global-functions';
 
 @Component
 export default class ProductCard extends Vue {
@@ -110,8 +111,8 @@ export default class ProductCard extends Vue {
         }
     }
 
-    getName(product: Product): string | undefined {
-        return product.name!.length < 70 ? product.name : product.name!.substr(0, 70)! + '...';
+    getName(name: string): string | undefined {
+        return getShortName(name, 70);
     }
 
     getProvider(item): string {

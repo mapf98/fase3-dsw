@@ -2,6 +2,7 @@ import { ProductStateInterface } from './interfaces/products.state.interface';
 
 export const PRODUCT_EMPTY_STATE: ProductStateInterface = {
     products: [],
+    allProducts: [],
     productsAndPhotosLoaded: false,
     productsDaily: [],
     productsDailyAndPhotosLoaded: false,

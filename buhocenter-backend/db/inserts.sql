@@ -187,8 +187,6 @@ insert into catalogues (name, description, term, category_id) VALUES ('Balls', '
 insert into catalogues (name, description, term, category_id) VALUES ('Washing machine', 'Catálogo de lavadoras', 'WASHING_MACHINE', 10);
 insert into catalogues (name, description, term, category_id) VALUES ('Music instruments', 'Catálogo de instrumentos musicales', 'MUSIC_INSTRUMENTS', 11);
 insert into catalogues (name, description, term, category_id) VALUES ('Consoles', 'Catálogo de consolas', 'CONSOLES', 12);
-insert into catalogues (name, description, term, category_id) VALUES ('Cámaras', 'Catálogo de Cámaras', 'Camara', 1);
-insert into catalogues (name, description, term, category_id) VALUES ('Baterías', 'Catálogo de Baterías', 'Battery', 12);
 
 insert into product_catalogues (catalogue_id, product_id) VALUES (1, 1);
 insert into product_catalogues (catalogue_id, product_id) VALUES (1, 2);

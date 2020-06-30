@@ -79,9 +79,7 @@ export default class Catalogue extends Vue {
 
     async fetchProducts(data: ProductFilters) {
         this.SET_PRODUCT_PHOTOS_NOT_LOADED(false);
-        const fetched: boolean = await this.FETCH_PRODUCTS({
-            data,
-        });
+        const fetched: boolean = await this.FETCH_PRODUCTS(data);
         if (!fetched) {
             this.errorLoadingContent = true;
         } else {
@@ -91,7 +89,7 @@ export default class Catalogue extends Vue {
 
     async mounted() {
         if (this.$route.query.category_id) await this.fetchProducts({ catalogueId: this.GET_CATALOGUE_ID });
-        else await this.fetchProducts({});
+        else if (this.$router.currentRoute.fullPath === '/products') await this.fetchProducts({});
     }
 
     @products.Action(ProductsTypes.actions.FETCH_PRODUCTS) private FETCH_PRODUCTS;

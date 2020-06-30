@@ -5,12 +5,6 @@
                 Error occurred while getting the languages
                 <v-btn color="white" text @click="snackbar = false">Cerrar</v-btn>
             </v-snackbar>
-            <v-img
-                src="../../../../assets/Logo-completo.png"
-                width="400"
-                class="img-header-form align-center"
-            >
-            </v-img>
             <v-alert v-if="getErrRegister" prominent type="error">
                 <v-row align="center">
                     <v-col class="grow">{{ getErrMessage }}</v-col>

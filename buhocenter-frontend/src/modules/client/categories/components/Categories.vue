@@ -85,8 +85,6 @@ export default class Categories extends Vue {
 
     async fetchCategories() {
         await this.FETCH_CATEGORIES();
-        console.log('total', this.GET_TOTAL_CATEGORIES);
-        console.log(this.GET_CATEGORIES);
     }
 
     async mounted() {

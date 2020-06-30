@@ -136,6 +136,10 @@ export default class Aside extends Vue {
         return this.GET_CATEGORY_ID!;
     }
 
+    get getCatalogueId(): number {
+        return this.GET_CATALOGUE_ID!;
+    }
+
     get getCatalogue(): string {
         return this.GET_CATALOGUE!;
     }
@@ -148,23 +152,17 @@ export default class Aside extends Vue {
         }
     }
 
-    xyz(sec: number): boolean {
-        if (sec === 1) return true;
-        else return false;
-    }
-
     async showCategory(category: Category) {
         await this.MODIFY_CATEGORY(category);
         await this.MODIFY_CATALOGUE({});
-        this.$router.push(`/products?category_id=${category.id}`);
+        if (this.$router.currentRoute.query.category_id !== this.getCategoryId!.toString())
+            this.$router.push(`/products?category_id=${category.id}`);
     }
 
     async showCatalogue(catalogue: Catalogue) {
         await this.MODIFY_CATALOGUE(catalogue);
-        this.$router.push(
-            `/products?category_id=${this.GET_CATEGORY_ID}&catalogue_id=${this.GET_CATALOGUE_ID}`,
-        );
-        this.filter.catalogueId = this.GET_CATALOGUE_ID;
+        this.changeRoute();
+        this.filter.catalogueId = this.getCatalogueId;
         this.$emit('refreshProducts', this.filter);
     }
 
@@ -172,7 +170,7 @@ export default class Aside extends Vue {
         this.model = [0, 0];
         this.filter.price = undefined;
         this.filter.rating = undefined;
-        this.$router.push(`/products`);
+        if (this.$router.currentRoute.fullPath !== '/products') this.$router.push(`/products`);
         this.$emit('refreshProducts', {});
     }
 
@@ -190,9 +188,16 @@ export default class Aside extends Vue {
 
     setCatalogue(catalogue: Catalogue): void {
         this.MODIFY_CATALOGUE(catalogue);
-        const data: ProductFilters = { catalogueId: this.GET_CATALOGUE_ID };
-        this.$router.push(`/products?category_id=${this.getCategoryId}&catalogue_id=${catalogue.id}`);
+        const data: ProductFilters = { catalogueId: this.getCatalogueId };
+        this.changeRoute();
         this.$emit('refreshProducts', data);
+    }
+
+    changeRoute() {
+        if (this.$router.currentRoute.query.catalogue_id !== this.getCatalogueId!.toString())
+            this.$router.push(
+                `/products?category_id=${this.getCategoryId}&catalogue_id=${this.getCatalogueId}`,
+            );
     }
 
     get list(): any {

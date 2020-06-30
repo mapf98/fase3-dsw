@@ -14,6 +14,7 @@ import {
     ProductCreate,
     ProductRatingCreate,
     Products,
+    ProductFilters,
 } from '@/modules/client/products/interfaces/products.interface';
 import { Filter } from '@/utils/filter';
 
@@ -23,6 +24,9 @@ const products: Module<ProductStateInterface, any> = {
     getters: {
         [ProductsTypes.getters.GET_PRODUCTS](state): Product[] {
             return state.products;
+        },
+        [ProductsTypes.getters.GET_ALL_PRODUCTS](state): Product[] {
+            return state.allProducts;
         },
         [ProductsTypes.getters.GET_PRODUCTS_AND_PHOTOS_LOADED](state): boolean {
             return state.productsAndPhotosLoaded;
@@ -49,6 +53,9 @@ const products: Module<ProductStateInterface, any> = {
         },
         [ProductsTypes.mutations.SET_PRODUCTS](state, products: Product[]): void {
             state.products = products;
+        },
+        [ProductsTypes.mutations.SET_ALL_PRODUCTS](state, products: Product[]): void {
+            state.allProducts = products;
         },
         [ProductsTypes.mutations.SET_PRODUCT_AND_PHOTOS_LOADED](state, loaded: boolean): void {
             state.productsAndPhotosLoaded = loaded;
@@ -86,11 +93,13 @@ const products: Module<ProductStateInterface, any> = {
         [ProductsTypes.actions.SET_PRODUCT_PHOTOS_NOT_LOADED]({ commit }, loaded: boolean): void {
             commit(ProductsTypes.mutations.SET_PRODUCT_AND_PHOTOS_LOADED, loaded);
         },
-        async [ProductsTypes.actions.FETCH_PRODUCTS]({ commit }, { data }): Promise<boolean> {
+        async [ProductsTypes.actions.FETCH_PRODUCTS]({ commit }, data: ProductFilters): Promise<boolean> {
             try {
                 const filter: Filter = new Filter(data);
                 const products: Products = await productsHttpRepository.getProducts(filter);
                 commit(ProductsTypes.mutations.SET_PRODUCTS, products.products);
+            
+                if (data = {}) commit(ProductsTypes.mutations.SET_ALL_PRODUCTS, products.products);
                 commit(ProductsTypes.mutations.SET_TOTAL_PRODUCTS, products.productsNumber);
 
                 return true;
@@ -164,11 +173,13 @@ const products: Module<ProductStateInterface, any> = {
         },
         async [ProductsTypes.actions.FETCH_ALL_PRODUCTS]({ commit }): Promise<boolean> {
             try {
-                const products: Product[] = await productsHttpRepository.getAllProducts();
-                commit(ProductsTypes.mutations.SET_PRODUCTS, products);
-                return false;
-            } catch (e) {
+                const filter: Filter = new Filter({});
+                const products: Products = await productsHttpRepository.getProducts(filter);
+                commit(ProductsTypes.mutations.SET_ALL_PRODUCTS, products.products);
+
                 return true;
+            } catch (e) {
+                return false;
             }
         },
         async [ProductsTypes.actions.DELETE_PRODUCT]({ commit }, id): Promise<boolean> {
