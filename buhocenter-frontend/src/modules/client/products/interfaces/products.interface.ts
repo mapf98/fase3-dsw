@@ -21,6 +21,19 @@ export interface ProductCreate {
     };
 }
 
+export interface ProductRatingCreate {
+    id?: number;
+    rating: number;
+    comment: string;
+    date: string;
+    product: {
+        id: number;
+    };
+    user: {
+        id: number;
+    };
+}
+
 export interface ProductProvider {
     createdAt?: string;
     id: number;
@@ -78,12 +91,13 @@ export interface Product {
     }[];
     productRatings?: ProductRating[];
     serviceRatings?: ProductRating[]; //Eliminar
-
+    canAccumulatePoints?: boolean;
     updatedAt?: string;
     createdAt?: string;
     quantity?: number;
     //quitar
     type?: number;
+    fragile?: boolean;
 }
 
 export interface ProductPhotos {

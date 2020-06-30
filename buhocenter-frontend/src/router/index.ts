@@ -25,6 +25,7 @@ import PersonalInformation from '@/modules/client/customers/components/PersonalI
 import Checkout from '../views/Checkout.vue';
 import DashboardCreateOffer from '@/modules/management/promotions/components/CreateOffer.vue';
 import DashboardAllOffers from '@/modules/management/promotions/components/AllOffers.vue';
+import Orders from '@/modules/client/customers/components/Orders.vue';
 
 Vue.use(VueRouter);
 
@@ -188,6 +189,11 @@ const routes: RouteConfig[] = [
                 path: '/your-account',
                 name: 'your-account',
                 component: PersonalInformation,
+            },
+            {
+                path: '/your-orders',
+                name: 'your-orders',
+                component: Orders,
             },
         ],
     },

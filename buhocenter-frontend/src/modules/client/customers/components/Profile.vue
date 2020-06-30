@@ -75,7 +75,7 @@ export default class Profile extends Vue {
             title: 'YOUR_ORDERS',
             subtitle: 'YOUR_ORDERS_INFO',
             admin: false,
-            link: '#',
+            link: '/your-orders',
         },
         {
             src: require('../../../../assets/login.png'),

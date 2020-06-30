@@ -246,12 +246,15 @@ export class PaymentsService {
         const CartsNumber = Array.from({ length: payment.carts.length }, (array, index) => index);
 
         for await (let index of CartsNumber) {
-            payment.carts[index].product.productRatings = [
-                await this.productRatingService.getProductRatingByUserIdAndProductId(
-                    userId,
-                    payment.carts[index].product.id,
-                ),
-            ];
+            const productRating = await this.productRatingService.getProductRatingByUserIdAndProductId(
+                userId,
+                payment.carts[index].product.id,
+            );
+            if (productRating) {
+                payment.carts[index].product.productRatings = [productRating];
+            } else {
+                payment.carts[index].product.productRatings = [];
+            }
         }
 
         return payment;

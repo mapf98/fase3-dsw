@@ -2,4 +2,5 @@ import { OrderStateInterface } from '@/store/payments/interfaces/order.state.int
 
 export const ORDERS_STATE: OrderStateInterface = {
     orders: [],
+    productsOrder: [],
 };

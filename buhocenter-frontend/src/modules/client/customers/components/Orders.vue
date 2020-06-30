@@ -1,269 +1,173 @@
 <template>
     <v-container fluid>
-        <v-img src="../../../../assets/images/direction.jpg" height="125" class="grey darken-4"></v-img>
+        <v-img src="../../../../assets/images/orders.jpg" height="125" class="grey darken-4"></v-img>
         <h1 class="overline text-center">{{ $t('YOUR_ORDERS') }}</h1>
-        <v-row>
-            <v-col cols="2" class="mx-auto">
-                <v-card class="dashed-card fill-width" fill-height fill-width max-width="344">
-                    <v-card-text class="container">
-                        <v-row class="d-flex justify-center">
-                            <v-icon x-large>
-                                mdi-plus
-                            </v-icon>
-                        </v-row>
-                        <v-row class="d-flex justify-center">
-                            <p class="overline text--primary">
-                                {{ $t('ADD_ADDRESS') }}
-                            </p>
-                        </v-row>
-                    </v-card-text>
-                </v-card>
+        <v-row class="d-flex justify-center">
+            <v-col :cols="responsiveSelect()">
+                <v-select
+                    @change="setYear"
+                    v-model="year"
+                    dense
+                    :items="years"
+                    :label="$t('YEAR')"
+                    solo
+                ></v-select>
             </v-col>
-            <v-row v-if="GET_ADDRESSES.length">
-                <v-col cols="3" class="fill-height" v-for="address in GET_ADDRESSES" :key="address.id">
-                    <v-card
-                        class="mx-auto"
-                        max-width="344"
-                        height="310"
-                        fill-height
-                        :style="`border: ${address.setDefault ? '2px solid #907F46' : 'none'}`"
-                    >
-                        <v-card-text class="font-weight-bold">
-                            <p class="ma-0 text-center subtitle text--primary">
-                                {{ address.firstStreet }}
-                            </p>
-                            <p v-if="address.secondStreet !== ''" class="text-center subtitle text--primary">
-                                {{ address.secondStreet }}
-                            </p>
-                            <p class="text-center ma-0 subtitle text--primary">
-                                {{ address.city }}
-                            </p>
-                            <p class="text-center ma-0 subtitle text--primary">
-                                {{ address.state }}
-                            </p>
-                            <p class="text-center ma-0 subtitle text--primary">
-                                {{ address.zipcode }}
-                            </p>
-                            <p v-if="address.setDefault" class="text-center ma-0 caption text--primary">
-                                <b>DEFAULT ADDRESS</b>
-                            </p>
-                        </v-card-text>
-                        <v-card-actions class="text-center d-flex justify-center">
-                            <v-row class="d-flex justify-center">
-                                <v-col
-                                    v-if="!address.setDefault"
-                                    sm="12"
-                                    :class="{ 'pa-0': $vuetify.breakpoint.mdAndDown }"
-                                >
-                                    <v-btn
-                                        color="primary"
-                                        outlined
-                                        class="btn-remove"
-                                        :x-small="$vuetify.breakpoint.mdAndDown"
-                                        @click="setDefaultAddress(address.id)"
-                                        text
-                                    >
-                                        Set as default
-                                    </v-btn>
+        </v-row>
+        <v-row class="d-flex justify-center">
+            <v-col :cols="responsiveOrders()">
+                <EmptyState class="mt-n12" v-if="this.selectOrder().length == 0" :message="emptyMessage" />
+                <v-expansion-panels popout class="mt-n4">
+                    <v-expansion-panel v-for="order in selectOrder()" :key="order.id">
+                        <v-expansion-panel-header class="primary--text" @click="fetchProductsOrder(order.id)">
+                            <v-row class="d-flex align-start justify-center my-n6">
+                                <v-col :cols="responsiveDetail()" class="align-start">
+                                    <p>{{ $t('ORDER').toUpperCase() }} #</p>
+                                    <p class="black--text mt-n2">{{ order.id }}</p>
                                 </v-col>
-                                <v-col sm="12">
-                                    <v-btn
-                                        color="primary"
-                                        class="btn-remove"
-                                        :x-small="$vuetify.breakpoint.mdAndDown"
-                                        @click="deletAddress(address.id)"
-                                    >
-                                        {{ $t('REMOVE') }}
-                                    </v-btn>
+                                <v-col :cols="responsiveDate()">
+                                    <p>{{ $t('ORDER_PLACED').toUpperCase() }}</p>
+                                    <p class="black--text mt-n2">
+                                        {{ order.createdAt.split('T')[0] }}
+                                    </p>
+                                </v-col>
+                                <v-col :cols="responsiveDetail()">
+                                    <p>TOTAL</p>
+                                    <p class="black--text mt-n2">
+                                        {{ order.total }} {{ order.foreignExchange.symbol }}
+                                    </p>
+                                </v-col>
+                                <v-col :cols="responsiveStatus()" class="">
+                                    <v-chip outlined small class="mt-6">
+                                        <v-avatar left>
+                                            <v-icon small> {{ statusIcon }} </v-icon>
+                                        </v-avatar>
+                                        {{ $t(`${getLastStatus(order.statusHistories)}`).toUpperCase() }}
+                                    </v-chip>
                                 </v-col>
                             </v-row>
-                        </v-card-actions>
-                    </v-card>
-                </v-col>
-            </v-row>
+                        </v-expansion-panel-header>
+                        <v-expansion-panel-content>
+                            <div class="d-flex justify-end">
+                                <h1 class="overline">{{ $t('CRYPTOCURRENCY_AMOUNT') }}:</h1>
+                                <h1 class="overline font-weight-bold ml-6">
+                                    {{ order.totalCryptocurrency }} {{ order.cryptocurrency.iso }} ({{
+                                        order.cryptocurrency.name
+                                    }})
+                                </h1>
+                            </div>
+                            <div class="d-flex justify-end">
+                                <v-btn small outlined color="primary" class="primary--text overline">
+                                    <v-icon small class="mr-2"> mdi-download </v-icon>
+                                    {{ $t('INVOICE') }}
+                                </v-btn>
+                            </div>
+                            <Product :order="order.id" />
+                        </v-expansion-panel-content>
+                    </v-expansion-panel>
+                </v-expansion-panels>
+            </v-col>
         </v-row>
-        <v-snackbar v-model="defaultAddressError" top :timeout="timeout" color="error">
-            {{ $t('ERROR_PUT_ADDRESS') }}
-            <v-btn color="white" text @click="defaultAddressError = false">{{ $t('CLOSE') }}</v-btn>
-        </v-snackbar>
-        <v-snackbar v-model="fetchingAddressesError" top :timeout="timeout" color="error">
-            {{ $t('ERROR_GET_ADDRESS') }}
-            <v-btn color="white" text @click="fetchingAddressesError = false">{{ $t('CLOSE') }}</v-btn>
-        </v-snackbar>
-        <v-snackbar v-model="deletingAddressError" top :timeout="timeout" color="error">
-            {{ $t('ERROR_DELETE_ADDRESS') }}
-            <v-btn color="white" text @click="deletingAddressError = false">{{ $t('CLOSE') }}</v-btn>
-        </v-snackbar>
-        <v-snackbar v-model="addressCreated" top :timeout="timeout" color="success">
-            {{ $t('SUCCESS_ADDRESS') }}
-            <v-btn color="white" text @click="addressCreated = false">{{ $t('CLOSE') }}</v-btn>
-        </v-snackbar>
-        <v-snackbar v-model="addressCreatedError" top :timeout="timeout" color="error">
-            {{ $t('ERROR_PUT_ADDRESS') }}
-            <v-btn color="white" text @click="addressCreatedError = false">{{ $t('CLOSE') }}</v-btn>
-        </v-snackbar>
     </v-container>
 </template>
 <script lang="ts">
 import Vue from 'vue';
 import Component from 'vue-class-component';
-import { addresses, authModule } from '@/store/namespaces';
+import { payments, authModule } from '@/store/namespaces';
 import AuthTypes from '../../../../store/auth/methods/auth.methods';
-import AddressTypes from '@/store/addresses/methods/address.methods';
-import CreateAddressForm from '@/modules/client/addresses/components/CreateAddressForm.vue';
+import PaymentsTypes from '@/store/payments/methods/payments.methods';
 import { STATUS } from '@/config/constants';
-import rules from '@/utils/rules';
 import { CustomerInterface } from '@/modules/client/auth/interfaces/customer.interface';
-import { Address } from '@/modules/client/addresses/interfaces/address.interface';
+import { Orders, StatusHistory, ProductsOrder } from '@/modules/client/customers/interfaces/orders.interface';
+import Product from './OrderProducts.vue';
+import EmptyState from '@/modules/common/components/EmptyState.vue';
 
 @Component({
-    components: { CreateAddressForm },
+    components: { Product, EmptyState },
 })
-export default class AddressManagement extends Vue {
-    defaultAddressError = false;
-    fetchingAddressesError = false;
-    deletingAddressError = false;
-    addressCreated = false;
-    dialog = false;
-    timeout = 5000;
-    isFormValid = true;
-    addressCreatedError = false;
-    rules: any = rules;
-    firstStreet = '';
-    secondStreet = '';
-    cityName = '';
-    state = '';
-    zipCode = '';
-    $refs!: {
-        form: any;
-    };
+export default class ClientOrders extends Vue {
+    years = ['All', '2020', '2019', '2018', '2017'];
+    statusIcon = '';
+    year = '';
+    ordersFilter: Orders[] = [];
+    emptyMessage = 'NO_ORDERS';
 
-    createAddress() {
-        this.dialog = true;
+    responsiveDetail(): number {
+        const { xs, sm } = this.$vuetify.breakpoint;
+        return xs || sm ? 5 : 2;
     }
 
-    createDefaultAddressObject(addressId: number) {
-        const defaultAddress: Address = {
-            id: addressId,
-            user: {
-                id: this.GET_CLIENT_DATA.id!,
-            },
-        };
-
-        return defaultAddress;
+    responsiveDate(): number {
+        const { xs, sm } = this.$vuetify.breakpoint;
+        return xs || sm ? 7 : 6;
     }
 
-    async deletAddress(addressId: number) {
-        const deleted: boolean = await this.DELETE_ADDRESS(addressId);
-
-        if (!deleted) {
-            this.deletingAddressError = true;
-        } else {
-            await this.fetchAddresses();
-            this.$router.go(0);
-        }
+    responsiveStatus(): number {
+        const { xs, sm } = this.$vuetify.breakpoint;
+        return xs || sm ? 7 : 2;
     }
 
-    async setDefaultAddress(addressId: number) {
-        const updated: boolean = await this.SET_DEFAULT_ADDRESS(this.createDefaultAddressObject(addressId));
-
-        if (!updated) {
-            this.fetchingAddressesError = true;
-        } else {
-            await this.fetchAddresses();
-            this.$router.go(0);
-        }
+    responsiveOrders(): number {
+        const { xs, sm } = this.$vuetify.breakpoint;
+        return xs || sm ? 12 : 10;
     }
 
-    async fetchAddresses() {
-        const fetched: boolean = await this.FETCH_ADDRESSES(this.GET_CLIENT_DATA.id!);
-
-        if (!fetched) {
-            this.defaultAddressError = true;
-        }
+    responsiveSelect(): number {
+        const { xs, sm } = this.$vuetify.breakpoint;
+        return xs || sm ? 4 : 1;
     }
 
-    async mounted() {
-        await this.fetchAddresses();
+    selectOrder(): Orders[] {
+        if (this.year == '' || this.year == 'All') return this.GET_ORDERS;
+        else return this.ordersFilter;
     }
 
-    modifyFirstStreet(value: any) {
-        this.firstStreet = value;
-    }
-    modifySecondStreet(value: any) {
-        this.secondStreet = value;
-    }
-    modifyCityName(value: any) {
-        this.cityName = value;
-    }
-    modifyState(value: any) {
-        this.state = value;
-    }
-    modifyZipCode(value: any) {
-        this.zipCode = value;
-    }
-
-    createAddressObject() {
-        const address: Address = {
-            firstStreet: this.firstStreet,
-            secondStreet: this.secondStreet,
-            cityName: this.cityName,
-            state: this.state,
-            zipcode: this.zipCode,
-            user: {
-                id: this.GET_CLIENT_DATA.id!,
-            },
-            status: {
-                id: STATUS.ACTIVE,
-            },
-        };
-
-        return address;
-    }
-
-    async saveChanges() {
-        if (this.$refs.form.validate()) {
-            const created: boolean = await this.CREATE_ADDRESS(this.createAddressObject());
-            if (!created) {
-                this.dialog = false;
-                this.addressCreatedError = true;
-            } else {
-                this.addressCreated = true;
-                this.fetchAddresses();
-                setTimeout(() => {
-                    this.dialog = false;
-                }, 2000);
+    setYear(): void {
+        let ordersArray: Orders[] = [];
+        this.GET_ORDERS.forEach((el: Orders) => {
+            if (this.year === el.createdAt.toString().split('-')[0]) {
+                ordersArray.push(el);
             }
-        }
+        });
+        if (this.year == 'All') ordersArray = [];
+        this.ordersFilter = ordersArray;
+    }
+
+    getLastStatus(status: StatusHistory[]): string {
+        let orderStatus: string = '';
+        let orderId: number = -1;
+        status.forEach((el) => {
+            if (orderId < el.status.id) {
+                orderStatus = el.status.name;
+                orderId = el.status.id;
+            }
+        });
+        if (orderStatus == 'Paid') this.statusIcon = 'mdi-checkbox-marked-circle';
+        if (orderStatus == 'Pending') this.statusIcon = 'mdi-information';
+        return orderStatus.toUpperCase();
+    }
+
+    async fetchOrders(): Promise<void> {
+        await this.FETCH_ORDERS(this.GET_CLIENT_DATA.id!);
+    }
+
+    async mounted(): Promise<void> {
+        await this.fetchOrders();
+    }
+
+    async fetchProductsOrder(orderId: number): Promise<void> {
+        await this.FETCH_ORDER_BY_ID(orderId);
     }
 
     @authModule.Getter(AuthTypes.getters.GET_CLIENT_DATA)
     private GET_CLIENT_DATA!: CustomerInterface;
-    @addresses.Action(AddressTypes.actions.CREATE_ADDRESS)
-    private CREATE_ADDRESS!: (address: Address) => boolean;
-    @addresses.Action(AddressTypes.actions.SHOW_CREATE_ADDRESS_DIALOG)
-    private SHOW_CREATE_ADDRESS_DIALOG!: (display: boolean) => void;
-    @addresses.Action(AddressTypes.actions.SET_DEFAULT_ADDRESS)
-    private SET_DEFAULT_ADDRESS!: (defaultAddress: Address) => boolean;
-    @addresses.Action(AddressTypes.actions.DELETE_ADDRESS)
-    private DELETE_ADDRESS!: (addressId: number) => boolean;
-    @addresses.Action(AddressTypes.actions.FETCH_ADDRESSES)
-    private FETCH_ADDRESSES!: (customerId: number) => boolean;
-    @addresses.Getter(AddressTypes.getters.GET_ADDRESSES)
-    private GET_ADDRESSES!: Address[];
+    @payments.Action(PaymentsTypes.actions.FETCH_ORDERS)
+    private FETCH_ORDERS!: (customerId: number) => boolean;
+    @payments.Action(PaymentsTypes.actions.FETCH_ORDER_BY_ID)
+    private FETCH_ORDER_BY_ID!: (orderId: number) => Promise<any>;
+    @payments.Getter(PaymentsTypes.getters.GET_ORDERS)
+    private GET_ORDERS!: Orders[];
 }
 </script>
 
-<style scoped>
-.dashed-card {
-    width: 100%;
-    height: 100%;
-    border: 2px dashed #979797;
-    background: #f5f5f5;
-    border-radius: 0;
-    padding: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-</style>
+<style scoped></style>

@@ -4,6 +4,7 @@ import {
     dimensionDto,
     ProductPhotoDto,
     ProductCreate,
+    ProductRatingCreate,
     Products,
 } from '../interfaces/products.interface';
 import { Filter } from '@/utils/filter';
@@ -13,6 +14,7 @@ class ProductsHttpRepository extends HttpRepository {
     private static readonly RESOURCEDIMENSION = 'products/dimension';
     private static readonly RESOURCEIMAGE = 'products/image';
     private static readonly RESOURCEINVENTORY = 'products/inventory';
+    private static readonly RESOURCERATING = 'product-ratings';
 
     public getProducts(filter: Filter): Promise<Products> {
         return this.get(`${ProductsHttpRepository.RESOURCE}?` + filter.get());
@@ -61,6 +63,10 @@ class ProductsHttpRepository extends HttpRepository {
             data,
             false,
         );
+    }
+
+    public createProductRating(productRating: ProductRatingCreate) {
+        return this.post(this.createUri([`${ProductsHttpRepository.RESOURCERATING}`]), productRating);
     }
 }
 

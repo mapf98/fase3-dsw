@@ -12,6 +12,7 @@ import {
     ProductPhotoDto,
     dimensionDto,
     ProductCreate,
+    ProductRatingCreate,
     Products,
 } from '@/modules/client/products/interfaces/products.interface';
 import { Filter } from '@/utils/filter';
@@ -259,6 +260,17 @@ const products: Module<ProductStateInterface, any> = {
         async [ProductsTypes.actions.UPDATE_INVENTORY_QUANTITY]({ commit }, inventoryData): Promise<boolean> {
             try {
                 await productsHttpRepository.updateInventory(inventoryData);
+                return true;
+            } catch (e) {
+                return false;
+            }
+        },
+        async [ProductsTypes.actions.CREATE_PRODUCT_RATING](
+            { commit },
+            productRating: ProductRatingCreate,
+        ): Promise<boolean> {
+            try {
+                await productsHttpRepository.createProductRating(productRating);
                 return true;
             } catch (e) {
                 return false;
