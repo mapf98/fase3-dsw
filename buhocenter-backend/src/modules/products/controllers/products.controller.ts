@@ -38,6 +38,15 @@ export class ProductsController {
         private readonly productTransactionsRepository: ProductTransactionsRepository,
     ) {}
 
+    @Post()
+    async createProduct(@Body() product: Partial<Product>): Promise<Product> {
+        this.logger.info(`createProduct: Creating a product`, {
+            context: ProductsController.name,
+        });
+
+        return await this.productsService.createProduct(product);
+    }
+
     @Get('daily-recommendation')
     async getDailyProductsRecommendation(@Res() res: Response): Promise<Response> {
         this.logger.info(`getDailyProductsRecommendation: products recomendados del dia `, {
@@ -145,21 +154,6 @@ export class ProductsController {
                 `getAllProducts: error when trying to get all accessible products=${JSON.stringify(
                     e.message,
                 )}`,
-                { context: ProductsController.name },
-            );
-
-            return res.status(HttpStatus.BAD_REQUEST).send();
-        }
-    }
-
-    @Post()
-    async createProduct(@Res() res: Response, @Body() product: ProductsAO): Promise<Response> {
-        try {
-            let response: Product = await this.productTransactionsRepository.createProduct(product);
-            return res.status(HttpStatus.OK).send(response);
-        } catch (e) {
-            this.logger.error(
-                `createProduct: error when trying to create product=${JSON.stringify(e.message)}`,
                 { context: ProductsController.name },
             );
 

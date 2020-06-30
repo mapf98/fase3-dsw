@@ -51,6 +51,19 @@ export class ProductsService {
     ) {}
 
     /**
+     * createProduct
+     * @param product: Partial<Product>
+     * @returns Promise<Product>
+     */
+    async createProduct(product: Partial<Product>): Promise<Product> {
+        this.logger.debug(`createProduct: Creating a product [productName=${product.name}]`, {
+            context: ProductsService.name,
+        });
+
+        return await this.productsRepository.save(product);
+    }
+
+    /**
      * Returns the appreciations emitted to a product array
      * @param products products array to obtain its appreciations
      */
@@ -357,22 +370,6 @@ export class ProductsService {
         );
 
         return 'products deleted sucesfully';
-    }
-
-    public async createProduct(product: ProductsAO): Promise<Product> {
-        let active = STATUS.ACTIVE.id;
-        let newProduct = new Product();
-        newProduct.name = product.productName;
-        newProduct.description = product.description;
-        newProduct.price = product.price;
-
-        newProduct.status = await this.statusService.getStatusById(active);
-        newProduct.brand = await this.brandsService.getBrand(product.brand.id);
-        await this.productsRepository.save(newProduct);
-
-        await this.categoriesService.createCategoryProduct(product.category.id, newProduct);
-
-        return newProduct;
     }
 
     async createDimension(

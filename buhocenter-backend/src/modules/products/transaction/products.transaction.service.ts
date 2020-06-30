@@ -101,16 +101,6 @@ export class ProductTransactionsRepository {
         });
     }
 
-    public async createProduct(product: ProductsAO): Promise<Product> {
-        this.logger.info(`createProduct: creating the product: product=${JSON.stringify(product)}]`, {
-            context: ProductTransactionsRepository.name,
-        });
-
-        return await this.connection.transaction(async transactionalEntityManage => {
-            return await this.productsService.createProduct(product);
-        });
-    }
-
     public async saveProductImage(imageName: string, productId: number): Promise<string> {
         this.logger.info(`createProduct: creating the product: product=${JSON.stringify(productId)}]`, {
             context: ProductTransactionsRepository.name,

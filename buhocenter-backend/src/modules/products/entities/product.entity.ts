@@ -27,7 +27,7 @@ export class Product extends PrimalEntity {
     price: number;
 
     @Column({ name: 'rating', type: 'decimal', nullable: false, default: 0 })
-    rating: number;
+    rating?: number;
 
     @Column({ name: 'fragile', type: 'boolean', nullable: false })
     fragile: boolean;
@@ -62,7 +62,7 @@ export class Product extends PrimalEntity {
         offer => offer.products,
         { nullable: true },
     )
-    offer: Offer;
+    offer?: Offer;
 
     @OneToOne(
         type => ProductDimension,
@@ -82,13 +82,13 @@ export class Product extends PrimalEntity {
         type => Cart,
         carts => carts.product,
     )
-    carts: Cart[];
+    carts?: Cart[];
 
     @OneToMany(
         type => ProductRating,
         productRatings => productRatings.product,
     )
-    productRatings: ProductRating[];
+    productRatings?: ProductRating[];
 
     @OneToMany(
         type => ProductCatalogue,
@@ -108,5 +108,5 @@ export class Product extends PrimalEntity {
         type => ProductQuestion,
         productQuestions => productQuestions.product,
     )
-    productQuestions: ProductQuestion[];
+    productQuestions?: ProductQuestion[];
 }
