@@ -101,17 +101,20 @@
                         class="mr-3 my-2"
                         style="max-width: none !important; width: 100%;"
                     >
-                        <h3 class="my-3">{{ $t('QUESTION_ANSWERS') }}</h3>
-                        <v-row
-                            class="mx-auto my-3 d-flex"
-                            v-for="question of GET_ITEM_DETAIL.questions"
-                            :key="question.id"
-                        >
-                            <v-col cols="10">
-                                {{ question.comment }}
-                                <div class="overline">
-                                    {{ getDate(question.createdAt) }}
-                                </div>
+                        <h1 class="my-3">{{ $t('COMMENTS') }}</h1>
+                        <v-row class="mx-auto my-3 d-flex" v-for="comment in comments" :key="comment.id">
+                            <v-col>
+                                <v-card elevation="5" tile>
+                                    <v-card-title>
+                                        {{ comment.user.name }}
+                                        {{ comment.user.lastName }}
+                                        <v-rating :value="comment.rating" readonly small></v-rating>
+                                    </v-card-title>
+                                    <v-card-subtitle>{{ comment.createdAt }}</v-card-subtitle>
+                                    <v-card-text>
+                                        <p class="body-1 text--primary">{{ comment.comment }}</p>
+                                    </v-card-text>
+                                </v-card>
                             </v-col>
                         </v-row>
                     </v-container>
@@ -140,11 +143,20 @@
 <script lang="ts">
 import Vue from 'vue';
 import Component from 'vue-class-component';
-import { layout, products, authModule, carts, payments, loader } from '../../../../store/namespaces';
+import {
+    layout,
+    products,
+    authModule,
+    carts,
+    payments,
+    loader,
+    comments,
+} from '../../../../store/namespaces';
 import CartMethods from '@/store/carts/methods/cart.methods';
 import ProductsTypes from '@/store/products/methods/products.methods';
 import LayoutTypes from '@/store/layout/methods/layout.methods';
 import PaymentsTypes from '@/store/payments/methods/payments.methods';
+import commentsTypes from '@/store/comments/methods/comments.methods';
 import { getDate } from '../../../../utils/date-functions';
 import ShoppingBar from './ShoppingBar.vue';
 import ItemDescription from './ItemDescription.vue';
@@ -157,6 +169,7 @@ import { STATUS } from '@/config/constants';
 import DailyRecomendation from '@/modules/client/daily-recomendation/components/DailyRecomendation.vue';
 import { CustomerInterface } from '@/modules/client/auth/interfaces/customer.interface';
 import { Product } from '@/modules/client/products/interfaces/products.interface';
+import { Comment } from '../interfaces/comment.interface';
 import { CartInterface, ProductCarts, ServiceCart } from '@/modules/client/cart/interfaces/carts.interface';
 
 @Component({
@@ -172,6 +185,7 @@ import { CartInterface, ProductCarts, ServiceCart } from '@/modules/client/cart/
 })
 export default class ItemDetail extends Vue {
     principalImage = '';
+    rating = 3;
     quantityValues: string[] = [
         '1',
         '2',
@@ -207,6 +221,15 @@ export default class ItemDetail extends Vue {
     errorAddingItemToCart = false;
     itemAddedToCart = false;
     timeout = 5000;
+
+    comments: Comment[] = [];
+
+    splitDate(comments: Comment[]): Comment[] {
+        comments.forEach((comment: Comment) => {
+            comment.createdAt = comment.createdAt?.slice(0, 10);
+        });
+        return comments;
+    }
 
     createOrder(quantity: number) {
         // FIX: Acomodar al implementar el dropdown multimoneda
@@ -352,6 +375,10 @@ export default class ItemDetail extends Vue {
                     itemId: this.GET_ITEM_DETAIL.id,
                     item: this.GET_ITEM_DETAIL,
                 });
+                this.GET_ALL_PRODUCT_COMMENTS(this.GET_ITEM_DETAIL.id!);
+                this.comments = this.PRODUCT_COMMENTS;
+                this.comments = this.splitDate(this.comments);
+                console.log(this.PRODUCT_COMMENTS);
             } else {
                 photosLoaded = await this.FETCH_SERVICE_ITEM_PHOTOS({
                     itemId: this.GET_ITEM_DETAIL.id,
@@ -403,6 +430,11 @@ export default class ItemDetail extends Vue {
 
     @authModule.Getter(AuthTypes.getters.GET_CLIENT_DATA)
     GET_CLIENT_DATA!: CustomerInterface;
+
+    @comments.Action(commentsTypes.actions.GET_ALL_PRODUCT_COMMENTS) GET_ALL_PRODUCT_COMMENTS!: (
+        productId: number,
+    ) => boolean;
+    @comments.Getter(commentsTypes.getters.GET_COMMENTS) PRODUCT_COMMENTS!: Comment[];
 }
 </script>
 

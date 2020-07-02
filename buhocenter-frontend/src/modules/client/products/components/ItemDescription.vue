@@ -104,7 +104,6 @@ export default class ItemDescription extends Vue {
         if (this.GET_ITEM_DETAIL.offers) {
             return this.GET_ITEM_DETAIL.offers.some((element) => element.offer.status.id === STATUS.ACTIVE);
         }
-
         return false;
     }
 

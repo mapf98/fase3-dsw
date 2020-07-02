@@ -121,7 +121,7 @@ export default class RateProduct extends Vue {
             }
         }
     }
-    
+
     @authModule.Getter(AuthTypes.getters.GET_CLIENT_DATA)
     private GET_CLIENT_DATA!: CustomerInterface;
     @products.Action(ProductsTypes.actions.CREATE_PRODUCT_RATING) CREATE_PRODUCT_RATING!: (

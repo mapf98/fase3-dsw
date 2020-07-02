@@ -1,6 +1,6 @@
 export const terms = {
     HOME: 'Home',
-    SEARCH:'Search',
+    SEARCH: 'Search',
     PRODUCTS: 'Products',
     ALL_PRODUCTS: 'All products',
     ALL: 'All',
@@ -172,4 +172,5 @@ export const terms = {
     INVOICE: 'Invoice',
     YEAR: 'Year',
     NO_ORDERS: 'There are no orders made in this time period',
+    COMMENTS: 'Comments',
 };

@@ -15,6 +15,7 @@ import catalogueModule from '@/store/catalogue/catalogue';
 import addresses from '@/store/addresses/addresses';
 import clients from '@/store/clients/clients';
 import offers from '@/store/offers/offers';
+import comments from '@/store/comments/comments';
 
 Vue.use(Vuex);
 
@@ -34,6 +35,7 @@ export default new Vuex.Store({
         catalogueModule,
         clients,
         offers,
+        comments,
     },
     plugins: [createPersistedState({ storage: window.sessionStorage })],
 });

@@ -72,8 +72,8 @@ export default class SearchBar extends Vue {
         );
     }
 
-    getName(name){
-        return getShortName(name,30);
+    getName(name) {
+        return getShortName(name, 30);
     }
 
     @Watch('$route', { immediate: true, deep: true })

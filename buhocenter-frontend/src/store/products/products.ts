@@ -98,8 +98,8 @@ const products: Module<ProductStateInterface, any> = {
                 const filter: Filter = new Filter(data);
                 const products: Products = await productsHttpRepository.getProducts(filter);
                 commit(ProductsTypes.mutations.SET_PRODUCTS, products.products);
-            
-                if (data = {}) commit(ProductsTypes.mutations.SET_ALL_PRODUCTS, products.products);
+
+                if ((data = {})) commit(ProductsTypes.mutations.SET_ALL_PRODUCTS, products.products);
                 commit(ProductsTypes.mutations.SET_TOTAL_PRODUCTS, products.productsNumber);
 
                 return true;
