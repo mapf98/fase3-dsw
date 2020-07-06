@@ -53,7 +53,6 @@ export default class Catalogues extends Vue {
         if (this.$route.query.category_id) {
             await this.fetchCatalogues(this.$route.query.category_id);
         }
-        console.log('catalogos:  ', this.GET_CATALOGUES);
     }
 
     get_categoryId() {

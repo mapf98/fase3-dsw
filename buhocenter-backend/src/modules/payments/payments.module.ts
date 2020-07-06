@@ -3,8 +3,6 @@ import { PaymentsService } from './services/payments.service';
 import { PaymentsController } from './controllers/payments.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { purchasesEntities } from './entities';
-import { ProxyService } from './services/proxy.service';
-import { PaymentGatewayRepository } from './repositories/payment-gateway.repository';
 import { ProductsModule } from '../products/products.module';
 import { PaymentsTransactionsRepository } from './transactions/payments.transactions.service';
 import { StatussModule } from '../status/status.module';
@@ -29,9 +27,7 @@ import { CommissionsTransactionsRepository } from './transactions/commissions.tr
     ],
     providers: [
         PaymentsTransactionsRepository,
-        PaymentGatewayRepository,
         PaymentsService,
-        ProxyService,
         CommissionsService,
         CryptocurrenciesService,
         CommissionsTransactionsRepository,

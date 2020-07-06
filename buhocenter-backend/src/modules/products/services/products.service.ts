@@ -4,7 +4,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
 import { Logger } from 'winston';
 import { STATUS } from '../../../config/constants';
-import { ProductsAO, idDto } from '../dto/products.dto';
+import { idDto } from '../dto/products.dto';
 import { Product } from '../entities/product.entity';
 import { ProductRating } from '../entities/product-rating.entity';
 import { ProductInventory } from '../entities/product-inventory.entity';
@@ -17,10 +17,10 @@ import { Offer } from '../entities/offer.entity';
 import { ProductParameters } from '../interfaces/product-parameters';
 import { PaginatedProducts } from '../interfaces/paginated-products';
 import { PAGINATE } from '../../../config/constants';
-import { throws } from 'assert';
 import { ProductQuestion } from '../entities/product-question.entity';
 import { UsersService } from '../../users/services/users.service';
 import { ProductQuestions } from '../interfaces/product-questions';
+import { CustomerLoyaltyService } from '../../third-party/services/customer-loyalty.service';
 
 @Injectable()
 export class ProductsService {
@@ -48,6 +48,7 @@ export class ProductsService {
         private readonly productQuestionRepository: Repository<ProductQuestion>,
         @Inject(UsersService)
         private readonly usersService: UsersService,
+        private readonly customerLoyaltyService: CustomerLoyaltyService,
     ) {}
 
     /**
@@ -93,11 +94,8 @@ export class ProductsService {
         this.logger.debug(`getProductInventoryAvailability: [productId=${productId}]`, {
             context: ProductsService.name,
         });
-        try {
-            return this.productInventoriesRepository.findOne(productId);
-        } catch (e) {
-            console.log(`error al buscar en inventario: ${e.message}`);
-        }
+
+        return this.productInventoriesRepository.findOne(productId);
     }
 
     /**
@@ -149,11 +147,10 @@ export class ProductsService {
     }
 
     /**
-
      * getProducts
      * @param parameters: ProductParameters
      * @returns Promise<PaginatedProducts>
-    */
+     */
     async getProducts(parameters: ProductParameters): Promise<PaginatedProducts> {
         this.logger.debug(
             `getProducts:  Getting products by a set of parameters [parameters:${JSON.stringify(
@@ -196,11 +193,13 @@ export class ProductsService {
         query.andWhere('productInventory.availableQuantity - productInventory.minimumAvailableQuantity > 0');
         query.andWhere('status.id = :statusId', { statusId: STATUS.ACTIVE.id });
 
+        const products: Product[] = await query
+        .skip(parameters.start)
+        .take(parameters.limit)
+        .getMany()
+
         return {
-            products: await query
-                .skip(parameters.start)
-                .take(parameters.limit)
-                .getMany(),
+            products,
             productsNumber: await query.getCount(),
         };
     }
@@ -359,7 +358,7 @@ export class ProductsService {
         let active = STATUS.ACTIVE.id;
         return await this.productsRepository.find({
             where: { status: active },
-        });
+        })
     }
 
     public async deletMultiplesProducts(productsArray: number[]): Promise<string> {

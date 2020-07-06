@@ -6,7 +6,7 @@ import {
     AddressVerificationSO,
 } from '../dto/AddressVerification.dto';
 import { Address } from '../entities/address.entity';
-import { AddressHttpRepository } from '../repositories/address-http.repository';
+import { AddressRepository } from '../repositories/address.repository';
 import { UsersService } from '../../users/services/users.service';
 import { STATUS } from '../../../config/constants';
 import { StatusService } from '../../status/services/status.service';
@@ -22,8 +22,8 @@ export class AddressService {
         private readonly usersService: UsersService,
         @Inject(StatusService)
         private readonly statusService: StatusService,
-        @Inject(AddressHttpRepository)
-        private readonly addressHttpRepository: AddressHttpRepository,
+        @Inject(AddressRepository)
+        private readonly addressHttpRepository: AddressRepository,
         @InjectRepository(Address)
         private addressesRepository: Repository<Address>,
     ) {}

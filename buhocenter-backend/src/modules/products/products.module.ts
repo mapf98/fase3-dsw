@@ -20,9 +20,11 @@ import { ProductInventoriesService } from './services/product-inventories.servic
 import { ProductRatingsController } from './controllers/product-rating.controller';
 import { ProductRatingsService } from './services/product-ratings.service';
 import { UsersModule } from '../users/users.module';
+import { ThirdPartyModule } from '../third-party/third-party.module';
+import { AuthModule } from '../auth/auth.module';
 
 @Module({
-    imports: [TypeOrmModule.forFeature(entities), StatussModule, UsersModule],
+    imports: [TypeOrmModule.forFeature(entities), StatussModule, UsersModule, ThirdPartyModule, AuthModule],
     controllers: [
         ProductsController,
         BrandsController,

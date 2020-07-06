@@ -17,11 +17,11 @@ class ProductsHttpRepository extends HttpRepository {
     private static readonly RESOURCERATING = 'product-ratings';
 
     public getProducts(filter: Filter): Promise<Products> {
-        return this.get(`${ProductsHttpRepository.RESOURCE}?` + filter.get());
+        return this.get(`${ProductsHttpRepository.RESOURCE}?` + filter.get(), this.createHeader());
     }
 
     public getProductById(id: number): Promise<Product> {
-        return this.get(this.createUri([`${ProductsHttpRepository.RESOURCE}`, `${id}`]));
+        return this.get(this.createUri([`${ProductsHttpRepository.RESOURCE}`, `${id}`]), this.createHeader());
     }
     //tipar
     updateProductData(product: ProductCreate) {
@@ -39,7 +39,7 @@ class ProductsHttpRepository extends HttpRepository {
     }
 
     public async getProductsDailyRecommendation(): Promise<Product[]> {
-        return await this.get(this.createUri([`${ProductsHttpRepository.RESOURCE}`, `daily-recommendation`]));
+        return await this.get(this.createUri([`${ProductsHttpRepository.RESOURCE}`, `daily-recommendation`]), this.createHeader());
     }
 
     public createProduct(product: ProductCreate) {

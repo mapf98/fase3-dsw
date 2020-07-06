@@ -15,7 +15,7 @@ export class AuthService {
      * Creates token for users when logging in
      * @param user objeto del usuario que se encuentra iniciando sesión
      */
-    async login(user: User): Promise<string> {
+    public async login(user: User): Promise<string> {
         this.logger.debug(`login: generating token to user [uid=${user.uid}|email=${user.email}]`, {
             context: AuthService.name,
         });
@@ -24,5 +24,13 @@ export class AuthService {
         }
         const payload = { username: user.email, uid: user.uid };
         return this.jwtService.sign(payload);
+    }
+
+    /**
+     * Decodes token using jwtService provided by Nest.
+     * @param token string.
+     */
+    public async decodeToken(token: string): Promise<any> {
+        return this.jwtService.decode(token);
     }
 }

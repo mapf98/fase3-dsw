@@ -378,7 +378,6 @@ export default class ItemDetail extends Vue {
                 this.GET_ALL_PRODUCT_COMMENTS(this.GET_ITEM_DETAIL.id!);
                 this.comments = this.PRODUCT_COMMENTS;
                 this.comments = this.splitDate(this.comments);
-                console.log(this.PRODUCT_COMMENTS);
             } else {
                 photosLoaded = await this.FETCH_SERVICE_ITEM_PHOTOS({
                     itemId: this.GET_ITEM_DETAIL.id,

@@ -11,6 +11,7 @@ import {
     HttpStatus,
     Patch,
     Delete,
+    UseInterceptors,
 } from '@nestjs/common';
 import { ProductsService } from '../services/products.service';
 import { Product } from '../entities/product.entity';
@@ -28,6 +29,7 @@ import { Logger } from 'winston';
 import { ProductTransactionsRepository } from '../transaction/products.transaction.service';
 import { ProductParameters } from '../interfaces/product-parameters';
 import { PaginatedProducts } from '../interfaces/paginated-products';
+import { CustomerLoyaltyInterceptor } from '../../../common/customer-loyalty-product-points.interceptor';
 
 @Controller('products')
 export class ProductsController {
@@ -48,47 +50,29 @@ export class ProductsController {
     }
 
     @Get('daily-recommendation')
-    async getDailyProductsRecommendation(@Res() res: Response): Promise<Response> {
+    @UseInterceptors(CustomerLoyaltyInterceptor)
+    async getDailyProductsRecommendation(): Promise<Product[]> {
         this.logger.info(`getDailyProductsRecommendation: products recomendados del dia `, {
             context: ProductsController.name,
         });
 
-        try {
-            const products: Product[] = await this.productsService.getDailyProductsRecommendation();
-            return res.status(HttpStatus.OK).send(products);
-        } catch (e) {
-            this.logger.error(
-                `getDailyProductsRecommendation: error fetching daily recommendations [e=${e}]`,
-                {
-                    context: ProductsController.name,
-                },
-            );
-            return res.status(HttpStatus.BAD_REQUEST).send();
-        }
+        return this.productsService.getDailyProductsRecommendation();
     }
 
     @Get(':id')
+    @UseInterceptors(CustomerLoyaltyInterceptor)
     async getProductById(
-        @Res() res: Response,
         @Param('id', new ParseIntPipe()) id: number,
-    ): Promise<Response> {
+    ): Promise<Product> {
         this.logger.info(`getProductById: getting the product with id [id=${id}]`, {
             context: ProductsController.name,
         });
 
-        try {
-            const product: Product = await this.productsService.getProductById(id);
-            return res.status(HttpStatus.OK).send(product);
-        } catch (e) {
-            this.logger.error(`Error obteniendo el product por el id ${id}`, {
-                context: ProductsController.name,
-            });
-            this.logger.error(`${e}`, { context: ProductsController.name });
-            return res.status(HttpStatus.NOT_FOUND).send();
-        }
+        return this.productsService.getProductById(id);
     }
 
     @Get()
+    @UseInterceptors(CustomerLoyaltyInterceptor)
     getProducts(@Query() parameters: ProductParameters): Promise<PaginatedProducts> {
         this.logger.info('getProducts: Getting products by a set of parameters', {
             context: ProductsController.name,
@@ -266,7 +250,6 @@ export class ProductsController {
         @Res() res: Response,
         @Query('questionId', new ParseIntPipe()) questionId: number,
     ): Promise<Response> {
-        console.log(questionId);
         this.logger.info(`deleteQuestionInProduct:deleting the question with id [questionId=${questionId}]`, {
             context: ProductsController.name,
         });

@@ -30,6 +30,9 @@ export class User extends PrimalEntity {
     @Column({ name: 'is_federate', type: 'boolean', nullable: false })
     is_federate: boolean;
 
+    @Column({ name: 'loyalty_system_token', type: 'text', nullable: true, default: false })
+    loyaltySystemToken: string;
+
     @Column({ name: 'uid', type: 'text', nullable: true })
     uid: string;
 
