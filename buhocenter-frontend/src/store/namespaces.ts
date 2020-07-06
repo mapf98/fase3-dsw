@@ -16,3 +16,4 @@ export const catalogueModule = namespace('catalogueModule');
 export const clientsModule = namespace('clients');
 export const offers = namespace('offers');
 export const comments = namespace('comments');
+export const settings = namespace('settings');

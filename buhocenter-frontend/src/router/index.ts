@@ -17,7 +17,7 @@ import DashboardCategories from '@/modules/management/categories/components/Cate
 import DashboardClients from '@/modules/management/clients/components/Clients.vue';
 import DashboardEmails from '@/modules/management/emails/components/Emails.vue';
 import DashboardOrders from '@/modules/management/orders/components/Orders.vue';
-import DashboardPlatform from '@/modules/management/platform/components/Platform.vue';
+import DashboardSettings from '@/modules/management/settings/components/DashboardSettings.vue';
 import DashboardProducts from '@/modules/management/products/components/Products.vue';
 import DashboardOffers from '@/modules/management/promotions/components/DashboardOffers.vue';
 import DashboardServices from '@/modules/management/services/components/Services.vue';
@@ -136,7 +136,7 @@ const routes: RouteConfig[] = [
                     {
                         path: '/dashboard/platform',
                         name: 'dashboard-platform',
-                        component: DashboardPlatform,
+                        component: DashboardSettings,
                         meta: {
                             admin: true,
                         },

@@ -173,4 +173,14 @@ export const terms = {
     YEAR: 'Year',
     NO_ORDERS: 'There are no orders made in this time period',
     COMMENTS: 'Comments',
+    SETTINGS_TITLE: 'Platform settings',
+    SETTINGS_UPDATE: 'Update',
+    SETTINGS_TOOLTIP:
+        'If you want to update a single parameter, zero the unwanted parameter (2 decimal places).',
+    SETTINGS_HISTORY: 'Change history',
+    SETTINGS_SERVICE: 'Service fee:',
+    SETTINGS_PROCESSOR: 'Processor fee:',
+    SETTINGS_UPDATEDAT: 'Updated at:',
+    SETTINGS_SUCCESS: 'Parameters updated successfully.',
+    SETTINGS_ERROR: 'Failed to update parameters.',
 };
