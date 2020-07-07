@@ -1,14 +1,27 @@
 <template>
     <v-container fluid class="mt-5" style="max-width: none !important;">
         <v-img src="../../../../assets/images/profile.jpg" height="125" class="grey darken-4"></v-img>
+        <v-row class="d-flex align-center mt-6">
+            <v-col cols="2">
+                <v-btn icon @click="goToProfile()">
+                    <v-icon large color="primary">
+                        mdi-arrow-left
+                    </v-icon>
+                </v-btn>
+            </v-col>
+            <v-col>
+                <div class="title-2">
+                    {{ $t('MY_PROFILE') }}
+                    <div class="line"></div>
+                </div>
+            </v-col>
+            <v-col cols="2"></v-col>
+        </v-row>
         <v-container class="d-flex justify-center" style="max-width: none !important;">
             <v-col xs="12" sm="12" lg="6" md="6">
                 <v-card fill-width class="pa-2">
-                    <v-row class="d-flex justify-center pt-4" fill-width>
-                        <v-icon style="font-size: 15px;">fas fa-user</v-icon>
-                    </v-row>
-                    <v-row class="d-flex justify-center mb-4" fill-width>
-                        <h1 class="overline">{{ $t('YOUR_PROFILE') }}</h1>
+                    <v-row class="d-flex justify-center pa-2 mb-3" fill-width>
+                        <v-icon style="font-size: 25px;">fas fa-user</v-icon>
                     </v-row>
 
                     <v-form ref="form" v-model="isFormValid">
@@ -83,7 +96,7 @@
                                 :style="
                                     modifiedLanguage === item.code
                                         ? 'border: 2px solid #907F46; border-radius:10px;'
-                                        : ''
+                                        : 'border: 2px solid transparent; border-radius:10px;'
                                 "
                             >
                                 <v-img
@@ -156,24 +169,28 @@ export default class PersonalInformation extends Vue {
         form: any;
     };
 
-    modifyName(value: any) {
+    modifyName(value: string): void {
         this.modifiedName = value;
     }
 
-    modifyLastName(value: any) {
+    modifyLastName(value: string): void {
         this.modifiedLastName = value;
     }
 
-    modifyEmail(value: any) {
+    modifyEmail(value: string): void {
         this.modifiedEmail = value;
     }
 
-    modifyPsswd(value: any) {
+    modifyPsswd(value: string): void {
         this.password = value;
     }
 
-    modifyConfirmedPsswd(value: any) {
+    modifyConfirmedPsswd(value: string): void {
         this.confirmedPassword = value;
+    }
+
+    goToProfile(): void {
+        this.$router.push('/profile');
     }
 
     selectCustomerLanguage(code: string): void {
@@ -194,7 +211,7 @@ export default class PersonalInformation extends Vue {
         };
     }
 
-    async saveChanges() {
+    async saveChanges(): Promise<void> {
         if (this.$refs.form.validate()) {
             this.loading = true;
 
@@ -207,8 +224,6 @@ export default class PersonalInformation extends Vue {
                 });
             }
 
-            this.loading = false;
-
             if (!updatedInFirebase) {
                 this.userProfileError = true;
             } else {
@@ -220,7 +235,7 @@ export default class PersonalInformation extends Vue {
                     this.MODIFY_CLIENT_DATA(this.createClientDataObject());
                     this.API_CHANGE_LANGUAGE(this.modifiedLanguage);
                     this.userProfileModified = true;
-                    this.$router.push({ name: 'home' });
+                    this.loading = false;
                 }
             }
         }

@@ -42,5 +42,5 @@ export interface Carts {
     productPrice: number;
     offerPrice: number;
     productPoints: number;
-    product: Product[];
+    product: Product;
 }

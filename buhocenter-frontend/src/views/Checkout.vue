@@ -6,7 +6,7 @@
         </v-snackbar>
         <v-snackbar v-model="addressCreatedError" top :timeout="timeout" color="error">
             {{ $t('ERROR_CREATE_ADDRESS') }}
-            <v-btn color="white" text @click="addressCreatedError = false">{{ $t('CLOSE') }}</v-btn>
+            <v-btn color="white" text @click="addressCreatedError = false">{{ $t('') }}</v-btn>
         </v-snackbar>
 
         <v-dialog v-model="dialog" max-width="500px" style="background: #ffffff;">

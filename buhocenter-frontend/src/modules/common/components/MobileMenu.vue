@@ -2,12 +2,11 @@
     <v-navigation-drawer v-model="readyOpen" fixed temporary width="300">
         <v-row>
             <v-col class="d-flex justify-center align-center mt-2 align-center">
-                <p class="mb-0 headline">Menu</p>
+                <p class="mb-0 headline">{{ $t('MENU') }}</p>
             </v-col>
         </v-row>
         <v-row>
             <v-col>
-                <SearchBar size="mobile" />
                 <div v-if="getStatusLogin" class="d-flex justify-center">
                     <v-menu v-model="menu" :close-on-content-click="true" :nudge-width="200" offset-x>
                         <template v-slot:activator="{ on }">
@@ -48,6 +47,9 @@
                     >
                         <v-icon color="primary">mdi-cart</v-icon>
                     </v-badge>
+                </div>
+                <div class="d-flex justify-center mx-10 mt-12">
+                    <SearchBar size="mobile" />
                 </div>
                 <div class="d-flex justify-center mx-10 mt-12">
                     <v-menu transition="slide-x-transition" bottom right>
@@ -124,7 +126,7 @@ export default class MobileSidebar extends Vue {
         this.$emit('openCart');
     }
 
-    async signOut() {
+    async signOut(): Promise<void> {
         await this.logout();
         this.EMPTY_CART();
         this.$router.push({ name: 'home' });
@@ -134,7 +136,7 @@ export default class MobileSidebar extends Vue {
         this.$router.currentRoute.path != '/home' ? this.$router.push('/home') : false;
     }
 
-    async mounted() {
+    async mounted(): Promise<void> {
         if (this.getLanguages.length === 0) {
             await this.apiGetLanguages();
             this.snackbar = this.getErrLanguages;
@@ -148,7 +150,7 @@ export default class MobileSidebar extends Vue {
         }
     }
 
-    async changeLanguagePlatform(code) {
+    async changeLanguagePlatform(code: string): Promise<void> {
         await this.apiChangeLanguage(code);
         this.snackbar = this.getErrLoadLanguage;
     }

@@ -129,6 +129,10 @@
             {{ isProduct() ? $t('PRODUCT_ADD_TO_CART_SUCCESS') : $t('SERVICE_ADD_TO_CART_SUCCESS') }}
             <v-btn color="white" text @click="itemAddedToCart = false">{{ $t('CLOSE') }}</v-btn>
         </v-snackbar>
+        <v-snackbar v-model="itemCartUpdate" top :timeout="timeout" color="success">
+            {{ $t('PRODUCT_UPDATE_TO_CART_SUCCESS') }}
+            <v-btn color="white" text @click="itemAddedToCart = false">{{ $t('CLOSE') }}</v-btn>
+        </v-snackbar>
         <v-snackbar v-model="errorAddingItemToCart" top :timeout="timeout" color="error">
             {{ isProduct() ? $t('PRODUCT_ADD_TO_CART_ERROR') : $t('SERVICE_ADD_TO_CART_ERROR') }}
             <v-btn color="white" text @click="errorAddingItemToCart = false">Cerrar</v-btn>
@@ -220,6 +224,7 @@ export default class ItemDetail extends Vue {
     errorLoadingContent = false;
     errorAddingItemToCart = false;
     itemAddedToCart = false;
+    itemCartUpdate: boolean = false;
     timeout = 5000;
 
     comments: Comment[] = [];
@@ -328,24 +333,53 @@ export default class ItemDetail extends Vue {
 
     async addItemToCart(quantity: number): Promise<void> {
         this.quantity = quantity;
-        const created: boolean = await this.addProductToCart();
-
-        if (created) {
-            this.itemAddedToCart = true;
-            await this.GET_ITEMS_CARS(this.GET_CLIENT_DATA.id!);
-            this.FALSE_PHOTO_CART();
-            await this.FETCH_PRODUCT_CART_PHOTO_BY_NAME(this.GET_CART_OBJECT);
+        if (!this.productExistInCart()) {
+            const created: boolean = await this.addProductToCart();
+            if (created) {
+                this.itemAddedToCart = true;
+                await this.GET_ITEMS_CARS(this.GET_CLIENT_DATA.id!);
+                this.FALSE_PHOTO_CART();
+                await this.FETCH_PRODUCT_CART_PHOTO_BY_NAME(this.GET_CART_OBJECT);
+            } else {
+                this.errorAddingItemToCart = true;
+            }
         } else {
-            this.errorAddingItemToCart = true;
+            await this.changeQuantity(quantity);
+            this.itemCartUpdate = true;
         }
     }
 
-    isProduct(): boolean {
-        if (this.$route.query.item === 'product') {
-            return true;
-        }
+    async changeQuantity(quantity): Promise<void> {
+        const index_checkout = await this.GET_PRODUCTS_CHECKOUT.findIndex(
+            (productCart) => productCart.product!.id == this.GET_ITEM_DETAIL.id,
+        );
+        const index = await this.GET_CART_OBJECT.findIndex(
+            (productCart) => productCart.product && productCart.product.id == this.GET_ITEM_DETAIL.id,
+        );
+        const accumulated_quantity = this.GET_CART_OBJECT[index].quantity;
+        this.SET_QUANTITY_PRODUCT({
+            quantity:
+                (typeof quantity == 'string' ? parseInt(quantity) : quantity) +
+                (accumulated_quantity ? accumulated_quantity : 0),
+            inCheckout: index_checkout === -1 ? false : true,
+            index_checkout,
+            index,
+        });
+    }
 
-        return false;
+    productExistInCart(): boolean {
+        const new_product_id: number | undefined = this.GET_ITEM_DETAIL.id;
+        let exist: boolean = false;
+        this.GET_PRODUCTS_CART.map((product_cart) => {
+            if (product_cart.product && product_cart.product.id === new_product_id) {
+                exist = true;
+            }
+        });
+        return exist;
+    }
+
+    isProduct(): boolean {
+        return this.$route.query.item === 'product';
     }
 
     get imageSelected(): string {
@@ -385,7 +419,13 @@ export default class ItemDetail extends Vue {
                 });
             }
 
-            this.principalImage = this.GET_ITEM_DETAIL.imageUrl!;
+            this.principalImage =
+                this.GET_ITEM_DETAIL &&
+                this.GET_ITEM_DETAIL.productPhotos?.length &&
+                this.GET_ITEM_DETAIL.productPhotos[0].imageUrl
+                    ? this.GET_ITEM_DETAIL.productPhotos[0].imageUrl!
+                    : '';
+            this.imageSelected;
         } else {
             this.errorLoadingContent = true;
         }
@@ -396,6 +436,10 @@ export default class ItemDetail extends Vue {
     }
 
     @loader.Getter(LoaderTypes.getters.IS_LOADING) IS_LOADING!: boolean;
+    @carts.Getter(CartMethods.getters.GET_PRODUCTS_CART)
+    GET_PRODUCTS_CART!: ProductCarts[];
+    @carts.Getter(CartMethods.getters.GET_PRODUCTS_CHECKOUT)
+    GET_PRODUCTS_CHECKOUT!: ProductCarts[];
     @loader.Action(LoaderTypes.actions.SHOW_LOADER) SHOW_LOADER!: (loading: boolean) => boolean;
     @payments.Action(PaymentsTypes.actions.CREATE_ORDER) CREATE_ORDER;
     @carts.Getter(CartMethods.getters.GET_CART_OBJECT)
@@ -407,6 +451,8 @@ export default class ItemDetail extends Vue {
     @carts.Action(CartMethods.actions.GET_ITEMS_CARS) GET_ITEMS_CARS!: (clientId: number) => boolean;
     @carts.Action(CartMethods.actions.FETCH_PRODUCT_CART_PHOTO_BY_NAME)
     FETCH_PRODUCT_CART_PHOTO_BY_NAME!: (products: ProductCarts[]) => boolean;
+    @carts.Mutation(CartMethods.mutations.SET_QUANTITY_PRODUCT)
+    SET_QUANTITY_PRODUCT;
 
     @products.Getter(ProductsTypes.getters.GET_ITEM_DETAIL)
     GET_ITEM_DETAIL!: Product;

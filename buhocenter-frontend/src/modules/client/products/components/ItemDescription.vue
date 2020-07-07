@@ -6,7 +6,7 @@
         <p class="subtitle-1 my-0 mr-3">{{ GET_ITEM_DETAIL.name }}</p>
         <v-row class="mx-auto d-flex align-center">
             <v-rating
-                :value="getRatings"
+                :value="getRatings()"
                 background-color="orange lighten-3"
                 color="orange"
                 small
@@ -44,7 +44,7 @@
         </v-row>
         <v-row v-if="isProduct()" class="mx-auto d-flex align-center">
             <h3>{{ $t('PRODUCT_DIMENSIONS') }}:</h3>
-            <p class="body-1 mx-2 my-0">{{ productDimensions }} inches</p>
+            <p class="body-1 mx-2 my-0">{{ productDimensions }} cm</p>
         </v-row>
     </v-col>
 </template>

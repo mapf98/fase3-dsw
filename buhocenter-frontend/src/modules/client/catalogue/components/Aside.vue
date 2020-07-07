@@ -1,105 +1,248 @@
 <template>
-    <v-navigation-drawer v-model="drawer" :mini-variant.sync="mini" permanent>
-        <v-list-item class="px-2" v-if="this.$route.query.category_id">
-            <v-list-item-title class="overline ml-3 pa-4" v-if="getCategory !== '' && getCategory">
-                <RouterLink :to="`/catalogues?category_id=${getCategoryId}`">
-                    {{ $t(getCategory) }}
-                </RouterLink>
-                <a class="pa-2 inline" v-if="getCatalogue !== '' && getCatalogue">
-                    > {{ $t(getCatalogue) }}
-                </a>
-            </v-list-item-title>
-        </v-list-item>
-
-        <v-divider></v-divider>
-        <v-list dense>
-            <v-list-item link @click="searchAll()">
-                <v-list-item-action class="ml-2">
-                    <v-icon color="primary" style="font-size: 20px !important;"
-                        >mdi-calendar-text-outline</v-icon
-                    >
-                </v-list-item-action>
-                <v-list-item-content>
-                    <v-list-item-title class="fs-sp">
-                        {{ $t('ALL_PRODUCTS') }}
+    <div>
+        <div class="d-none d-md-flex d-lg-flex all">
+            <v-navigation-drawer v-model="drawer" :mini-variant.sync="mini" permanent>
+                <v-list-item class="px-2" v-if="this.$route.query.category_id">
+                    <v-list-item-title class="overline ml-3 pa-4" v-if="getCategory !== '' && getCategory">
+                        <RouterLink :to="`/catalogues?category_id=${getCategoryId}`">
+                            {{ $t(getCategory) }}
+                        </RouterLink>
+                        <a class="pa-2 inline" v-if="getCatalogue !== '' && getCatalogue">
+                            > {{ $t(getCatalogue) }}
+                        </a>
                     </v-list-item-title>
-                </v-list-item-content>
-            </v-list-item>
-            <div v-for="(item, w) in list" :key="w">
-                <div class="ml-6 pa-2 subheader">{{ item.title }}</div>
-                <v-list-group v-for="(sec, j) in item.section" :key="j" @click="showCategory(sec)">
-                    <template v-slot:appendIcon>
-                        <v-icon style="font-size: 15px !important;">mdi-chevron-down</v-icon>
-                    </template>
-                    <template v-slot:activator>
-                        <v-list-item-action>
-                            <v-icon x-small class="ml-2">{{ sec.icon }}</v-icon>
+                </v-list-item>
+
+                <v-divider></v-divider>
+                <v-list dense>
+                    <v-list-item link @click="searchAll()">
+                        <v-list-item-action class="ml-2">
+                            <v-icon color="primary" style="font-size: 20px !important;"
+                                >mdi-calendar-text-outline</v-icon
+                            >
                         </v-list-item-action>
-                        <v-list-item-content class="ml-n4">
+                        <v-list-item-content>
                             <v-list-item-title class="fs-sp">
-                                {{ $t(sec.term) }}
+                                {{ $t('ALL_PRODUCTS') }}
                             </v-list-item-title>
                         </v-list-item-content>
-                    </template>
+                    </v-list-item>
+                    <div v-for="(item, w) in list" :key="w">
+                        <div class="ml-6 pa-2 subheader">{{ item.title }}</div>
+                        <v-list-group v-for="(sec, j) in item.section" :key="j" @click="showCategory(sec)">
+                            <template v-slot:appendIcon>
+                                <v-icon style="font-size: 15px !important;">mdi-chevron-down</v-icon>
+                            </template>
+                            <template v-slot:activator>
+                                <v-list-item-action>
+                                    <v-icon x-small class="ml-2">{{ sec.icon }}</v-icon>
+                                </v-list-item-action>
+                                <v-list-item-content class="ml-n4">
+                                    <v-list-item-title class="fs-sp">
+                                        {{ $t(sec.term) }}
+                                    </v-list-item-title>
+                                </v-list-item-content>
+                            </template>
 
-                    <v-list-item-group>
-                        <v-list-item
-                            v-for="(sub, k) in sec.catalogues"
-                            :key="k"
-                            class="pl-2"
-                            @click="showCatalogue(sub)"
-                        >
-                            <v-list-item-action>
-                                <v-icon style="font-size: 10px !important;" class="ml-4"
-                                    >mdi-square-small</v-icon
+                            <v-list-item-group>
+                                <v-list-item
+                                    v-for="(sub, k) in sec.catalogues"
+                                    :key="k"
+                                    class="pl-2"
+                                    @click="showCatalogue(sub)"
                                 >
-                            </v-list-item-action>
-                            <v-list-item-content>
-                                <v-list-item-title class="fs-sp"> {{ $t(sub.term) }}</v-list-item-title>
-                            </v-list-item-content>
-                        </v-list-item>
-                    </v-list-item-group>
-                </v-list-group>
+                                    <v-list-item-action>
+                                        <v-icon style="font-size: 10px !important;" class="ml-4"
+                                            >mdi-square-small</v-icon
+                                        >
+                                    </v-list-item-action>
+                                    <v-list-item-content>
+                                        <v-list-item-title class="fs-sp">
+                                            {{ $t(sub.term) }}</v-list-item-title
+                                        >
+                                    </v-list-item-content>
+                                </v-list-item>
+                            </v-list-item-group>
+                        </v-list-group>
 
-                <v-list-item-group mandatory v-model="model[0]">
-                    <v-list-item
-                        color="primary"
-                        v-for="(child, i) in item.types"
-                        :key="i"
-                        @click="getProductsByPrice(child.price)"
-                        link
-                    >
-                        <v-list-item-content>
-                            <v-list-item-title class="fs-sp ml-10"
-                                >{{ child.type }} {{ child.price }} {{ child.currency }}</v-list-item-title
+                        <v-list-item-group mandatory v-model="model[0]">
+                            <v-list-item
+                                color="primary"
+                                v-for="(child, i) in item.types"
+                                :key="i"
+                                @click="getProductsByPrice(child.price)"
+                                link
                             >
-                        </v-list-item-content>
-                    </v-list-item>
-                </v-list-item-group>
-                <v-list-item-group mandatory v-model="model[1]">
-                    <v-list-item
-                        v-for="(child, i) in item.rating"
-                        :key="i"
-                        link
-                        class="ml-4"
-                        color="primary"
-                        @click="getProductsByRating(child.value)"
-                    >
-                        <v-rating
-                            v-if="child.value"
-                            small
-                            v-model="child.value"
-                            readonly
-                            background-color="primary"
-                        ></v-rating>
-                        <v-list-item-content v-else>
-                            <v-list-item-title class="fs-sp ml-10">{{ child.type }}</v-list-item-title>
-                        </v-list-item-content>
-                    </v-list-item>
-                </v-list-item-group>
-            </div>
-        </v-list>
-    </v-navigation-drawer>
+                                <v-list-item-content>
+                                    <v-list-item-title class="fs-sp ml-10"
+                                        >{{ child.type }} {{ child.price }}
+                                        {{ child.currency }}</v-list-item-title
+                                    >
+                                </v-list-item-content>
+                            </v-list-item>
+                        </v-list-item-group>
+                        <v-list-item-group mandatory v-model="model[1]">
+                            <v-list-item
+                                v-for="(child, i) in item.rating"
+                                :key="i"
+                                link
+                                class="ml-4"
+                                color="primary"
+                                @click="getProductsByRating(child.value)"
+                            >
+                                <v-rating
+                                    v-if="child.value"
+                                    small
+                                    v-model="child.value"
+                                    readonly
+                                    background-color="primary"
+                                ></v-rating>
+                                <v-list-item-content v-else>
+                                    <v-list-item-title class="fs-sp ml-10">{{
+                                        child.type
+                                    }}</v-list-item-title>
+                                </v-list-item-content>
+                            </v-list-item>
+                        </v-list-item-group>
+                    </div>
+                </v-list>
+            </v-navigation-drawer>
+        </div>
+        <div v-if="showResponsive()">
+            <v-bottom-sheet v-model="sheet" scrollable>
+                <template v-slot:activator="{ on, attrs }">
+                    <v-btn color="primary" dark v-bind="attrs" v-on="on" fixed fab bottom right>
+                        <v-icon>
+                            mdi-filter-outline
+                        </v-icon>
+                    </v-btn>
+                </template>
+                <v-card>
+                    <v-card-text>
+                        <v-sheet class="text-center" height="400px">
+                            <v-list-item class="px-2" v-if="this.$route.query.category_id">
+                                <v-list-item-title
+                                    class="overline ml-3 pa-4"
+                                    v-if="getCategory !== '' && getCategory"
+                                >
+                                    <RouterLink :to="`/catalogues?category_id=${getCategoryId}`">
+                                        {{ $t(getCategory) }}
+                                    </RouterLink>
+                                    <a class="pa-2 inline" v-if="getCatalogue !== '' && getCatalogue">
+                                        > {{ $t(getCatalogue) }}
+                                    </a>
+                                </v-list-item-title>
+                            </v-list-item>
+                            <v-list dense>
+                                <v-list-item link @click="searchAll()">
+                                    <v-list-item-action class="ml-2">
+                                        <v-icon color="primary" style="font-size: 20px !important;"
+                                            >mdi-calendar-text-outline</v-icon
+                                        >
+                                    </v-list-item-action>
+                                    <v-list-item-content>
+                                        <v-list-item-title class="fs-sp">
+                                            {{ $t('ALL_PRODUCTS') }}
+                                        </v-list-item-title>
+                                    </v-list-item-content>
+                                </v-list-item>
+                                <v-divider class="mb-2"></v-divider>
+                                <div v-for="(item, w) in list" :key="w">
+                                    <div class="ml-6 pa-2 subheader">{{ item.title }}</div>
+                                    <v-divider class="mb-2"></v-divider>
+                                    <v-list-group
+                                        v-for="(sec, j) in item.section"
+                                        :key="j"
+                                        @click="showCategory(sec)"
+                                    >
+                                        <template v-slot:appendIcon>
+                                            <v-icon style="font-size: 15px !important;"
+                                                >mdi-chevron-down</v-icon
+                                            >
+                                        </template>
+                                        <template v-slot:activator>
+                                            <v-list-item-action>
+                                                <v-icon x-small class="ml-2">{{ sec.icon }}</v-icon>
+                                            </v-list-item-action>
+                                            <v-list-item-content class="ml-n4">
+                                                <v-list-item-title class="fs-sp">
+                                                    {{ $t(sec.term) }}
+                                                </v-list-item-title>
+                                            </v-list-item-content>
+                                        </template>
+
+                                        <v-list-item-group>
+                                            <v-list-item
+                                                v-for="(sub, k) in sec.catalogues"
+                                                :key="k"
+                                                class="pl-2"
+                                                @click="showCatalogue(sub)"
+                                            >
+                                                <v-list-item-action>
+                                                    <v-icon style="font-size: 10px !important;" class="ml-4"
+                                                        >mdi-square-small</v-icon
+                                                    >
+                                                </v-list-item-action>
+                                                <v-list-item-content>
+                                                    <v-list-item-title class="fs-sp">
+                                                        {{ $t(sub.term) }}</v-list-item-title
+                                                    >
+                                                </v-list-item-content>
+                                            </v-list-item>
+                                        </v-list-item-group>
+                                    </v-list-group>
+
+                                    <v-list-item-group mandatory v-model="model[0]">
+                                        <v-list-item
+                                            color="primary"
+                                            v-for="(child, i) in item.types"
+                                            :key="i"
+                                            @click="getProductsByPrice(child.price)"
+                                            link
+                                        >
+                                            <v-list-item-content>
+                                                <v-list-item-title class="fs-sp ml-10"
+                                                    >{{ child.type }} {{ child.price }}
+                                                    {{ child.currency }}</v-list-item-title
+                                                >
+                                            </v-list-item-content>
+                                        </v-list-item>
+                                    </v-list-item-group>
+                                    <v-list-item-group mandatory v-model="model[1]">
+                                        <v-list-item
+                                            v-for="(child, i) in item.rating"
+                                            :key="i"
+                                            link
+                                            class="ml-4"
+                                            color="primary"
+                                            @click="getProductsByRating(child.value)"
+                                        >
+                                            <v-rating
+                                                v-if="child.value"
+                                                small
+                                                v-model="child.value"
+                                                readonly
+                                                background-color="primary"
+                                                class="mx-auto"
+                                            ></v-rating>
+                                            <v-list-item-content v-else>
+                                                <v-list-item-title class="fs-sp ml-10">{{
+                                                    child.type
+                                                }}</v-list-item-title>
+                                            </v-list-item-content>
+                                        </v-list-item>
+                                    </v-list-item-group>
+                                </div>
+                            </v-list>
+                        </v-sheet>
+                    </v-card-text>
+                    <v-card-actions class="d-flex justify-center mt-6">
+                        <v-btn outlined color="error" @click="sheet = !sheet">X</v-btn>
+                    </v-card-actions>
+                </v-card>
+            </v-bottom-sheet>
+        </div>
+    </div>
 </template>
 
 <script lang="ts">
@@ -120,6 +263,7 @@ export default class Aside extends Vue {
     valor!: string;
     model = [0, 0];
     drawer = true;
+    sheet = false;
     filter: ProductFilters = new ProductFilters();
     items = [
         { title: 'Home', icon: 'mdi-home-city' },
@@ -127,6 +271,11 @@ export default class Aside extends Vue {
         { title: 'Users', icon: 'mdi-account-group-outline' },
     ];
     mini = false;
+
+    showResponsive(): boolean {
+        const { xs, sm } = this.$vuetify.breakpoint;
+        return xs || sm ? true : false;
+    }
 
     get getCategory(): string {
         return this.GET_CATEGORY!;
@@ -278,6 +427,10 @@ export default class Aside extends Vue {
 </script>
 
 <style scoped>
+.all{
+    height:100%;
+}
+
 .text-title-aside {
     color: #907f46;
     font-size: 16px;

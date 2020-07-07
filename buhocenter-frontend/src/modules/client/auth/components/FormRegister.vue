@@ -2,8 +2,8 @@
     <v-row align="center" justify="center">
         <v-col class="container-login" cols="12" lg="8" md="8" sm="8">
             <v-snackbar v-model="snackbar" top :timeout="timeout" color="error">
-                Error occurred while getting the languages
-                <v-btn color="white" text @click="snackbar = false">Cerrar</v-btn>
+                {{ $t('ERROR_LANGUAGES') }}
+                <v-btn color="white" text @click="snackbar = false">{{ $t('CLOSE') }}</v-btn>
             </v-snackbar>
             <v-alert v-if="getErrRegister" prominent type="error">
                 <v-row align="center">
@@ -20,28 +20,28 @@
                 <v-row class="logo-header mb-10">
                     <img src="../../../../assets/Logo-completo.png" class="logo-header__img" />
                     <span class="login100-form-title p-b-53 mb-4">
-                        Register into Buhocenter
+                        {{ $t('REGISTER_BUHOCENTER') }}
                     </span>
                 </v-row>
 
                 <v-row>
                     <v-col cols="12" lg="6" md="6" sm="12">
                         <span class="login100-form-subtitle p-b-53 mb-4">
-                            Personal information
+                            {{ $t('PERSONAL_INFORMATION') }}
                         </span>
                         <div class="divider"></div>
                         <div class="validate-input mb-4" data-validate="Name is required">
                             <v-text-field
                                 :label="$t('FIRST-NAME')"
                                 v-model="name"
-                                :rules="[() => !!name || 'This field is required']"
+                                :rules="[() => !!name || `${$t('REQUIRED_FIELD')}`]"
                             ></v-text-field>
                         </div>
                         <div class="validate-input mb-4" data-validate="Name is required">
                             <v-text-field
                                 :label="$t('LAST-NAME')"
                                 v-model="lastName"
-                                :rules="[() => !!lastName || 'This field is required']"
+                                :rules="[() => !!lastName || `${$t('REQUIRED_FIELD')}`]"
                             ></v-text-field>
                         </div>
                         <v-col cols="12" lg="12" md="12">
@@ -68,10 +68,12 @@
                                 </template>
                                 <v-date-picker v-model="birthdate" scrollable>
                                     <v-spacer></v-spacer>
-                                    <v-btn text color="primary" dark @click="modal = false">Cancel</v-btn>
-                                    <v-btn text color="primary" dark @click="$refs.dialog.save(birthdate)"
-                                        >Save</v-btn
-                                    >
+                                    <v-btn text color="primary" dark @click="modal = false">{{
+                                        $t('CLOSE')
+                                    }}</v-btn>
+                                    <v-btn text color="primary" dark @click="$refs.dialog.save(birthdate)">{{
+                                        $t('SAVE')
+                                    }}</v-btn>
                                 </v-date-picker>
                             </v-dialog>
                         </v-col>
@@ -92,14 +94,14 @@
                     </v-col>
                     <v-col cols="12" lg="6" md="6" sm="12">
                         <span class="login100-form-subtitle p-b-53 mb-4">
-                            User Account
+                            {{ $t('USER_ACCOUNT') }}
                         </span>
                         <div class="divider"></div>
                         <div class="validate-input mb-4" data-validate="Email is required">
                             <v-text-field
                                 :label="$t('EMAIL')"
                                 v-model="email"
-                                :rules="[() => !!email || 'This field is required']"
+                                :rules="[() => !!email || `${$t('REQUIRED_FIELD')}`]"
                             ></v-text-field>
                         </div>
                         <div class="validate-input mb-4" data-validate="Password is required">
@@ -109,7 +111,7 @@
                                 :append-icon="showPass ? 'mdi-eye' : 'mdi-eye-off'"
                                 :type="showPass ? 'text' : 'password'"
                                 @click:append="showPass = !showPass"
-                                :rules="[() => !!password || 'This field is required']"
+                                :rules="[() => !!password || `${$t('REQUIRED_FIELD')}`]"
                             ></v-text-field>
                         </div>
                         <div class="validate-input mb-4" data-validate="Password is required">
@@ -119,12 +121,9 @@
                                 :append-icon="showRepeatPass ? 'mdi-eye' : 'mdi-eye-off'"
                                 :type="showRepeatPass ? 'text' : 'password'"
                                 @click:append="showRepeatPass = !showRepeatPass"
-                                :rules="[() => !!confirmPassword || 'This field is required']"
+                                :rules="[() => !!confirmPassword || `${$t('REQUIRED_FIELD')}`]"
                             ></v-text-field>
                         </div>
-                        <v-alert type="error" v-if="errorInputs.passwordEquals">
-                            Passwords must match
-                        </v-alert>
                     </v-col>
                 </v-row>
                 <div class="center">
@@ -157,7 +156,7 @@
                 </li>
             </ul>
             <v-btn color="white" text @click="snackbarError = false" small>
-                Close
+                {{ $t('CLOSE') }}
             </v-btn>
         </v-snackbar>
     </v-row>
@@ -210,16 +209,16 @@ export default class Login extends Vue {
 
     showErrors(errorInputs: any): void {
         if (errorInputs.birthdate) {
-            this.errors.push('You must be of legal age');
+            this.errors.push(`${this.$t('LEGAL_AGE')}`);
         }
         if (errorInputs.email) {
-            this.errors.push('Valid email is required.');
+            this.errors.push(`${this.$t('VALID_EMAIL')}`);
         }
         if (errorInputs.passwordEquals) {
-            this.errors.push('passwords must match.');
+            this.errors.push(`${this.$t('PASSWORD_MATCH')}`);
         }
         if (errorInputs.password) {
-            this.errors.push('Password must be at least 6 characters.');
+            this.errors.push(`${this.$t('PASSWORD_LENGTH')}`);
         }
         (this.$refs.form as Vue & { validate: () => boolean }).validate();
         this.snackbarError = true;
@@ -303,6 +302,7 @@ export default class Login extends Vue {
     background: #fff;
     border-radius: 10px;
     padding: 50px;
+    box-shadow: -7px 14px 24px 0px rgba(179, 179, 179, 0.44);
 }
 
 .center {
@@ -463,7 +463,7 @@ export default class Login extends Vue {
     padding: 0 20px;
     width: 100%;
     height: 40px;
-    background-color: #f1cabb;
+    background-color: #756a44;
     border-radius: 10px;
     font-size: 16px;
     color: #fff;
@@ -471,6 +471,7 @@ export default class Login extends Vue {
     transition: all 0.4s;
     position: relative;
     z-index: 1;
+    outline: none;
 }
 
 .login100-form-btn::before {
@@ -483,7 +484,7 @@ export default class Login extends Vue {
     border-radius: 10px;
     top: 0;
     left: 0;
-    background: #f1cabb;
+    background: #756a44;
     opacity: 0;
     transition: all 0.4s;
 }

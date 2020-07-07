@@ -1,13 +1,25 @@
 <template>
-    <div class="searchbar">
-        <input :class="'input '" :placeholder="$t('SEARCH')" @keyup.enter="searchByName()" v-model="query" />
-        <div class="icon" @click="searchByName()">
-            <i class="fas fa-search"></i>
+    <div :class="'searchbar'">
+        <div class="searchbar__input">
+            <input
+                :class="'input input' + getSize()"
+                :placeholder="$t('SEARCH')"
+                @keyup.enter="searchByName()"
+                v-model="query"
+            />
+            <div class="icon" @click="searchByName()">
+                <i class="fas fa-search"></i>
+            </div>
         </div>
-        <div class="popover" v-show="matches.length > 0">
+        <div :class="'popover popover' + getSize()" v-show="matches.length > 0 && query != ''">
             <div class="popover__options">
                 <ul>
-                    <li class="popover__option" v-for="(item, i) in matches" :key="i" @click="itemClicked(i)">
+                    <li
+                        class="popover__option"
+                        v-for="(item, i) in matches"
+                        :key="i"
+                        @click="itemClicked(item.name, i)"
+                    >
                         {{ getName(item.name) }}
                     </li>
                 </ul>
@@ -37,13 +49,16 @@ export default class SearchBar extends Vue {
     errorLoadingContent = false;
     ejemplo;
 
-    get getSize(): string {
-        return this.size;
+    getSize(): string {
+        if (this.size === 'mobile') return '__mobile';
+        else return '__big';
     }
 
-    itemClicked(i: number): void {
-        this.filter.name = this.matches[i].name;
-        this.searchProducts(this.filter);
+    itemClicked(name: string, i: number): void {
+        if (name !== 'No products found') {
+            this.filter.name = this.matches[i].name;
+            this.searchProducts(this.filter);
+        }
     }
 
     searchByName(): void {
@@ -65,11 +80,17 @@ export default class SearchBar extends Vue {
         this.query = '';
     }
 
-    get matches(): any {
-        if (this.query === '') return [];
+    get filteredProducts(): any {
         return this.GET_PRODUCTS.filter((item) =>
             item[this.filterBy].toLowerCase().includes(this.query.toLowerCase()),
         );
+    }
+
+    get matches(): any {
+        if (this.query === '') return [];
+        else if (this.query !== '' && this.filteredProducts.length === 0)
+            return [{ name: 'No products found' }];
+        return this.filteredProducts;
     }
 
     getName(name) {
@@ -92,11 +113,6 @@ export default class SearchBar extends Vue {
 </script>
 
 <style scoped lang="scss">
-.searchbar {
-    position: relative;
-    margin-left: 10px;
-}
-
 .popover {
     position: absolute;
     z-index: 2;
@@ -107,6 +123,11 @@ export default class SearchBar extends Vue {
     box-shadow: 0 0 5px #987746;
     width: 100%;
     transition: all 0.2s;
+
+    &__mobile {
+        width: 200px;
+        margin-left: 20px;
+    }
 
     ul {
         padding: 0;
@@ -131,12 +152,43 @@ export default class SearchBar extends Vue {
     }
 }
 
+.searchbar {
+    position: relative;
+
+    &__input {
+        display: flex;
+    }
+}
+
+.input {
+    border: 1px solid #907f46;
+    padding: 10px;
+    height: 35px;
+    outline: none;
+    border-radius: 3px 0 0 3px;
+    margin-right: 0;
+    margin-left: 0 !important;
+    box-shadow: 0 0 1.5px #907f46;
+
+    transition: all 0.2s ease;
+
+    &__big {
+        width: 250px;
+        &:focus {
+            width: 300px;
+        }
+    }
+
+    &__mobile {
+        width: 200px;
+        margin-left: 20px;
+    }
+}
+
 .searchbar .icon {
-    position: absolute;
-    top: 0;
-    right: 0;
+    position: relative;
     width: 35px;
-    height: 100%;
+    height: 35px;
     background: #907f46;
     border-radius: 0px 3px 3px 0;
     color: #fff;
@@ -152,21 +204,5 @@ export default class SearchBar extends Vue {
     left: 50%;
     transform: translate(-50%, -50%);
     cursor: pointer;
-}
-
-.input {
-    border: 1px solid #907f46;
-    padding: 10px;
-    height: 35px;
-    outline: none;
-    border-radius: 3px;
-    margin-right: 0;
-    box-shadow: 0 0 5px #907f46;
-    width: 250px;
-    transition: all 0.2s ease;
-
-    &:focus {
-        width: 300px;
-    }
 }
 </style>

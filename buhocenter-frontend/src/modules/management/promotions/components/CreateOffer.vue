@@ -16,9 +16,13 @@
             </div>
             <v-text-field :label="descriptionLabel" class="mx-3" v-model="offerDescription"></v-text-field>
             <div class="d-flex justify-center mt-6 mb-3">
-                <v-btn @click="() => createOffer()" color="primary" :disabled="checkForm">{{
-                    $t('CREATE_OFFER')
-                }}</v-btn>
+                <v-btn
+                    @click="() => createOffer()"
+                    color="primary"
+                    :disabled="checkForm"
+                    :loading="loading"
+                    >{{ $t('CREATE_OFFER') }}</v-btn
+                >
             </div>
         </v-card>
         <v-alert
@@ -63,6 +67,7 @@ import { TranslateResult } from 'vue-i18n';
 @Component
 export default class CreateOffer extends Vue {
     addSuccess: boolean = false;
+    loading: boolean = false;
     addError: boolean = false;
     showPercentageError: boolean = false;
     showFormWarning: boolean = true;
@@ -90,6 +95,7 @@ export default class CreateOffer extends Vue {
     }
 
     async createOffer(): Promise<void> {
+        this.loading = true;
         const offer: Offer = {
             id: undefined,
             createdAt: undefined,
@@ -105,6 +111,7 @@ export default class CreateOffer extends Vue {
         } else {
             this.addError = true;
         }
+        this.loading = false;
     }
 
     validateForm(): boolean {

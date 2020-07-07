@@ -12,14 +12,8 @@
         </v-navigation-drawer>
 
         <v-snackbar v-model="snackbar" top :timeout="6000" color="error">
-            <b v-if="getErrLoadLanguage">
-                Unexpected error loading languages
-            </b>
-            <b v-else>
-                Error occurred while getting the languages
-            </b>
-
-            <v-btn color="white" text @click="snackbar = false">Close</v-btn>
+            <b>{{ $t('ERROR_LANGUAGES') }}</b>
+            <v-btn color="white" text @click="snackbar = false">{{ $t('CLOSE') }}</v-btn>
         </v-snackbar>
 
         <v-app-bar clipped-left app color="white" light>
@@ -41,11 +35,9 @@
                 <SearchBar size="large" />
             </div>
             <div class="mr-2 ml-4 hidden-sm-and-down">
-                <v-menu transition="slide-x-transition" bottom right>
+                <v-menu offset-y bottom>
                     <template v-slot:activator="{ on }">
-                        <v-btn color="primary" dark v-on="on">
-                            {{ getLanguagePlatform }}
-                        </v-btn>
+                        <v-btn color="primary" dark v-on="on">{{ getLanguagePlatform }}</v-btn>
                     </template>
                     <v-list>
                         <v-list-item
@@ -54,13 +46,13 @@
                             @click="changeLanguagePlatform(item.code)"
                         >
                             <v-row>
-                                <v-col cols="4"
-                                    ><v-img
+                                <v-col cols="4">
+                                    <v-img
                                         :src="require(`../../../assets/flags/${item.code}.png`)"
                                         height="18"
                                         width="18"
-                                    ></v-img
-                                ></v-col>
+                                    ></v-img>
+                                </v-col>
                                 <v-col cols="8">{{ item.name }}</v-col>
                             </v-row>
                         </v-list-item>
@@ -72,26 +64,23 @@
             </div>
             <div class="mr-2 ml-2 hidden-sm-and-down" v-if="getStatusLogin">
                 <div class="text-xs-center">
-                    <v-menu v-model="menu" :close-on-content-click="true" :nudge-width="200" offset-x>
+                    <v-menu v-model="menu" :close-on-content-click="true" :nudge-width="200" offset-y bottom>
                         <template v-slot:activator="{ on }">
-                            <v-btn text v-on="on">
-                                {{ getClient.name + ' ' + getClient.lastName }}
-                            </v-btn>
+                            <v-btn text v-on="on">{{ getClient.name }}</v-btn>
                         </template>
                         <v-card>
                             <v-list>
-                                <v-list-item avatar to="/profile">
-                                    <v-list-item-action>
-                                        <v-list-item-title>{{
-                                            $t('PROFILE') + ': ' + getClient.name + ' ' + getClient.lastName
-                                        }}</v-list-item-title>
-                                    </v-list-item-action>
+                                <v-list-item to="/profile">
+                                    <v-icon large color="primary">mdi-account-circle-outline</v-icon>
+                                    <v-list-item-title class="ml-2">{{
+                                        $t('MY_ACCOUNT').toUpperCase()
+                                    }}</v-list-item-title>
                                 </v-list-item>
                             </v-list>
                             <v-divider></v-divider>
                             <v-card-actions>
                                 <v-spacer></v-spacer>
-                                <v-btn color="primary" flat @click="signOut()">{{ $t('LOG-OUT') }}</v-btn>
+                                <v-btn color="primary" dense @click="signOut()">{{ $t('LOG-OUT') }}</v-btn>
                             </v-card-actions>
                         </v-card>
                     </v-menu>
@@ -99,9 +88,7 @@
             </div>
             <div class="mr-2 ml-2 hidden-sm-and-down" v-else>
                 <router-link to="/sign-in">
-                    <v-btn text>
-                        {{ $t('SIGN-IN') }}
-                    </v-btn>
+                    <v-btn text>{{ $t('SIGN-IN') }}</v-btn>
                 </router-link>
             </div>
             <div
@@ -157,10 +144,12 @@ export default class Header extends Vue {
     fetched = FETCHED;
     snackbar = false;
 
-    async signOut() {
+    async signOut(): Promise<void> {
         await this.logout();
         this.EMPTY_CART();
-        this.$router.push({ name: 'home' });
+        localStorage.clear();
+        sessionStorage.clear();
+        this.goToHome();
     }
 
     openSideMenu(): void {
@@ -172,7 +161,7 @@ export default class Header extends Vue {
         this.$router.currentRoute.path != '/home' ? this.$router.push('/home') : false;
     }
 
-    async mounted() {
+    async mounted(): Promise<void> {
         if (this.getLanguages.length === 0) {
             await this.apiGetLanguages();
             this.snackbar = this.getErrLanguages;
@@ -186,7 +175,7 @@ export default class Header extends Vue {
         }
     }
 
-    async changeLanguagePlatform(code) {
+    async changeLanguagePlatform(code: string): Promise<void> {
         await this.apiChangeLanguage(code);
         this.snackbar = this.getErrLoadLanguage;
     }

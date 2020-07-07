@@ -5,9 +5,6 @@
                 <v-row class="logo-header">
                     <img src="../../../../assets/Logo-completo.png" class="logo-header__img" />
                 </v-row>
-                <!-- <span class="login100-form-title p-b-53">
-          {{ $t("SIGN-IN-WITH") }}
-        </span> -->
                 <div class="buttons">
                     <v-col lg="12" md="12" sm="12">
                         <a
@@ -16,7 +13,7 @@
                             @click="loginWithSocial('facebook')"
                         >
                             <v-icon class="mr-2 icon-face pa-2">fab fa-facebook</v-icon>
-                            Sign in with Facebook
+                            {{ $t('LOGIN_FACEBOOK') }}
                         </a>
                     </v-col>
                     <v-col lg="12" md="12" sm="12">
@@ -26,12 +23,12 @@
                             @click="loginWithSocial('google')"
                         >
                             <v-icon class="mr-2 icon-google pa-2">fab fa-google</v-icon>
-                            Sign in with Google
+                            {{ $t('LOGIN_GOOGLE') }}
                         </a>
                     </v-col>
                 </div>
                 <span class="login100-form-title pt-4 pb-4">
-                    Or
+                    {{ $t('LOGIN_OR') }}
                 </span>
 
                 <div class="validate-input mb-4" data-validate="Password is required">
@@ -80,7 +77,7 @@
                 </li>
             </ul>
             <v-btn color="white" text @click="snackbarError = false" small>
-                Close
+                {{ $t('CLOSE') }}
             </v-btn>
         </v-snackbar>
     </v-row>
@@ -166,7 +163,8 @@ export default class Login extends Vue {
 .container-login {
     background: #fff;
     border-radius: 10px;
-    padding: 25px 50px;
+    padding: 10px 50px;
+    box-shadow: -7px 14px 24px 0px rgba(179, 179, 179, 0.44);
 }
 
 a {
@@ -308,7 +306,7 @@ a:focus {
     padding: 0 20px;
     width: 100%;
     height: 40px;
-    background-color: #f1cabb;
+    background-color: #756a44;
     border-radius: 10px;
     font-size: 16px;
     color: #fff;
@@ -316,6 +314,7 @@ a:focus {
     transition: all 0.4s;
     position: relative;
     z-index: 1;
+    outline: none;
 }
 
 .login100-form-btn::before {
@@ -328,9 +327,10 @@ a:focus {
     border-radius: 10px;
     top: 0;
     left: 0;
-    background: #f1cabb;
+    background: #756a44;
     opacity: 0;
     transition: all 0.4s;
+    outline: none;
 }
 
 .login100-form-btn:hover:before {

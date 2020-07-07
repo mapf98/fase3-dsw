@@ -1,7 +1,22 @@
 <template>
     <v-container fluid>
         <v-img src="../../../../assets/images/orders.jpg" height="125" class="grey darken-4"></v-img>
-        <h1 class="overline text-center">{{ $t('YOUR_ORDERS') }}</h1>
+        <v-row class="d-flex align-center mt-6">
+            <v-col cols="2">
+                <v-btn icon @click="goToProfile()">
+                    <v-icon large color="primary">
+                        mdi-arrow-left
+                    </v-icon>
+                </v-btn>
+            </v-col>
+            <v-col>
+                <div class="title-2">
+                    {{ $t('MY_ORDERS') }}
+                    <div class="line"></div>
+                </div>
+            </v-col>
+            <v-col cols="2"></v-col>
+        </v-row>
         <v-row class="d-flex justify-center">
             <v-col :cols="responsiveSelect()">
                 <v-select
@@ -76,9 +91,8 @@ import Component from 'vue-class-component';
 import { payments, authModule } from '@/store/namespaces';
 import AuthTypes from '../../../../store/auth/methods/auth.methods';
 import PaymentsTypes from '@/store/payments/methods/payments.methods';
-import { STATUS } from '@/config/constants';
 import { CustomerInterface } from '@/modules/client/auth/interfaces/customer.interface';
-import { Orders, StatusHistory, ProductsOrder } from '@/modules/client/customers/interfaces/orders.interface';
+import { Orders, StatusHistory } from '@/modules/client/customers/interfaces/orders.interface';
 import Product from './OrderProducts.vue';
 import EmptyState from '@/modules/common/components/EmptyState.vue';
 
@@ -114,7 +128,7 @@ export default class ClientOrders extends Vue {
 
     responsiveSelect(): number {
         const { xs, sm } = this.$vuetify.breakpoint;
-        return xs || sm ? 4 : 1;
+        return xs || sm ? 6 : 2;
     }
 
     selectOrder(): Orders[] {
@@ -145,6 +159,10 @@ export default class ClientOrders extends Vue {
         if (orderStatus == 'Paid') this.statusIcon = 'mdi-checkbox-marked-circle';
         if (orderStatus == 'Pending') this.statusIcon = 'mdi-information';
         return orderStatus.toUpperCase();
+    }
+
+    goToProfile(): void {
+        this.$router.push('/profile');
     }
 
     async fetchOrders(): Promise<void> {

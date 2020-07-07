@@ -46,14 +46,13 @@ const payments: Module<any, any> = {
         async [PaymentsTypes.actions.FETCH_ORDER_BY_ID]({ commit }, orderId: number): Promise<boolean> {
             try {
                 const response: ProductsOrder = await paymentsRepository.getOrderById(orderId);
-
                 response.carts.forEach(async (el) => {
-                    const principalPhoto: string = el.product.productPhotos[0].content;
+                    const principalPhoto: string = el.product.productPhotos![0].content!;
                     const photo = await productsFirebaseRepository.getProductPhotoByName(
-                        el.product.id,
+                        el.product.id!,
                         principalPhoto,
                     );
-                    el.product.productPhotos[0].content = photo;
+                    el.product.productPhotos![0].content = photo;
                 });
                 commit(PaymentsTypes.mutations.SET_PRODUCTS_ORDER, response);
                 return true;

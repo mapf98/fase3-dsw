@@ -50,7 +50,7 @@ export class ProductsController {
     }
 
     @Get('daily-recommendation')
-    @UseInterceptors(CustomerLoyaltyInterceptor)
+     @UseInterceptors(CustomerLoyaltyInterceptor)
     async getDailyProductsRecommendation(): Promise<Product[]> {
         this.logger.info(`getDailyProductsRecommendation: products recomendados del dia `, {
             context: ProductsController.name,

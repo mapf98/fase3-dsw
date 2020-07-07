@@ -1,35 +1,30 @@
 <template>
     <v-container>
+        <div class="title-2 mb-4">
+            {{ $t('MY_CART') }}
+            <div class="line"></div>
+        </div>
         <div v-if="GET_LOAD_PHOTO_CART">
             <v-list-item v-for="(item, i) in productsCart" :key="item.id" class="mb-4">
                 <ProductCart :item="item" :index="i"></ProductCart>
             </v-list-item>
         </div>
-        <v-list-item>
-            <v-card margin="0px">
-                <v-card-actions>
-                    <v-card-actions v-if="errorCheckout">
-                        <v-alert type="error">
-                            {{ $t('ERROR_NOT_CHECKOUT_PRODUCTS') }}
-                        </v-alert>
-                    </v-card-actions>
+        <v-card width="min-content" class="ma-auto">
+            <v-card-actions>
+                <v-card-actions v-if="errorCheckout">
+                    <v-alert type="error">{{ $t('ERROR_NOT_CHECKOUT_PRODUCTS') }}</v-alert>
                 </v-card-actions>
-                <v-card-actions>
-                    Subtotal({{ GET_PRODUCTS_CHECKOUT.length }} items):{{ ' '
-                    }}<b>{{ GET_TOTAL_PRICE_CHECKOUT.toFixed(2) }}$</b>
-                </v-card-actions>
-                <v-card-actions>
-                    <v-btn
-                        @click="checkout"
-                        color="primary"
-                        outlined
-                        class="btn-remove"
-                        :disabled="onCheckout"
-                        >{{ $t('PROCEED_CHECKOUT') }}</v-btn
-                    >
-                </v-card-actions>
-            </v-card>
-        </v-list-item>
+            </v-card-actions>
+            <v-card-actions>
+                Subtotal ({{ GET_PRODUCTS_CHECKOUT.length }} items):{{ ' ' }}
+                <b>{{ GET_TOTAL_PRICE_CHECKOUT.toFixed(2) }}$</b>
+            </v-card-actions>
+            <v-card-actions>
+                <v-btn @click="checkout" color="primary" outlined class="btn-remove" :disabled="onCheckout">{{
+                    $t('PROCEED_CHECKOUT')
+                }}</v-btn>
+            </v-card-actions>
+        </v-card>
     </v-container>
 </template>
 

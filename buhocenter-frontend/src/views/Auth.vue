@@ -1,5 +1,5 @@
 <template>
-    <v-content>
+    <v-content class="auth-container">
         <v-container class="fill-height" fluid>
             <Login></Login>
         </v-container>
@@ -17,3 +17,9 @@ export default {
     },
 };
 </script>
+
+<style scoped>
+.auth-container {
+    padding: 20px 0px !important;
+}
+</style>

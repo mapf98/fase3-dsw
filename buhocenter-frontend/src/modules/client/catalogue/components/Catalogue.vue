@@ -1,13 +1,13 @@
 <template>
     <v-row>
-        <div class="d-none d-md-flex d-lg-flex">
-            <Aside @refreshProducts="refreshProducts" />
-        </div>
+        <Aside @refreshProducts="refreshProducts" />
+
         <v-col cols="12" lg="9" md="9" sm="12">
             <v-container fluid>
                 <EmptyState class="mt-12" v-if="this.GET_TOTAL_PRODUCTS == 0" :message="emptyMessage" />
                 <ProductCard />
                 <v-pagination
+                    class="mt-6"
                     v-if="HowManyPages > 0"
                     color="primary"
                     v-model="page"
@@ -62,6 +62,7 @@ export default class Catalogue extends Vue {
     closeSnackbar() {
         this.errorLoadingContent = false;
     }
+
 
     get getLength() {
         const length: number = this.HowManyPages + 1;

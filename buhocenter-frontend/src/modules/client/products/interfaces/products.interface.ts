@@ -101,6 +101,7 @@ export interface Product {
 }
 
 export interface ProductPhotos {
+    imageUrl: string | string;
     id?: 17;
     createdAt?: string;
     updatedAt?: string;

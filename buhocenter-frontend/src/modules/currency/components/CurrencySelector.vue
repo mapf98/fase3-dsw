@@ -1,5 +1,5 @@
 <template>
-    <v-menu transition="slide-x-transition" bottom right>
+    <v-menu offset-y bottom>
         <template v-slot:activator="{ on }">
             <v-btn color="primary" dark v-on="on" outlined>
                 {{ $currency.getCurrentSymbol() }}

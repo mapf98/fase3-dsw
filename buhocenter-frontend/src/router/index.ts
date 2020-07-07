@@ -9,7 +9,6 @@ import Register from '../views/Register.vue';
 import Profile from '@/modules/client/customers/components/Profile.vue';
 import Catalogues from '@/modules/client/catalogues/components/Catalogues.vue';
 import AddressManagement from '@/modules/client/addresses/components/AddressManagement.vue';
-import CreateAddressForm from '@/modules/client/addresses/components/CreateAddressForm.vue';
 import Dashboard from '@/views/dashboard/Dashboard.vue';
 import DashboardHome from '@/modules/management/home/components/Home.vue';
 import DashboardCatalogues from '@/modules/management/catalogues/components/Catalogues.vue';
@@ -26,6 +25,10 @@ import Checkout from '../views/Checkout.vue';
 import DashboardCreateOffer from '@/modules/management/promotions/components/CreateOffer.vue';
 import DashboardAllOffers from '@/modules/management/promotions/components/AllOffers.vue';
 import Orders from '@/modules/client/customers/components/Orders.vue';
+import NotFound from '@/modules/common/components/NotFound.vue';
+import { VueEasyJwt } from 'vue-easy-jwt';
+import moment from 'moment';
+const jwt = new VueEasyJwt();
 
 Vue.use(VueRouter);
 
@@ -49,16 +52,17 @@ const routes: RouteConfig[] = [
                 path: '/profile',
                 name: 'profile',
                 component: Profile,
+                meta: {
+                    requiresAuth: true,
+                },
             },
             {
                 path: '/address-management',
                 name: 'address-management',
                 component: AddressManagement,
-            },
-            {
-                path: '/create-address',
-                name: 'create-address',
-                component: CreateAddressForm,
+                meta: {
+                    requiresAuth: true,
+                },
             },
             {
                 path: '/register',
@@ -84,6 +88,10 @@ const routes: RouteConfig[] = [
                 path: '/dashboard',
                 redirect: '/dashboard/home',
                 component: Dashboard,
+                meta: {
+                    admin: true,
+                    requiresAuth: true,
+                },
                 children: [
                     {
                         path: '/dashboard/home',
@@ -91,6 +99,7 @@ const routes: RouteConfig[] = [
                         component: DashboardHome,
                         meta: {
                             admin: true,
+                            requiresAuth: true,
                         },
                     },
                     {
@@ -99,6 +108,7 @@ const routes: RouteConfig[] = [
                         component: DashboardCatalogues,
                         meta: {
                             admin: true,
+                            requiresAuth: true,
                         },
                     },
                     {
@@ -107,6 +117,7 @@ const routes: RouteConfig[] = [
                         component: DashboardCategories,
                         meta: {
                             admin: true,
+                            requiresAuth: true,
                         },
                     },
                     {
@@ -115,6 +126,7 @@ const routes: RouteConfig[] = [
                         component: DashboardClients,
                         meta: {
                             admin: true,
+                            requiresAuth: true,
                         },
                     },
                     {
@@ -123,14 +135,16 @@ const routes: RouteConfig[] = [
                         component: DashboardEmails,
                         meta: {
                             admin: true,
+                            requiresAuth: true,
                         },
                     },
                     {
                         path: '/dashboard/orders',
-                        name: 'dashboard-emails',
+                        name: 'dashboard-orders',
                         component: DashboardOrders,
                         meta: {
                             admin: true,
+                            requiresAuth: true,
                         },
                     },
                     {
@@ -139,6 +153,7 @@ const routes: RouteConfig[] = [
                         component: DashboardSettings,
                         meta: {
                             admin: true,
+                            requiresAuth: true,
                         },
                     },
                     {
@@ -147,6 +162,7 @@ const routes: RouteConfig[] = [
                         component: DashboardProducts,
                         meta: {
                             admin: true,
+                            requiresAuth: true,
                         },
                     },
                     {
@@ -155,6 +171,7 @@ const routes: RouteConfig[] = [
                         component: DashboardOffers,
                         meta: {
                             admin: true,
+                            requiresAuth: true,
                         },
                         children: [
                             {
@@ -163,6 +180,7 @@ const routes: RouteConfig[] = [
                                 component: DashboardAllOffers,
                                 meta: {
                                     admin: true,
+                                    requiresAuth: true,
                                 },
                             },
                             {
@@ -171,6 +189,7 @@ const routes: RouteConfig[] = [
                                 component: DashboardCreateOffer,
                                 meta: {
                                     admin: true,
+                                    requiresAuth: true,
                                 },
                             },
                         ],
@@ -181,6 +200,7 @@ const routes: RouteConfig[] = [
                         component: DashboardServices,
                         meta: {
                             admin: true,
+                            requiresAuth: true,
                         },
                     },
                 ],
@@ -189,17 +209,34 @@ const routes: RouteConfig[] = [
                 path: '/your-account',
                 name: 'your-account',
                 component: PersonalInformation,
+                meta: {
+                    requiresAuth: true,
+                },
             },
             {
                 path: '/your-orders',
                 name: 'your-orders',
                 component: Orders,
+                meta: {
+                    requiresAuth: true,
+                },
             },
         ],
     },
     {
         path: '/checkout',
         component: Checkout,
+        meta: {
+            requiresAuth: true,
+        },
+    },
+    {
+        path: '*',
+        name: 'not-found',
+        component: NotFound,
+        meta: {
+            requiresAuth: false,
+        },
     },
 ];
 
@@ -207,6 +244,49 @@ const router = new VueRouter({
     mode: 'history',
     base: process.env.BASE_URL,
     routes,
+});
+
+router.beforeEach((to, from, next) => {
+    window.scrollTo(0, 0);
+    to.matched.some((route) => {
+        let checkAdmin = false;
+        if (route.meta.admin && sessionStorage.getItem('vuex') !== null) {
+            const vuexStorage: string | null = sessionStorage.getItem('vuex');
+            if (JSON.parse(vuexStorage == undefined ? '' : vuexStorage).authModule.data.role !== undefined) {
+                if (
+                    JSON.parse(vuexStorage == undefined ? '' : vuexStorage).authModule.data.role.name !==
+                    'Admin'
+                ) {
+                    checkAdmin = true;
+                    next({ path: '/not-found' });
+                } else {
+                    next();
+                }
+            } else {
+                checkAdmin = true;
+                next({ path: '/not-found' });
+            }
+        }
+        if (route.meta.requiresAuth && !checkAdmin) {
+            if (localStorage.getItem('token') !== null) {
+                const yourToken: any = localStorage.getItem('token');
+                const tokenData: any = jwt.decodeToken(yourToken);
+                if (!moment(moment.unix(tokenData.exp).utc()).isSameOrAfter(moment().utc())) {
+                    localStorage.clear();
+                    sessionStorage.clear();
+                    next({ path: '/sign-in' });
+                } else {
+                    next();
+                }
+            } else {
+                localStorage.clear();
+                sessionStorage.clear();
+                next({ path: '/sign-in' });
+            }
+        } else {
+            next();
+        }
+    });
 });
 
 export default router;

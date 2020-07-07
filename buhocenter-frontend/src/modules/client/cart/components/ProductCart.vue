@@ -35,12 +35,12 @@
                 </v-col>
                 <v-col lg="4" offset="1" class="mt-2">
                     <v-select
-                        :value="item.quantity"
-                        v-model="item.quantity"
+                        :value="item.quantity.toString()"
+                        :v-model="item.quantity.toString()"
                         :items="quantityValues"
                         @change="changeQuantity()"
                         :x-small="$vuetify.breakpoint.mdAndDown"
-                        :label="item.quantity"
+                        :label="$t('QUANTITY')"
                         height="30"
                         primary
                         dense

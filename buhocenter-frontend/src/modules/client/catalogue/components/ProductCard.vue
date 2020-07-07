@@ -30,6 +30,7 @@
                 v-for="item in GET_PRODUCTS"
                 :key="item.id"
                 class="mb-4 contenedor-product"
+                style="max-height: 500px; position: relative;"
             >
                 <v-card
                     class="d-inline-block"
@@ -119,8 +120,7 @@ export default class ProductCard extends Vue {
         if (item.type === ITEM_TYPE.PRODUCT) {
             return item.provider.name;
         }
-
-        return item.serviceProvider[0].provider.name;
+        return item.serviceProvider ? item.serviceProvider[0].provider.name : '';
     }
 
     @products.Action(ProductsTypes.actions.FETCH_SERVICE_DETAIL)

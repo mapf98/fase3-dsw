@@ -1,38 +1,45 @@
 <template>
-    <v-row>
-        <v-col>
-            <v-card>
-                <v-card-title>
-                    {{ $t('CLIENTS') }}
-                    <v-spacer></v-spacer>
-                    <v-text-field
-                        v-model="search"
-                        append-icon="mdi-magnify"
-                        label=""
-                        single-line
-                        hide-details
-                    ></v-text-field>
-                </v-card-title>
-                <v-data-table
-                    :headers="headers"
-                    :items="desserts"
-                    :expanded.sync="expanded"
-                    item-key="name"
-                    class="elevation-1"
-                    :search="search"
-                >
-                    <template v-slot:item.actions="{ item }">
-                        <v-icon color="red" small @click="blockUser(item)" class="mr-2">
-                            mdi-block-helper
-                        </v-icon>
-                        <v-icon color="green" small @click="unblockUser(item)">
-                            mdi-checkbox-marked-circle-outline
-                        </v-icon>
-                    </template>
-                </v-data-table>
-            </v-card>
-        </v-col>
-    </v-row>
+    <v-container>
+        <v-row>
+            <v-col class="d-flex justify-center">
+                <h2>{{ $t('CLIENTS') }}</h2>
+            </v-col>
+        </v-row>
+        <v-row>
+            <v-col>
+                <v-card>
+                    <v-card-title>
+                        {{ $t('CLIENTS') }}
+                        <v-spacer></v-spacer>
+                        <v-text-field
+                            v-model="search"
+                            append-icon="mdi-magnify"
+                            label=""
+                            single-line
+                            hide-details
+                        ></v-text-field>
+                    </v-card-title>
+                    <v-data-table
+                        :headers="headers"
+                        :items="desserts"
+                        :expanded.sync="expanded"
+                        item-key="name"
+                        class="elevation-1"
+                        :search="search"
+                    >
+                        <template v-slot:item.actions="{ item }">
+                            <v-icon color="red" small @click="blockUser(item)" class="mr-2">
+                                mdi-block-helper
+                            </v-icon>
+                            <v-icon color="green" small @click="unblockUser(item)">
+                                mdi-checkbox-marked-circle-outline
+                            </v-icon>
+                        </template>
+                    </v-data-table>
+                </v-card>
+            </v-col>
+        </v-row>
+    </v-container>
 </template>
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';

@@ -2,8 +2,15 @@
     <v-footer app absolute class="pa-0">
         <v-card flat tile class="secondary lighten-1 white--text text-center" width="100%">
             <v-card-text>
-                <v-btn v-for="icon in icons" :key="icon" class="mx-4 white--text" icon>
-                    <v-icon size="24px">{{ icon }}</v-icon>
+                <v-btn
+                    v-for="(social_icon, index) in icons"
+                    :key="index + '-icon'"
+                    class="mx-4 white--text"
+                    icon
+                >
+                    <a :href="social_icon.url" target="_blank" style="text-decoration: none;">
+                        <v-icon size="24px">{{ social_icon.icon }}</v-icon>
+                    </a>
                 </v-btn>
             </v-card-text>
 
@@ -32,7 +39,12 @@ import Component from 'vue-class-component';
 
 @Component
 export default class Footer extends Vue {
-    icons: string[] = ['mdi-facebook', 'mdi-twitter', 'mdi-linkedin', 'mdi-instagram'];
+    icons: { url: string; icon: string }[] = [
+        { icon: 'mdi-facebook', url: 'https://www.facebook.com' },
+        { icon: 'mdi-twitter', url: 'https://www.twitter.com' },
+        { icon: 'mdi-linkedin', url: 'https://www.linkedin.com' },
+        { icon: 'mdi-instagram', url: 'https://www.instagram.com' },
+    ];
 }
 </script>
 

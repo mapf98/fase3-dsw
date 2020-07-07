@@ -2,7 +2,10 @@
     <v-container fluid>
         <v-dialog v-model="dialog" max-width="500px" style="background: #ffffff;">
             <div style="background: #ffffff; padding: 40px 30px;">
-                <h1 class="text-center overline">{{ $t('ADD_ADDRESS') }}</h1>
+                <div class="title-2">
+                    {{ $t('ADD_ADDRESS') }}
+                    <div class="line"></div>
+                </div>
                 <v-form ref="form" v-model="isFormValid">
                     <v-row class="mx-auto fill-width">
                         <v-col lg="12" xs="12">
@@ -58,8 +61,23 @@
             </div>
         </v-dialog>
         <v-img src="../../../../assets/images/direction.jpg" height="125" class="grey darken-4"></v-img>
-        <h1 class="overline text-center">{{ $t('YOUR_ADDRESSES') }}</h1>
-        <v-row>
+        <v-row class="d-flex align-center mt-6">
+            <v-col cols="2">
+                <v-btn icon @click="goToProfile()">
+                    <v-icon large color="primary">
+                        mdi-arrow-left
+                    </v-icon>
+                </v-btn>
+            </v-col>
+            <v-col>
+                <div class="title-2">
+                    {{ $t('MY_ADDRESSES') }}
+                    <div class="line"></div>
+                </div>
+            </v-col>
+            <v-col cols="2"></v-col>
+        </v-row>
+        <v-row class="ma-6">
             <v-col cols="2" class="mx-auto">
                 <v-card
                     class="dashed-card fill-width"
@@ -75,7 +93,7 @@
                             </v-icon>
                         </v-row>
                         <v-row class="d-flex justify-center">
-                            <p class="overline text--primary">
+                            <p class="title-2">
                                 {{ $t('ADD_ADDRESS') }}
                             </p>
                         </v-row>
@@ -108,7 +126,7 @@
                                 {{ address.zipcode }}
                             </p>
                             <p v-if="address.setDefault" class="text-center ma-0 caption text--primary">
-                                <b>DEFAULT ADDRESS</b>
+                                <b>{{ t$('DEFAULT_ADDRESS') }}</b>
                             </p>
                         </v-card-text>
                         <v-card-actions class="text-center d-flex justify-center">
@@ -126,7 +144,7 @@
                                         @click="setDefaultAddress(address.id)"
                                         text
                                     >
-                                        Set as default
+                                        {{ t$('SET_AS_DEFAULT') }}
                                     </v-btn>
                                 </v-col>
                                 <v-col sm="12">
@@ -162,7 +180,7 @@
             <v-btn color="white" text @click="addressCreated = false">{{ $t('CLOSE') }}</v-btn>
         </v-snackbar>
         <v-snackbar v-model="addressCreatedError" top :timeout="timeout" color="error">
-            {{ $t('ERROR_PUT_ADDRESS') }}
+            {{ $t('ERROR_ADD_ADDRESS') }}
             <v-btn color="white" text @click="addressCreatedError = false">{{ $t('CLOSE') }}</v-btn>
         </v-snackbar>
     </v-container>
@@ -173,15 +191,12 @@ import Component from 'vue-class-component';
 import { addresses, authModule } from '@/store/namespaces';
 import AuthTypes from '../../../../store/auth/methods/auth.methods';
 import AddressTypes from '@/store/addresses/methods/address.methods';
-import CreateAddressForm from '@/modules/client/addresses/components/CreateAddressForm.vue';
 import { STATUS } from '@/config/constants';
 import rules from '@/utils/rules';
 import { CustomerInterface } from '@/modules/client/auth/interfaces/customer.interface';
 import { Address } from '@/modules/client/addresses/interfaces/address.interface';
 
-@Component({
-    components: { CreateAddressForm },
-})
+@Component
 export default class AddressManagement extends Vue {
     defaultAddressError = false;
     fetchingAddressesError = false;
@@ -214,6 +229,10 @@ export default class AddressManagement extends Vue {
         };
 
         return defaultAddress;
+    }
+
+    goToProfile(): void {
+        this.$router.push('/profile');
     }
 
     async deletAddress(addressId: number) {

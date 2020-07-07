@@ -115,5 +115,5 @@ export const CURRENCY = Object.freeze({
 
 export const PAGINATE = Object.freeze({
     START: 1,
-    LIMIT: 10,
+    LIMIT: 9,
 });

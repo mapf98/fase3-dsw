@@ -6,9 +6,7 @@
                     <template v-for="item in items">
                         <v-row v-if="item.heading" :key="item.heading" align="center">
                             <v-col cols="6">
-                                <v-subheader v-if="item.heading">
-                                    {{ $t(item.heading) }}
-                                </v-subheader>
+                                <v-subheader v-if="item.heading">{{ $t(item.heading) }}</v-subheader>
                             </v-col>
                             <v-col cols="6" class="text-center">
                                 <a href="#!" class="body-2 black--text">EDIT</a>
@@ -19,13 +17,11 @@
                             :key="item.term"
                             v-model="item.model"
                             :prepend-icon="item.model ? item.icon : item['icon-alt']"
-                            append-icon=""
+                            append-icon
                         >
                             <template v-slot:activator>
                                 <v-list-item-content>
-                                    <v-list-item-title>
-                                        {{ $t(item.term) }}
-                                    </v-list-item-title>
+                                    <v-list-item-title>{{ $t(item.term) }}</v-list-item-title>
                                 </v-list-item-content>
                             </template>
                             <v-list-item v-for="(child, i) in item.children" :key="i" link :to="child.url">
@@ -33,9 +29,7 @@
                                     <v-icon style="font-size: 18px;">{{ child.icon }}</v-icon>
                                 </v-list-item-action>
                                 <v-list-item-content>
-                                    <v-list-item-title>
-                                        {{ $t(child.term) }}
-                                    </v-list-item-title>
+                                    <v-list-item-title>{{ $t(child.term) }}</v-list-item-title>
                                 </v-list-item-content>
                             </v-list-item>
                         </v-list-group>
@@ -44,9 +38,7 @@
                                 <v-icon style="font-size: 18px;">{{ item.icon }}</v-icon>
                             </v-list-item-action>
                             <v-list-item-content>
-                                <v-list-item-title>
-                                    {{ $t(item.term) }}
-                                </v-list-item-title>
+                                <v-list-item-title>{{ $t(item.term) }}</v-list-item-title>
                             </v-list-item-content>
                         </v-list-item>
                     </template>
@@ -87,26 +79,15 @@ export default class Dashboard extends Vue {
                 },
             ],
         },
-        {
-            icon: 'mdi-chevron-up',
-            'icon-alt': 'mdi-chevron-down',
-            term: 'ITEMS',
-            model: false,
-            children: [
-                { icon: 'fas fa-box', term: 'PRODUCTS', url: '/dashboard/products' },
-                {
-                    icon: 'mdi-room-service',
-                    term: 'SERVICES',
-                    url: '/dashboard/services',
-                },
-            ],
-        },
+
+        { icon: 'fas fa-box', term: 'PRODUCTS', url: '/dashboard/products' },
+
         {
             icon: 'fas fa-percent',
             term: 'OFFERS',
             url: '/dashboard/promotions/all',
         },
-        { icon: 'mdi-message', term: 'EMAILS', url: '/dashboard/emails' },
+
         {
             icon: 'fas fa-cogs',
             term: 'PLATFORM_SETTINGS',

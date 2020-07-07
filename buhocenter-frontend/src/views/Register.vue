@@ -1,5 +1,5 @@
 <template>
-    <v-content>
+    <v-content class="register-container">
         <v-container class="fill-height" fluid>
             <FormRegister></FormRegister>
         </v-container>
@@ -16,3 +16,8 @@ export default {
     },
 };
 </script>
+<style scoped>
+.register-container {
+    padding: 20px 0px !important;
+}
+</style>
