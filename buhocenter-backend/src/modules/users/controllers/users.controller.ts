@@ -68,8 +68,7 @@ export class UsersController {
     async loginSocial(@Body() data: GmailDto, @Res() res): Promise<Response> {
         try {
             this.logger.info(
-                `
-            loginSocial: federated login by user [uid=${data.clientData.uid}|token=${data.token}]`,
+                `loginSocial: federated login by user [uid=${data.clientData.uid}|token=${data.token}]`,
                 { context: UsersController.name },
             );
             const dataResponse: ResponseAuth = await this.usersService.validateRegisterSocial(data);

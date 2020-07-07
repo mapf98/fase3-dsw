@@ -194,9 +194,9 @@ export class ProductsService {
         query.andWhere('status.id = :statusId', { statusId: STATUS.ACTIVE.id });
 
         const products: Product[] = await query
-        .skip(parameters.start)
-        .take(parameters.limit)
-        .getMany()
+            .skip(parameters.start)
+            .take(parameters.limit)
+            .getMany();
 
         return {
             products,
@@ -358,7 +358,7 @@ export class ProductsService {
         let active = STATUS.ACTIVE.id;
         return await this.productsRepository.find({
             where: { status: active },
-        })
+        });
     }
 
     public async deletMultiplesProducts(productsArray: number[]): Promise<string> {

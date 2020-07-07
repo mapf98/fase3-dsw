@@ -4,11 +4,18 @@ import { AxiosRequestConfig, AxiosResponse } from 'axios';
 export class HttpRepository {
     protected createHeader(): Partial<AxiosRequestConfig['headers']> {
         const token: string | null = localStorage.getItem('token');
-        return {
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-        };
+
+        let headers;
+
+        if (token) {
+            headers = {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            };
+        }
+        
+        return headers;
     }
 
     protected createUri(path: string[], queryString?: Record<string, any> | any): string {

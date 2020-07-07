@@ -61,9 +61,7 @@ export class ProductsController {
 
     @Get(':id')
     @UseInterceptors(CustomerLoyaltyInterceptor)
-    async getProductById(
-        @Param('id', new ParseIntPipe()) id: number,
-    ): Promise<Product> {
+    async getProductById(@Param('id', new ParseIntPipe()) id: number): Promise<Product> {
         this.logger.info(`getProductById: getting the product with id [id=${id}]`, {
             context: ProductsController.name,
         });

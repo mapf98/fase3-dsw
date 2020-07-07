@@ -39,7 +39,10 @@ class ProductsHttpRepository extends HttpRepository {
     }
 
     public async getProductsDailyRecommendation(): Promise<Product[]> {
-        return await this.get(this.createUri([`${ProductsHttpRepository.RESOURCE}`, `daily-recommendation`]), this.createHeader());
+        return await this.get(
+            this.createUri([`${ProductsHttpRepository.RESOURCE}`, `daily-recommendation`]),
+            this.createHeader(),
+        );
     }
 
     public createProduct(product: ProductCreate) {

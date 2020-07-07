@@ -42,6 +42,9 @@ export class User extends PrimalEntity {
     @Column({ name: 'language_id', type: 'varchar', length: 4, nullable: true })
     language: string;
 
+    @Column({ name: 'fidelity_user_email', type: 'text', nullable: true })
+    fidelityUserEmail: string;
+
     @Column({ name: 'status_id', type: 'int', default: 1 })
     @JoinColumn({ name: 'status_id' })
     @ManyToOne(
