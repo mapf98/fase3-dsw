@@ -14,7 +14,7 @@ export class HttpRepository {
                 },
             };
         }
-        
+
         return headers;
     }
 

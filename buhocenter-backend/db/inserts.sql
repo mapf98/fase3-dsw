@@ -502,103 +502,131 @@ insert into product_dimensions (product_id, width, height, long, weight) VALUES 
 insert into product_dimensions (product_id, width, height, long, weight) VALUES (56, 6.54, 8.54, 8, 4);
 insert into product_dimensions (product_id, width, height, long, weight) VALUES (57, 6.54, 13.54, 11.43, 6);
 
+insert into product_ratings(date_creacion,date_modificacion,rating,comment,date,product_id,user_id) values
+('2020-01-25 00:00:00.000000','2020-01-25 00:00:00.000000',5,'Me ecanto el producto, maravilloso!','2020-01-25 00:00:00.000000',1,1);
+insert into product_ratings(date_creacion,date_modificacion,rating,comment,date,product_id,user_id) values
+('2020-02-25 00:00:00.000000','2020-02-25 00:00:00.000000',5,'Excelente! Recomendado 100%','2020-01-25 00:00:00.000000',2,2);
+insert into product_ratings(date_creacion,date_modificacion,rating,comment,date,product_id,user_id) values
+('2020-01-25 00:00:00.000000','2020-01-25 00:00:00.000000',5,'Me ecanto el producto, maravilloso!','2020-01-25 00:00:00.000000',3,3);
+insert into product_ratings(date_creacion,date_modificacion,rating,comment,date,product_id,user_id) values
+('2020-02-25 00:00:00.000000','2020-02-25 00:00:00.000000',5,'Excelente! Recomendado 100%','2020-01-25 00:00:00.000000',4,4);
 
+insert into product_ratings(date_creacion,date_modificacion,rating,comment,date,product_id,user_id) values
+('2020-01-25 00:00:00.000000','2020-01-25 00:00:00.000000',5,'Me ecanto el producto, maravilloso!','2020-01-25 00:00:00.000000',5,1);
+insert into product_ratings(date_creacion,date_modificacion,rating,comment,date,product_id,user_id) values
+('2020-02-25 00:00:00.000000','2020-02-25 00:00:00.000000',5,'Excelente! Recomendado 100%','2020-01-25 00:00:00.000000',6,2);
+insert into product_ratings(date_creacion,date_modificacion,rating,comment,date,product_id,user_id) values
+('2020-01-25 00:00:00.000000','2020-01-25 00:00:00.000000',4,'Muy buena la atención! El producto increíble','2020-01-25 00:00:00.000000',7,3);
+insert into product_ratings(date_creacion,date_modificacion,rating,comment,date,product_id,user_id) values
+('2020-02-25 00:00:00.000000','2020-02-25 00:00:00.000000',5,'Just amazing. This product is incredible','2020-01-25 00:00:00.000000',8,4);
 
+insert into product_ratings(date_creacion,date_modificacion,rating,comment,date,product_id,user_id) values
+('2020-01-25 00:00:00.000000','2020-01-25 00:00:00.000000',5,'Me ecanto el producto, maravilloso!','2020-01-25 00:00:00.000000',9,1);
+insert into product_ratings(date_creacion,date_modificacion,rating,comment,date,product_id,user_id) values
+('2020-02-25 00:00:00.000000','2020-02-25 00:00:00.000000',5,'Excelente! Recomendado 100%','2020-01-25 00:00:00.000000',10,2);
+insert into product_ratings(date_creacion,date_modificacion,rating,comment,date,product_id,user_id) values
+('2020-01-25 00:00:00.000000','2020-01-25 00:00:00.000000',4,'Muy buena la atención! El producto increíble','2020-01-25 00:00:00.000000',11,3);
+insert into product_ratings(date_creacion,date_modificacion,rating,comment,date,product_id,user_id) values
+('2020-02-25 00:00:00.000000','2020-02-25 00:00:00.000000',5,'Just amazing. This product is incredible','2020-01-25 00:00:00.000000',12,4);
 
+insert into product_ratings(date_creacion,date_modificacion,rating,comment,date,product_id,user_id) values
+('2020-01-25 00:00:00.000000','2020-01-25 00:00:00.000000',5,'Me ecanto el producto, maravilloso!','2020-01-25 00:00:00.000000',13,1);
+insert into product_ratings(date_creacion,date_modificacion,rating,comment,date,product_id,user_id) values
+('2020-02-25 00:00:00.000000','2020-02-25 00:00:00.000000',5,'Excelente! Recomendado 100%','2020-01-25 00:00:00.000000',14,2);
+insert into product_ratings(date_creacion,date_modificacion,rating,comment,date,product_id,user_id) values
+('2020-01-25 00:00:00.000000','2020-01-25 00:00:00.000000',4,'Muy buena la atención! El producto increíble','2020-01-25 00:00:00.000000',15,3);
+insert into product_ratings(date_creacion,date_modificacion,rating,comment,date,product_id,user_id) values
+('2020-02-25 00:00:00.000000','2020-02-25 00:00:00.000000',5,'Just amazing. This product is incredible','2020-01-25 00:00:00.000000',16,4);
 
-insert into product_questions (comment, product_id, user_id)
-    VALUES ('Me encantó el producto', 1, 1);
-insert into product_questions (comment, product_id, user_id)
-    VALUES ('Buen producto', 2, 2);
-insert into product_questions (comment, product_id, user_id)
-    VALUES ('Excelene calidad! Lo recomiendo', 4, 3);
-insert into product_questions (comment, product_id, user_id)
-    VALUES ('No me gustó mucho. Pésima calidad', 2, 1);
-insert into product_questions (comment, product_id, user_id)
-    VALUES ('I love it!', 8, 2);
-insert into product_questions (comment, product_id, user_id)
-    VALUES ('Muy bueno <3', 10, 3);
-insert into product_questions (comment, product_id, user_id)
-    VALUES ('La mejor compra que he hecho', 12, 1);
-insert into product_questions (comment, product_id, user_id)
-    VALUES ('Pésimo proveedor', 14, 2);
-insert into product_questions (comment, product_id, user_id)
-    VALUES ('No me gustó el paquete', 15, 3);
-insert into product_questions (comment, product_id, user_id)
-    VALUES ('Gracias por ofrecer un producto de tan buena calidad', 3, 1);
-insert into product_questions (comment, product_id, user_id)
-    VALUES ('Simplemente... lo amé', 11, 2);
-insert into product_questions (comment, product_id, user_id)
-    VALUES ('No me gustó el paquete', 16, 3);
-insert into product_questions (comment, product_id, user_id)
-    VALUES ('Gracias por ofrecer un producto de tan buena calidad', 17, 1);
-insert into product_questions (comment, product_id, user_id)
-    VALUES ('Simplemente... lo amé', 18, 2);
+insert into product_ratings(date_creacion,date_modificacion,rating,comment,date,product_id,user_id) values
+('2020-01-25 00:00:00.000000','2020-01-25 00:00:00.000000',5,'Me ecanto el producto, maravilloso!','2020-01-25 00:00:00.000000',17,1);
+insert into product_ratings(date_creacion,date_modificacion,rating,comment,date,product_id,user_id) values
+('2020-02-25 00:00:00.000000','2020-02-25 00:00:00.000000',5,'Excelente! Recomendado 100%','2020-01-25 00:00:00.000000',18,2);
+insert into product_ratings(date_creacion,date_modificacion,rating,comment,date,product_id,user_id) values
+('2020-01-25 00:00:00.000000','2020-01-25 00:00:00.000000',4,'Muy buena la atención! El producto increíble','2020-01-25 00:00:00.000000',19,3);
+insert into product_ratings(date_creacion,date_modificacion,rating,comment,date,product_id,user_id) values
+('2020-02-25 00:00:00.000000','2020-02-25 00:00:00.000000',5,'Just amazing. This product is incredible','2020-01-25 00:00:00.000000',20,4);
 
+insert into product_ratings(date_creacion,date_modificacion,rating,comment,date,product_id,user_id) values
+('2020-01-25 00:00:00.000000','2020-01-25 00:00:00.000000',5,'Me ecanto el producto, maravilloso!','2020-01-25 00:00:00.000000',21,1);
+insert into product_ratings(date_creacion,date_modificacion,rating,comment,date,product_id,user_id) values
+('2020-02-25 00:00:00.000000','2020-02-25 00:00:00.000000',5,'Excelente! Recomendado 100%','2020-01-25 00:00:00.000000',22,2);
+insert into product_ratings(date_creacion,date_modificacion,rating,comment,date,product_id,user_id) values
+('2020-01-25 00:00:00.000000','2020-01-25 00:00:00.000000',4,'Muy buena la atención! El producto increíble','2020-01-25 00:00:00.000000',23,3);
+insert into product_ratings(date_creacion,date_modificacion,rating,comment,date,product_id,user_id) values
+('2020-02-25 00:00:00.000000','2020-02-25 00:00:00.000000',5,'Just amazing. This product is incredible','2020-01-25 00:00:00.000000',24,4);
 
-insert into product_questions (comment, product_id, user_id)
-    VALUES ('No me gustó el paquete', 31, 3);
-insert into product_questions (comment, product_id, user_id)
-    VALUES ('Gracias por ofrecer un producto de tan buena calidad', 32, 1);
-insert into product_questions (comment, product_id, user_id)
-    VALUES ('Simplemente... lo amé', 33, 2);
+insert into product_ratings(date_creacion,date_modificacion,rating,comment,date,product_id,user_id) values
+('2020-01-25 00:00:00.000000','2020-01-25 00:00:00.000000',5,'Me ecanto el producto, maravilloso!','2020-01-25 00:00:00.000000',25,1);
+insert into product_ratings(date_creacion,date_modificacion,rating,comment,date,product_id,user_id) values
+('2020-02-25 00:00:00.000000','2020-02-25 00:00:00.000000',5,'Excelente! Recomendado 100%','2020-01-25 00:00:00.000000',26,2);
+insert into product_ratings(date_creacion,date_modificacion,rating,comment,date,product_id,user_id) values
+('2020-01-25 00:00:00.000000','2020-01-25 00:00:00.000000',4,'Muy buena la atención! El producto increíble','2020-01-25 00:00:00.000000',27,3);
+insert into product_ratings(date_creacion,date_modificacion,rating,comment,date,product_id,user_id) values
+('2020-02-25 00:00:00.000000','2020-02-25 00:00:00.000000',5,'Just amazing. This product is incredible','2020-01-25 00:00:00.000000',28,4);
 
-insert into product_questions (comment, product_id, user_id)
-    VALUES ('No me gustó el paquete', 34, 1);
-insert into product_questions (comment, product_id, user_id)
-    VALUES ('Gracias por ofrecer un producto de tan buena calidad', 35, 1);
-insert into product_questions (comment, product_id, user_id)
-    VALUES ('Simplemente... lo amé', 36, 2);
+insert into product_ratings(date_creacion,date_modificacion,rating,comment,date,product_id,user_id) values
+('2020-01-25 00:00:00.000000','2020-01-25 00:00:00.000000',5,'Me ecanto el producto, maravilloso!','2020-01-25 00:00:00.000000',29,1);
+insert into product_ratings(date_creacion,date_modificacion,rating,comment,date,product_id,user_id) values
+('2020-02-25 00:00:00.000000','2020-02-25 00:00:00.000000',5,'Excelente! Recomendado 100%','2020-01-25 00:00:00.000000',30,2);
+insert into product_ratings(date_creacion,date_modificacion,rating,comment,date,product_id,user_id) values
+('2020-01-25 00:00:00.000000','2020-01-25 00:00:00.000000',4,'Muy buena la atención! El producto increíble','2020-01-25 00:00:00.000000',31,3);
+insert into product_ratings(date_creacion,date_modificacion,rating,comment,date,product_id,user_id) values
+('2020-02-25 00:00:00.000000','2020-02-25 00:00:00.000000',5,'Just amazing. This product is incredible','2020-01-25 00:00:00.000000',32,4);
 
+insert into product_ratings(date_creacion,date_modificacion,rating,comment,date,product_id,user_id) values
+('2020-01-25 00:00:00.000000','2020-01-25 00:00:00.000000',5,'Me ecanto el producto, maravilloso!','2020-01-25 00:00:00.000000',33,1);
+insert into product_ratings(date_creacion,date_modificacion,rating,comment,date,product_id,user_id) values
+('2020-02-25 00:00:00.000000','2020-02-25 00:00:00.000000',5,'Excelente! Recomendado 100%','2020-01-25 00:00:00.000000',34,2);
+insert into product_ratings(date_creacion,date_modificacion,rating,comment,date,product_id,user_id) values
+('2020-01-25 00:00:00.000000','2020-01-25 00:00:00.000000',4,'Muy buena la atención! El producto increíble','2020-01-25 00:00:00.000000',35,3);
+insert into product_ratings(date_creacion,date_modificacion,rating,comment,date,product_id,user_id) values
+('2020-02-25 00:00:00.000000','2020-02-25 00:00:00.000000',5,'Just amazing. This product is incredible','2020-01-25 00:00:00.000000',36,4);
 
-insert into product_questions (comment, product_id, user_id)
-    VALUES ('No me gustó el paquete', 37, 1);
-insert into product_questions (comment, product_id, user_id)
-    VALUES ('Gracias por ofrecer un producto de tan buena calidad', 38, 1);
-insert into product_questions (comment, product_id, user_id)
-    VALUES ('Simplemente... lo amé', 39, 2);
+insert into product_ratings(date_creacion,date_modificacion,rating,comment,date,product_id,user_id) values
+('2020-01-25 00:00:00.000000','2020-01-25 00:00:00.000000',5,'Me ecanto el producto, maravilloso!','2020-01-25 00:00:00.000000',37,1);
+insert into product_ratings(date_creacion,date_modificacion,rating,comment,date,product_id,user_id) values
+('2020-02-25 00:00:00.000000','2020-02-25 00:00:00.000000',5,'Excelente! Recomendado 100%','2020-01-25 00:00:00.000000',38,2);
+insert into product_ratings(date_creacion,date_modificacion,rating,comment,date,product_id,user_id) values
+('2020-01-25 00:00:00.000000','2020-01-25 00:00:00.000000',4,'Muy buena la atención! El producto increíble','2020-01-25 00:00:00.000000',39,3);
+insert into product_ratings(date_creacion,date_modificacion,rating,comment,date,product_id,user_id) values
+('2020-02-25 00:00:00.000000','2020-02-25 00:00:00.000000',5,'Just amazing. This product is incredible','2020-01-25 00:00:00.000000',40,4);
 
-insert into product_questions (comment, product_id, user_id)
-    VALUES ('No me gustó el paquete', 40, 1);
-insert into product_questions (comment, product_id, user_id)
-    VALUES ('Gracias por ofrecer un producto de tan buena calidad', 41, 1);
-insert into product_questions (comment, product_id, user_id)
-    VALUES ('Simplemente... lo amé', 42, 2);
+insert into product_ratings(date_creacion,date_modificacion,rating,comment,date,product_id,user_id) values
+('2020-01-25 00:00:00.000000','2020-01-25 00:00:00.000000',5,'Me ecanto el producto, maravilloso!','2020-01-25 00:00:00.000000',41,1);
+insert into product_ratings(date_creacion,date_modificacion,rating,comment,date,product_id,user_id) values
+('2020-02-25 00:00:00.000000','2020-02-25 00:00:00.000000',5,'Excelente! Recomendado 100%','2020-01-25 00:00:00.000000',42,2);
+insert into product_ratings(date_creacion,date_modificacion,rating,comment,date,product_id,user_id) values
+('2020-01-25 00:00:00.000000','2020-01-25 00:00:00.000000',4,'Muy buena la atención! El producto increíble','2020-01-25 00:00:00.000000',43,3);
+insert into product_ratings(date_creacion,date_modificacion,rating,comment,date,product_id,user_id) values
+('2020-02-25 00:00:00.000000','2020-02-25 00:00:00.000000',5,'Just amazing. This product is incredible','2020-01-25 00:00:00.000000',44,4);
 
+insert into product_ratings(date_creacion,date_modificacion,rating,comment,date,product_id,user_id) values
+('2020-01-25 00:00:00.000000','2020-01-25 00:00:00.000000',5,'Me ecanto el producto, maravilloso!','2020-01-25 00:00:00.000000',45,1);
+insert into product_ratings(date_creacion,date_modificacion,rating,comment,date,product_id,user_id) values
+('2020-02-25 00:00:00.000000','2020-02-25 00:00:00.000000',5,'Excelente! Recomendado 100%','2020-01-25 00:00:00.000000',46,2);
+insert into product_ratings(date_creacion,date_modificacion,rating,comment,date,product_id,user_id) values
+('2020-01-25 00:00:00.000000','2020-01-25 00:00:00.000000',4,'Muy buena la atención! El producto increíble','2020-01-25 00:00:00.000000',47,3);
+insert into product_ratings(date_creacion,date_modificacion,rating,comment,date,product_id,user_id) values
+('2020-02-25 00:00:00.000000','2020-02-25 00:00:00.000000',5,'Just amazing. This product is incredible','2020-01-25 00:00:00.000000',48,4);
 
-insert into product_questions (comment, product_id, user_id)
-    VALUES ('No me gustó el paquete', 43, 1);
-insert into product_questions (comment, product_id, user_id)
-    VALUES ('Gracias por ofrecer un producto de tan buena calidad', 44, 1);
-insert into product_questions (comment, product_id, user_id)
-    VALUES ('Simplemente... lo amé', 45, 2);
-insert into product_questions (comment, product_id, user_id)
-    VALUES ('No me gustó el paquete', 46, 1);
-insert into product_questions (comment, product_id, user_id)
-    VALUES ('Gracias por ofrecer un producto de tan buena calidad', 47, 1);
-insert into product_questions (comment, product_id, user_id)
-    VALUES ('Simplemente... lo amé', 48, 2);
+insert into product_ratings(date_creacion,date_modificacion,rating,comment,date,product_id,user_id) values
+('2020-01-25 00:00:00.000000','2020-01-25 00:00:00.000000',5,'Me ecanto el producto, maravilloso!','2020-01-25 00:00:00.000000',49,1);
+insert into product_ratings(date_creacion,date_modificacion,rating,comment,date,product_id,user_id) values
+('2020-02-25 00:00:00.000000','2020-02-25 00:00:00.000000',5,'Excelente! Recomendado 100%','2020-01-25 00:00:00.000000',50,2);
+insert into product_ratings(date_creacion,date_modificacion,rating,comment,date,product_id,user_id) values
+('2020-01-25 00:00:00.000000','2020-01-25 00:00:00.000000',4,'Muy buena la atención! El producto increíble','2020-01-25 00:00:00.000000',51,3);
+insert into product_ratings(date_creacion,date_modificacion,rating,comment,date,product_id,user_id) values
+('2020-02-25 00:00:00.000000','2020-02-25 00:00:00.000000',5,'Just amazing. This product is incredible','2020-01-25 00:00:00.000000',52,4);
 
-insert into product_questions (comment, product_id, user_id)
-    VALUES ('No me gustó el paquete', 49, 1);
-insert into product_questions (comment, product_id, user_id)
-    VALUES ('Gracias por ofrecer un producto de tan buena calidad', 51, 1);
-insert into product_questions (comment, product_id, user_id)
-    VALUES ('Simplemente... lo amé', 50, 2);
-insert into product_questions (comment, product_id, user_id)
-    VALUES ('No me gustó el paquete', 42, 1);
-insert into product_questions (comment, product_id, user_id)
-    VALUES ('Gracias por ofrecer un producto de tan buena calidad', 53, 1);
-insert into product_questions (comment, product_id, user_id)
-    VALUES ('Simplemente... lo amé', 54, 2);
-insert into product_questions (comment, product_id, user_id)
-    VALUES ('No me gustó el paquete', 55, 1);
-insert into product_questions (comment, product_id, user_id)
-    VALUES ('Gracias por ofrecer un producto de tan buena calidad', 56, 1);
-insert into product_questions (comment, product_id, user_id)
-    VALUES ('Simplemente... lo amé', 57, 2);
-
-
+insert into product_ratings(date_creacion,date_modificacion,rating,comment,date,product_id,user_id) values
+('2020-01-25 00:00:00.000000','2020-01-25 00:00:00.000000',5,'Me ecanto el producto, maravilloso!','2020-01-25 00:00:00.000000',53,1);
+insert into product_ratings(date_creacion,date_modificacion,rating,comment,date,product_id,user_id) values
+('2020-02-25 00:00:00.000000','2020-02-25 00:00:00.000000',5,'Excelente! Recomendado 100%','2020-01-25 00:00:00.000000',54,2);
+insert into product_ratings(date_creacion,date_modificacion,rating,comment,date,product_id,user_id) values
+('2020-01-25 00:00:00.000000','2020-01-25 00:00:00.000000',4,'Muy buena la atención! El producto increíble','2020-01-25 00:00:00.000000',55,3);
+insert into product_ratings(date_creacion,date_modificacion,rating,comment,date,product_id,user_id) values
+('2020-02-25 00:00:00.000000','2020-02-25 00:00:00.000000',5,'Just amazing. This product is incredible','2020-01-25 00:00:00.000000',56,4);
 
 
 

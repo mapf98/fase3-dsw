@@ -97,6 +97,7 @@
                         >{{ $t('CREATE_PETROMILES_ACCOUNT') }}!</a
                     >
                 </div>
+
             </v-card>
         </v-dialog>
     </v-container>
@@ -115,7 +116,7 @@ export default class Profile extends Vue {
     modal: boolean = false;
     items = [
         {
-            src: require('../../../../assets/orders.png'),
+            src: require('../../../../assts/orders.png'),
             title: 'MY_ORDERS',
             subtitle: 'YOUR_ORDERS_INFO',
             admin: false,

@@ -179,7 +179,7 @@ export const terms = {
     MY_INVOICES: 'My Invoices',
     MY_ORDERS: 'My Orders',
     MY_PROFILE: 'My Profile',
-    MY_CART: 'MY_CART',
+    MY_CART: 'MY CART',
     WELCOME_ADMIN: 'Welcome to the platform administration ',
     PARTNER_PETROMILES: 'Link your account with our partner Petromiles',
     TYPE_PETROMILES_ACCOUNT: 'Please type your petromiles account!',
@@ -222,4 +222,5 @@ export const terms = {
     SETTINGS_UPDATEDAT: 'Updated at:',
     SETTINGS_SUCCESS: 'Parameters updated successfully.',
     SETTINGS_ERROR: 'Failed to update parameters.',
+    CART_EMPTY:'Your cart is empty'
 };

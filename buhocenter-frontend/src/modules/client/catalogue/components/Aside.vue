@@ -427,8 +427,8 @@ export default class Aside extends Vue {
 </script>
 
 <style scoped>
-.all{
-    height:100%;
+.all {
+    height: 100%;
 }
 
 .text-title-aside {

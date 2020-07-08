@@ -395,6 +395,7 @@ export default class ItemDetail extends Vue {
     }
 
     async mounted(): Promise<void> {
+        
         let fetched = false;
         let photosLoaded = false;
         if (this.isProduct()) {
@@ -409,7 +410,7 @@ export default class ItemDetail extends Vue {
                     itemId: this.GET_ITEM_DETAIL.id,
                     item: this.GET_ITEM_DETAIL,
                 });
-                this.GET_ALL_PRODUCT_COMMENTS(this.GET_ITEM_DETAIL.id!);
+                await this.GET_ALL_PRODUCT_COMMENTS(this.GET_ITEM_DETAIL.id!);
                 this.comments = this.PRODUCT_COMMENTS;
                 this.comments = this.splitDate(this.comments);
             } else {

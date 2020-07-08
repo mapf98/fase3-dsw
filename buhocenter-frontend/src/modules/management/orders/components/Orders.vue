@@ -1,7 +1,9 @@
 <template>
-    <div class="container-page" style="position: relative;">
-        <h2>Orders</h2>
-    </div>
+     <v-row>
+        <v-col class="d-flex justify-center">
+            <h2>{{ $t('ORDERS') }}</h2>
+        </v-col>
+    </v-row>
 </template>
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';

@@ -5,11 +5,27 @@
             <div class="line"></div>
         </div>
         <div v-if="GET_LOAD_PHOTO_CART">
-            <v-list-item v-for="(item, i) in productsCart" :key="item.id" class="mb-4">
-                <ProductCart :item="item" :index="i"></ProductCart>
-            </v-list-item>
+            <div v-if="productsCart.length === 0" class="cart-empty">{{ $t('CART_EMPTY') }}</div>
+            <v-fade-transition hide-on-leave>
+                <v-list-item v-for="(item, i) in productsCart" :key="item.id" class="mb-4">
+                    <ProductCart :item="item" :index="i"></ProductCart>
+                </v-list-item>
+            </v-fade-transition>
         </div>
-        <v-card width="min-content" class="ma-auto">
+        <v-col
+            cols="12"
+            class="d-flex justify-center align-center"
+            v-else
+        >
+            <v-progress-circular
+                class="justify-center mt-12"
+                :size="70"
+                :width="7"
+                color="primary"
+                indeterminate
+            ></v-progress-circular>
+        </v-col>
+        <v-card width="min-content" class="ma-auto" v-if="productsCart.length !== 0">
             <v-card-actions>
                 <v-card-actions v-if="errorCheckout">
                     <v-alert type="error">{{ $t('ERROR_NOT_CHECKOUT_PRODUCTS') }}</v-alert>
@@ -20,9 +36,17 @@
                 <b>{{ GET_TOTAL_PRICE_CHECKOUT.toFixed(2) }}$</b>
             </v-card-actions>
             <v-card-actions>
-                <v-btn @click="checkout" color="primary" outlined class="btn-remove" :disabled="onCheckout">{{
+                <v-btn
+                    @click="checkout"
+                    color="primary"
+                    outlined
+                    class="btn-remove"
+                    :disabled="onCheckout"
+                >
+                    {{
                     $t('PROCEED_CHECKOUT')
-                }}</v-btn>
+                    }}
+                </v-btn>
             </v-card-actions>
         </v-card>
     </v-container>
@@ -139,5 +163,14 @@ export default class Cart extends Vue {
 <style>
 .btn-remove {
     height: 30px !important;
+}
+
+.cart-empty {
+    text-align: center;
+    color: rgb(133, 133, 133);
+    font-size: 25px;
+    font-style: unset;
+    height: 70vh;
+    padding: 50% 0 0 0;
 }
 </style>

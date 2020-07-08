@@ -41,8 +41,16 @@
                                     </v-col>
 
                                     <v-col cols="9" class="pl-0 pb-0 pt-0">
-                                        <v-row class="flex-column ma-0 fill-height title" justify="center">
-                                            ${{ product.price }}
+                                        <v-row class="ma-0 fill-height title in-line space">
+                                            <div class="mr-4 ml-0">${{ product.price }}</div>
+                                            <div
+                                                v-if="product.tentativePoints"
+                                                style="font-size: 10px;"
+                                                class="in-line"
+                                            >
+                                                <img src="@/assets/petromiles-small.png" class="mr-2"/>
+                                                <div>{{ product.tentativePoints }} pts</div>
+                                            </div>
                                         </v-row>
                                     </v-col>
 
@@ -82,7 +90,6 @@ import AboutUs from '@/modules/client/about-us/components/AboutUs.vue';
 import { products } from '@/store/namespaces';
 import ProductsTypes from '@/store/products/methods/products.methods';
 import { Product } from '@/modules/client/products/interfaces/products.interface';
-
 @Component({
     components: { Categories, AboutUs },
 })
@@ -145,5 +152,14 @@ export default class DailyRecommendation extends Vue {
 .product-name:hover {
     text-decoration: underline;
     color: #907f46;
+}
+
+.in-line {
+    display: flex;
+    align-items: center;
+}
+
+.space {
+    justify-content: space-between;
 }
 </style>

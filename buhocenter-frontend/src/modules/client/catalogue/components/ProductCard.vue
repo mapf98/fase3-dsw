@@ -58,9 +58,17 @@
                             </v-col>
 
                             <v-col cols="9" class="pl-0 pb-0">
-                                <v-row class="flex-column ma-0 fill-height title" justify="center">
-                                    ${{ item.price }}
-                                </v-row>
+                                 <v-row class="ma-0 fill-height title in-line space">
+                                            <div class="mr-4 ml-0">${{ item.price }}</div>
+                                            <div
+                                                v-if="item.tentativePoints"
+                                                style="font-size: 10px;"
+                                                class="in-line"
+                                            >
+                                                <img src="@/assets/petromiles-small.png" class="mr-2"/>
+                                                <div>{{ item.tentativePoints }} pts</div>
+                                            </div>
+                                        </v-row>
                             </v-col>
 
                             <v-col cols="9" class="pl-0">
@@ -182,5 +190,14 @@ export default class ProductCard extends Vue {
 .product-name:hover {
     text-decoration: underline;
     color: #907f46;
+}
+
+.in-line {
+    display: flex;
+    align-items: center;
+}
+
+.space {
+    justify-content: space-between;
 }
 </style>
