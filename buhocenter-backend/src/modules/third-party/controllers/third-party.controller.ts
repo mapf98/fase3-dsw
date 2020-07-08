@@ -38,9 +38,7 @@ export class ThirdPartyController {
     }
 
     @Post('/update-products-points')
-    async updateProductPoints(
-        @Body() userProducts: CustomerLoyaltyUpdateProductPoints,
-    ): Promise<Product[]> {
+    async updateProductPoints(@Body() userProducts: CustomerLoyaltyUpdateProductPoints): Promise<Product[]> {
         this.logger.info(`updateProductPoints... [userProducts=${JSON.stringify(userProducts)}]`, {
             context: ThirdPartyController.name,
         });

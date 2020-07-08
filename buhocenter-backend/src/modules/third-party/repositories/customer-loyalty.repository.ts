@@ -20,8 +20,9 @@ export class CustomerLoyaltyRepository {
         accumulatePointsRequest: CustomerLoyaltyAccumulatePoints,
         token: string,
     ): Promise<any> {
-        this.logger.debug(`accumulatePoints: fetching product points in PetroMiles...`,
-            { context: CustomerLoyaltyRepository.name });
+        this.logger.debug(`accumulatePoints: fetching product points in PetroMiles...`, {
+            context: CustomerLoyaltyRepository.name,
+        });
 
         return await this.httpService
             .post(
@@ -40,8 +41,9 @@ export class CustomerLoyaltyRepository {
     public async authorize(
         associateUserRequest: CustomerLoyaltyAssociateUser,
     ): Promise<CustomerLoyaltyAssociateUserResponse> {
-        this.logger.debug(`authorize: authorizing user in PetroMiles...`,
-            { context: CustomerLoyaltyRepository.name });
+        this.logger.debug(`authorize: authorizing user in PetroMiles...`, {
+            context: CustomerLoyaltyRepository.name,
+        });
 
         return await this.httpService
             .post(
@@ -55,8 +57,9 @@ export class CustomerLoyaltyRepository {
     async authorizeCode(
         accumulatePointsRequest: CustomerLoyaltyAssociateUser,
     ): Promise<CustomerLoyaltyAssociateUserCodeResponse> {
-        this.logger.debug(`authorizeCode: validating user code in PetroMiles...`,
-            { context: CustomerLoyaltyRepository.name });
+        this.logger.debug(`authorizeCode: validating user code in PetroMiles...`, {
+            context: CustomerLoyaltyRepository.name,
+        });
 
         return await this.httpService
             .post(

@@ -36,9 +36,10 @@ export class CustomerLoyaltyService {
 
         for await (const product of products) {
             if (product.canAccumulatePoints) {
-                
-                this.logger.debug(`getProductsAccumulatedPoints: product selected [id=${product.id}|price=${
-                    product.price}]`, { context: CustomerLoyaltyService.name });
+                this.logger.debug(
+                    `getProductsAccumulatedPoints: product selected [id=${product.id}|price=${product.price}]`,
+                    { context: CustomerLoyaltyService.name },
+                );
 
                 const transformedProduct = {
                     id: `${product.id}`,
@@ -168,8 +169,10 @@ export class CustomerLoyaltyService {
         };
 
         return await this.customerLoyaltyRepository.accumulatePoints(request, token);
+    }
 
-     * Sets the tentative points 
+    /**
+     * Sets the tentative points
      * @param userProducts contains the user object and a list of product items to set tentative
      * points
      * @returns Promise<Product[]>. List of products with the tentative points.
