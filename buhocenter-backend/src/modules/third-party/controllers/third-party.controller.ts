@@ -7,6 +7,8 @@ import {
     CustomerLoyaltyAssociateUserResponse,
     CustomerLoyaltyAssociateUser,
 } from '../interfaces/customer-loyalty-associate-user.interface';
+import { CustomerLoyaltyUpdateProductPoints } from '../interfaces/customer-loyalty-update-product-points';
+import { Product } from 'src/modules/products/entities/product.entity';
 
 @Controller('third-party')
 export class ThirdPartyController {
@@ -33,5 +35,16 @@ export class ThirdPartyController {
         });
 
         return await this.customerLoyaltyService.authorizeCode(user);
+    }
+
+    @Post('/update-products-points')
+    async updateProductPoints(
+        @Body() userProducts: CustomerLoyaltyUpdateProductPoints,
+    ): Promise<Product[]> {
+        this.logger.info(`updateProductPoints... [userProducts=${JSON.stringify(userProducts)}]`, {
+            context: ThirdPartyController.name,
+        });
+
+        return await this.customerLoyaltyService.updateProductPoints(userProducts);
     }
 }

@@ -15,6 +15,7 @@ import {
 } from '../interfaces/customer-loyalty-associate-user.interface';
 import { CustomerLoyaltyStatus } from '../enums/customer-loyalty-status.enum';
 import { UsersService } from '../../users/services/users.service';
+import { CustomerLoyaltyUpdateProductPoints } from '../interfaces/customer-loyalty-update-product-points';
 
 @Injectable()
 export class CustomerLoyaltyService {
@@ -29,11 +30,15 @@ export class CustomerLoyaltyService {
      * @param products list of products to accumulate tentative points
      * @param token user token
      */
-    public async getProductsAccumulatedPoints(products: Product[], token: string): Promise<any> {
+    public async getProductsAccumulatedPoints(products: Product[], token: string): Promise<Product[]> {
         const transformedProducts: CustomerLoyaltyItems[] = [];
 
         for await (const product of products) {
             if (product.canAccumulatePoints) {
+                
+                this.logger.debug(`getProductsAccumulatedPoints: product selected [id=${product.id}|price=${
+                    product.price}]`, { context: CustomerLoyaltyService.name });
+
                 const transformedProduct = {
                     id: `${product.id}`,
                     priceTag: parseFloat((product.price * 100).toFixed(0)),
@@ -67,7 +72,7 @@ export class CustomerLoyaltyService {
      * @param products list of products to add tentative points
      * @param productsAccumulatedPoints list of products with tentative points
      */
-    private addPointsToProductItems(products, productsAccumulatedPoints) {
+    private addPointsToProductItems(products, productsAccumulatedPoints): Product[] {
         return products.map(i => {
             if (i.canAccumulatePoints) {
                 const itemFound = productsAccumulatedPoints.find(j => j.id === `${i.id}`);
@@ -84,7 +89,7 @@ export class CustomerLoyaltyService {
      */
     public async authorize(user: Partial<User>): Promise<CustomerLoyaltyAssociateUserResponse> {
         this.logger.debug(`authorize: authorizing user [user=${JSON.stringify(user)}]`, {
-            context: UsersService.name,
+            context: CustomerLoyaltyService.name,
         });
 
         if (user === undefined) {
@@ -116,7 +121,7 @@ export class CustomerLoyaltyService {
         user: Partial<User & Partial<CustomerLoyaltyAssociateUser>>,
     ): Promise<Partial<User & Partial<CustomerLoyaltyAssociateUser>>> {
         this.logger.debug(`authorizeCode: validating userCode [user=${JSON.stringify(user)}]`, {
-            context: UsersService.name,
+            context: CustomerLoyaltyService.name,
         });
 
         const request: CustomerLoyaltyAssociateUser = {
@@ -134,5 +139,21 @@ export class CustomerLoyaltyService {
             await this.usersService.updateUser(user);
             return user;
         }
+    }
+
+    /**
+     * Sets the tentative points 
+     * @param userProducts contains the user object and a list of product items to set tentative
+     * points
+     * @returns Promise<Product[]>. List of products with the tentative points.
+     */
+    public async updateProductPoints(userProducts: CustomerLoyaltyUpdateProductPoints): Promise<Product[]> {
+        const user: User | undefined = await this.usersService.getUserById(userProducts.user.id);
+
+        if (user === undefined) {
+            throw new NotFoundException('The userId provided is invalid');
+        }
+
+        return await this.getProductsAccumulatedPoints(userProducts.products, user.loyaltySystemToken);
     }
 }
