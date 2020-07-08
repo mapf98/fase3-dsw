@@ -12,13 +12,17 @@ import { CryptocurrenciesService } from './services/cryptocurrencies.service';
 import { CommissionsController } from './controllers/commission.controller';
 import { CommissionsService } from './services/commissions.service';
 import { CommissionsTransactionsRepository } from './transactions/commissions.transactions.service';
+import { UsersModule } from '../users/users.module';
+import { ThirdPartyModule } from '../third-party/third-party.module';
 
 @Module({
     imports: [
         CartsModule,
         StatussModule,
         ProductsModule,
+        UsersModule,
         ConfigModule,
+        ThirdPartyModule,
         TypeOrmModule.forFeature(purchasesEntities),
         HttpModule.register({
             timeout: 20000,

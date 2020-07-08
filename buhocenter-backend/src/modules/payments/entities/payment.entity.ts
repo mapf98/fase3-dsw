@@ -18,6 +18,21 @@ export class Payment extends PrimalEntity {
     @Column({ name: 'transaction_id', type: 'integer', nullable: true })
     transaction: number;
 
+    @Column({ name: 'loyalty_system_confirmation_id', type: 'text', nullable: true })
+    loyaltySystemConfirmationId: string;
+
+    @Column({ name: 'loyalty_system_date', type: 'text', nullable: true })
+    loyaltySystemDate: string;
+
+    @Column({ name: 'loyalty_system_amount', type: 'text', nullable: true })
+    loyaltySystemAmount: string;
+
+    @Column({ name: 'loyalty_system_commission', type: 'text', nullable: true })
+    loyaltySystemCommission: string;
+
+    @Column({ name: 'loyalty_system_points', type: 'text', nullable: true })
+    loyaltySystemPoints: string;
+
     @JoinColumn({ name: 'address_id' })
     @ManyToOne(
         type => Address,

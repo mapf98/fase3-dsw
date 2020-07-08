@@ -9,6 +9,7 @@ import { ResponseAuth } from '../interfaces/ResponseAuth';
 import { STATUS, ROLE, LANGUAGE, FOREIGN_EXCHANGES } from '../../../config/constants';
 import { AuthService } from '../../auth/services/auth.service';
 import { EmailsService } from '../../notifications/services/emails.service';
+import { promises } from 'dns';
 
 @Injectable()
 export class UsersService {
@@ -255,5 +256,22 @@ export class UsersService {
             };
         }
         return response;
+    }
+
+    /**
+     * getUserByAddress
+     * @param addressId: number
+     * @returns Promise<User>
+     */
+    async getUserByAddress(addressId: number): Promise<User> {
+        this.logger.debug(`getUserByAddress: Getting a user by its address [addressId=${addressId}]`, {
+            context: UsersService.name,
+        });
+
+        return await this.usersRepository
+            .createQueryBuilder('user')
+            .innerJoin('user.addresses', 'addresses')
+            .where('addresses.id = :id', { id: addressId })
+            .getOne();
     }
 }

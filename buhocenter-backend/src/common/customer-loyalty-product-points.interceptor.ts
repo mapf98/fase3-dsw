@@ -54,16 +54,19 @@ export class CustomerLoyaltyInterceptor implements NestInterceptor {
                             );
                         }
                     }
-                } catch(ex) {
-                    this.logger.error(`CustomerLoyaltyInterceptor: error fetching tentative points [e=${
-                        JSON.stringify(ex)
-                    }]`, {
-                        context: CustomerLoyaltyInterceptor.name,
-                    });
+                } catch (ex) {
+                    this.logger.error(
+                        `CustomerLoyaltyInterceptor: error fetching tentative points [e=${JSON.stringify(
+                            ex,
+                        )}]`,
+                        {
+                            context: CustomerLoyaltyInterceptor.name,
+                        },
+                    );
                 } finally {
                     return value;
                 }
-            })
+            }),
         );
     }
 }

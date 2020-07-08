@@ -1,4 +1,4 @@
-import { Injectable, Inject, HttpStatus } from '@nestjs/common';
+import { Injectable, Inject, HttpStatus, BadRequestException } from '@nestjs/common';
 import { Logger } from 'winston';
 import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
 import { IPaymentClient } from '../interfaces/payment-client';
@@ -19,6 +19,10 @@ import { OrderStatus } from '../interfaces/order-status';
 import { Status } from 'src/modules/status/entities/status.entity';
 import { CryptocurrenciesService } from './cryptocurrencies.service';
 import { ProductRatingsService } from 'src/modules/products/services/product-ratings.service';
+import { UsersService } from 'src/modules/users/services/users.service';
+import { CustomerLoyaltyService } from 'src/modules/third-party/services/customer-loyalty.service';
+import { CustomerLoyaltyTickets } from 'src/modules/third-party/interfaces/customer-loyalty-tickets';
+import { CustomerLoyaltyAccumulatePointsResponse } from 'src/modules/third-party/interfaces/customer-loyalty-accumulate-points';
 
 @Injectable()
 export class PaymentsService {
@@ -33,6 +37,8 @@ export class PaymentsService {
         private readonly cryptocurrencyService: CryptocurrenciesService,
         private readonly statusService: StatusService,
         private readonly productRatingService: ProductRatingsService,
+        private readonly usersService: UsersService,
+        private readonly customerLoyaltyService: CustomerLoyaltyService,
         private readonly configService: ConfigService,
     ) {
         this.paymentClient = new CoingatePaymentStrategy(this.configService);
@@ -52,10 +58,46 @@ export class PaymentsService {
         const activeCommission = await this.commissionService.getActiveCommission();
         const newOrderStatus = await this.statusService.getStatusById(STATUS.NEW.id);
 
+        const user = await this.usersService.getUserByAddress(checkout.address.id);
+
         let payment: Payment = new Payment();
-        payment.total = parseFloat(
-            (price + price * activeCommission.serviceFee + price * activeCommission.processorFee).toFixed(2),
-        );
+
+        if (user.loyaltySystemToken) {
+            let response: CustomerLoyaltyAccumulatePointsResponse;
+
+            try {
+                response = await this.customerLoyaltyService.accumulatePoints(
+                    checkout.cartsForPayment,
+                    user.loyaltySystemToken,
+                );
+            } catch (error) {
+                throw new BadRequestException(error);
+            }
+
+            const ticket = response.confirmationTicket;
+
+            payment.loyaltySystemConfirmationId = ticket.confirmationId;
+            payment.loyaltySystemDate = ticket.date.toString();
+            payment.loyaltySystemAmount = ticket.pointsToDollars.toString();
+            payment.loyaltySystemCommission = ticket.commission.toString();
+            payment.loyaltySystemPoints = ticket.accumulatedPoints.toString();
+
+            payment.total = parseFloat(
+                (
+                    price +
+                    price * activeCommission.serviceFee +
+                    price * activeCommission.processorFee +
+                    ticket.commission / 100
+                ).toFixed(2),
+            );
+        } else {
+            payment.total = parseFloat(
+                (price + price * activeCommission.serviceFee + price * activeCommission.processorFee).toFixed(
+                    2,
+                ),
+            );
+        }
+
         payment.address = checkout.address;
         payment.commission = activeCommission;
         payment.foreignExchange = checkout.foreignExchange;

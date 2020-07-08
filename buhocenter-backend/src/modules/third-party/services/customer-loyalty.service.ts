@@ -15,6 +15,7 @@ import {
 } from '../interfaces/customer-loyalty-associate-user.interface';
 import { CustomerLoyaltyStatus } from '../enums/customer-loyalty-status.enum';
 import { UsersService } from '../../users/services/users.service';
+import { Cart } from 'src/modules/carts/entities/cart.entity';
 import { CustomerLoyaltyUpdateProductPoints } from '../interfaces/customer-loyalty-update-product-points';
 
 @Injectable()
@@ -142,6 +143,32 @@ export class CustomerLoyaltyService {
     }
 
     /**
+     * accumulatePoints
+     * @param carts: Cart[]
+     * @param token: string
+     * @returns Promise<any>
+     */
+    async accumulatePoints(carts: Cart[], token: string): Promise<any> {
+        this.logger.debug(`accumulatePoints: Accumulating points`, {
+            context: CustomerLoyaltyService.name,
+        });
+
+        let items: CustomerLoyaltyItems[] = carts.map(cart => {
+            return {
+                id: `${cart.id}`,
+                priceTag: parseFloat((cart.productPrice * 100).toFixed(0)),
+                currency: CURRENCY.PRICE.toLowerCase(),
+            };
+        });
+
+        const request: CustomerLoyaltyAccumulatePoints = {
+            apiKey: process.env.PETROMILES_API_KEY,
+            type: CustomerLoyaltyActions.CREATION,
+            products: items,
+        };
+
+        return await this.customerLoyaltyRepository.accumulatePoints(request, token);
+
      * Sets the tentative points 
      * @param userProducts contains the user object and a list of product items to set tentative
      * points
