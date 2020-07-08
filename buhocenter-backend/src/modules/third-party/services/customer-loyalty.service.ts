@@ -194,8 +194,31 @@ export class CustomerLoyaltyService {
 
         return await this.getProductsAccumulatedPoints(userProducts.products, user.loyaltySystemToken);
     }
+    
+     /*
+     * Validates if the user is member of the loyalty system
+     * @param id user id to validate the associated account
+     * @returns Promise<User>. User found and validated.
+     */
+    public async hasLoyaltyAssociatedAccount(id: number): Promise<User | boolean> {
+        this.logger.debug(`hasLoyaltyAssociatedAccount: validating user [id=${id}]`, {
+            context: CustomerLoyaltyService.name,
+        });
 
-    /**
+        const user: User | undefined = await this.usersService.getUserById(id);
+
+        if (user === undefined) {
+            return false;
+        }
+
+        if (user.loyaltySystemToken && user.fidelityUserEmail) {
+            return user;
+        }
+
+        return false;
+    }
+
+    /*
      * Generate csv with CSV generator
      * @returns Promise<ReadStream>
      */

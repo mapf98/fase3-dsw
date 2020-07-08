@@ -52,7 +52,7 @@ export interface Product {
     id?: number;
     brand?: BrandInterface;
     minimumQuantityAvailable?: number;
-    tentativePoints: number;
+    tentativePoints?: number;
     name?: string;
     imageUrl?: string;
     //revisar offer y offerss

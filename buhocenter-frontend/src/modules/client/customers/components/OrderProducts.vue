@@ -18,7 +18,7 @@
                 </v-col>
                 <v-col>
                     <v-list-item-title class="font-weight-bold mb-1">{{
-                        product.product.name
+                        getName(product.product.name)
                     }}</v-list-item-title>
                     <div class="overline mb-4">{{ product.product.provider.name }}</div>
                     <v-list-item-subtitle class="mb-7">{{ product.productPrice }} $</v-list-item-subtitle>
@@ -39,6 +39,7 @@ import { payments } from '@/store/namespaces';
 import { ProductsOrder } from '@/modules/client/customers/interfaces/orders.interface';
 import PaymentsTypes from '@/store/payments/methods/payments.methods';
 import RateProduct from './RateProduct.vue';
+import { getShortName } from '@/utils/global-functions';
 
 @Component({
     components: { RateProduct },
@@ -55,6 +56,10 @@ export default class OrderHistoryProduct extends Vue {
     responsiveDetail(): number {
         const { xs, sm } = this.$vuetify.breakpoint;
         return xs || sm ? 12 : 3;
+    }
+
+    getName(name: string): string {
+        return getShortName(name, 50);
     }
 
     newRate(status: boolean): void {

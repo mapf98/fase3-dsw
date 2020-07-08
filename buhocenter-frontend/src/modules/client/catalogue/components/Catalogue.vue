@@ -63,7 +63,6 @@ export default class Catalogue extends Vue {
         this.errorLoadingContent = false;
     }
 
-
     get getLength() {
         const length: number = this.HowManyPages + 1;
 

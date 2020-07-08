@@ -17,3 +17,4 @@ export const clientsModule = namespace('clients');
 export const offers = namespace('offers');
 export const comments = namespace('comments');
 export const settings = namespace('settings');
+export const thirdParty = namespace('thirdParty');

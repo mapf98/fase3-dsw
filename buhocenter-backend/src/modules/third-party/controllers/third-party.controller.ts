@@ -1,4 +1,4 @@
-import { Controller, Inject, Post, Body, Header, Res, HttpCode, HttpStatus } from '@nestjs/common';
+import { Controller, Inject, Post, Body, Header, Res, Get, Query, ParseIntPipe } from '@nestjs/common';
 import { CustomerLoyaltyService } from '../services/customer-loyalty.service';
 import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
 import { Logger } from 'winston';
@@ -68,5 +68,14 @@ export class ThirdPartyController {
         });
 
         return await this.customerLoyaltyService.updateProductPoints(userProducts);
+    }
+
+    @Get('/loyalty-associated-account')
+    async associatedAccount(@Query('userId', new ParseIntPipe()) id: number): Promise<User | boolean> {
+        this.logger.info(`associatedAccount... [userId=${JSON.stringify(id)}]`, {
+            context: ThirdPartyController.name,
+        });
+
+        return await this.customerLoyaltyService.hasLoyaltyAssociatedAccount(id);
     }
 }
