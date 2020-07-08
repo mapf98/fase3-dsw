@@ -12,5 +12,6 @@ import { AddressTransactionsRepository } from './transaction/address.transaction
     imports: [TypeOrmModule.forFeature([Address]), HttpModule, UsersModule, StatussModule],
     controllers: [AddressController],
     providers: [AddressService, AddressRepository, AddressTransactionsRepository],
+    exports: [AddressService],
 })
 export class AddressModule {}

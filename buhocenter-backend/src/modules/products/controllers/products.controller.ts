@@ -266,4 +266,27 @@ export class ProductsController {
         let response = await this.productsService.getAllQuestionsInProduct(productId);
         return res.status(HttpStatus.OK).send(response);
     }
+
+    @Get('facture/:id')
+    async generateOrderPDF(@Res() res: Response, @Param('id') paymentId: number): Promise<any> {
+        const path = require('path');
+        this.logger.info(`generateOrderPDF: generating pdf of the order with id [dirname=${paymentId})]`, {
+            context: ProductsController.name,
+        });
+
+        let response = this.productsService.createPdf(paymentId).then(() => {
+            const fs = require('fs');
+
+            const filePath = path.resolve(__dirname + '../../../../../reports/pdfs/' + paymentId + '.pdf');
+
+            const stream = fs.createReadStream(filePath);
+            res.writeHead(200, {
+                'Content-disposition':
+                    'attachment; filename="' + encodeURIComponent(path.basename(filePath)) + '"',
+                'Content-type': 'application/pdf',
+            });
+
+            stream.pipe(res);
+        });
+    }
 }

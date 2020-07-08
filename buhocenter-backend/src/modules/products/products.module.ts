@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, forwardRef } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ProductTransactionsRepository } from './transaction/products.transaction.service';
 import { ProductsController } from './controllers/products.controller';
@@ -24,7 +24,13 @@ import { ThirdPartyModule } from '../third-party/third-party.module';
 import { AuthModule } from '../auth/auth.module';
 
 @Module({
-    imports: [TypeOrmModule.forFeature(entities), StatussModule, UsersModule, ThirdPartyModule, AuthModule],
+    imports: [
+        TypeOrmModule.forFeature(entities),
+        StatussModule,
+        forwardRef(() => UsersModule),
+        ThirdPartyModule,
+        AuthModule,
+    ],
     controllers: [
         ProductsController,
         BrandsController,

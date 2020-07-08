@@ -96,15 +96,11 @@ export class CustomerLoyaltyRepository {
         form.append('file', csvFile);
 
         const result = await this.httpService
-            .post(
-                `${this.configService.get(ConfigKeys.PETROMILES_URL)}third-party-clients/csv-check`,
-                form,
-                {
-                    headers: {
-                        'content-type': `multipart/form-data; boundary=${form.getBoundary()}`,
-                    },
+            .post(`${this.configService.get(ConfigKeys.PETROMILES_URL)}third-party-clients/csv-check`, form, {
+                headers: {
+                    'content-type': `multipart/form-data; boundary=${form.getBoundary()}`,
                 },
-            )
+            })
             .pipe(map(i => i.data))
             .toPromise();
 

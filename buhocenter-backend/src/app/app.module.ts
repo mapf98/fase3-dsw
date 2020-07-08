@@ -1,5 +1,5 @@
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Module } from '@nestjs/common';
+import { Module, forwardRef } from '@nestjs/common';
 import { SendGridModule } from '@anchan828/nest-sendgrid';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -16,6 +16,8 @@ import * as dotenv from 'dotenv';
 import { DatabaseModule } from '../database/database.module';
 import { ConfigModule } from 'src/config/config.module';
 import { AllExceptionsFilter } from './all-exceptions.filter';
+import { NotificationsModule } from '../modules/notifications/notifications.module';
+import { ThirdPartyModule } from '../modules/third-party/third-party.module';
 
 dotenv.config();
 
@@ -36,6 +38,8 @@ dotenv.config();
         SendGridModule.forRoot({
             apikey: process.env.SENDGRID_API_KEY,
         }),
+        NotificationsModule,
+        ThirdPartyModule,
     ],
     controllers: [AppController],
     providers: [AppService, AllExceptionsFilter],
