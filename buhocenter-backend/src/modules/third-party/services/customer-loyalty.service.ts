@@ -15,8 +15,14 @@ import {
 } from '../interfaces/customer-loyalty-associate-user.interface';
 import { CustomerLoyaltyStatus } from '../enums/customer-loyalty-status.enum';
 import { UsersService } from '../../users/services/users.service';
-import { Cart } from 'src/modules/carts/entities/cart.entity';
+import { CsvGenerator } from '../../documents/repositories/csv.generator';
+import { ClientsCsvPetromilesInterface } from '../../documents/infraestructure/interfaces/clients-csv.petromiles.interface';
+import { sendMock } from '../../documents/infraestructure/test/mocks/send.mock';
+import { ReadStream } from 'fs';
+import { Cart } from '../../carts/entities/cart.entity';
 import { CustomerLoyaltyUpdateProductPoints } from '../interfaces/customer-loyalty-update-product-points';
+import { ConfigKeys } from '../../../config/config.keys';
+import { ConfigService } from '../../../config/config.service';
 
 @Injectable()
 export class CustomerLoyaltyService {
@@ -24,6 +30,8 @@ export class CustomerLoyaltyService {
         @Inject(WINSTON_MODULE_PROVIDER) private readonly logger: Logger,
         private readonly customerLoyaltyRepository: CustomerLoyaltyRepository,
         private readonly usersService: UsersService,
+        private readonly csvGenerator: CsvGenerator,
+        private readonly configService: ConfigService,
     ) {}
 
     /**
@@ -31,7 +39,7 @@ export class CustomerLoyaltyService {
      * @param products list of products to accumulate tentative points
      * @param token user token
      */
-    public async getProductsAccumulatedPoints(products: Product[], token: string): Promise<Product[]> {
+    public async getProductsAccumulatedPoints(products: Product[], token: string): Promise<any> {
         const transformedProducts: CustomerLoyaltyItems[] = [];
 
         for await (const product of products) {
@@ -53,7 +61,7 @@ export class CustomerLoyaltyService {
 
         if (transformedProducts.length) {
             const request: CustomerLoyaltyAccumulatePoints = {
-                apiKey: process.env.PETROMILES_API_KEY,
+                apiKey: this.configService.get(ConfigKeys.PETROMILES_API_KEY),
                 type: CustomerLoyaltyActions.CONSULT,
                 products: transformedProducts,
             };
@@ -99,7 +107,7 @@ export class CustomerLoyaltyService {
         }
 
         const request: CustomerLoyaltyAssociateUser = {
-            apiKey: process.env.PETROMILES_API_KEY,
+            apiKey: this.configService.get(ConfigKeys.PETROMILES_API_KEY),
             userEmail: user.fidelityUserEmail,
         };
 
@@ -127,7 +135,7 @@ export class CustomerLoyaltyService {
         });
 
         const request: CustomerLoyaltyAssociateUser = {
-            apiKey: process.env.PETROMILES_API_KEY,
+            apiKey: this.configService.get(ConfigKeys.PETROMILES_API_KEY),
             userEmail: user.fidelityUserEmail,
             userCode: user.userCode,
         };
@@ -154,7 +162,7 @@ export class CustomerLoyaltyService {
             context: CustomerLoyaltyService.name,
         });
 
-        let items: CustomerLoyaltyItems[] = carts.map(cart => {
+        const items: CustomerLoyaltyItems[] = carts.map(cart => {
             return {
                 id: `${cart.id}`,
                 priceTag: parseFloat((cart.productPrice * 100).toFixed(0)),
@@ -163,7 +171,7 @@ export class CustomerLoyaltyService {
         });
 
         const request: CustomerLoyaltyAccumulatePoints = {
-            apiKey: process.env.PETROMILES_API_KEY,
+            apiKey: this.configService.get(ConfigKeys.PETROMILES_API_KEY),
             type: CustomerLoyaltyActions.CREATION,
             products: items,
         };
@@ -185,5 +193,25 @@ export class CustomerLoyaltyService {
         }
 
         return await this.getProductsAccumulatedPoints(userProducts.products, user.loyaltySystemToken);
+    }
+
+    /**
+     * Generate csv with CSV generator
+     * @returns Promise<ReadStream>
+     */
+    public async generateClientCsv(): Promise<ReadStream> {
+        const data: ClientsCsvPetromilesInterface[] = sendMock;
+        const fileName = `reports/csv/${new Date().toISOString()}.csv`;
+        const file = this.csvGenerator.generate(data, fileName);
+        const fileSent = await this.customerLoyaltyRepository.sendClientsCsv(file);
+        return file;
+    }
+
+    /**
+     * Download csv with CSV generator
+     * @returns ReadStream>
+     */
+    public downloadClientCsv(fileName: string): ReadStream {
+        return this.csvGenerator.read(fileName);
     }
 }

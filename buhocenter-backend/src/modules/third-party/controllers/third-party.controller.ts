@@ -1,4 +1,4 @@
-import { Controller, Inject, Post, Body } from '@nestjs/common';
+import { Controller, Inject, Post, Body, Header, Res, HttpCode, HttpStatus } from '@nestjs/common';
 import { CustomerLoyaltyService } from '../services/customer-loyalty.service';
 import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
 import { Logger } from 'winston';
@@ -9,6 +9,8 @@ import {
 } from '../interfaces/customer-loyalty-associate-user.interface';
 import { CustomerLoyaltyUpdateProductPoints } from '../interfaces/customer-loyalty-update-product-points';
 import { Product } from 'src/modules/products/entities/product.entity';
+import { ReadStream } from 'fs';
+import * as fs from 'fs';
 
 @Controller('third-party')
 export class ThirdPartyController {
@@ -35,6 +37,28 @@ export class ThirdPartyController {
         });
 
         return await this.customerLoyaltyService.authorizeCode(user);
+    }
+
+    @Post('clients-csv')
+    @Header('Content-Type', 'text/csv')
+    @Header('Content-Disposition', 'attachment; filename=clients.csv')
+    async generateClientCsv(@Res() response): Promise<ReadStream> {
+        this.logger.info(`generateClientCsv: generating client csv]`, {
+            context: ThirdPartyController.name,
+        });
+        const stream = await this.customerLoyaltyService.generateClientCsv();
+        return stream.pipe(response);
+    }
+
+    @Post('download/clients-csv')
+    @Header('Content-Type', 'text/csv')
+    @Header('Content-Disposition', 'attachment; filename=clients.csv')
+    async downloadCsvFile(@Res() response, @Body() data: { name: string }): Promise<ReadStream> {
+        this.logger.info(`downloadCsvFile: downloading client csv ${JSON.stringify(data)}`, {
+            context: ThirdPartyController.name,
+        });
+        const stream = this.customerLoyaltyService.downloadClientCsv(`reports/csv/${data.name}`);
+        return stream.pipe(response);
     }
 
     @Post('/update-products-points')
