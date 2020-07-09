@@ -76,7 +76,7 @@ export class ProductTransactionsRepository {
         });
 
         return await this.connection.transaction(async transactionalEntityManage => {
-            return await this.categoriesService.getAllCategorys();
+            return await this.categoriesService.getAllCategories();
         });
     }
 

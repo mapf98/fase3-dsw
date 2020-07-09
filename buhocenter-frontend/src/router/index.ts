@@ -103,18 +103,9 @@ const routes: RouteConfig[] = [
                         },
                     },
                     {
-                        path: '/dashboard/catalogues',
-                        name: 'dashboard-catalogues',
-                        component: DashboardCatalogues,
-                        meta: {
-                            admin: true,
-                            requiresAuth: true,
-                        },
-                    },
-                    {
                         path: '/dashboard/categories',
                         name: 'dashboard-categories',
-                        component: DashboardCategories,
+                        component: DashboardCatalogues,
                         meta: {
                             admin: true,
                             requiresAuth: true,
@@ -230,6 +221,12 @@ const routes: RouteConfig[] = [
             requiresAuth: true,
         },
     },
+    {path: '/petromiles',
+            beforeEnter() {location.href = 'https://petromiles-frontend.herokuapp.com/'},
+    },
+    {path: '/shipthis',
+    beforeEnter() {location.href = 'https://ship-this.herokuapp.com/'},
+},
     {
         path: '*',
         name: 'not-found',

@@ -111,25 +111,28 @@ export class CartsService {
 
     /**
      * Returns the products with its saved items
-     * @param UserId current logged in User id
+     * @param userId current logged in User id
      * @return Promise<Cart[]>
      */
-    async findCartProduct(UserId: number): Promise<any> {
-        this._logger.debug(`findCartProduct: [UserId=${UserId}]`, {
+    async findCartProduct(userId: number): Promise<Cart[]> {
+        this._logger.debug(`findCartProduct: [userId=${userId}]`, {
             context: CartsService.name,
         });
 
-        let cart: Cart[] = await this._cartRepository.find({
-            where: `User_id = ${UserId}`,
-            relations: [
-                'product',
-                'product.status',
-                'product.productPhotos',
-                'product.provider',
-                'product.offer',
-            ],
-        });
-        cart = cart.filter(i => i.product && i.product.status && i.product.status.id !== STATUS.INACTIVE.id);
+        let cart: Cart[] = await this._cartRepository
+            .createQueryBuilder('cart')
+            .innerJoinAndSelect('cart.status', 'status')
+            .innerJoinAndSelect('cart.product', 'product')
+            .innerJoinAndSelect('product.brand', 'brand')
+            .innerJoinAndSelect('product.provider', 'provider')
+            .innerJoinAndSelect('product.productPhotos', 'productPhotos')
+            .innerJoinAndSelect('product.productDimension', 'productDimension')
+            .innerJoinAndSelect('product.productInventory', 'productInventory')
+            .leftJoinAndSelect('product.offer', 'offer')
+            .where('cart.user = :userId', { userId: userId })
+            .andWhere('cart.status = :statusId', { statusId: STATUS.ACTIVE.id })
+            .getMany();
+
         return cart;
     }
 

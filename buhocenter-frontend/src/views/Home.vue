@@ -11,6 +11,7 @@
         <Categories></Categories>
         <DailyRecomendation></DailyRecomendation>
         <AboutUs></AboutUs>
+        <Allies></Allies>
     </div>
 </template>
 <script lang="ts">
@@ -18,9 +19,9 @@ import { Component, Vue } from 'vue-property-decorator';
 import Categories from '@/modules/client/categories/components/Categories.vue';
 import AboutUs from '@/modules/client/about-us/components/AboutUs.vue';
 import DailyRecomendation from '@/modules/client/daily-recomendation/components/DailyRecomendation.vue';
-
+import Allies from '@/modules/client/allies/components/Allies.vue';
 @Component({
-    components: { Categories, AboutUs, DailyRecomendation },
+    components: { Categories, AboutUs, DailyRecomendation ,Allies},
 })
 export default class Home extends Vue {
     items = [

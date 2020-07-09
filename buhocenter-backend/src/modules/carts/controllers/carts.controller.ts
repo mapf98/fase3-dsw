@@ -39,20 +39,13 @@ export class CartsController {
     }
 
     @Get('client/:id')
-    async getCartProductsBycustomerID(@Res() res: Response, @Param('id', new ParseIntPipe()) id: number) {
-        try {
-            this.logger.info(
-                `getCartProductsBycustomerID: obteniendo el carrito y products, customer [id=${id}]`,
-                { context: CartsController.name },
-            );
-            const response: Cart[] = await this.service.findCartProduct(id);
-            return res.status(HttpStatus.OK).send({ cart: response });
-        } catch (e) {
-            this.logger.error(`getCartProductsBycustomerID: catch error [message=${e.message}]`, {
-                context: CartsController.name,
-            });
-            return res.status(HttpStatus.BAD_REQUEST).status(500);
-        }
+    async getCartProductsBycustomerID(@Param('id', new ParseIntPipe()) id: number): Promise<Cart[]> {
+        this.logger.info(
+            `getCartProductsBycustomerID: obteniendo el carrito y products, customer [id=${id}]`,
+            { context: CartsController.name },
+        );
+
+        return await this.service.findCartProduct(id);
     }
 
     @Delete('products/:id')

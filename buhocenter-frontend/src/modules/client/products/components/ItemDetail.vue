@@ -121,7 +121,11 @@
                 </v-container>
             </v-col>
             <v-col cols="12" lg="3" md="4" class="d-none d-md-flex d-lg-flex">
-                <ShoppingBar @addItemToCart="addItemToCart" @buyItem="buyItem" :stock="getProductStock" />
+                <ShoppingBar
+                    @addItemToCart="addItemToCart"
+                    @buyItem="buyItem"
+                    :stock="getProductStock"
+                />
             </v-col>
             <DailyRecomendation></DailyRecomendation>
         </v-row>
@@ -190,12 +194,10 @@ import { CartInterface, ProductCarts, ServiceCart } from '@/modules/client/cart/
 export default class ItemDetail extends Vue {
     principalImage = '';
     rating = 3;
-
-    //quantityValues: string[] = [];
-
+    
     get getProductStock(): string[] {
         var productStock: string[] = [];
-        for (var i = 0; i < this.GET_ITEM_DETAIL.productInventory!.availableQuantity; i++) {
+        for (var i = 0; i < this.GET_ITEM_DETAIL.productInventory!.availableQuantity!; i++) {
             productStock.push((i + 1).toString());
         }
         return productStock;

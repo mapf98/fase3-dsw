@@ -2,7 +2,7 @@ import { Entity, Column, OneToMany, ManyToOne, JoinColumn } from 'typeorm';
 import { PrimalEntity } from '../../../app/entities/base-entity';
 import { ProductCatalogue } from './product-catalogue.entity';
 import { Category } from './category.entity';
-import { Status } from '../../../modules/status/entities/status.entity';
+import { Status } from '../../status/entities/status.entity';
 
 @Entity({ name: 'catalogues' })
 export class Catalogue extends PrimalEntity {

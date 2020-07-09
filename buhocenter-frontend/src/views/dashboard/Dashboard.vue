@@ -62,22 +62,10 @@ export default class Dashboard extends Vue {
         { icon: 'mdi-contacts', term: 'CLIENTS', url: '/dashboard/clients' },
         { icon: 'fas fa-boxes', term: 'ORDERS', url: '/dashboard/orders' },
         {
-            icon: 'mdi-chevron-up',
-            'icon-alt': 'mdi-chevron-down',
+            icon: 'mdi-shape',
             term: 'CATEGORIES',
-            model: false,
-            children: [
-                {
-                    icon: 'mdi-bookshelf',
-                    term: 'CATEGORIES',
-                    url: '/dashboard/categories',
-                },
-                {
-                    icon: 'mdi-bookmark-outline',
-                    term: 'CATALOGUES',
-                    url: '/dashboard/catalogues',
-                },
-            ],
+            url: '/dashboard/categories',
+            
         },
 
         { icon: 'fas fa-box', term: 'PRODUCTS', url: '/dashboard/products' },

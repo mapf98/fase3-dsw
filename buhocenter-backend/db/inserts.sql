@@ -641,6 +641,8 @@ insert into categories (name, icon, term) VALUES ('Sports','fas fa-futbol','SPOR
 insert into categories (name, icon, term) VALUES ('Home appliances','fas fa-utensils','HOME_APPLIANCES');
 insert into categories (name, icon, term) VALUES ('Music','fas fa-music','MUSIC');
 insert into categories (name, icon, term) VALUES ('Videogames','fas fa-gamepad','VIDEOGAMES');
+insert into categories (name, icon, term) VALUES ('Others...','mdi-contain','OTHERS');
+
 
 insert into catalogues (name, description, term, category_id, status_id) VALUES ('Computers', 'Catálogo de Computadoras', 'COMPUTERS', 1,1);
 insert into catalogues (name, description, term, category_id, status_id) VALUES ('Smarthphones', 'Catálogo de smarthphones', 'SMARTHPHONES', 1,1);

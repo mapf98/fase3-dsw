@@ -6,11 +6,11 @@
         </div>
         <div v-if="GET_LOAD_PHOTO_CART">
             <div v-if="productsCart.length === 0" class="cart-empty">{{ $t('CART_EMPTY') }}</div>
-            <v-list-item v-for="(item, i) in productsCart" :key="item.id" class="mb-4">
-                <v-fade-transition hide-on-leave>
-                    <ProductCart :item="item" :index="i"></ProductCart>
-                </v-fade-transition>
-            </v-list-item>
+                <v-list-item v-for="(item, i) in productsCart" :key="item.id" class="mb-4">
+                    <v-fade-transition hide-on-leave>
+                        <ProductCart :item="item" :index="i" ></ProductCart>
+                    </v-fade-transition>
+                </v-list-item>
         </div>
         <v-col cols="12" class="d-flex justify-center align-center" v-else>
             <v-progress-circular
@@ -56,7 +56,7 @@ import { CustomerInterface } from '@/modules/client/auth/interfaces/customer.int
     components: { ProductCart },
 })
 export default class Cart extends Vue {
-    public productsCart?: ProductCarts[] = [];
+    public productsCart?: ProductCarts[]=[];
     public productsCheckout?: ProductCarts[] = [];
     public onCheckout = true;
     item: any;
@@ -82,16 +82,20 @@ export default class Cart extends Vue {
     @Watch('GET_PRODUCTS_CART')
     getProducts(): void {
         this.productsCart = this.GET_CART_OBJECT;
+        
     }
 
     async mounted(): Promise<void> {
         if (this.GET_AUTH_TOKEN !== '') {
             this.FALSE_PHOTO_CART();
+
             await this.GET_ITEMS_CARS(this.GET_CLIENT_DATA.id!);
             if (this.GET_CART_OBJECT) {
+               
                 await this.FETCH_PRODUCT_CART_PHOTO_BY_NAME(this.GET_CART_OBJECT);
             }
             this.productsCart = this.GET_CART_OBJECT;
+           
         }
     }
 

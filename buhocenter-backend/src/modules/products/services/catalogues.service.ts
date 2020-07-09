@@ -4,8 +4,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
 import { Logger } from 'winston';
 import { Catalogue } from '../entities/catalogue.entity';
-import {STATUS} from '../../../config/constants';
-import {StatusService} from '../../status/services/status.service';
+import { STATUS } from '../../../config/constants';
+import { StatusService } from '../../status/services/status.service';
 
 @Injectable()
 export class CataloguesService {
@@ -25,7 +25,9 @@ export class CataloguesService {
             context: CataloguesService.name,
         });
 
-        return await this.catalogueRepository.find();
+        return await this.catalogueRepository.find({
+            where: { status: STATUS.ACTIVE.id },
+        });
     }
 
     /**
@@ -41,13 +43,10 @@ export class CataloguesService {
         switch (true) {
             case catalogue.name === '':
                 throw new BadRequestException('The catalogue need a name');
-                break;
             case !catalogue.category:
                 throw new BadRequestException('The catalogue need a category');
-                break;
             case !catalogue.status:
                 throw new BadRequestException('The catalogue need a status');
-                break;
         }
 
         return await this.catalogueRepository.save(catalogue);
@@ -79,7 +78,7 @@ export class CataloguesService {
      * @param catalogueId: number
      * @returns Promise<Boolean>
      */
-    async deleteCatalogue(catalogueId: number): Promise<Boolean> {
+    async deleteCatalogue(catalogueId: number): Promise<boolean> {
         this.logger.debug(`deleteCatalogue: Deleting a catalogue [catalogueId=${catalogueId}]`, {
             context: CataloguesService.name,
         });

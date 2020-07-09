@@ -277,7 +277,7 @@ export class UsersService {
         return await this.usersRepository
             .createQueryBuilder('user')
             .innerJoin('user.addresses', 'addresses')
-            .where('addresses.id = :id', { id: addressId })
+            .where('addresses.id = :addressId', { addressId: addressId })
             .getOne();
     }
 }

@@ -264,7 +264,7 @@ export class PaymentsService {
             context: PaymentsService.name,
         });
 
-        return await this.paymentRepository
+        let query = this.paymentRepository
             .createQueryBuilder('payment')
             .innerJoinAndSelect('payment.address', 'address')
             .innerJoinAndSelect('address.user', 'user')
@@ -272,12 +272,16 @@ export class PaymentsService {
             .innerJoinAndSelect('statusHistories.status', 'status')
             .innerJoinAndSelect('payment.commission', 'commission')
             .innerJoinAndSelect('payment.foreignExchange', 'foreignExchange')
-            .leftJoinAndSelect('payment.cryptocurrency', 'cryptocurrency')
-            .where('status.id <> :id', { id: STATUS.CANCELED.id })
-            .andWhere('status.id <> :id', { id: STATUS.EXPIRED.id })
-            .andWhere('status.id <> :id', { id: STATUS.INVALID.id })
-            .andWhere('user.id = :id', { id: userId })
-            .getMany();
+            .leftJoinAndSelect('payment.cryptocurrency', 'cryptocurrency');
+
+        if (userId) {
+            query.where('status.id <> :statusCanceledId', { statusCanceledId: STATUS.CANCELED.id });
+            query.andWhere('status.id <> :statusExpiredId', { statusExpiredId: STATUS.EXPIRED.id });
+            query.andWhere('status.id <> :statusInvalidId', { statusInvalidId: STATUS.INVALID.id });
+            query.andWhere('user.id = :userId', { userId: userId });
+        }
+
+        return await query.getMany();
     }
 
     /**

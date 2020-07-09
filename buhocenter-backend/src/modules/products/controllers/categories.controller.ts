@@ -47,4 +47,11 @@ export class CategoriesController {
             return res.status(HttpStatus.BAD_REQUEST).send();
         }
     }
+
+    @Get('/all')
+    async getAllCategories(): Promise<Category[]> {
+        this.logger.debug(`getAllCategories: Getting all categories`, { context: CategoriesController.name });
+
+        return await this.categoriesService.getAllCategories();
+    }
 }

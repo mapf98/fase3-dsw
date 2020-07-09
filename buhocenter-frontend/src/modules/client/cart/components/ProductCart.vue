@@ -37,7 +37,7 @@
                     <v-select
                         :value="item.quantity.toString()"
                         v-model="quantity"
-                        :items="stock"
+                        :items="getProductStock"
                         @change="changeQuantity()"
                         :x-small="$vuetify.breakpoint.mdAndDown"
                         :label="$t('QUANTITY')"
@@ -71,9 +71,11 @@ export default class ProductCart extends Vue {
     checkbox = false;
 
     stock: string[] = ['1', '2', '3'];
-    quantity: number = this.item.quantity!;
+   quantity: number = this.item.quantity!;
 
-    getProductStock(): string[] {
+
+
+    get getProductStock(): string[] {
         var productStock: string[] = [];
         for (var i = 0; i < this.item.product!.productInventory!.availableQuantity; i++) {
             productStock.push((i + 1).toString());

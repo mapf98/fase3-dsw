@@ -11,9 +11,9 @@ const carts: Module<CartsStateInterface, any> = {
     namespaced: true,
     state: CARTS_EMPTY_STATE,
     mutations: {
-        [CartTypes.mutations.SET_CART](state, data: CartInterface) {
-            if (data.cart) {
-                state.cart = data.cart;
+        [CartTypes.mutations.SET_CART](state, data: ProductCarts[]) {
+            if (data) {
+                state.cart = data;
                 state.checkout = [];
                 state.err_cart = false;
                 state.err_cart_message = '';
@@ -113,7 +113,7 @@ const carts: Module<CartsStateInterface, any> = {
         },
         async [CartTypes.actions.GET_ITEMS_CARS]({ commit }, clientId: number): Promise<boolean> {
             try {
-                const response: CartInterface | boolean = await cartsHttpRepository.getItemsCars(clientId);
+                const response: ProductCarts[] | boolean = await cartsHttpRepository.getItemsCars(clientId);
                 if (response) {
                     commit(CartTypes.mutations.SET_CART, response);
                     return true;

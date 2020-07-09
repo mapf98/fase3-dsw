@@ -33,7 +33,7 @@ class CartsHttpRepository extends HttpRepository {
      * Permite obtener todos los productos del cart del client
      * @param clientId id de client
      */
-    public async getItemsCars(clientId: number): Promise<CartInterface | boolean> {
+    public async getItemsCars(clientId: number): Promise<CART_INTERFACE.ProductCarts[] | boolean> {
         try {
             return await this.get(
                 this.createUri([`${CartsHttpRepository.RESOURCE}`, `client/${clientId}`]),

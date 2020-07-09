@@ -21,8 +21,8 @@ const categoryModule: Module<CategoryStateInterface, any> = {
         },
     },
     mutations: {
-        [CategoryTypes.mutations.SET_CATEGORIES](state, response: Categories): void {
-            state.categories = response.categories;
+        [CategoryTypes.mutations.SET_CATEGORIES](state, response: Category[]): void {
+            state.categories = response;
         },
         [CategoryTypes.mutations.SET_CATEGORIES_AND_PHOTOS_LOADED](state, value: boolean): void {
             state.categoriesAndPhotosLoaded = value;
@@ -48,7 +48,7 @@ const categoryModule: Module<CategoryStateInterface, any> = {
         async [CategoryTypes.actions.FETCH_CATEGORIES]({ commit }): Promise<boolean> {
             try {
                 const response: Categories = await categoriesHttpRepository.getCategories();
-                commit(CategoryTypes.mutations.SET_CATEGORIES, response);
+                commit(CategoryTypes.mutations.SET_CATEGORIES, response.categories);
                 commit(
                     CategoryTypes.mutations.SET_TOTAL_CATEGORIES,
                     // eslint-disable-next-line
@@ -60,6 +60,21 @@ const categoryModule: Module<CategoryStateInterface, any> = {
                 return false;
             }
         },
+        async [CategoryTypes.actions.FETCH_ALL_CATEGORIES]({ commit }): Promise<boolean> {
+            try {
+                const response: Category[] = await categoriesHttpRepository.getAllCategories();
+                commit(CategoryTypes.mutations.SET_CATEGORIES, response);
+                commit(
+                    CategoryTypes.mutations.SET_TOTAL_CATEGORIES,
+                    // eslint-disable-next-line
+                    // @ts-ignore
+                    response.length,
+                );
+                return true;
+            } catch (e) {
+                return false;
+            }
+        }
     },
 };
 

@@ -8,6 +8,7 @@ import {
     Catalogue,
     ProductCatalogue,
 } from '@/modules/client/catalogues/interfaces/catalogues.interface';
+import { CatalogueCreateI } from '@/modules/management/catalogues/components/interfaces/catalogue.create';
 
 const catalogueModule: Module<CatalogueStateInterface, any> = {
     namespaced: true,
@@ -63,10 +64,19 @@ const catalogueModule: Module<CatalogueStateInterface, any> = {
                 return false;
             }
         },
-        async [CatalogueTypes.actions.DELETE_CATALOGUE]({ commit }, catalogueId: number): Promise<boolean> {
+        async [CatalogueTypes.actions.CREATE_CATALOGUE]({ commit }, data: CatalogueCreateI): Promise<boolean> {
             try {
-                const response: boolean = await catalogueHttpRepository.deleteCatalogue(catalogueId);
+                const response: CatalogueCreateI = await catalogueHttpRepository.createCatalogue(data);
                 return true;
+            } catch (e) {
+                return false;
+            }
+        },
+        async [CatalogueTypes.actions.DELETE_CATALOGUE]({ commit }, catalogueId: number): Promise<any> {
+            try {
+                const response: any = await catalogueHttpRepository.deleteCatalogue(catalogueId);
+                if (response===true) return true;
+                else return false;
             } catch (e) {
                 return false;
             }
