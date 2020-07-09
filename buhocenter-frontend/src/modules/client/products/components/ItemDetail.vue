@@ -57,7 +57,7 @@
                                         small
                                         color="white"
                                         v-model="quantity"
-                                        :items="quantityValues"
+                                        :items="getProductStock"
                                         label="Qty"
                                         persistent-hint
                                     ></v-select>
@@ -121,7 +121,7 @@
                 </v-container>
             </v-col>
             <v-col cols="12" lg="3" md="4" class="d-none d-md-flex d-lg-flex">
-                <ShoppingBar @addItemToCart="addItemToCart" @buyItem="buyItem" />
+                <ShoppingBar @addItemToCart="addItemToCart" @buyItem="buyItem" :stock="getProductStock" />
             </v-col>
             <DailyRecomendation></DailyRecomendation>
         </v-row>
@@ -190,34 +190,17 @@ import { CartInterface, ProductCarts, ServiceCart } from '@/modules/client/cart/
 export default class ItemDetail extends Vue {
     principalImage = '';
     rating = 3;
-    quantityValues: string[] = [
-        '1',
-        '2',
-        '3',
-        '4',
-        '5',
-        '6',
-        '10',
-        '11',
-        '12',
-        '13',
-        '14',
-        '15',
-        '16',
-        '17',
-        '18',
-        '19',
-        '20',
-        '21',
-        '22',
-        '23',
-        '25',
-        '26',
-        '27',
-        '28',
-        '29',
-        '30',
-    ];
+
+    //quantityValues: string[] = [];
+
+    get getProductStock(): string[] {
+        var productStock: string[] = [];
+        for (var i = 0; i < this.GET_ITEM_DETAIL.productInventory!.availableQuantity; i++) {
+            productStock.push((i + 1).toString());
+        }
+        return productStock;
+    }
+
     quantity = 0;
 
     itemDetailLoaded = false;
@@ -358,9 +341,7 @@ export default class ItemDetail extends Vue {
         );
         const accumulated_quantity = this.GET_CART_OBJECT[index].quantity;
         this.SET_QUANTITY_PRODUCT({
-            quantity:
-                (typeof quantity == 'string' ? parseInt(quantity) : quantity) +
-                (accumulated_quantity ? accumulated_quantity : 0),
+            quantity: typeof quantity == 'string' ? parseInt(quantity) : quantity,
             inCheckout: index_checkout === -1 ? false : true,
             index_checkout,
             index,

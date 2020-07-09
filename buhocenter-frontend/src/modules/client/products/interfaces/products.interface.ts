@@ -78,7 +78,7 @@ export interface Product {
     };
     rating?: string;
     questions?: Comment[];
-    productInventories?: ProductInventorie;
+    productInventory?: ProductInventorie;
     productCategories?: {
         createdAt?: string;
         id?: number;

@@ -68,6 +68,10 @@ export default class OrderHistoryProduct extends Vue {
         this.alreadyRated = status;
     }
 
+    mounted() {
+        console.log(this.GET_PRODUCTS_ORDER);
+    }
+
     @payments.Getter(PaymentsTypes.getters.GET_PRODUCTS_ORDER)
     private GET_PRODUCTS_ORDER!: ProductsOrder[];
 }

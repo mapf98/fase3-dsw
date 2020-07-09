@@ -29,8 +29,12 @@ class PetromilesAuthRepository extends HttpRepository {
         );
     }
 
-    async generateCsv(): Promise<boolean>{
-        const response = await this.post(this.createUri([`${PetromilesAuthRepository.RESOURCE}/download/clients-csv`]), {}, this.createHeader());
+    async generateCsv(): Promise<boolean> {
+        const response = await this.post(
+            this.createUri([`${PetromilesAuthRepository.RESOURCE}/download/clients-csv`]),
+            {},
+            this.createHeader(),
+        );
         const url = window.URL.createObjectURL(new Blob([response.data]));
         const link = document.createElement('a');
         link.href = url;

@@ -6,11 +6,11 @@
         </div>
         <div v-if="GET_LOAD_PHOTO_CART">
             <div v-if="productsCart.length === 0" class="cart-empty">{{ $t('CART_EMPTY') }}</div>
-            <v-fade-transition hide-on-leave>
-                <v-list-item v-for="(item, i) in productsCart" :key="item.id" class="mb-4">
+            <v-list-item v-for="(item, i) in productsCart" :key="item.id" class="mb-4">
+                <v-fade-transition hide-on-leave>
                     <ProductCart :item="item" :index="i"></ProductCart>
-                </v-list-item>
-            </v-fade-transition>
+                </v-fade-transition>
+            </v-list-item>
         </div>
         <v-col cols="12" class="d-flex justify-center align-center" v-else>
             <v-progress-circular

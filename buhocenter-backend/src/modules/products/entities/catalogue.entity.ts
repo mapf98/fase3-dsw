@@ -2,6 +2,7 @@ import { Entity, Column, OneToMany, ManyToOne, JoinColumn } from 'typeorm';
 import { PrimalEntity } from '../../../app/entities/base-entity';
 import { ProductCatalogue } from './product-catalogue.entity';
 import { Category } from './category.entity';
+import { Status } from '../../../modules/status/entities/status.entity';
 
 @Entity({ name: 'catalogues' })
 export class Catalogue extends PrimalEntity {
@@ -26,6 +27,14 @@ export class Catalogue extends PrimalEntity {
         { nullable: false, onUpdate: 'CASCADE' },
     )
     category: Category;
+
+    @JoinColumn({ name: 'status_id' })
+    @ManyToOne(
+        type => Status,
+        status => status.catalogues,
+        { nullable: false, onUpdate: 'CASCADE' },
+    )
+    status: Status;
 
     @OneToMany(
         type => ProductCatalogue,

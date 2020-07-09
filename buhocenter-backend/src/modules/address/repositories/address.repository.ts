@@ -2,7 +2,7 @@ import { HttpService, Injectable } from '@nestjs/common';
 import { map } from 'rxjs/operators';
 
 @Injectable()
-export class AddressRepository {
+export class AddressValidationRepository {
     constructor(private readonly httpService: HttpService) {}
 
     /**

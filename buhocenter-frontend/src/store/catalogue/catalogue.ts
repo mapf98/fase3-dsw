@@ -63,6 +63,14 @@ const catalogueModule: Module<CatalogueStateInterface, any> = {
                 return false;
             }
         },
+        async [CatalogueTypes.actions.DELETE_CATALOGUE]({ commit }, catalogueId: number): Promise<boolean> {
+            try {
+                const response: boolean = await catalogueHttpRepository.deleteCatalogue(catalogueId);
+                return true;
+            } catch (e) {
+                return false;
+            }
+        },
     },
 };
 

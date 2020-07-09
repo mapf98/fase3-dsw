@@ -18,6 +18,7 @@ import offers from '@/store/offers/offers';
 import comments from '@/store/comments/comments';
 import settings from '@/store/settings/settings';
 import thirdParty from '@/store/third-party/third-party';
+import orders from '@/store/orders/orders';
 
 Vue.use(Vuex);
 
@@ -40,6 +41,7 @@ export default new Vuex.Store({
         comments,
         settings,
         thirdParty,
+        orders,
     },
     plugins: [createPersistedState({ storage: window.sessionStorage })],
 });

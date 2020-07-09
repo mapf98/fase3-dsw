@@ -36,8 +36,8 @@
                 <v-col lg="4" offset="1" class="mt-2">
                     <v-select
                         :value="item.quantity.toString()"
-                        :v-model="item.quantity.toString()"
-                        :items="quantityValues"
+                        v-model="quantity"
+                        :items="stock"
                         @change="changeQuantity()"
                         :x-small="$vuetify.breakpoint.mdAndDown"
                         :label="$t('QUANTITY')"
@@ -69,34 +69,17 @@ export default class ProductCart extends Vue {
     @Prop() index!: number;
 
     checkbox = false;
-    quantityValues: string[] = [
-        '1',
-        '2',
-        '3',
-        '4',
-        '5',
-        '6',
-        '10',
-        '11',
-        '12',
-        '13',
-        '14',
-        '15',
-        '16',
-        '17',
-        '18',
-        '19',
-        '20',
-        '21',
-        '22',
-        '23',
-        '25',
-        '26',
-        '27',
-        '28',
-        '29',
-        '30',
-    ];
+
+    stock: string[] = ['1', '2', '3'];
+    quantity: number = this.item.quantity!;
+
+    getProductStock(): string[] {
+        var productStock: string[] = [];
+        for (var i = 0; i < this.item.product!.productInventory!.availableQuantity; i++) {
+            productStock.push((i + 1).toString());
+        }
+        return productStock;
+    }
 
     getProvider(): string {
         return this.item.product!.provider!.name;
@@ -107,6 +90,7 @@ export default class ProductCart extends Vue {
     }
 
     mounted() {
+        //this.stock= this.getProductStock();
         const index = this.GET_PRODUCTS_CHECKOUT.findIndex((productCart) => productCart.id == this.item.id);
         this.checkbox = index !== -1;
     }
@@ -117,7 +101,7 @@ export default class ProductCart extends Vue {
         );
         const index = this.GET_CART_OBJECT.findIndex((productCart) => productCart.id == this.item.id);
         this.SET_QUANTITY_PRODUCT({
-            quantity: this.item.quantity,
+            quantity: this.quantity,
             inCheckout: index_checkout === -1 ? false : true,
             index_checkout,
             index,
@@ -125,9 +109,7 @@ export default class ProductCart extends Vue {
     }
 
     changeSelectCheckout() {
-        const index = this.GET_PRODUCTS_CHECKOUT.findIndex(
-            (productCart) => productCart!.product!.id == this.item.product!.id,
-        );
+        const index = this.checkoutIndex;
         if (index === -1) {
             const checkout: ProductCarts = {
                 quantity: this.item.quantity!,
@@ -139,11 +121,18 @@ export default class ProductCart extends Vue {
         }
     }
 
+    get checkoutIndex() {
+        return this.GET_PRODUCTS_CHECKOUT.findIndex(
+            (productCart) => productCart!.product!.id == this.item.product!.id,
+        );
+    }
+
     getDiscountPrice(): string {
         return this.item.product!.offer.discountPrice;
     }
 
     async removeProductCart() {
+        this.REMOVE_PRODUCT_CHECKOUT(this.checkoutIndex);
         const index = this.GET_CART_OBJECT.findIndex((productCart) => productCart.id == this.item.id);
         await this.DELETE_PRODUCT_CART({ productCartId: this.item.id!, index });
     }

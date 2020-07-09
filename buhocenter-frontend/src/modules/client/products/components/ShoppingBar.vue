@@ -5,7 +5,7 @@
                 <v-select
                     v-model="quantity"
                     :rules="[rules.required()]"
-                    :items="quantityValues"
+                    :items="stock"
                     :x-small="$vuetify.breakpoint.mdAndDown"
                     :label="$t('QUANTITY')"
                     primary
@@ -38,12 +38,13 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import { Emit, Component } from 'vue-property-decorator';
+import { Emit, Component, Prop } from 'vue-property-decorator';
 import { authModule } from '../../../../store/namespaces';
 import AuthTypes from '../../../../store/auth/methods/auth.methods';
 import SocialIcons from '@/modules/client/social/components/SocialIcons.vue';
 import rules from '../../../../utils/rules';
 import { CustomerInterface } from '@/modules/client/auth/interfaces/customer.interface';
+import { Product } from '@/modules/client/products/interfaces/products.interface';
 
 @Component({
     components: {
@@ -53,34 +54,7 @@ import { CustomerInterface } from '@/modules/client/auth/interfaces/customer.int
 export default class ShoppingBar extends Vue {
     quantity = 0;
 
-    quantityValues: string[] = [
-        '1',
-        '2',
-        '3',
-        '4',
-        '5',
-        '6',
-        '10',
-        '11',
-        '12',
-        '13',
-        '14',
-        '15',
-        '16',
-        '17',
-        '18',
-        '19',
-        '20',
-        '21',
-        '22',
-        '23',
-        '25',
-        '26',
-        '27',
-        '28',
-        '29',
-        '30',
-    ];
+    @Prop({ default: '', required: false }) stock!: string[];
 
     rules: any = rules;
 

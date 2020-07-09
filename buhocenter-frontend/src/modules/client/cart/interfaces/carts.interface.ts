@@ -25,6 +25,8 @@ export class ProductCarts {
     customer?: {
         id: number;
     };
+    productPoints?: number;
+    productPrice?: string;
     quantity?: number;
     updatedAt?: string;
     user?: {

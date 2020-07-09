@@ -7,7 +7,7 @@ import { ConfigService } from 'src/config/config.service';
 import { Checkout } from '../interfaces/checkout';
 import { NewPayment } from '../interfaces/new-payment';
 import { StatusService } from 'src/modules/status/services/status.service';
-import { STATUS } from 'src/config/constants';
+import { STATUS, PAGINATE } from 'src/config/constants';
 import { CartsService } from 'src/modules/carts/services/carts.service';
 import { Payment } from '../entities/payment.entity';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -23,6 +23,8 @@ import { UsersService } from 'src/modules/users/services/users.service';
 import { CustomerLoyaltyService } from 'src/modules/third-party/services/customer-loyalty.service';
 import { CustomerLoyaltyTickets } from 'src/modules/third-party/interfaces/customer-loyalty-tickets';
 import { CustomerLoyaltyAccumulatePointsResponse } from 'src/modules/third-party/interfaces/customer-loyalty-accumulate-points';
+import { PaymentParameters } from '../interfaces/payment-parameters';
+import { PaginatedPayments } from '../interfaces/paginated-payments';
 
 @Injectable()
 export class PaymentsService {
@@ -231,6 +233,28 @@ export class PaymentsService {
     }
 
     /**
+     * getPayments
+     * @param parameters: PaymentParameters
+     * @returns Promise<Payment[] | PaginatedPayments>
+     */
+    async getPayments(parameters: PaymentParameters): Promise<Payment[] | PaginatedPayments> {
+        this.logger.debug(
+            `getPayments: Getting the payments [userId=${parameters.userId}|start=${parameters.start}|limit=${parameters.limit}]`,
+            {
+                context: PaymentsService.name,
+            },
+        );
+
+        if (parameters.userId) {
+            return await this.getPaymentsByUserId(parameters.userId);
+        } else {
+            parameters.start = parameters.start || PAGINATE.START;
+            parameters.limit = parameters.limit || PAGINATE.LIMIT;
+            return await this.getPaginatedPayments(parameters.start, parameters.limit);
+        }
+    }
+
+    /**
      * getPaymentsByUserId
      * @param userId: number
      * @returns Payment[]
@@ -242,17 +266,62 @@ export class PaymentsService {
 
         return await this.paymentRepository
             .createQueryBuilder('payment')
+            .innerJoinAndSelect('payment.address', 'address')
+            .innerJoinAndSelect('address.user', 'user')
             .innerJoinAndSelect('payment.statusHistories', 'statusHistories')
             .innerJoinAndSelect('statusHistories.status', 'status')
-            .where('status.id <> :id', { id: STATUS.CANCELED.id })
-            .andWhere('status.id <> :id', { id: STATUS.EXPIRED.id })
-            .andWhere('status.id <> :id', { id: STATUS.INVALID.id })
             .innerJoinAndSelect('payment.commission', 'commission')
             .innerJoinAndSelect('payment.foreignExchange', 'foreignExchange')
             .leftJoinAndSelect('payment.cryptocurrency', 'cryptocurrency')
-            .innerJoin('payment.carts', 'carts')
-            .andWhere('carts.user = :id', { id: userId })
+            .where('status.id <> :id', { id: STATUS.CANCELED.id })
+            .andWhere('status.id <> :id', { id: STATUS.EXPIRED.id })
+            .andWhere('status.id <> :id', { id: STATUS.INVALID.id })
+            .andWhere('user.id = :id', { id: userId })
             .getMany();
+    }
+
+    /**
+     * getPaginatedPayments
+     * @param start: number
+     * @param limit: number
+     * @returns Promise
+     */
+    async getPaginatedPayments(start: number, limit: number): Promise<PaginatedPayments> {
+        this.logger.debug(
+            `getPaginatedPayments: Getting paginated payments [start=${start}|limit=${limit}]`,
+            {
+                context: PaymentsService.name,
+            },
+        );
+
+        start = start * limit - limit;
+
+        const paginatedProducts = await this.paymentRepository.findAndCount({
+            relations: [
+                'address',
+                'address.user',
+                'commission',
+                'statusHistories',
+                'statusHistories.status',
+                'foreignExchange',
+                'cryptocurrency',
+                'carts',
+                'carts.product',
+                'carts.product.productPhotos',
+                'carts.product.brand',
+                'carts.product.provider',
+            ],
+            skip: start,
+            take: limit,
+            order: {
+                id: 'ASC',
+            },
+        });
+
+        return {
+            payments: paginatedProducts[0],
+            paymentsNumber: paginatedProducts[1],
+        };
     }
 
     /**

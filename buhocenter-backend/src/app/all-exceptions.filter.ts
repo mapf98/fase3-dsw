@@ -9,6 +9,7 @@ import {
 } from '@nestjs/common';
 import { Logger } from 'winston';
 import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
+import { Console } from 'console';
 
 @Injectable()
 @Catch()

@@ -19,6 +19,10 @@ class CataloguesHttpRepository extends HttpRepository {
     public saveCatalogue(data: ProductCatalogue) {
         return this.post(this.createUri([`${CataloguesHttpRepository.RESOURCECATALOGUE}`]), data, false);
     }
+
+    public deleteCatalogue(data: number): Promise<boolean> {
+        return this.delete(this.createUri([`${CataloguesHttpRepository.RESOURCECATALOGUE}`]), data);
+    }
 }
 
 export default new CataloguesHttpRepository();

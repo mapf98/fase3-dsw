@@ -6,7 +6,7 @@ import {
     AddressVerificationSO,
 } from '../dto/AddressVerification.dto';
 import { Address } from '../entities/address.entity';
-import { AddressRepository } from '../repositories/address.repository';
+import { AddressValidationRepository } from '../repositories/address.repository';
 import { UsersService } from '../../users/services/users.service';
 import { STATUS } from '../../../config/constants';
 import { StatusService } from '../../status/services/status.service';
@@ -18,12 +18,9 @@ import { InjectRepository } from '@nestjs/typeorm';
 export class AddressService {
     constructor(
         @Inject(WINSTON_MODULE_PROVIDER) private readonly _logger: Logger,
-        @Inject(UsersService)
         private readonly usersService: UsersService,
-        @Inject(StatusService)
         private readonly statusService: StatusService,
-        @Inject(AddressRepository)
-        private readonly addressHttpRepository: AddressRepository,
+        private readonly addressHttpRepository: AddressValidationRepository,
         @InjectRepository(Address)
         private addressesRepository: Repository<Address>,
     ) {}

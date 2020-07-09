@@ -55,8 +55,10 @@
                         </v-col>
                     </v-row>
                 </v-form>
-                <v-row class="d-flex justify-center my-2" @click="saveChanges()">
-                    <v-btn outlined color="primary">{{ $t('SAVE') }}</v-btn>
+                <v-row class="d-flex justify-center my-2">
+                    <v-btn outlined color="primary" :loading="loadingAdd" @click="saveChanges()">{{
+                        $t('SAVE')
+                    }}</v-btn>
                 </v-row>
             </div>
         </v-dialog>
@@ -84,6 +86,7 @@
                     fill-height
                     fill-width
                     max-width="344"
+                    height="310"
                     @click="createAddress()"
                 >
                     <v-card-text class="container">
@@ -126,7 +129,7 @@
                                 {{ address.zipcode }}
                             </p>
                             <p v-if="address.setDefault" class="text-center ma-0 caption text--primary">
-                                <b>{{ t$('DEFAULT_ADDRESS') }}</b>
+                                <b>{{ $t('DEFAULT_ADDRESS') }}</b>
                             </p>
                         </v-card-text>
                         <v-card-actions class="text-center d-flex justify-center">
@@ -144,13 +147,14 @@
                                         @click="setDefaultAddress(address.id)"
                                         text
                                     >
-                                        {{ t$('SET_AS_DEFAULT') }}
+                                        {{ $t('SET_AS_DEFAULT') }}
                                     </v-btn>
                                 </v-col>
                                 <v-col sm="12">
                                     <v-btn
                                         color="primary"
                                         class="btn-remove"
+                                        :loading="loadingRemove"
                                         :x-small="$vuetify.breakpoint.mdAndDown"
                                         @click="deletAddress(address.id)"
                                     >
@@ -200,6 +204,8 @@ import { Address } from '@/modules/client/addresses/interfaces/address.interface
 export default class AddressManagement extends Vue {
     defaultAddressError = false;
     fetchingAddressesError = false;
+    loadingRemove: boolean = false;
+    loadingAdd: boolean = false;
     deletingAddressError = false;
     addressCreated = false;
     dialog = false;
@@ -236,13 +242,14 @@ export default class AddressManagement extends Vue {
     }
 
     async deletAddress(addressId: number) {
+        this.loadingRemove = true;
         const deleted: boolean = await this.DELETE_ADDRESS(addressId);
 
         if (!deleted) {
             this.deletingAddressError = true;
         } else {
             await this.fetchAddresses();
-            this.$router.go(0);
+            this.loadingRemove = false;
         }
     }
 
@@ -305,16 +312,16 @@ export default class AddressManagement extends Vue {
 
     async saveChanges() {
         if (this.$refs.form.validate()) {
+            this.loadingAdd = true;
             const created: boolean = await this.CREATE_ADDRESS(this.createAddressObject());
             if (!created) {
                 this.dialog = false;
                 this.addressCreatedError = true;
             } else {
                 this.addressCreated = true;
-                this.fetchAddresses();
-                setTimeout(() => {
-                    this.dialog = false;
-                }, 2000);
+                await this.fetchAddresses();
+                this.loadingAdd = false;
+                this.dialog = false;
             }
         }
     }

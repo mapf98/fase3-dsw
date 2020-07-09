@@ -15,7 +15,7 @@ import DashboardCatalogues from '@/modules/management/catalogues/components/Cata
 import DashboardCategories from '@/modules/management/categories/components/Categories.vue';
 import DashboardClients from '@/modules/management/clients/components/Clients.vue';
 import DashboardEmails from '@/modules/management/emails/components/Emails.vue';
-import DashboardOrders from '@/modules/management/orders/components/Orders.vue';
+import DashboardOrders from '@/modules/management/orders/components/DashboardOrders.vue';
 import DashboardSettings from '@/modules/management/settings/components/DashboardSettings.vue';
 import DashboardProducts from '@/modules/management/products/components/Products.vue';
 import DashboardOffers from '@/modules/management/promotions/components/DashboardOffers.vue';

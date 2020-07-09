@@ -7,6 +7,7 @@ import { Address } from '../../address/entities/address.entity';
 import { User } from '../../users/entities/user.entity';
 import { Commission } from '../../payments/entities/commission.entity';
 import { Offer } from '../../products/entities/offer.entity';
+import { Catalogue } from '../../products/entities/catalogue.entity';
 
 @Entity('statuses')
 export class Status extends PrimalEntity {
@@ -62,4 +63,10 @@ export class Status extends PrimalEntity {
         statusOffers => statusOffers.status,
     )
     statusOffers: Offer[];
+
+    @OneToMany(
+        type => Catalogue,
+        catalogues => catalogues.status,
+    )
+    catalogues: Catalogue[];
 }

@@ -19,48 +19,50 @@ import { NewPayment } from '../interfaces/new-payment';
 import { Checkout } from '../interfaces/checkout';
 import { OrderStatus } from '../interfaces/order-status';
 import { Payment } from '../entities/payment.entity';
+import { PaginatedPayments } from '../interfaces/paginated-payments';
+import { PaymentParameters } from '../interfaces/payment-parameters';
 
 @Controller('payments')
 export class PaymentsController {
     constructor(
-        @Inject(WINSTON_MODULE_PROVIDER) private readonly _logger: Logger,
-        private readonly _paymentsService: PaymentsService,
+        @Inject(WINSTON_MODULE_PROVIDER) private readonly logger: Logger,
+        private readonly paymentsService: PaymentsService,
     ) {}
 
     @Post('/orders')
     createOrder(@Body() checkout: Checkout): Promise<NewPayment> {
-        this._logger.info(`createOrder: Creating a new order`, {
+        this.logger.info(`createOrder: Creating a new order`, {
             context: PaymentsController.name,
         });
 
-        return this._paymentsService.createOrder(checkout);
+        return this.paymentsService.createOrder(checkout);
     }
 
     @HttpCode(200)
     @Post('/orders/callback')
     callbackOrders(@Body() order: OrderStatus): Promise<OrderStatus> {
-        this._logger.info(`callbackOrders: receiving the status of a payment`, {
+        this.logger.info(`callbackOrders: receiving the status of a payment`, {
             context: PaymentsController.name,
         });
 
-        return this._paymentsService.callbackOrders(order);
+        return this.paymentsService.callbackOrders(order);
     }
 
     @Get()
-    getPaymentsByUserId(@Query('userId', new ParseIntPipe()) userId: number): Promise<Payment[]> {
-        this._logger.info('getPaymentsByUserI: Getting the payments of a user', {
+    getPayments(@Query() parameters: PaymentParameters): Promise<Payment[] | PaginatedPayments> {
+        this.logger.info('getPayments: Getting the payments', {
             context: PaymentsController.name,
         });
 
-        return this._paymentsService.getPaymentsByUserId(userId);
+        return this.paymentsService.getPayments(parameters);
     }
 
     @Get(':id')
     getPaymentsById(@Param('id', new ParseIntPipe()) id: number): Promise<Payment> {
-        this._logger.info('getPaymentsByUserI: Getting a payment by its id', {
+        this.logger.info('getPaymentsByUserI: Getting a payment by its id', {
             context: PaymentsController.name,
         });
 
-        return this._paymentsService.getPaymentsById(id);
+        return this.paymentsService.getPaymentsById(id);
     }
 }

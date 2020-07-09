@@ -1,6 +1,5 @@
 insert into statuses (name, description) VALUES ('Active', 'Indicates that the resource is available to the system');
 insert into statuses (name, description) VALUES ('Inactive', 'Indicates that the resource is not available to the system');
-
 insert into statuses (name, description) VALUES ('New','Indicates that a new order was create');
 insert into statuses (name, description) VALUES ('Pending','Indicates that the order is pending to pay');
 insert into statuses (name, description) VALUES ('Confirming','Indicates that the order is being confirming');
@@ -400,12 +399,12 @@ insert into product_photos (content, product_id) VALUES ('balls4.png', 48);
 insert into product_photos (content, product_id) VALUES ('balls5.png', 48);
 
 
-insert into product_photos (content, product_id) VALUES ('whashm1.png', 49);
-insert into product_photos (content, product_id) VALUES ('whashm2.png', 49);
-insert into product_photos (content, product_id) VALUES ('whashm3.png', 50);
-insert into product_photos (content, product_id) VALUES ('whashm4.png', 50);
-insert into product_photos (content, product_id) VALUES ('whashm5.png', 51);
-insert into product_photos (content, product_id) VALUES ('whashm6.png', 51);
+insert into product_photos (content, product_id) VALUES ('washm1.png', 49);
+insert into product_photos (content, product_id) VALUES ('washm2.png', 49);
+insert into product_photos (content, product_id) VALUES ('washm3.png', 50);
+insert into product_photos (content, product_id) VALUES ('washm4.png', 50);
+insert into product_photos (content, product_id) VALUES ('washm5.png', 51);
+insert into product_photos (content, product_id) VALUES ('washm6.png', 51);
 
 
 insert into product_photos (content, product_id) VALUES ('music1.png', 52);
@@ -643,20 +642,20 @@ insert into categories (name, icon, term) VALUES ('Home appliances','fas fa-uten
 insert into categories (name, icon, term) VALUES ('Music','fas fa-music','MUSIC');
 insert into categories (name, icon, term) VALUES ('Videogames','fas fa-gamepad','VIDEOGAMES');
 
-insert into catalogues (name, description, term, category_id) VALUES ('Computers', 'Catálogo de Computadoras', 'COMPUTERS', 1);
-insert into catalogues (name, description, term, category_id) VALUES ('Smarthphones', 'Catálogo de smarthphones', 'SMARTHPHONES', 1);
-insert into catalogues (name, description, term, category_id) VALUES ('Shirt', 'Catálogo de camisas', 'SHIRT', 2);
-insert into catalogues (name, description, term, category_id) VALUES ('Pants', 'Catálogo de pantalones', 'PANTS', 2);
-insert into catalogues (name, description, term, category_id) VALUES ('Wood', 'Catálogo de maderas', 'WOOD', 3);
-insert into catalogues (name, description, term, category_id) VALUES ('Bracelects', 'Catálogo de pulseras', 'BRACELETS', 4);
-insert into catalogues (name, description, term, category_id) VALUES ('Robots', 'Catálogo de robots', 'ROBOTS', 5);
-insert into catalogues (name, description, term, category_id) VALUES ('Fragrance', 'Catálogo de perfumes', 'FRAGRANCE', 6);
-insert into catalogues (name, description, term, category_id) VALUES ('Sofas', 'Catálogo de sofas', 'SOFAS', 7);
-insert into catalogues (name, description, term, category_id) VALUES ('Spare parts', 'Catálogo de repuestos', 'SPARE_PARTS', 8);
-insert into catalogues (name, description, term, category_id) VALUES ('Balls', 'Catálogo de balones', 'BALLS', 9);
-insert into catalogues (name, description, term, category_id) VALUES ('Washing machine', 'Catálogo de lavadoras', 'WASHING_MACHINE', 10);
-insert into catalogues (name, description, term, category_id) VALUES ('Music instruments', 'Catálogo de instrumentos musicales', 'MUSIC_INSTRUMENTS', 11);
-insert into catalogues (name, description, term, category_id) VALUES ('Consoles', 'Catálogo de consolas', 'CONSOLES', 12);
+insert into catalogues (name, description, term, category_id, status_id) VALUES ('Computers', 'Catálogo de Computadoras', 'COMPUTERS', 1,1);
+insert into catalogues (name, description, term, category_id, status_id) VALUES ('Smarthphones', 'Catálogo de smarthphones', 'SMARTHPHONES', 1,1);
+insert into catalogues (name, description, term, category_id, status_id) VALUES ('Shirt', 'Catálogo de camisas', 'SHIRT', 2,1);
+insert into catalogues (name, description, term, category_id, status_id) VALUES ('Pants', 'Catálogo de pantalones', 'PANTS', 2,1);
+insert into catalogues (name, description, term, category_id, status_id) VALUES ('Wood', 'Catálogo de maderas', 'WOOD', 3,1);
+insert into catalogues (name, description, term, category_id, status_id) VALUES ('Bracelects', 'Catálogo de pulseras', 'BRACELETS', 4,1);
+insert into catalogues (name, description, term, category_id, status_id) VALUES ('Robots', 'Catálogo de robots', 'ROBOTS', 5,1);
+insert into catalogues (name, description, term, category_id, status_id) VALUES ('Fragrance', 'Catálogo de perfumes', 'FRAGRANCE', 6,1);
+insert into catalogues (name, description, term, category_id, status_id) VALUES ('Sofas', 'Catálogo de sofas', 'SOFAS', 7,1);
+insert into catalogues (name, description, term, category_id, status_id) VALUES ('Spare parts', 'Catálogo de repuestos', 'SPARE_PARTS', 8,1);
+insert into catalogues (name, description, term, category_id, status_id) VALUES ('Balls', 'Catálogo de balones', 'BALLS', 9,1);
+insert into catalogues (name, description, term, category_id, status_id) VALUES ('Washing machine', 'Catálogo de lavadoras', 'WASHING_MACHINE', 10,1);
+insert into catalogues (name, description, term, category_id, status_id) VALUES ('Music instruments', 'Catálogo de instrumentos musicales', 'MUSIC_INSTRUMENTS', 11,1);
+insert into catalogues (name, description, term, category_id, status_id) VALUES ('Consoles', 'Catálogo de consolas', 'CONSOLES', 12,1);
 
 insert into product_catalogues (catalogue_id, product_id) VALUES (1, 1);
 insert into product_catalogues (catalogue_id, product_id) VALUES (1, 2);

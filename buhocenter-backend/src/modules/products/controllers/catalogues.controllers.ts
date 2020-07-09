@@ -10,6 +10,7 @@ import {
     Res,
     HttpStatus,
     Patch,
+    Delete,
 } from '@nestjs/common';
 import { ProductsService } from '../services/products.service';
 import { Response } from 'express';
@@ -18,6 +19,8 @@ import { Logger } from 'winston';
 import { ProductTransactionsRepository } from '../transaction/products.transaction.service';
 import { Brand } from '../entities/brand.entity';
 import { categoryDto } from '../dto/products.dto';
+import { Catalogue } from '../entities/catalogue.entity';
+import { CataloguesService } from '../services/catalogues.service';
 
 @Controller('catalogues')
 export class CataloguesController {
@@ -25,6 +28,7 @@ export class CataloguesController {
         @Inject(WINSTON_MODULE_PROVIDER) private readonly logger: Logger,
         @Inject(ProductTransactionsRepository)
         private readonly productTransactionsRepository: ProductTransactionsRepository,
+        private readonly cataloguesService: CataloguesService,
     ) {}
 
     @Get()
@@ -45,19 +49,20 @@ export class CataloguesController {
     }
 
     @Post()
-    async saveCatalogue(@Res() res: Response, @Body() body: categoryDto): Promise<Response> {
-        this.logger.info(`getCatalogues:associating Catalogue`, {
+    async createCatalogue(@Body() catalogue: Catalogue): Promise<Catalogue> {
+        this.logger.info(`createCatalogue: Creating a catalogue `, {
             context: CataloguesController.name,
         });
-        try {
-            let catalogues = await this.productTransactionsRepository.catalogueSaveControl(body);
-            return res.status(HttpStatus.OK).send({ catalogues });
-        } catch (e) {
-            this.logger.info(
-                `getCatalogues: error when trying to get associate catalogue[error=${e.message}]`,
-                { context: CataloguesController.name },
-            );
-            return res.status(HttpStatus.BAD_REQUEST).send();
-        }
+
+        return await this.cataloguesService.createCatalogue(catalogue);
+    }
+
+    @Delete(':id')
+    async deleteCatalogue(@Param('id', new ParseIntPipe()) catalogueId: number): Promise<Boolean> {
+        this.logger.info(`deleteCatalogue: Deleting a catalogue `, {
+            context: CataloguesController.name,
+        });
+
+        return await this.cataloguesService.deleteCatalogue(catalogueId);
     }
 }

@@ -127,23 +127,19 @@ export class ProductsService {
             context: ProductsService.name,
         });
 
-        const product: Product = await this.productsRepository.findOne({
+        return await this.productsRepository.findOne({
             where: { id },
             relations: [
+                'status',
                 'productPhotos',
+                'productInventory',
                 'provider',
                 'productDimension',
                 'brand',
                 'offer',
-                'productQuestions',
+                'productRatings',
             ],
         });
-
-        await this.getProductAverageRating([product]);
-
-        product.productInventory = await this.getProductInventoryAvailability(id);
-
-        return product;
     }
 
     /**
@@ -216,7 +212,7 @@ export class ProductsService {
             context: ProductsService.name,
         });
         let products: Product[] = await this.productsRepository.find({
-            where: `status_id = ${STATUS.ACTIVE.id}`,
+            where: `products.status_id = ${STATUS.ACTIVE.id}`,
             join: {
                 alias: 'products',
                 innerJoinAndSelect: {
@@ -572,7 +568,6 @@ export class ProductsService {
 
             let today = new Date();
             let currentTime = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
-            let totalPrice;
 
             // Define font files
             var fonts = {
@@ -592,7 +587,6 @@ export class ProductsService {
             var PdfPrinter = require('pdfmake');
             var printer = new PdfPrinter(fonts);
             var fs = require('fs');
-            let prueba = 'sucasas';
             //let buhocenterLogo = await this.convertImageToDataURL(path.resolve(__dirname,'../../../../pdf','assets','Logo-completo.png'),100);
 
             var docDefinition = {
@@ -876,7 +870,7 @@ export class ProductsService {
             );
             pdfDoc.end();
 
-            return paymentId;
+            return pdfDoc;
         } catch (e) {
             this.logger.error(
                 `sendPdf: error when trying to create the pdf of the order with id[orderId =${paymentId}]|error=${JSON.stringify(
@@ -888,8 +882,6 @@ export class ProductsService {
             );
 
             throw new BadRequestException('error when trying to create the pdf of the order...');
-
-            return false;
         }
     }
 
