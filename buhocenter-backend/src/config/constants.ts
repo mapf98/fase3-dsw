@@ -117,3 +117,8 @@ export const PAGINATE = Object.freeze({
     START: 1,
     LIMIT: 9,
 });
+
+export const SYNCHRONIZATION_STATUS = Object.freeze({
+    WITHOUT_NOTIFICATION: 'NOT NOTIFIED',
+    NOTIFIED: 'NOTIFIED',
+});

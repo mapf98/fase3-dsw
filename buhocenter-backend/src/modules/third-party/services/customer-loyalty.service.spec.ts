@@ -3,7 +3,7 @@ import { CustomerLoyaltyService } from './customer-loyalty.service';
 import { WinstonModule } from 'nest-winston';
 import { LoggerSettingsService } from '../../settings/services/logger.service';
 import { CustomerLoyaltyRepository } from '../repositories/customer-loyalty.repository';
-import {forwardRef, HttpModule} from '@nestjs/common';
+import { forwardRef, HttpModule } from '@nestjs/common';
 import { ConfigService } from '../../../config/config.service';
 import { LanguagesService } from '../../users/services/languages.service';
 import { LanguageRepository } from '../../users/repositories/language.repository';
@@ -18,10 +18,10 @@ import { JwtModule } from '@nestjs/jwt';
 import { SendGridModule } from '@anchan828/nest-sendgrid';
 import { CsvGenerator } from '../../documents/repositories/csv.generator';
 import { PetromilesClientsCsv } from '../../documents/infraestructure/csv/petromiles-clients.csv';
-import {UsersModule} from "../../users/users.module";
-import {ConfigModule} from "../../../config/config.module";
-import {SendPacketService} from "./send-packet.service";
-import {SendPacketRepository} from "../repositories/send-packet.repository";
+import { UsersModule } from '../../users/users.module';
+import { ConfigModule } from '../../../config/config.module';
+import { SendPacketService } from './send-packet.service';
+import { SendPacketRepository } from '../repositories/send-packet.repository';
 
 xdescribe('customer loyalty service', () => {
     let service: CustomerLoyaltyService;
@@ -47,7 +47,9 @@ xdescribe('customer loyalty service', () => {
                 },
             ],
             imports: [
-                HttpModule, forwardRef(() => UsersModule), ConfigModule,
+                HttpModule,
+                forwardRef(() => UsersModule),
+                ConfigModule,
                 SendGridModule.forRoot({
                     apikey: process.env.SENDGRID_API_KEY,
                 }),

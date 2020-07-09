@@ -12,11 +12,7 @@
                 </v-list-item>
             </v-fade-transition>
         </div>
-        <v-col
-            cols="12"
-            class="d-flex justify-center align-center"
-            v-else
-        >
+        <v-col cols="12" class="d-flex justify-center align-center" v-else>
             <v-progress-circular
                 class="justify-center mt-12"
                 :size="70"
@@ -36,16 +32,8 @@
                 <b>{{ GET_TOTAL_PRICE_CHECKOUT.toFixed(2) }}$</b>
             </v-card-actions>
             <v-card-actions>
-                <v-btn
-                    @click="checkout"
-                    color="primary"
-                    outlined
-                    class="btn-remove"
-                    :disabled="onCheckout"
-                >
-                    {{
-                    $t('PROCEED_CHECKOUT')
-                    }}
+                <v-btn @click="checkout" color="primary" outlined class="btn-remove" :disabled="onCheckout">
+                    {{ $t('PROCEED_CHECKOUT') }}
                 </v-btn>
             </v-card-actions>
         </v-card>

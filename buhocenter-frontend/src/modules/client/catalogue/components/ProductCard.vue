@@ -58,17 +58,13 @@
                             </v-col>
 
                             <v-col cols="9" class="pl-0 pb-0">
-                                 <v-row class="ma-0 fill-height title in-line space">
-                                            <div class="mr-4 ml-0">${{ item.price }}</div>
-                                            <div
-                                                v-if="item.tentativePoints"
-                                                style="font-size: 10px;"
-                                                class="in-line"
-                                            >
-                                                <img src="@/assets/petromiles-small.png" class="mr-2"/>
-                                                <div>{{ item.tentativePoints }} pts</div>
-                                            </div>
-                                        </v-row>
+                                <v-row class="ma-0 fill-height title in-line space">
+                                    <div class="mr-4 ml-0">${{ item.price }}</div>
+                                    <div v-if="item.tentativePoints" style="font-size: 10px;" class="in-line">
+                                        <img src="@/assets/petromiles-small.png" class="mr-2" />
+                                        <div>{{ item.tentativePoints }} pts</div>
+                                    </div>
+                                </v-row>
                             </v-col>
 
                             <v-col cols="9" class="pl-0">

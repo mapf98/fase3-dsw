@@ -395,7 +395,6 @@ export default class ItemDetail extends Vue {
     }
 
     async mounted(): Promise<void> {
-        
         let fetched = false;
         let photosLoaded = false;
         if (this.isProduct()) {

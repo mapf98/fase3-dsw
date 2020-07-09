@@ -1,5 +1,5 @@
 <template>
-     <v-row>
+    <v-row>
         <v-col class="d-flex justify-center">
             <h2>{{ $t('ORDERS') }}</h2>
         </v-col>

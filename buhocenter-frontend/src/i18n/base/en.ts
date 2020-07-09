@@ -228,6 +228,6 @@ export const terms = {
     PETROMILES_ERROR: 'Error linking the account with PetroMiles.',
     PETROMILES_UNLINK_SUCCESS: 'Account successfully dissociated from PetroMiles.',
     CART_EMPTY: 'Your cart is empty',
-    ATTEMPTS_P1: 'You have',  
+    ATTEMPTS_P1: 'You have',
     ATTEMPTS_P2: 'attempts left.',
 };

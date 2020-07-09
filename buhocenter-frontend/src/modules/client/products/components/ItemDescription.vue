@@ -37,17 +37,15 @@
             </div>
         </v-row>
         <v-row v-if="isProduct()" class="mx-auto d-flex align-center">
-            <v-col style="display:flex;align-items:center;">
+            <v-col style="display: flex; align-items: center;">
                 <h3>{{ $t('IN_STOCK') }}:</h3>
                 <p class="body-1 mx-2 my-0">
                     {{ this.GET_ITEM_DETAIL.productInventory.availableQuantity }}
                 </p>
             </v-col>
-            <v-col v-if="this.GET_ITEM_DETAIL.tentativePoints" style="display:flex;align-items:center;">
-                <img src="@/assets/petromiles.png" class="mr-2" style="width:25px;"/>
-                <p class="body-1 mx-2 my-0">
-                    {{ this.GET_ITEM_DETAIL.tentativePoints }} pts
-                </p>
+            <v-col v-if="this.GET_ITEM_DETAIL.tentativePoints" style="display: flex; align-items: center;">
+                <img src="@/assets/petromiles.png" class="mr-2" style="width: 25px;" />
+                <p class="body-1 mx-2 my-0">{{ this.GET_ITEM_DETAIL.tentativePoints }} pts</p>
             </v-col>
         </v-row>
         <v-row v-if="isProduct()" class="mx-auto d-flex align-center">
@@ -67,9 +65,6 @@ import { Product } from '@/modules/client/products/interfaces/products.interface
 
 @Component
 export default class ItemDescription extends Vue {
-
-  
-
     isProduct(): boolean {
         return this.$route.query.item === 'product';
     }

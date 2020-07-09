@@ -2,7 +2,7 @@ import { Injectable, Inject, BadRequestException, NotFoundException } from '@nes
 import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
 import { Logger } from 'winston';
 import { Product } from '../../products/entities/product.entity';
-import { CURRENCY } from '../../../config/constants';
+import { CURRENCY, SYNCHRONIZATION_STATUS } from '../../../config/constants';
 import { CustomerLoyaltyActions } from '../enums/customer-loyalty-actions.enum';
 import { CustomerLoyaltyItems } from '../interfaces/customer-loyalty-items';
 import { CustomerLoyaltyAccumulatePoints } from '../interfaces/customer-loyalty-accumulate-points';
@@ -23,6 +23,8 @@ import { Cart } from '../../carts/entities/cart.entity';
 import { CustomerLoyaltyUpdateProductPoints } from '../interfaces/customer-loyalty-update-product-points';
 import { ConfigKeys } from '../../../config/config.keys';
 import { ConfigService } from '../../../config/config.service';
+import { Payment } from '../../payments/entities/payment.entity';
+import { getRepository, IsNull, Not } from 'typeorm';
 
 @Injectable()
 export class CustomerLoyaltyService {
@@ -194,8 +196,8 @@ export class CustomerLoyaltyService {
 
         return await this.getProductsAccumulatedPoints(userProducts.products, user.loyaltySystemToken);
     }
-    
-     /*
+
+    /*
      * Validates if the user is member of the loyalty system
      * @param id user id to validate the associated account
      * @returns Promise<User>. User found and validated.
@@ -218,16 +220,79 @@ export class CustomerLoyaltyService {
         return false;
     }
 
+    private async retrieveDataToCsv(): Promise<ClientsCsvPetromilesInterface[]> {
+        this.logger.debug(`retrieveDataToCsv: retrieving payments`, {
+            context: CustomerLoyaltyService.name,
+        });
+        const paymentData: Payment[] = await getRepository(Payment).find({
+            where: {
+                loyaltySystemConfirmationId: Not(IsNull()),
+                loyaltySyncStatus: SYNCHRONIZATION_STATUS.WITHOUT_NOTIFICATION,
+            },
+            relations: ['carts', 'carts.user'],
+        });
+        this.logger.debug(`retrieveDataToCsv: retrieved payments [length=${paymentData.length}]`, {
+            context: CustomerLoyaltyService.name,
+        });
+
+        this.logger.debug(`retrieveDataToCsv: mapping payments in a Petromiles Body`, {
+            context: CustomerLoyaltyService.name,
+        });
+
+        return paymentData.map(i => {
+            return {
+                userEmail: i.carts[0].user.fidelityUserEmail,
+                apiKey: this.configService.get(ConfigKeys.PETROMILES_API_KEY),
+                accumulatedPoints: i.loyaltySystemPoints,
+                confirmationId: i.loyaltySystemConfirmationId,
+                pointsToDollars: i.loyaltySystemAmount,
+                date: i.loyaltySystemDate,
+                commission: i.loyaltySystemCommission,
+            };
+        });
+    }
+
+    private async updatePaymentsSync(clients: ClientsCsvPetromilesInterface[], file: string): Promise<void> {
+        this.logger.debug(`updatePaymentsSync: updating synchronization files on payments`, {
+            context: CustomerLoyaltyService.name,
+        });
+        const repository = getRepository(Payment);
+        for (const i of clients) {
+            await repository.update(
+                { loyaltySystemConfirmationId: i.confirmationId },
+                {
+                    fileWithLoyaltySyncData: file,
+                    loyaltySyncStatus: SYNCHRONIZATION_STATUS.NOTIFIED,
+                },
+            );
+        }
+    }
+
     /*
      * Generate csv with CSV generator
      * @returns Promise<ReadStream>
      */
     public async generateClientCsv(): Promise<ReadStream> {
-        const data: ClientsCsvPetromilesInterface[] = sendMock;
+        this.logger.debug(`generateClientCsv: clients csv`, {
+            context: CustomerLoyaltyService.name,
+        });
+
+        const data = await this.retrieveDataToCsv();
+
+        this.logger.debug(`generateClientCsv: generating the csv`, {
+            context: CustomerLoyaltyService.name,
+        });
         const fileName = `reports/csv/${new Date().toISOString()}.csv`;
         const file = this.csvGenerator.generate(data, fileName);
         const fileSent = await this.customerLoyaltyRepository.sendClientsCsv(file);
-        return file;
+
+        this.logger.debug(`generateClientCsv: updating`, {
+            context: CustomerLoyaltyService.name,
+        });
+
+        await this.updatePaymentsSync(data, fileName);
+
+        return this.csvGenerator.read(fileName);
     }
 
     /**

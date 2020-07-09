@@ -10,7 +10,7 @@ import { LanguagesService } from '../services/languages.service';
 import { LanguageRepository } from '../repositories/language.repository';
 import { SendGridModule, SendGridService } from '@anchan828/nest-sendgrid';
 import { AuthService } from '../../auth/services/auth.service';
-import {forwardRef, HttpModule, HttpService} from '@nestjs/common';
+import { forwardRef, HttpModule, HttpService } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { JwtStrategy } from '../../auth/strategies/jwt.strategy';

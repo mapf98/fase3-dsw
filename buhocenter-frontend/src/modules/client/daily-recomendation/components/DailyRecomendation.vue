@@ -48,7 +48,7 @@
                                                 style="font-size: 10px;"
                                                 class="in-line"
                                             >
-                                                <img src="@/assets/petromiles-small.png" class="mr-2"/>
+                                                <img src="@/assets/petromiles-small.png" class="mr-2" />
                                                 <div>{{ product.tentativePoints }} pts</div>
                                             </div>
                                         </v-row>

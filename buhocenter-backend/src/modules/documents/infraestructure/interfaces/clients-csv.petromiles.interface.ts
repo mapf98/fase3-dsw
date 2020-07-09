@@ -1,9 +1,9 @@
 export interface ClientsCsvPetromilesInterface {
-    confirmationId: number;
+    confirmationId: string;
     apiKey: string;
     date: string;
     userEmail: string;
-    pointsToDollars: number;
-    commission: number;
-    accumulatedPoints: number;
+    pointsToDollars: string;
+    commission: string;
+    accumulatedPoints: string;
 }

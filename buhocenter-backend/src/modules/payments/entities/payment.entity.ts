@@ -6,6 +6,7 @@ import { Commission } from './commission.entity';
 import { ForeignExchange } from '../../users/entities/foreign-exchange.entity';
 import { StatusHistory } from '../../status/entities/status-history.entity';
 import { Cart } from '../../carts/entities/cart.entity';
+import { SYNCHRONIZATION_STATUS } from '../../../config/constants';
 
 @Entity('payments')
 export class Payment extends PrimalEntity {
@@ -32,6 +33,16 @@ export class Payment extends PrimalEntity {
 
     @Column({ name: 'loyalty_system_points', type: 'text', nullable: true })
     loyaltySystemPoints: string;
+
+    @Column({
+        name: 'loyalty_sync_status',
+        type: 'text',
+        default: SYNCHRONIZATION_STATUS.WITHOUT_NOTIFICATION,
+    })
+    loyaltySyncStatus: string;
+
+    @Column({ name: 'file_with_loyalty_sync_data', type: 'text', nullable: true })
+    fileWithLoyaltySyncData: string;
 
     @JoinColumn({ name: 'address_id' })
     @ManyToOne(
