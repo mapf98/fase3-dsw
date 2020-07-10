@@ -43,5 +43,5 @@ export default new Vuex.Store({
         thirdParty,
         orders,
     },
-    plugins: [createPersistedState({ storage: window.sessionStorage })],
+    plugins: [createPersistedState()],
 });

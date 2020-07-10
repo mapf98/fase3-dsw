@@ -24,7 +24,7 @@ async function bootstrap() {
 
     app.setGlobalPrefix('/api/v1');
 
-    await app.listen(process.env.API_PORT);
+    await app.listen(process.env.PORT);
 
     if (module.hot) {
         module.hot.accept();

@@ -30,7 +30,7 @@ insert into users
     ('Angel', 'Sucasas', '1999-01-25 00:00:00.000000','angel@gmail.com', true, 1, 2, 1);
 insert into users
     (name, last_name, birthdate, email, is_federate, status_id, role_id, uid, foreign_exchange_id) VALUES
-    ('Admin', 'User', '1999-01-25 00:00:00.000000','admin@gmail.com', false, 1, 2, 'ppi0RqZ7RuTFdFSvIqf7cpuDppT2', 1);
+    ('Admin', 'User', '1999-01-25 00:00:00.000000','admin@gmail.com', false, 1, 2, 'pWyqVNhoitTERopK70ZxD5g88h73', 1);
 
 insert into providers (name) values ('Apple Products');
 insert into providers (name) values ('HP C.A');

@@ -5,7 +5,7 @@
     "scripts": {
         "serve": "npm run format && vue-cli-service serve",
         "format": "prettier --write \"src/**/*.ts\" \"src/**/*.vue\"",
-        "build": "npm version prerelease --force && vue-cli-service build --mode local",
+        "build": "vue-cli-service build",
         "build:dev": "npm version prepatch && npm run format && vue-cli-service build --mode development",
         "build:prod": "vue-cli-service build --mode production",
         "lint": "vue-cli-service lint",

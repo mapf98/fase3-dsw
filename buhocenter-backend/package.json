@@ -8,7 +8,7 @@
     "prebuild": "rimraf dist && npm run format",
     "build": "npm version prerelease --force && nest build",
     "build:dev": "npm version prepatch --force && nest build --mode development",
-    "build:prod": "nest build --mode production",
+    "build:prod": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "npm run format && nest start",
     "start:dev": "nest start --watch",

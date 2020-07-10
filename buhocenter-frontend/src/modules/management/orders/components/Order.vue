@@ -76,9 +76,7 @@
                         <b>{{ $t('ORDER_PROVIDER') }}</b> {{ product.product.provider.name }}
                     </p>
                     <p class="ma-0">
-                        <b>{{ $t('ORDER_PRODUCT_PRICE') }}</b> ${{ product.productPrice }} (- ${{
-                            product.offerPrice
-                        }})
+                        <b>{{ $t('ORDER_PRODUCT_PRICE') }}</b> ${{ product.productPrice }}
                     </p>
                     <p class="ma-0">
                         <b>{{ $t('ORDER_PRODUCT_QUANTITY') }}</b> {{ product.quantity }}
