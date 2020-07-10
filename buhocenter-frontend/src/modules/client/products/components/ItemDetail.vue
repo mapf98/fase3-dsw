@@ -3,6 +3,28 @@
         <v-row>
             <v-col cols="12" lg="9" md="8" sm="12">
                 <v-container fluid class="mt-5" style="max-width: none !important; width: 100%;">
+                    <v-row>
+                        <v-col
+                            cols="12"
+                            offset-lg="1"
+                            offset-md="1"
+                            offset-sm="0"
+                            col-lg="10"
+                            col-md="10"
+                            col-sm="12"
+                        >
+                            <p class="overline font-weight-light caption" style="word-break: break-word;">
+                                <RouterLink :to="`/catalogues?category_id=${GET_CATEGORY_ID}`">
+                                    {{ $t(GET_CATEGORY) }} </RouterLink
+                                >>
+                                <RouterLink
+                                    :to="`/products?category_id=${GET_CATEGORY_ID}&catalogue_id=${GET_CATALOGUE_ID}`"
+                                >
+                                    {{ $t(GET_CATALOGUE) }}
+                                </RouterLink>
+                            </p>
+                        </v-col>
+                    </v-row>
                     <v-row v-if="itemDetailLoaded" class="pa-0">
                         <v-col cols="12" lg="1" md="1" sm="2" class="justify-center ma-0">
                             <div v-for="photo in GET_ITEM_DETAIL.productPhotos" :key="photo.imageUrl">

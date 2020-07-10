@@ -1,6 +1,6 @@
 <template>
     <div class="container-page" style="position: relative;">
-        <v-row>
+         <v-row>
             <v-col class="d-flex justify-center">
                 <h2>{{ $t('PRODUCTS') }}</h2>
             </v-col>
@@ -20,6 +20,7 @@
             <template v-slot:top>
                 <v-toolbar flat color="white">
                     <v-row>
+                        
                         <v-col class="d-flex justify-end">
                             <v-text-field
                                 v-model="search"
@@ -114,7 +115,7 @@ export default class DashboardProducts extends Vue {
     }
 
     async showAllProducts(): Promise<void> {
-        await this.FETCH_ALL_PRODUCTS({ start: 1, limit: 100, admin: true });
+        await this.FETCH_ALL_PRODUCTS({ start: 1, limit: 100 });
         this.management = !this.management;
     }
 
@@ -148,7 +149,7 @@ export default class DashboardProducts extends Vue {
     }
 
     async mounted(): Promise<void> {
-        await this.FETCH_ALL_PRODUCTS({ start: 1, limit: 100, admin: true });
+        await this.FETCH_ALL_PRODUCTS({ start: 1, limit: 100 });
     }
 
     @products.Getter(ProductsTypes.getters.GET_PRODUCTS)

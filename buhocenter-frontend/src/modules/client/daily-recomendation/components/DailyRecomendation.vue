@@ -41,27 +41,21 @@
                                     </v-col>
 
                                     <v-col cols="9" class="pl-0 pb-0 pt-0">
-                                        <div
-                                            class="ma-0 mb-2"
-                                            style="
-                                                display: flex;
-                                                align-items: center;
-                                                justify-content: space-between;
-                                            "
-                                        >
-                                            <div class="mr-4" style="bottom: 0; font-size: 20px;">
+                                        <v-row class="ma-0 fill-height title in-line space">
+                                            <div class="mr-4 ml-0 mb-9" style="position: absolute; bottom: 0;">
                                                 {{ product.price | getCurrentExchangeWithSymbolFor }}
                                             </div>
                                             <div
                                                 v-if="product.tentativePoints"
-                                                style="display: flex; align-items: center; font-size: 15px;"
+                                                style="font-size: 10px;"
+                                                class="in-line"
                                             >
                                                 <img src="@/assets/petromiles-small.png" class="mr-2" />
-                                                <div style="font-size: 15px;">
+                                                <div style="font-size: 13px;">
                                                     {{ product.tentativePoints }} pts
                                                 </div>
                                             </div>
-                                        </div>
+                                        </v-row>
                                     </v-col>
 
                                     <v-col cols="9" class="pr-0">

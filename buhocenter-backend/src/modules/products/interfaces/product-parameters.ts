@@ -7,7 +7,6 @@ export interface ProductParameters {
     offerId?: number;
     catalogueId?: number;
     categoryId?: number;
-    admin?: boolean;
     limit: number;
     start: number;
 }

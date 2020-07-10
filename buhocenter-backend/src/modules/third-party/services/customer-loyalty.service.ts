@@ -2,7 +2,7 @@ import { Injectable, Inject, BadRequestException, NotFoundException } from '@nes
 import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
 import { Logger } from 'winston';
 import { Product } from '../../products/entities/product.entity';
-import {CURRENCY, STATUS, SYNCHRONIZATION_STATUS} from '../../../config/constants';
+import { CURRENCY, SYNCHRONIZATION_STATUS } from '../../../config/constants';
 import { CustomerLoyaltyActions } from '../enums/customer-loyalty-actions.enum';
 import { CustomerLoyaltyItems } from '../interfaces/customer-loyalty-items';
 import { CustomerLoyaltyAccumulatePoints } from '../interfaces/customer-loyalty-accumulate-points';
@@ -164,8 +164,8 @@ export class CustomerLoyaltyService {
             context: CustomerLoyaltyService.name,
         });
 
-        const items: CustomerLoyaltyItems[] = carts.map(cart => {
-            const price = cart.productPrice * cart.quantity;
+        let items: CustomerLoyaltyItems[] = carts.map(cart => {
+            let price = cart.productPrice * cart.quantity;
 
             return {
                 id: `${cart.id}`,
@@ -230,16 +230,13 @@ export class CustomerLoyaltyService {
         this.logger.debug(`retrieveDataToCsv: retrieving payments`, {
             context: CustomerLoyaltyService.name,
         });
-        let paymentData: Payment[] = await getRepository(Payment).find({
+        const paymentData: Payment[] = await getRepository(Payment).find({
             where: {
                 loyaltySystemConfirmationId: Not(IsNull()),
                 loyaltySyncStatus: SYNCHRONIZATION_STATUS.WITHOUT_NOTIFICATION,
             },
-            relations: ['carts', 'carts.user', 'statusHistories', 'statusHistories.status'],
+            relations: ['carts', 'carts.user'],
         });
-
-        paymentData = paymentData.filter((i) => i.statusHistories.find((j) => j.status.id === STATUS.PAID.id));
-
         this.logger.debug(`retrieveDataToCsv: retrieved payments [length=${paymentData.length}]`, {
             context: CustomerLoyaltyService.name,
         });

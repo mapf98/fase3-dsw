@@ -8,7 +8,7 @@
                 <ProductCard />
                 <v-pagination
                     class="mt-6"
-                    v-if="HowManyPages > 0 && GET_PRODUCTS_AND_PHOTOS_LOADED"
+                    v-if="HowManyPages > 0"
                     color="primary"
                     v-model="page"
                     :length="getLength"

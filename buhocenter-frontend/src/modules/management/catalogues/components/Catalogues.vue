@@ -57,7 +57,7 @@
                                     </p>
                                 </v-col>
                                 <v-col>
-                                    <p>Status</p>
+                                    <p>STATUS</p>
                                     <p class="black--text mt-n2">
                                         {{ catalogue.status.name }}
                                     </p>
@@ -116,7 +116,8 @@
                     <v-card-title>
                         <v-icon large color="primary" class="mr-4">mdi-shape-outline</v-icon>
                         <span class="headline"
-                            >{{ $t('CREATE_CATALOGUE_FOR') }} {{ $t(currentCategory.term) }}</span
+                            >{{ $t('CREATE_CATALOGUE_FOR') }}
+                            {{ $t(currentCategory.term).toUpperCase() }}</span
                         >
                     </v-card-title>
                     <v-divider></v-divider>
@@ -124,7 +125,7 @@
                         <v-row>
                             <v-col>
                                 <v-text-field
-                                    label="Name your catalogue"
+                                    label="Name your product"
                                     v-model="catalogueName"
                                     class="mr-2"
                                 ></v-text-field>
@@ -149,23 +150,21 @@
                             </v-col>
                             <v-col cols="4">
                                 <v-radio-group v-model="catalogueStatus" row>
-                                    <v-radio label="Active" :value="1"></v-radio>
-                                    <v-radio label="Inactive" :value="2"></v-radio>
+                                    <v-radio label="ACTIVE" :value="1"></v-radio>
+                                    <v-radio label="INACTIVE" :value="2"></v-radio>
                                 </v-radio-group>
                             </v-col>
                         </v-row>
                     </div>
                     <v-divider></v-divider>
-                    <v-row>
-                        <v-spacer></v-spacer>
-                        <v-btn
-                            :disabled="!validateForm"
-                            color="primary"
-                            class="mx-3 mt-4 mb-4 mr-8"
-                            @click="createCatalogue()"
-                            >{{ $t('CREATE_CATALOGUE') }}</v-btn
-                        >
-                    </v-row>
+                    <v-spacer></v-spacer>
+                    <v-btn
+                        :disabled="!validateForm"
+                        color="primary"
+                        class="mx-3 mt-4 mb-4"
+                        @click="createCatalogue()"
+                        >{{ $t('CREATE_CATALOGUE') }}</v-btn
+                    >
                 </v-card>
             </v-dialog>
         </v-row>

@@ -187,11 +187,8 @@ export class ProductsService {
             query.andWhere('catalogue.id = :catalogueId', { catalogueId: parameters.catalogueId });
         !parameters.categoryId ||
             query.andWhere('category.id = :categoryId', { categoryId: parameters.categoryId });
-        
-        if (!parameters.admin) {
-            query.andWhere('productInventory.availableQuantity - productInventory.minimumAvailableQuantity > 0');
-            query.andWhere('status.id = :statusId', { statusId: STATUS.ACTIVE.id });
-        }
+        query.andWhere('productInventory.availableQuantity - productInventory.minimumAvailableQuantity > 0');
+        query.andWhere('status.id = :statusId', { statusId: STATUS.ACTIVE.id });
 
         const products: Product[] = await query
             .skip(parameters.start)

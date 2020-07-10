@@ -65,7 +65,6 @@
                             @change="previewImage(index, $event)"
                             prepend-icon="mdi-camera"
                             counter
-                            :clearable="canDeletePhotos(index)"
                             dense
                             outlined
                             :rules="[rules.requiredPhoto(index, product.productPhotos[0].content)]"
@@ -141,7 +140,6 @@
                             outlined
                             v-model="category"
                             :items="categoryItems"
-                            :disabled="canSelectCatalogues()"
                             item-text="name"
                             :label="$t('CATEGORIES')"
                             @change="filterCatalogues()"
@@ -152,7 +150,6 @@
                             outlined
                             v-model="product.productCatalogues"
                             :items="catalogues"
-                            :disabled="canSelectCatalogues()"
                             item-value="id"
                             item-text="name"
                             :label="$t('CATALOGUES')"
@@ -365,14 +362,6 @@ export default class ProductManagement extends Vue {
         },
         photosFiles: this.photosFiles,
     };
-
-    canDeletePhotos(index) {
-        return this.item && this.item.productPhotos[index] ? false : true;
-    }
-
-    canSelectCatalogues() {
-        return this.item ? true : false; 
-    }
 
     async mounted(): Promise<void> {
         await this.FETCH_CATEGORIES();

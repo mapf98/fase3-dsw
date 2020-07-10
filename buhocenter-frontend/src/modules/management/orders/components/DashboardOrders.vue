@@ -5,14 +5,13 @@
                 <h2>{{ $t('ORDERS') }}</h2>
             </v-col>
         </v-row>
-        <v-divider v-if="!showPagination"></v-divider>
         <v-row v-if="!showPagination">
             <v-col>
                 <v-alert
                     type="info"
                     elevation="1"
                     class="my-3 mx-12"
-                    color="primary"
+                    color="blue darken-1"
                     dense
                     transition="slide-x-transition"
                 >
@@ -85,12 +84,4 @@ export default class DashboardOrders extends Vue {
     private QUANTITY!: number;
 }
 </script>
-<style lang="scss" scoped>
-.no-orders {
-    text-align: center;
-    color: rgb(133, 133, 133);
-    font-size: 25px;
-    font-style: unset;
-    margin:100px auto;
-}
-</style>
+<style></style>

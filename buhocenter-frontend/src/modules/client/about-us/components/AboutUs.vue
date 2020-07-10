@@ -39,7 +39,7 @@
                         </v-card-subtitle>
 
                         <v-card-actions class="justify-center">
-                            <RouterLink to="/products" style="text-decoration: none;">
+                            <RouterLink to="/sign-in" style="text-decoration: none;">
                                 <v-btn color="primary"> {{ $t('GO_SHOPPING') }}</v-btn>
                             </RouterLink>
                         </v-card-actions>

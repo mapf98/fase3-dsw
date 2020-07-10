@@ -76,7 +76,7 @@
                     {{ error }}
                 </li>
             </ul>
-            <v-btn color="white" text @click="closeSnack()" small>
+            <v-btn color="white" text @click="snackbarError = false" small>
                 {{ $t('CLOSE') }}
             </v-btn>
         </v-snackbar>
@@ -109,11 +109,6 @@ export default class Login extends Vue {
     }
     snackbar = false;
 
-    closeSnack() {
-        this.snackbarError = false;
-        this.errors.splice(0);
-    }
-
     async loginWithSocial(social: string) {
         await this.loginSocial(social);
         const token: string = this.getToken;
@@ -124,9 +119,7 @@ export default class Login extends Vue {
     }
 
     async submitLogin() {
-        if (this.errors.length > 0) {
-            this.showErrors();
-        }
+        this.showErrors();
         this.isLoading = true;
         await this.login({
             email: this.email,

@@ -84,7 +84,7 @@
                                             contain
                                         ></v-img>
                                     </div>
-                                    <a :href="order.trackingUrl" target="_blank" class="mx-3">Track package in ShipThis</a>
+                                    <a :href="order.trackingUrl" class="mx-3">Track package in ShipThis</a>
                                 </div>
                                 <v-btn
                                     small
