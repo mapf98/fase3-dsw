@@ -34,7 +34,8 @@
             >
                 <v-card
                     class="d-inline-block"
-                    style="width: 100%; height: 500px;"
+                    height="450"
+                    width="300"
                     @click="getItemDetail(item)"
                     v-if="GET_PRODUCTS_AND_PHOTOS_LOADED"
                 >
@@ -58,13 +59,29 @@
                             </v-col>
 
                             <v-col cols="9" class="pl-0 pb-0">
-                                <v-row class="ma-0 fill-height title in-line space">
-                                    <div class="mr-4 ml-0 mb-12" style="position: absolute; bottom: 0;">{{ item.price | getCurrentExchangeWithSymbolFor }}</div>
-                                    <div v-if="item.tentativePoints" style="font-size: 15px;" class="in-line">
-                                        <img src="@/assets/petromiles-small.png" class="mr-2" />
-                                        <div>{{ item.tentativePoints }} pts</div>
+                                <div
+                                    class="ma-0 mb-4"
+                                    style="
+                                        display: flex;
+                                        align-items: center;
+                                        justify-content: space-between;
+                                        position: absolute;
+                                        bottom: 0;
+                                    "
+                                >
+                                    <div class="mr-4 mb-8" style="bottom: 0; font-size: 20px;">
+                                        {{ item.price | getCurrentExchangeWithSymbolFor }}
                                     </div>
-                                </v-row>
+                                    <div
+                                        v-if="item.tentativePoints"
+                                        style="display: flex; align-items: center; font-size: 15px;"
+                                    >
+                                        <img src="@/assets/petromiles-small.png" class="mr-2 mb-8" />
+                                        <div style="font-size: 15px;" class="mb-8">
+                                            {{ item.tentativePoints }} pts
+                                        </div>
+                                    </div>
+                                </div>
                             </v-col>
 
                             <v-col cols="9" class="pl-0">

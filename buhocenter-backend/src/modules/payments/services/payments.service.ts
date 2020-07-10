@@ -68,11 +68,21 @@ export class PaymentsService {
 
         let payment: Payment = new Payment();
 
+        let packageShippingOrder;
+
+        this.logger.debug(`createOrder: Sending the order to Shipping System`, {
+            context: PaymentsService.name,
+        });
+        packageShippingOrder = await this.packageShippingService.createShippingOrder(user, checkout);
+        payment.trackingUrl = packageShippingOrder.tracking_URL;
+
         let cartsWithPoints: Cart[] = checkout.cartsForPayment.filter(cart => cart.productPoints > 0);
 
         if (user.loyaltySystemToken && cartsWithPoints.length > 0) {
             let response: CustomerLoyaltyAccumulatePointsResponse;
-
+            this.logger.debug(`createOrder: Sending the order to Loyalty System`, {
+                context: PaymentsService.name,
+            });
             try {
                 response = await this.customerLoyaltyService.accumulatePoints(
                     cartsWithPoints,
@@ -116,7 +126,6 @@ export class PaymentsService {
         payment.statusHistories = [statusHistory];
 
         let order: NewOrder;
-        let packageShippingOrder;
 
         await getManager().transaction(async transactionEntityManager => {
             try {
@@ -125,10 +134,11 @@ export class PaymentsService {
                     Payment,
                 );
                 await paymentTransactionRepository.save(payment);
+                this.logger.debug(`createOrder: Sending the order to payment gateway`, {
+                    context: PaymentsService.name,
+                });
                 order = await this.paymentClient.createOrder(payment.id, payment.total);
                 payment.transaction = order.id;
-                packageShippingOrder = await this.packageShippingService.createShippingOrder(user, checkout);
-                payment.trackingUrl = packageShippingOrder.tracking_URL;
                 await paymentTransactionRepository.save(payment);
             } catch (error) {
                 throw error;

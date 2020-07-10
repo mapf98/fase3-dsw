@@ -325,12 +325,18 @@ export default class Aside extends Vue {
     getProductsByPrice(productPrice: number): void {
         if (productPrice !== undefined) this.filter.price = productPrice;
         else this.filter.price = undefined;
+        if (this.$router.currentRoute.query.catalogue_id) {
+            this.filter.catalogueId = this.getCatalogueId;
+        }
         this.$emit('refreshProducts', this.filter);
     }
 
     getProductsByRating(productRating: number): void {
         if (productRating !== undefined) this.filter.rating = productRating;
         else this.filter.rating = undefined;
+        if (this.$router.currentRoute.query.catalogue_id) {
+            this.filter.catalogueId = this.getCatalogueId;
+        }
         this.$emit('refreshProducts', this.filter);
     }
 

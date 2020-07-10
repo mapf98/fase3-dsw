@@ -25,7 +25,7 @@ export class AllExceptionsFilter implements ExceptionFilter {
             exception instanceof HttpException ? exception.getStatus() : HttpStatus.INTERNAL_SERVER_ERROR;
 
         this.logger.error(
-            `ERROR: ${status}|PATH: ${request.url}|NAME: ${exception['name']}|MESSAGE: ${exception['message'].message}`,
+            `ERROR: ${status}|PATH: ${request.url}|NAME: ${exception['name']}|MESSAGE: ${exception['message'].message}|EXCEPTION: ${exception}`,
             {
                 context: AllExceptionsFilter.name,
             },
