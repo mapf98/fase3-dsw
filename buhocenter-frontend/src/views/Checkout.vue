@@ -236,9 +236,9 @@ export default class Checkout extends Vue {
             productPrice: number;
             offerPrice: number;
             productPoints: number | undefined;
-            hasInsurance: boolean | undefined;
             product: {
                 id: number;
+                hasInsurance: boolean | undefined;
                 fragile: boolean | undefined;
                 description: string | undefined;
                 productDimensions: {
@@ -256,7 +256,6 @@ export default class Checkout extends Vue {
                     id,
                     quantity: quantity,
                     productPrice: product?.price,
-                    hasInsurance: product?.hasInsurance,
                     offerPrice:
                         product?.offer && product?.offer.discountPrice
                             ? product?.offer.discountPric
@@ -264,6 +263,7 @@ export default class Checkout extends Vue {
                     productPoints: product?.canAccumulatePoints ? product.tentativePoints : 0,
                     product: {
                         id: product?.id,
+                        hasInsurance: product?.hasInsurance,
                         fragile: product?.fragile,
                         description: product?.name,
                         productDimensions: {
