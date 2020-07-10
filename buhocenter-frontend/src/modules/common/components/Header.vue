@@ -8,7 +8,9 @@
             right
             temporary
         >
-            <v-icon large color="primary" class="mt-3 ml-3" @click="drawer = false"> mdi-window-close </v-icon>
+            <v-icon large color="primary" class="mt-3 ml-3" @click="drawer = false">
+                mdi-window-close
+            </v-icon>
             <Cart></Cart>
         </v-navigation-drawer>
 
@@ -32,7 +34,7 @@
 
             <v-spacer />
 
-            <div class="pr-3 hidden-sm-and-down">
+            <div class="pr-3 hidden-sm-and-down" v-if="inDashboard">
                 <SearchBar size="large" />
             </div>
             <div class="mr-2 ml-4 hidden-sm-and-down">
@@ -134,6 +136,7 @@ export default class Header extends Vue {
         this.drawer = !this.drawer;
     }
 
+    inDashboard = true;
     drawer = false;
     dialog = false;
     menu = false;
@@ -160,7 +163,19 @@ export default class Header extends Vue {
         this.$router.currentRoute.path != '/home' ? this.$router.push('/home') : false;
     }
 
+    @Watch('$route')
+    offSearchBox(): void {
+        this.inDashboard = true;
+        let path = this.$router.currentRoute.path.split('/');
+        path.forEach((element) => {
+            if (element == 'dashboard') {
+                this.inDashboard = false;
+            }
+        });
+    }
+
     async mounted(): Promise<void> {
+        this.offSearchBox();
         if (this.getLanguages.length === 0) {
             await this.apiGetLanguages();
             this.snackbar = this.getErrLanguages;

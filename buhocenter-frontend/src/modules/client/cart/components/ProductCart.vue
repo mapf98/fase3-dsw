@@ -9,7 +9,7 @@
                             item.product.name
                         }}</v-list-item-title>
                         <v-list-item-icon
-                            ><v-img :src="item.product.imageUrl" contain></v-img
+                            ><v-img :src="item.product.imageUrl" contain width="100"></v-img
                         ></v-list-item-icon>
                         <v-list-item-subtitle>{{ item.product.description }}</v-list-item-subtitle>
                         <v-list-item-title class="headline mb-1 subtitle-1">
