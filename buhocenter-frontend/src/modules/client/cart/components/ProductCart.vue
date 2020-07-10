@@ -1,20 +1,25 @@
 <template>
     <v-card class="mx-auto" max-width="344" outlined>
         <v-list-item three-line>
-            <v-list-item-content>
-                <div class="overline mb-4">{{ getProvider() }}</div>
-                <v-list-item-title class="headline mb-1 subtitle-1">{{
-                    item.product.name
-                }}</v-list-item-title>
-                <v-list-item-subtitle>{{ item.product.description }}</v-list-item-subtitle>
-                <v-list-item-title class="headline mb-1 subtitle-1">
-                    <span :class="{ title: true, 'item-offer__title': hasOffer() }">{{
-                        item.product.price | getCurrentExchangeWithSymbolFor
-                    }}</span>
-                    <span v-if="hasOffer()" class="title">
-                        {{ getDiscountPrice() | getCurrentExchangeWithSymbolFor }}
-                    </span>
-                </v-list-item-title>
+            <v-list-item-content class="d-flex justify-center">
+                <v-col>
+                    <v-row>
+                        <div class="overline mb-4">{{ getProvider() }}</div>
+                        <v-list-item-title class="headline mb-1 subtitle-1">{{
+                            item.product.name
+                        }}</v-list-item-title>
+                        <v-list-item-icon
+                            ><v-img :src="item.product.imageUrl" contain></v-img
+                        ></v-list-item-icon>
+                        <v-list-item-subtitle>{{ item.product.description }}</v-list-item-subtitle>
+                        <v-list-item-title class="headline mb-1 subtitle-1">
+                            <span :class="{ title: true, 'item-offer__title': hasOffer() }"
+                                >${{ item.product.price }}</span
+                            >
+                            <span v-if="hasOffer()" class="title"> ${{ getDiscountPrice() }} </span>
+                        </v-list-item-title>
+                    </v-row>
+                </v-col>
             </v-list-item-content>
 
             <v-list-item-avatar tile size="80" color="grey">
@@ -42,7 +47,7 @@
                         :items="getProductStock"
                         @change="changeQuantity()"
                         :x-small="$vuetify.breakpoint.mdAndDown"
-                        :label="$t('QUANTITY')"
+                        :label="this.quantity"
                         height="30"
                         primary
                         dense
@@ -95,6 +100,7 @@ export default class ProductCart extends Vue {
         //this.stock= this.getProductStock();
         const index = this.GET_PRODUCTS_CHECKOUT.findIndex((productCart) => productCart.id == this.item.id);
         this.checkbox = index !== -1;
+        console.log(this.item);
     }
 
     changeQuantity() {

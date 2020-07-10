@@ -1,5 +1,10 @@
 <template>
     <div class="container-page" style="position: relative;">
+         <v-row>
+            <v-col class="d-flex justify-center">
+                <h2>{{ $t('PRODUCTS') }}</h2>
+            </v-col>
+        </v-row>
         <v-row v-if="$vuetify.breakpoint.smAndDown && !management">
             <v-col class="d-flex justify-center">
                 <v-btn @click="createProduct" color="primary" dark class>{{ $t('NEW_PRODUCT') }}</v-btn>
@@ -15,9 +20,7 @@
             <template v-slot:top>
                 <v-toolbar flat color="white">
                     <v-row>
-                        <v-col>
-                            <v-toolbar-title>{{ $t('PRODUCTS') }}</v-toolbar-title>
-                        </v-col>
+                        
                         <v-col class="d-flex justify-end">
                             <v-text-field
                                 v-model="search"

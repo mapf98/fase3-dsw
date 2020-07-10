@@ -10,7 +10,7 @@
                     :src="require('@/assets/images/petromiles-bg-2.png')"
                     link="petromiles"
                 />
-                <Card name="Ship this" :src="require('@/assets/images/shipthis-bg-2.png')" link="shipthis" />
+                <Card name="Ship This" :src="require('@/assets/images/shipthis-bg-2.png')" link="shipthis" />
             </v-row>
         </v-container>
     </div>

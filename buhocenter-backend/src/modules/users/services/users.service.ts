@@ -195,7 +195,6 @@ export class UsersService {
                     email: data.clientData.email,
                     token: data.token,
                     is_federate: true,
-                    cellphone: customerSave.cellphone,
                     foreignExchange: { id: FOREIGN_EXCHANGES.USD.id },
                     status: {
                         id: STATUS.ACTIVE.id,

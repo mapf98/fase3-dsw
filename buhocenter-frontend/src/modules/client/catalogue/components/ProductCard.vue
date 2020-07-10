@@ -59,10 +59,8 @@
 
                             <v-col cols="9" class="pl-0 pb-0">
                                 <v-row class="ma-0 fill-height title in-line space">
-                                    <div class="mr-4 ml-0">
-                                        {{ item.price | getCurrentExchangeWithSymbolFor }}
-                                    </div>
-                                    <div v-if="item.tentativePoints" style="font-size: 10px;" class="in-line">
+                                    <div class="mr-4 ml-0 mb-12" style="position: absolute; bottom: 0;">{{ item.price | getCurrentExchangeWithSymbolFor }}</div>
+                                    <div v-if="item.tentativePoints" style="font-size: 15px;" class="in-line">
                                         <img src="@/assets/petromiles-small.png" class="mr-2" />
                                         <div>{{ item.tentativePoints }} pts</div>
                                     </div>
@@ -80,6 +78,8 @@
                                         readonly
                                         :size="$vuetify.breakpoint.mdAndDown ? '3' : '30'"
                                         :dense="$vuetify.breakpoint.mdAndDown"
+                                        style="position: absolute; bottom: 0;"
+                                        class="mb-3"
                                     ></v-rating>
                                 </v-row>
                             </v-col>

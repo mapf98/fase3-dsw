@@ -30,7 +30,7 @@
             type="info"
             elevation="1"
             class="my-3 mx-12"
-            color="blue darken-1"
+            color="primary"
             dense
             :value="showFormWarning"
         >

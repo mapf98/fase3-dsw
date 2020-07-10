@@ -5,11 +5,6 @@
                 {{ $t('ERROR_LANGUAGES') }}
                 <v-btn color="white" text @click="snackbar = false">{{ $t('CLOSE') }}</v-btn>
             </v-snackbar>
-            <v-alert v-if="getErrRegister" prominent type="error">
-                <v-row align="center">
-                    <v-col class="grow">{{ getErrMessage }}</v-col>
-                </v-row>
-            </v-alert>
             <v-form
                 @submit.prevent="submitRegister"
                 class="login100-form validate-form flex-sb flex-w"
@@ -177,7 +172,7 @@ import LanguageMethods from '@/store/languages/methods/language.methods';
 import { authModule, languageModule } from '@/store/namespaces';
 import { CustomerInterface } from '@/modules/client/auth/interfaces/customer.interface';
 import Rules from '@/utils/rules';
-import * as moment from 'moment';
+import moment from 'moment';
 
 @Component
 export default class Login extends Vue {
@@ -187,7 +182,7 @@ export default class Login extends Vue {
     showRepeatPass = false;
     name = '';
     lastName = '';
-    cellphone: '';
+    cellphone = '';
     birthdate: string = moment().add(-18, 'year').toISOString(true).substr(0, 10);
     languages: string[] = [];
     language = 'en';
@@ -234,6 +229,9 @@ export default class Login extends Vue {
         if (errorInputs.password) {
             this.errors.push(`${this.$t('PASSWORD_LENGTH')}`);
         }
+        if (this.getErrRegister) {
+            this.errors.push(this.getErrMessage);
+        }
         (this.$refs.form as Vue & { validate: () => boolean }).validate();
         this.snackbarError = true;
     }
@@ -255,7 +253,8 @@ export default class Login extends Vue {
             !errorInputs.language &&
             !errorInputs.email &&
             !errorInputs.passwordEquals &&
-            !errorInputs.password
+            !errorInputs.password &&
+            this.getErrRegister == false
         ) {
             const newClient: CustomerInterface = {
                 name: this.name,

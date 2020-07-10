@@ -276,7 +276,7 @@ export default class addressStepCheckout extends Vue {
         this.zipCode = value;
     }
     createAddressObject(): Address {
-        const address: Address = {
+        const address = {
             firstStreet: this.firstStreet,
             secondStreet: this.secondStreet,
             cityName: this.cityName,

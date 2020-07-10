@@ -33,7 +33,7 @@
 
                                     <v-col cols="9" class="pl-0 product-name">
                                         <v-row
-                                            class="flex-column ma-0 fill-height caption product-name"
+                                            class="flex-column ma-0 fill-height caption product-name text-justify"
                                             justify="center"
                                         >
                                             {{ getName(product) }}
@@ -42,7 +42,7 @@
 
                                     <v-col cols="9" class="pl-0 pb-0 pt-0">
                                         <v-row class="ma-0 fill-height title in-line space">
-                                            <div class="mr-4 ml-0">
+                                            <div class="mr-4 ml-0 mb-9" style="position: absolute; bottom: 0;">
                                                 {{ product.price | getCurrentExchangeWithSymbolFor }}
                                             </div>
                                             <div
@@ -51,7 +51,9 @@
                                                 class="in-line"
                                             >
                                                 <img src="@/assets/petromiles-small.png" class="mr-2" />
-                                                <div>{{ product.tentativePoints }} pts</div>
+                                                <div style="font-size: 13px;">
+                                                    {{ product.tentativePoints }} pts
+                                                </div>
                                             </div>
                                         </v-row>
                                     </v-col>
@@ -71,6 +73,8 @@
                                                 :size="$vuetify.breakpoint.mdAndDown ? '3' : '30'"
                                                 :dense="$vuetify.breakpoint.mdAndDown"
                                                 half-increments
+                                                style="position: absolute; bottom: 0;"
+                                                class="mb-3"
                                             ></v-rating>
                                         </v-row>
                                     </v-col>

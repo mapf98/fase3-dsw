@@ -1,11 +1,16 @@
 <template>
     <v-container>
-        <div class="title-2 mb-4">
-            {{ $t('MY_CART') }}
-            <div class="line"></div>
+        <div>
+            <div class="title-2 mb-4">
+                {{ $t('MY_CART') }}
+                <div class="line"></div>
+            </div>
         </div>
         <div v-if="GET_LOAD_PHOTO_CART">
-            <div v-if="productsCart.length === 0" class="cart-empty">{{ $t('CART_EMPTY') }}</div>
+            <div v-if="productsCart.length === 0" class="cart-empty">
+                <v-icon>mdi-cart-remove</v-icon>
+                {{ $t('CART_EMPTY') }}
+            </div>
             <v-list-item v-for="(item, i) in productsCart" :key="item.id" class="mb-4">
                 <v-fade-transition hide-on-leave>
                     <ProductCart :item="item" :index="i"></ProductCart>
@@ -61,6 +66,7 @@ export default class Cart extends Vue {
     public onCheckout = true;
     item: any;
     public errorCheckout?: boolean = false;
+    public loading = false;
 
     @Watch('GET_PRODUCTS_CHECKOUT.length')
     check(): void {
@@ -120,8 +126,6 @@ export default class Cart extends Vue {
             this.errorCheckout = true;
         }
     }
-
-    @loader.Action(LoaderTypes.actions.SHOW_LOADER) SHOW_LOADER!: (loading: boolean) => void;
 
     @authModule.Getter(AuthMethods.getters.GET_AUTH_TOKEN)
     GET_AUTH_TOKEN!: string;

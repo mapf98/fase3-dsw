@@ -211,9 +211,20 @@ export default class ItemDetail extends Vue {
     comments: Comment[] = [];
 
     splitDate(comments: Comment[]): Comment[] {
+        let dateSplit;
+        let newDate = '';
+
         comments.forEach((comment: Comment) => {
             comment.createdAt = comment.createdAt?.slice(0, 10);
         });
+
+        comments.forEach((comment: Comment) => {
+            dateSplit = comment.createdAt?.split('-');
+            newDate = dateSplit[1] + '/' + dateSplit[2] + '/' + dateSplit[0];
+            comment.createdAt = newDate;
+            dateSplit = [];
+        });
+
         return comments;
     }
 

@@ -31,7 +31,9 @@
                     v-if="step === 1"
                     style="background: none; box-shadow: none;"
                 >
-                    <v-btn text class="mx-3"><router-link to="/home">{{ $t('CANCEL') }}</router-link></v-btn>
+                    <v-btn text class="mx-3"
+                        ><router-link to="/home">{{ $t('CANCEL') }}</router-link></v-btn
+                    >
                     <v-btn
                         class="mx-3"
                         color="primary"
