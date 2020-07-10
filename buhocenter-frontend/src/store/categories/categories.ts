@@ -74,7 +74,7 @@ const categoryModule: Module<CategoryStateInterface, any> = {
             } catch (e) {
                 return false;
             }
-        }
+        },
     },
 };
 

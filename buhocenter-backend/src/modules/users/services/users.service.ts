@@ -4,6 +4,7 @@ import {
     InternalServerErrorException,
     NotFoundException,
     BadRequestException,
+    UnauthorizedException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
@@ -15,7 +16,6 @@ import { ResponseAuth } from '../interfaces/ResponseAuth';
 import { STATUS, ROLE, LANGUAGE, FOREIGN_EXCHANGES } from '../../../config/constants';
 import { AuthService } from '../../auth/services/auth.service';
 import { EmailsService } from '../../notifications/services/emails.service';
-import { promises } from 'dns';
 
 @Injectable()
 export class UsersService {
@@ -37,6 +37,7 @@ export class UsersService {
 
         return await this.usersRepository.findOne({
             where: { uid },
+            relations: ['status'],
         });
     }
 
@@ -89,9 +90,11 @@ export class UsersService {
         let customerSave: User;
         let response: ResponseAuth;
         if (customer) {
+            if (customer.status.id === STATUS.INACTIVE.id) {
+                throw new UnauthorizedException('The user cannot enter to the system because are inactive');
+            }
             const newcustomer: User = this.usersRepository.merge(customer, {
                 token: data.token,
-                //foreignExchange: { id: FOREIGN_EXCHANGES.USD.id },
             });
             customerSave = await this.usersRepository.save(newcustomer);
             customerSave = await this.usersRepository.findOne({
@@ -107,6 +110,7 @@ export class UsersService {
                     lastName: customerSave.lastName,
                     uid: customerSave.uid,
                     email: customerSave.email,
+                    cellphone: customerSave.cellphone,
                     is_federate: customerSave.is_federate,
                     status: customerSave.status,
                     role: customerSave.role,
@@ -165,6 +169,11 @@ export class UsersService {
             let customerSave: User;
             let response: ResponseAuth;
             if (customer) {
+                if (customer.status.id === STATUS.INACTIVE.id) {
+                    throw new UnauthorizedException(
+                        'The user cannot enter to the system because are inactive',
+                    );
+                }
                 const newcustomer: User = this.usersRepository.merge(customer, {
                     token: data.token,
                     is_federate: true,
@@ -186,6 +195,7 @@ export class UsersService {
                     email: data.clientData.email,
                     token: data.token,
                     is_federate: true,
+                    cellphone: customerSave.cellphone,
                     foreignExchange: { id: FOREIGN_EXCHANGES.USD.id },
                     status: {
                         id: STATUS.ACTIVE.id,
@@ -216,6 +226,7 @@ export class UsersService {
                     status: customerSave.status,
                     role: { ...customerSave.role },
                     is_federate: customerSave.is_federate,
+                    cellphone: customerSave.cellphone,
                     birthDate: customerSave.birthdate,
                     language: customerSave.language,
                     addresses: customerSave.addresses.filter(

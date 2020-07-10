@@ -1,12 +1,12 @@
 <template>
     <v-col cols="12" lg="6" md="6" sm="12" xs="12">
-        <router-link :to="'/'+link">
-        <div class="logo-container" >
-            <img :src="src" class="logo-image" />
-            <div class="logo-name">
-                {{ name }}
+        <router-link :to="'/' + link">
+            <div class="logo-container">
+                <img :src="src" class="logo-image" />
+                <div class="logo-name">
+                    {{ name }}
+                </div>
             </div>
-        </div>
         </router-link>
     </v-col>
 </template>
@@ -19,8 +19,6 @@ export default class Card extends Vue {
     @Prop() src?: string;
     @Prop() name?: string;
     @Prop() link!: string;
-
-    
 }
 </script>
 

@@ -26,12 +26,12 @@ export class ProductCarts {
         id: number;
     };
     offerPrice?: number;
-    status?:{
-            createdAt?: string;
-            description: string
-            id: number
-            name: string
-            updatedAt: string;
+    status?: {
+        createdAt?: string;
+        description: string;
+        id: number;
+        name: string;
+        updatedAt: string;
     };
     productPoints?: number;
     productPrice?: string;

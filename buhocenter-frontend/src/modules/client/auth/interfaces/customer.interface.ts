@@ -16,6 +16,7 @@ export interface CustomerInterface {
     is_federate?: boolean;
     addresses?: Address[];
     status?: any;
+    cellphone?: string;
 }
 
 export interface FederatedCustomer {

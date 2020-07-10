@@ -230,6 +230,7 @@ export const terms = {
     CART_EMPTY: 'Your cart is empty',
     ATTEMPTS_P1: 'You have',
     ATTEMPTS_P2: 'attempts left.',
+    CELLPHONE: 'Cellphone',
     CREATE_CATALOGUE: 'Create catalogue',
     TERM: 'Term',
     DELETE: 'Delete',
@@ -259,5 +260,5 @@ export const terms = {
     ORDER_PROVIDER: 'Provider:',
     ORDER_PRODUCT_PRICE: 'Product price:',
     ORDER_PRODUCT_QUANTITY: 'Product quantity:',
-    MEET_ALLIES:'Meet our allies'
+    MEET_ALLIES: 'Meet our allies',
 };

@@ -71,9 +71,7 @@ export default class ProductCart extends Vue {
     checkbox = false;
 
     stock: string[] = ['1', '2', '3'];
-   quantity: number = this.item.quantity!;
-
-
+    quantity: number = this.item.quantity!;
 
     get getProductStock(): string[] {
         var productStock: string[] = [];

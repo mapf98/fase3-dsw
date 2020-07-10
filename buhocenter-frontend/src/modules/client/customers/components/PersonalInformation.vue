@@ -43,13 +43,21 @@
                                 ></v-text-field>
                             </v-col>
                         </v-row>
-                        <v-row v-if="!GET_CLIENT_DATA.is_federate" class="mx-auto fill-width">
-                            <v-col cols="12">
+                        <v-row class="mx-auto fill-width">
+                            <v-col cols="6" v-if="!GET_CLIENT_DATA.is_federate">
                                 <v-text-field
-                                    label="Email"
+                                    :label="$t('EMAIL')"
                                     :value="modifiedEmail"
                                     :rules="[rules.validateEmail(modifiedEmail)]"
                                     @change="modifyEmail"
+                                ></v-text-field>
+                            </v-col>
+                            <v-col :cols="!GET_CLIENT_DATA.is_federate ? '6' : '12'">
+                                <v-text-field
+                                    :label="$t('CELLPHONE')"
+                                    v-model="modifiedCellphone"
+                                    v-mask="'+1 (###) ###-####'"
+                                    :rules="[rules.required()]"
                                 ></v-text-field>
                             </v-col>
                         </v-row>
@@ -58,11 +66,7 @@
                                 <v-text-field
                                     :value="password"
                                     @change="modifyPsswd"
-                                    :rules="[
-                                        rules.required(),
-                                        rules.minPsswdLength(),
-                                        rules.matchPsswd(password, confirmedPassword),
-                                    ]"
+                                    :rules="[rules.required(), rules.minPsswdLength()]"
                                     :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
                                     :type="showPassword ? 'text' : 'password'"
                                     label="Password"
@@ -157,6 +161,7 @@ export default class PersonalInformation extends Vue {
     modifiedLastName = '';
     modifiedEmail = '';
     modifiedLanguage = '';
+    modifiedCellphone = '';
     password = '';
     confirmedPassword = '';
 
@@ -189,6 +194,10 @@ export default class PersonalInformation extends Vue {
         this.confirmedPassword = value;
     }
 
+    modifyCellphone(value: string): void {
+        this.modifiedCellphone = value;
+    }
+
     goToProfile(): void {
         this.$router.push('/profile');
     }
@@ -203,6 +212,7 @@ export default class PersonalInformation extends Vue {
             birthDate: this.GET_CLIENT_DATA.birthdate,
             email: this.modifiedEmail,
             is_federate: this.GET_CLIENT_DATA.is_federate,
+            cellphone: this.modifiedCellphone,
             language: this.modifiedLanguage,
             name: this.modifiedName,
             lastName: this.modifiedLastName,
@@ -235,9 +245,11 @@ export default class PersonalInformation extends Vue {
                     this.MODIFY_CLIENT_DATA(this.createClientDataObject());
                     this.API_CHANGE_LANGUAGE(this.modifiedLanguage);
                     this.userProfileModified = true;
-                    this.loading = false;
+                    this.$router.push('/profile');
                 }
             }
+
+            this.loading = false;
         }
     }
 
@@ -246,6 +258,7 @@ export default class PersonalInformation extends Vue {
         this.modifiedLastName = this.GET_CLIENT_DATA.lastName!;
         this.modifiedLanguage = this.GET_CLIENT_DATA.language!;
         this.modifiedEmail = this.GET_CLIENT_DATA.email!;
+        this.modifiedCellphone = this.GET_CLIENT_DATA.cellphone!;
     }
 
     @languageModule.Getter(LanguageMethods.getters.GET_PLATFORM_LANGUAGE)

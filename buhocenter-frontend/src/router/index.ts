@@ -221,12 +221,18 @@ const routes: RouteConfig[] = [
             requiresAuth: true,
         },
     },
-    {path: '/petromiles',
-            beforeEnter() {location.href = 'https://petromiles-frontend.herokuapp.com/'},
+    {
+        path: '/petromiles',
+        beforeEnter() {
+            location.href = 'https://petromiles-frontend.herokuapp.com/';
+        },
     },
-    {path: '/shipthis',
-    beforeEnter() {location.href = 'https://ship-this.herokuapp.com/'},
-},
+    {
+        path: '/shipthis',
+        beforeEnter() {
+            location.href = 'https://ship-this.herokuapp.com/';
+        },
+    },
     {
         path: '*',
         name: 'not-found',

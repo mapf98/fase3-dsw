@@ -16,20 +16,18 @@ class CataloguesHttpRepository extends HttpRepository {
     public getAllCatalogues(): Promise<Catalogues> {
         return this.get(this.createUri([`${CataloguesHttpRepository.RESOURCECATALOGUE}`]));
     }
-   
-
 
     // VER TIPO DE RETORNO
     public saveCatalogue(data: ProductCatalogue) {
         return this.post(this.createUri([`${CataloguesHttpRepository.RESOURCECATALOGUE}`]), data, false);
     }
 
-    public deleteCatalogue(id: number) : Promise<any> {
+    public deleteCatalogue(id: number): Promise<any> {
         return this.delete(this.createUri([`${CataloguesHttpRepository.RESOURCECATALOGUE}/${id}`]));
     }
 
-    public createCatalogue(data: CatalogueCreateI) : Promise<CatalogueCreateI> {
-        return this.post(this.createUri([`${CataloguesHttpRepository.RESOURCECATALOGUE}`]),data,false);
+    public createCatalogue(data: CatalogueCreateI): Promise<CatalogueCreateI> {
+        return this.post(this.createUri([`${CataloguesHttpRepository.RESOURCECATALOGUE}`]), data, false);
     }
 }
 

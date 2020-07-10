@@ -8,7 +8,7 @@ export interface CatalogueCreateI {
     status: {
         id: number;
     };
-    createdAt?: string,
-    updatedAt?: string,
+    createdAt?: string;
+    updatedAt?: string;
     id?: number;
 }

@@ -54,15 +54,13 @@ import { Product } from '@/modules/client/products/interfaces/products.interface
 export default class ShoppingBar extends Vue {
     quantity = 0;
 
-    @Prop({default: '', required:false}) stock!: string[];
+    @Prop({ default: '', required: false }) stock!: string[];
 
     rules: any = rules;
 
     $refs!: {
         form: any;
     };
-
-  
 
     isProduct(): boolean {
         if (this.$route.query.item === 'product') {

@@ -64,7 +64,10 @@ const catalogueModule: Module<CatalogueStateInterface, any> = {
                 return false;
             }
         },
-        async [CatalogueTypes.actions.CREATE_CATALOGUE]({ commit }, data: CatalogueCreateI): Promise<boolean> {
+        async [CatalogueTypes.actions.CREATE_CATALOGUE](
+            { commit },
+            data: CatalogueCreateI,
+        ): Promise<boolean> {
             try {
                 const response: CatalogueCreateI = await catalogueHttpRepository.createCatalogue(data);
                 return true;
@@ -75,7 +78,7 @@ const catalogueModule: Module<CatalogueStateInterface, any> = {
         async [CatalogueTypes.actions.DELETE_CATALOGUE]({ commit }, catalogueId: number): Promise<any> {
             try {
                 const response: any = await catalogueHttpRepository.deleteCatalogue(catalogueId);
-                if (response===true) return true;
+                if (response === true) return true;
                 else return false;
             } catch (e) {
                 return false;

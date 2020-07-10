@@ -87,6 +87,7 @@ class AuthRepository extends HttpRepository {
                     name: customer.name!,
                     lastName: customer.lastName!,
                     birthdate: customer.birthDate!,
+                    cellphone: customer.cellphone,
                     uid: result.user!.uid,
                     is_federate: false,
                     language: customer.language!,

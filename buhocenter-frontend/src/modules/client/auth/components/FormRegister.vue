@@ -37,11 +37,19 @@
                                 :rules="[() => !!name || `${$t('REQUIRED_FIELD')}`]"
                             ></v-text-field>
                         </div>
-                        <div class="validate-input mb-4" data-validate="Name is required">
+                        <div class="validate-input mb-4" data-validate="Last name is required">
                             <v-text-field
                                 :label="$t('LAST-NAME')"
                                 v-model="lastName"
                                 :rules="[() => !!lastName || `${$t('REQUIRED_FIELD')}`]"
+                            ></v-text-field>
+                        </div>
+                        <div class="validate-input mb-4" data-validate="Phone is required">
+                            <v-text-field
+                                :label="$t('CELLPHONE')"
+                                v-model="cellphone"
+                                v-mask="'+1 (###) ###-####'"
+                                :rules="[() => !!cellphone || `${$t('REQUIRED_FIELD')}`]"
                             ></v-text-field>
                         </div>
                         <v-col cols="12" lg="12" md="12">
@@ -59,14 +67,14 @@
                                             {{ $t('BIRTHDATE') }}
                                         </span>
                                     </div>
-                                    <div class="validate-input mb-4" data-validate="birthdate is required">
+                                    <div class="validate-input mb-4" data-validate="Birthdate is required">
                                         <v-btn primary class="input100 btn-date" v-on="on">
                                             {{ birthdate }}
                                         </v-btn>
                                         <span class="focus-input100"></span>
                                     </div>
                                 </template>
-                                <v-date-picker v-model="birthdate" scrollable>
+                                <v-date-picker v-model="birthdate" :max="maxDate()" scrollable>
                                     <v-spacer></v-spacer>
                                     <v-btn text color="primary" dark @click="modal = false">{{
                                         $t('CLOSE')
@@ -149,7 +157,7 @@
                 </div>
             </v-form>
         </v-col>
-        <v-snackbar v-model="snackbarError" color="error" class="mb-5 my-5" top>
+        <v-snackbar v-model="snackbarError" color="error" class="mb-5 my-5">
             <ul>
                 <li class="body-1" v-for="error in errors" :key="error.id">
                     {{ error }}
@@ -167,8 +175,9 @@ import { Component, Vue } from 'vue-property-decorator';
 import AuthMethods from '@/store/auth/methods/auth.methods';
 import LanguageMethods from '@/store/languages/methods/language.methods';
 import { authModule, languageModule } from '@/store/namespaces';
-import Rules from '@/utils/rules';
 import { CustomerInterface } from '@/modules/client/auth/interfaces/customer.interface';
+import Rules from '@/utils/rules';
+import * as moment from 'moment';
 
 @Component
 export default class Login extends Vue {
@@ -178,7 +187,8 @@ export default class Login extends Vue {
     showRepeatPass = false;
     name = '';
     lastName = '';
-    birthdate: string = new Date().toISOString().substr(0, 10);
+    cellphone: '';
+    birthdate: string = moment().add(-18, 'year').toISOString(true).substr(0, 10);
     languages: string[] = [];
     language = 'en';
     snackbarError = false;
@@ -199,6 +209,10 @@ export default class Login extends Vue {
         passwordEquals: false,
         password: false,
     };
+
+    maxDate(): string {
+        return moment().add(-18, 'year').toISOString(true);
+    }
 
     async mounted() {
         if (this.getLanguages.length) {
@@ -250,6 +264,7 @@ export default class Login extends Vue {
                 email: this.email,
                 password: this.password,
                 language: this.language!,
+                cellphone: this.cellphone,
             };
             const result = await this.registerCustomer(newClient);
             if (result) {

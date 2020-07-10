@@ -36,7 +36,7 @@
                         <v-divider class="mx-12"></v-divider>
                     </v-col>
                 </v-row>
-                <div style="margin-top: 30px;" v-if="currentCategory.catalogues.length>0">
+                <div style="margin-top: 30px;" v-if="currentCategory.catalogues.length > 0">
                     <div v-for="catalogue in getVisibleCatelogues" :key="catalogue.id">
                         <v-card class="primary--text" style="padding: 10px; margin: 10px;">
                             <v-row class="d-flex align-start justify-center my-n6">
@@ -99,11 +99,15 @@
                             <v-btn color="white" text @click="addError = false">{{ $t('CLOSE') }}</v-btn>
                         </v-snackbar>
                     </div>
-                    <v-pagination v-model="page" :length="totalPages" class="mt-12" v-if="showPagination"></v-pagination>
-
+                    <v-pagination
+                        v-model="page"
+                        :length="totalPages"
+                        class="mt-12"
+                        v-if="showPagination"
+                    ></v-pagination>
                 </div>
                 <div v-else class="empty-state">
-                            No catalogues in this category
+                    No catalogues in this category
                 </div>
             </v-col>
             <v-dialog v-model="modalCreate" max-width="800px"
@@ -166,11 +170,11 @@
         </v-row>
 
         <v-snackbar v-model="addError2" top color="error" class="mt-12">
-           {{message}}
+            {{ message }}
             <v-btn color="white" text @click="addError2 = false">{{ $t('CLOSE') }}</v-btn>
         </v-snackbar>
-         <v-snackbar v-model="addSuccess2" top color="success" class="mt-12">
-             Your catalogue has been successfully created!
+        <v-snackbar v-model="addSuccess2" top color="success" class="mt-12">
+            Your catalogue has been successfully created!
             <v-btn color="white" text @click="addSuccess2 = false">{{ $t('CLOSE') }}</v-btn>
         </v-snackbar>
     </v-container>
@@ -198,7 +202,7 @@ export default class DashboardCatalogues extends Vue {
     catalogueTerm = '';
     catalogueDescription = '';
     catalogueStatus = 1;
-    message='';
+    message = '';
     page: number = 1;
     start: number = 0;
     limit: number = 5;
@@ -239,7 +243,7 @@ export default class DashboardCatalogues extends Vue {
             category: { id: this.currentCategoryId },
             status: { id: this.catalogueStatus },
         };
-        this.updateCatalogue(catalogue,'There was an error activating your catalogue');
+        this.updateCatalogue(catalogue, 'There was an error activating your catalogue');
     }
 
     async createCatalogue() {
@@ -250,28 +254,27 @@ export default class DashboardCatalogues extends Vue {
             category: { id: this.currentCategoryId },
             status: { id: this.catalogueStatus },
         };
-       this.updateCatalogue(catalogue,'There was an error creating your catalogue');
+        this.updateCatalogue(catalogue, 'There was an error creating your catalogue');
     }
 
-    async updateCatalogue(catalogue:CatalogueCreateI,error: string){
-        if (!await this.CREATE_CATALOGUE(catalogue))
-        this.addError2 = true;
+    async updateCatalogue(catalogue: CatalogueCreateI, error: string) {
+        if (!(await this.CREATE_CATALOGUE(catalogue))) this.addError2 = true;
         else if (catalogue.name) this.addSuccess2 = true;
         this.modalCreate = false;
-        this.message=error;
+        this.message = error;
         await this.FETCH_ALL_CATEGORIES();
     }
 
-    get getVisibleCatelogues(): Catalogue[]{
-       return this.currentCategory.catalogues!.slice(this.start,(this.limit+this.start))
+    get getVisibleCatelogues(): Catalogue[] {
+        return this.currentCategory.catalogues!.slice(this.start, this.limit + this.start);
     }
 
-     @Watch('page')
-     setPagination(): void {
+    @Watch('page')
+    setPagination(): void {
         this.start = (this.page - 1) * this.limit;
     }
 
-  get showPagination(): boolean {
+    get showPagination(): boolean {
         return this.currentCategory.catalogues!.length > 0 ? true : false;
     }
 
@@ -283,7 +286,6 @@ export default class DashboardCatalogues extends Vue {
             return pages;
         }
     }
-
 
     @categoryModule.Getter(CategoriesMethods.getters.GET_CATEGORIES)
     private GET_CATEGORIES?: Category[];
@@ -307,13 +309,11 @@ export default class DashboardCatalogues extends Vue {
 .v-image__image--contain {
     background-position-y: 38% !important;
 }
-.empty-state{
-    margin:0 auto;
+.empty-state {
+    margin: 0 auto;
     text-align: center;
     color: rgb(133, 133, 133);
     font-size: 25px;
-   
-
 }
 @media only screen and (max-width: 600px) {
     .v-window__prev,

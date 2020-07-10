@@ -27,6 +27,9 @@ export class User extends PrimalEntity {
     @Column({ name: 'email', type: 'varchar', length: 100, nullable: false })
     email: string;
 
+    @Column({ name: 'cellphone', type: 'varchar', length: 20, nullable: true })
+    cellphone: string;
+
     @Column({ name: 'is_federate', type: 'boolean', nullable: false })
     is_federate: boolean;
 
