@@ -27,17 +27,28 @@
                         :search="search"
                     >
                         <template v-slot:item.actions="{ item }">
-                            <v-icon color="red" small @click="blockUser(item)" class="mr-2">
+                            <v-icon color="red" small @click="setMessage(item,'Are you sure you want to block this user?',1)" class="mr-2">
                                 mdi-block-helper
                             </v-icon>
-                            <v-icon color="green" small @click="unblockUser(item)">
+                            <v-icon color="green" small @click="setMessage(item,'Are you sure you want to unblock this user?',2)">
                                 mdi-checkbox-marked-circle-outline
                             </v-icon>
+                            
                         </template>
                     </v-data-table>
                 </v-card>
             </v-col>
         </v-row>
+            <v-dialog v-model="dialog"  max-width="290">
+                                <v-card>
+                                    <v-card-text class="pa-2">{{message}}</v-card-text>
+                                    <v-card-actions>
+                                    <v-spacer></v-spacer>
+                                    <v-btn color="error darken-1" text @click="confirm(false)">No</v-btn>
+                                    <v-btn color="green darken-1" text @click="confirm(true)">Yes</v-btn>
+                                    </v-card-actions>
+                                </v-card>
+                                </v-dialog>
     </v-container>
 </template>
 <script lang="ts">
@@ -65,6 +76,22 @@ export default class DashboardClients extends Vue {
         { text: 'Actions', value: 'actions', sortable: false },
     ];
     desserts: ClientInterface[] = [];
+    dialog = false;
+    message=''
+    user?:ClientInterface;
+    type?: number;
+    setMessage(client: ClientInterface, message:string,type:number){
+        this.message=message;
+        this.dialog=true;
+        this.user=client;
+        this.type=type;
+    }
+
+    confirm(confirm: boolean){
+        this.dialog=false;
+        if (confirm && this.type === 1)this.blockUser(this.user!)
+        else if (confirm && this.type === 2) this.unblockUser(this.user!)
+    }
 
     blockUser(client: ClientInterface): void {
         const status = {
@@ -75,7 +102,7 @@ export default class DashboardClients extends Vue {
             updatedAt: Number(new Date()),
         };
         client.status = status;
-        confirm('Are you sure you want to block this item?') && this.blockAndUblockClients(client);
+        this.blockAndUblockClients(client);
     }
 
     unblockUser(client: ClientInterface): void {
@@ -87,7 +114,7 @@ export default class DashboardClients extends Vue {
             updatedAt: Number(new Date()),
         };
         client.status = status;
-        confirm('Are you sure you want to unblock this item?') && this.blockAndUblockClients(client);
+        this.blockAndUblockClients(client);
     }
 
     async fetchAllClients(): Promise<void> {
