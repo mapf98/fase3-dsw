@@ -862,6 +862,8 @@ export class ProductsService {
                 // ...
             };
 
+            fs.mkdirSync('reports/pdfs' , { recursive: true });
+
             var pdfDoc = await printer.createPdfKitDocument(docDefinition, options);
             await pdfDoc.pipe(
                 fs.createWriteStream(
@@ -901,5 +903,359 @@ export class ProductsService {
                     WHERE (pay.id = ${paymentId}) and (pay.id = c.payment_id) and (c.product_id = p.id)                   
                 `.trim(),
         );
+    }
+
+    /**
+     * create the pdf of an specific order
+     * @param paymentId id of the order
+     * @returns Promise<any>
+     */
+    public async viewPdf(paymentId: number, response): Promise<any> {
+        const path = require('path');
+        this.logger.debug(`sendPdf: creating pdf of order... [order=${paymentId}]`, {
+            context: ProductsService.name,
+        });
+
+        try {
+            let pdfClienteData = await this.getPdfClientData(paymentId);
+            let pdfCartData = await this.getPdfCartData(paymentId);
+
+            let today = new Date();
+            let currentTime = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
+            let totalPrice;
+
+            // Define font files
+            var fonts = {
+                Roboto: {
+                    normal: path.resolve(__dirname, '../../../../reports', 'fonts', 'Roboto-Light.ttf'),
+                    bold: path.resolve(__dirname, '../../../../reports', 'fonts', 'Roboto-Medium.ttf'),
+                    italics: path.resolve(__dirname, '../../../../reports', 'fonts', 'Roboto-Italic.ttf'),
+                    bolditalics: path.resolve(
+                        __dirname,
+                        '../../../../reports',
+                        'fonts',
+                        'Roboto-MediumItalic.ttf',
+                    ),
+                },
+            };
+
+            var PdfPrinter = require('pdfmake');
+            var printer = new PdfPrinter(fonts);
+            var fs = require('fs');
+            let prueba = 'sucasas';
+            //let buhocenterLogo = await this.convertImageToDataURL(path.resolve(__dirname,'../../../../pdf','assets','Logo-completo.png'),100);
+
+            var docDefinition = {
+                content: [
+                    {},
+                    {
+                        style: 'footer',
+                        table: {
+                            headerRows: 1,
+                            widths: [200, 100, 200],
+                            heights: [10, 10, 10],
+                            body: [
+                                ['', { text: 'Buhocenter', style: 'tableHeader', alignment: 'center' }, ''],
+                                ['', {}, ''],
+                            ],
+                        },
+                        layout: 'headerLineOnly',
+                    },
+                    {
+                        style: 'tableExample',
+                        color: '#444',
+                        table: {
+                            widths: ['*', '*'],
+                            headerRows: 2,
+                            body: [
+                                [
+                                    { text: `Facture`, style: 'tableHeader', alignment: 'left', colSpan: 2 },
+                                    '',
+                                ],
+                                [
+                                    {
+                                        text: `Client ID: ${pdfClienteData[0].id}`,
+                                        style: 'tableHeader',
+                                        alignment: 'left',
+                                    },
+                                    {
+                                        text: `Invoice ID: ${pdfCartData[0].id}`,
+                                        style: 'tableHeader',
+                                        alignment: 'left',
+                                    },
+                                ],
+                                [
+                                    { text: `Fate: ${currentTime}`, style: 'tableHeader', alignment: 'left' },
+                                    {
+                                        text: `Transaction ID: ${pdfClienteData[0].transaction_id}`,
+                                        style: 'tableHeader',
+                                        alignment: 'left',
+                                    },
+                                ],
+                            ],
+                        },
+                        layout: {
+                            fillColor: function(rowIndex, node, columnIndex) {
+                                return rowIndex % 2 === 0 ? '#CCCCCC' : null;
+                            },
+                        },
+                    },
+                    {
+                        style: 'fisrtTable',
+                        color: '#444',
+                        table: {
+                            widths: ['*', '*'],
+                            headerRows: 2,
+                            body: [
+                                [
+                                    {
+                                        text: `Client data`,
+                                        style: 'tableHeader',
+                                        alignment: 'left',
+                                        colSpan: 2,
+                                    },
+                                    '',
+                                ],
+                                [
+                                    {
+                                        text: `Name: ${pdfClienteData[0].name}`,
+                                        style: 'tableHeader',
+                                        alignment: 'left',
+                                    },
+                                    {
+                                        text: `Last name: ${pdfClienteData[0].last_name}`,
+                                        style: 'tableHeader',
+                                        alignment: 'left',
+                                    },
+                                ],
+                                [
+                                    {
+                                        text: `Email: ${pdfClienteData[0].email}`,
+                                        style: 'tableHeader',
+                                        alignment: 'left',
+                                        colSpan: 2,
+                                    },
+                                    '',
+                                ],
+                            ],
+                        },
+                        layout: {
+                            fillColor: function(rowIndex, node, columnIndex) {
+                                return rowIndex % 2 === 0 ? '#CCCCCC' : null;
+                            },
+                        },
+                    },
+
+                    {
+                        style: 'tableExample',
+                        color: '#444',
+                        table: {
+                            widths: ['*', '*'],
+                            // keepWithHeaderRows: 1,
+                            body: [
+                                [
+                                    { text: 'Address', style: 'tableHeader' },
+                                    { text: `Zip code: ${pdfClienteData[0].zip_code}`, style: 'tableHeader' },
+                                ],
+                                [
+                                    {
+                                        text: `First street: ${pdfClienteData[0].first_street}`,
+                                        style: 'tableHeader',
+                                        alignment: 'left',
+                                    },
+                                    {
+                                        text: `Second street: ${pdfClienteData[0].second_street}`,
+                                        style: 'tableHeader',
+                                    },
+                                ],
+                                [
+                                    {
+                                        text: `City : ${pdfClienteData[0].city}`,
+                                        style: 'tableHeader',
+                                        alignment: 'left',
+                                    },
+                                    { text: `State: ${pdfClienteData[0].state}`, style: 'tableHeader' },
+                                ],
+                            ],
+                        },
+                        layout: {
+                            fillColor: function(rowIndex, node, columnIndex) {
+                                return rowIndex % 2 === 0 ? '#CCCCCC' : null;
+                            },
+                        },
+                    },
+
+                    {
+                        style: 'tableExample',
+                        color: '#444',
+                        table: {
+                            widths: ['*', 50, 80, 80, 100],
+                            headerRows: 2,
+                            // keepWithHeaderRows: 1,
+                            body: [
+                                [
+                                    { text: 'Products', style: 'header', colSpan: 5, alignment: 'center' },
+                                    {},
+                                    {},
+                                    '',
+                                    {},
+                                ],
+                                [
+                                    { text: 'Name', style: 'tableHeader', alignment: 'center' },
+                                    { text: 'Quantity', style: 'tableHeader', alignment: 'center' },
+                                    { text: 'Ind. price', style: 'tableHeader', alignment: 'center' },
+                                    { text: 'Discount', style: 'tableHeader', alignment: 'center' },
+                                    { text: 'Import', style: 'tableHeader', alignment: 'center' },
+                                ],
+                            ],
+                        },
+                        layout: {
+                            fillColor: function(rowIndex, node, columnIndex) {
+                                return rowIndex % 2 === 0 ? '#CCCCCC' : null;
+                            },
+                        },
+                    },
+
+                    {
+                        style: 'leftTable',
+                        color: '#444',
+                        alignment: 'center',
+                        table: {
+                            widths: [100, 100],
+
+                            // keepWithHeaderRows: 1,
+
+                            body: [
+                                [
+                                    { text: `Tax:`, style: 'tableHeader', alignment: 'left' },
+                                    {
+                                        text: `${pdfClienteData[0].processor_fee +
+                                            pdfClienteData[0].service_fee}`,
+                                        style: 'tableHeader',
+                                        alignment: 'center',
+                                    },
+                                ],
+                                [
+                                    { text: `Total:`, style: 'tableHeader', alignment: 'left' },
+                                    {
+                                        text: `${pdfClienteData[0].total}`,
+                                        style: 'tableHeader',
+                                        alignment: 'center',
+                                    },
+                                ],
+                                [
+                                    { text: `Total cryp:`, style: 'tableHeader', alignment: 'left' },
+                                    {
+                                        text: `${pdfClienteData[0].total_cryptocurrency}`,
+                                        style: 'tableHeader',
+                                        alignment: 'center',
+                                    },
+                                ],
+                            ],
+                        },
+                        layout: {
+                            fillColor: function(rowIndex, node, columnIndex) {
+                                return rowIndex % 2 === 0 ? '#CCCCCC' : null;
+                            },
+                        },
+                    },
+                ],
+                styles: {
+                    header: {
+                        fontSize: 13,
+                        bold: true,
+                        margin: [0, 0, 0, 5],
+                        color: 'black',
+                    },
+                    subheader: {
+                        fontSize: 16,
+                        bold: true,
+                        margin: [0, 10, 0, 5],
+                    },
+                    tableExample: {
+                        margin: [0, 5, 0, 15],
+                    },
+                    tableHeader: {
+                        bold: true,
+                        fontSize: 13,
+                        color: 'black',
+                    },
+                    leftTable: {
+                        margin: [298, 5, 0, 15],
+                    },
+
+                    defaultStyle: {
+                        // alignment: 'justify'
+                    },
+                    footer: {
+                        margin: [0, 0, 0, 15],
+                    },
+
+                    fisrtTable: {
+                        margin: [0, 30, 0, 15],
+                    },
+                    sideTable: {
+                        margin: [210, -150, 0, 15],
+                    },
+                },
+            };
+
+            pdfCartData.forEach(product =>
+                docDefinition.content[5].table.body.push([
+                    { text: `${product.name}`, style: 'tableHeader', alignment: 'center' },
+                    { text: `${product.quantity}`, style: 'tableHeader', alignment: 'center' },
+                    { text: `${product.product_price}`, style: 'tableHeader', alignment: 'center' },
+                    { text: `${product.offer_price}`, style: 'tableHeader', alignment: 'center' },
+                    {
+                        text: `${(product.price * product.quantity).toFixed(2)}`,
+                        style: 'tableHeader',
+                        alignment: 'center',
+                    },
+                ]),
+            );
+
+            var options = {
+                // ...
+            };
+
+            var pdfDoc = await printer.createPdfKitDocument(docDefinition, options);
+            /*await pdfDoc.pipe(
+                fs.createWriteStream(
+                    path.resolve(__dirname + '../../../../../reports/pdfs/' + paymentId + '.pdf'),
+                ),
+            );
+
+            
+            pdfDoc.end();*/
+
+            var chunks = [];
+            var result;
+
+            pdfDoc.on('data', function(chunk) {
+                chunks.push(chunk);
+            });
+            pdfDoc.on('end', function() {
+                result = Buffer.concat(chunks);
+
+                response.contentType('application/pdf');
+                response.send(result);
+            });
+            pdfDoc.end();
+
+            return paymentId;
+        } catch (e) {
+            this.logger.error(
+                `sendPdf: error when trying to create the pdf of the order with id[orderId =${paymentId}]|error=${JSON.stringify(
+                    e.message,
+                )}`,
+                {
+                    context: ProductsService.name,
+                },
+            );
+
+            throw new BadRequestException('error when trying to create the pdf of the order...');
+
+            return false;
+        }
     }
 }

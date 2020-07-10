@@ -289,4 +289,14 @@ export class ProductsController {
             stream.pipe(res);
         });
     }
+
+    @Get('facture/view/:id')
+    async viewOrderPDF(@Res() res: Response, @Param('id') paymentId: number): Promise<any> {
+        const path = require('path');
+        this.logger.info(`generateOrderPDF: generating pdf of the order with id [dirname=${paymentId})]`, {
+            context: ProductsController.name,
+        });
+
+        let response = this.productsService.viewPdf(paymentId, res);
+    }
 }

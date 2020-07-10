@@ -72,7 +72,13 @@
                                 </h1>
                             </div>
                             <div class="d-flex justify-end">
-                                <v-btn small outlined color="primary" class="primary--text overline">
+                                <v-btn
+                                    small
+                                    outlined
+                                    color="primary"
+                                    class="primary--text overline"
+                                    @click="() => downloadInvoice(order.id)"
+                                >
                                     <v-icon small class="mr-2"> mdi-download </v-icon>
                                     {{ $t('INVOICE') }}
                                 </v-btn>
@@ -95,6 +101,7 @@ import { CustomerInterface } from '@/modules/client/auth/interfaces/customer.int
 import { Orders, StatusHistory } from '@/modules/client/customers/interfaces/orders.interface';
 import Product from './OrderProducts.vue';
 import EmptyState from '@/modules/common/components/EmptyState.vue';
+import CustomersRepository from '@/modules/client/customers/repositories/customers.repository';
 
 @Component({
     components: { Product, EmptyState },
@@ -175,6 +182,10 @@ export default class ClientOrders extends Vue {
 
     async fetchProductsOrder(orderId: number): Promise<void> {
         await this.FETCH_ORDER_BY_ID(orderId);
+    }
+
+    async downloadInvoice(id: number) {
+        await CustomersRepository.downloadFile(id);
     }
 
     @authModule.Getter(AuthTypes.getters.GET_CLIENT_DATA)
