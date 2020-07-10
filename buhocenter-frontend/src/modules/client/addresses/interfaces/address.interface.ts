@@ -2,10 +2,10 @@ export interface Address {
     id?: number;
     firstStreet?: string;
     secondStreet?: string;
-    cityName?: string;
+    city?: string;
     state?: string;
     zipcode?: string;
-    default?: boolean;
+    setDefault?: boolean;
     user?: {
         id: number;
     };

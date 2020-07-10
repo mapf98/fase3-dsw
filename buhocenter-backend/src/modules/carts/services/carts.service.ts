@@ -50,9 +50,9 @@ export class CartsService {
             context: CartsService.name,
         });
 
-        let thisUser = await this.UsersService.getUserById(userId);
+        const thisUser = await this.UsersService.getUserById(userId);
 
-        let active = await this._statusService.getStatusById(STATUS.ACTIVE.id);
+        const active = await this._statusService.getStatusById(STATUS.ACTIVE.id);
 
         return await this._cartRepository.find({
             where: { User: thisUser, status: active },
@@ -74,15 +74,14 @@ export class CartsService {
             const findProduct: Product = await this.ProductsService.findProduct(ProductRes.product.id);
 
             const newProductCart: Cart = new Cart();
-            let active = await this._statusService.getStatusById(STATUS.ACTIVE.id);
-            let productQuantity: number = parseInt(ProductRes.quantity);
+            const active = await this._statusService.getStatusById(STATUS.ACTIVE.id);
+            const productQuantity: number = parseInt(ProductRes.quantity);
             newProductCart.quantity = productQuantity;
             newProductCart.productPrice = findProduct.price;
             newProductCart.user = user;
             newProductCart.status = active;
             newProductCart.product = findProduct;
-
-            let productOffer: Offer = await this.ProductsService.findOffer(findProduct.offer);
+            const productOffer: Offer = await this.ProductsService.findOffer(findProduct.offer);
             if (Offer) {
                 newProductCart.productPrice =
                     newProductCart.productPrice -
@@ -184,8 +183,8 @@ export class CartsService {
             cart.status = reservedStatus;
         });
 
-        for await (let cart of carts) {
-            let productInventory = await this._productInventoryService.getProductInventoryByCartId(cart.id);
+        for await (const cart of carts) {
+            const productInventory = await this._productInventoryService.getProductInventoryByCartId(cart.id);
             await this._productInventoryService.updateProductInventoryQuantity(
                 productInventory,
                 cart.quantity,
@@ -215,8 +214,8 @@ export class CartsService {
 
         await getManager().transaction(async transactionEntityManager => {
             try {
-                for await (let cart of carts) {
-                    let productInventory = await this._productInventoryService.getProductInventoryByCartId(
+                for await (const cart of carts) {
+                    const productInventory = await this._productInventoryService.getProductInventoryByCartId(
                         cart.id,
                     );
                     await this._productInventoryService.updateProductInventoryQuantity(

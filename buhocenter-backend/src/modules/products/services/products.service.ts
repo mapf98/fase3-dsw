@@ -895,7 +895,7 @@ export class ProductsService {
                 // ...
             };
 
-            fs.mkdirSync('reports/pdfs' , { recursive: true });
+            fs.mkdirSync('reports/pdfs', { recursive: true });
 
             var pdfDoc = await printer.createPdfKitDocument(docDefinition, options);
             await pdfDoc.pipe(

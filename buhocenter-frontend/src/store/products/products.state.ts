@@ -22,6 +22,5 @@ export const PRODUCT_EMPTY_STATE: ProductStateInterface = {
             weight: '',
         },
         rating: '',
-       
     },
 };

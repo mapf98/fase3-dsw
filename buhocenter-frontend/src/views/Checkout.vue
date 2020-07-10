@@ -1,361 +1,329 @@
 <template>
-    <v-main>
-        <v-snackbar v-model="addressCreated" top :timeout="timeout" color="success">
-            {{ $t('SUCCESS_ADDRESS') }}
-            <v-btn color="white" text @click="addressCreated = false">{{ $t('CLOSE') }}</v-btn>
+    <v-container>
+        <v-row class="logo-header justify-center d-flex">
+            <img src="../assets/Logo-completo.png" class="logo-header__img" />
+        </v-row>
+        <h1 class="text-center">Checkout</h1>
+
+        <v-stepper v-model="step" style="background: none; box-shadow: none;">
+            <v-stepper-header style="background: none; box-shadow: none;">
+                <v-stepper-step :complete="step > 0" step="1">
+                    {{ $t('SHIPPING_ADDRESS') }}
+                </v-stepper-step>
+
+                <v-divider></v-divider>
+
+                <v-stepper-step :complete="step > 1" step="2">
+                    {{ $t('PACKAGE_INSURANCE') }}
+                </v-stepper-step>
+
+                <v-divider></v-divider>
+
+                <v-stepper-step :complete="step > 2" step="3">
+                    {{ $t('PAYMENT_DETAIL') }}
+                </v-stepper-step>
+            </v-stepper-header>
+
+            <v-stepper-content step="1">
+                <address-step-checkout></address-step-checkout>
+                <div
+                    class="d-flex justify-center"
+                    v-if="step === 1"
+                    style="background: none; box-shadow: none;"
+                >
+                    <v-btn text class="mx-3"><router-link to="/home">{{ $t('CANCEL') }}</router-link></v-btn>
+                    <v-btn
+                        class="mx-3"
+                        color="primary"
+                        @click="validateFirstStep()"
+                        :disabled="fetchFirstStep"
+                    >
+                        <v-progress-circular
+                            indeterminate
+                            color="primary"
+                            v-if="fetchFirstStep"
+                        ></v-progress-circular>
+                        <span v-else>{{ $t('CONTINUE') }}</span>
+                    </v-btn>
+                </div>
+            </v-stepper-content>
+
+            <v-stepper-content step="2">
+                <package-insurance-step></package-insurance-step>
+                <div class="d-flex justify-center" v-if="step === 2">
+                    <v-btn text class="mx-3" @click="step = 1">Back</v-btn>
+                    <v-btn
+                        class="mx-3"
+                        color="primary"
+                        @click="validateSecondStep()"
+                        :disabled="fetchSecondStep"
+                    >
+                        <v-progress-circular
+                            indeterminate
+                            color="primary"
+                            v-if="fetchSecondStep"
+                        ></v-progress-circular>
+                        <span v-else>{{ $t('CONTINUE') }}</span>
+                    </v-btn>
+                </div>
+            </v-stepper-content>
+
+            <v-stepper-content step="3">
+                <payment-detail></payment-detail>
+                <div class="d-flex justify-center" v-if="step === 3">
+                    <v-btn text class="mx-3" @click="step = 2">Back</v-btn>
+                    <v-btn color="primary" class="mx-3" @click="goPay()" :disabled="fetchThirdStep">
+                        <v-progress-circular
+                            indeterminate
+                            color="primary"
+                            v-if="fetchThirdStep"
+                        ></v-progress-circular>
+                        <span v-else>{{ $t('PAY') }}</span>
+                    </v-btn>
+                </div>
+            </v-stepper-content>
+        </v-stepper>
+        <v-snackbar v-model="firstStepError" top color="error" class="mt-12">
+            {{ $t('ERROR_FIRST_STEP_CHECKOUT') }}
+            <v-btn color="white" text @click="firstStepError = false">{{ $t('CLOSE') }}</v-btn>
         </v-snackbar>
-        <v-snackbar v-model="addressCreatedError" top :timeout="timeout" color="error">
-            {{ $t('ERROR_CREATE_ADDRESS') }}
-            <v-btn color="white" text @click="addressCreatedError = false">{{ $t('') }}</v-btn>
+        <v-snackbar v-model="thirdStepError" top color="error" class="mt-12">
+            {{ $t('ERROR_THIRD_STEP_CHECKOUT') }}
+            <v-btn color="white" text @click="thirdStepError = false">{{ $t('CLOSE') }}</v-btn>
         </v-snackbar>
-
-        <v-dialog v-model="dialog" max-width="500px" style="background: #ffffff;">
-            <div style="background: #ffffff; padding: 40px 30px;">
-                <h1 class="text-center overline">{{ $t('ADD_ADDRESS') }}</h1>
-                <v-form ref="form" v-model="isFormValid">
-                    <v-row class="mx-auto fill-width">
-                        <v-col lg="12" xs="12">
-                            <v-text-field
-                                :label="$t('FIRST_STREET')"
-                                @change="modifyFirstStreet"
-                                :rules="[rules.required(), rules.fieldLength(65500)]"
-                            ></v-text-field>
-                        </v-col>
-                        <v-col lg="12" xs="12">
-                            <v-text-field
-                                :label="$t('SECOND_STREET')"
-                                @change="modifySecondStreet"
-                                :value="secondStreet"
-                                :rules="[rules.fieldMaxLength(65500)]"
-                            ></v-text-field>
-                        </v-col>
-                    </v-row>
-                    <v-row class="mx-auto fill-width">
-                        <v-col cols="12">
-                            <v-text-field
-                                :label="$t('CITY')"
-                                :value="cityName"
-                                :rules="[rules.required(), rules.fieldLength(65500)]"
-                                @change="modifyCityName"
-                            ></v-text-field>
-                        </v-col>
-                    </v-row>
-                    <v-row class="mx-auto fill-width">
-                        <v-col cols="12">
-                            <v-text-field
-                                :label="$t('STATE')"
-                                :value="state"
-                                :rules="[rules.required(), rules.fieldLength(65500)]"
-                                @change="modifyState"
-                            ></v-text-field>
-                        </v-col>
-                    </v-row>
-                    <v-row class="mx-auto fill-width">
-                        <v-col cols="12">
-                            <v-text-field
-                                :label="$t('ZIP_CODE')"
-                                :value="zipCode"
-                                :rules="[rules.fieldMaxLength(65500)]"
-                                @change="modifyZipCode"
-                            ></v-text-field>
-                        </v-col>
-                    </v-row>
-                </v-form>
-                <v-row class="d-flex justify-center my-2" @click="saveChanges()">
-                    <v-btn outlined color="primary">{{ $t('SAVE') }}</v-btn>
-                </v-row>
-            </div>
-        </v-dialog>
-        <v-container>
-            <v-row class="logo-header justify-center d-flex">
-                <img src="../assets/Logo-completo.png" class="logo-header__img" />
-            </v-row>
-            <h1 class="text-center">Checkout</h1>
-
-            <v-stepper v-model="step" style="background: none; box-shadow: none;">
-                <v-stepper-header style="background: none; box-shadow: none;">
-                    <v-stepper-step :complete="step > 0" step="1">
-                        {{ $t('SHIPPING_ADDRESS') }}
-                    </v-stepper-step>
-
-                    <v-divider></v-divider>
-
-                    <v-stepper-step :complete="step > 1" step="2">
-                        Puntos y ofertas
-                    </v-stepper-step>
-
-                    <v-divider></v-divider>
-
-                    <v-stepper-step :complete="step > 2" step="3">
-                        Pago
-                    </v-stepper-step>
-                </v-stepper-header>
-
-                <v-stepper-content step="1">
-                    <v-container class="mb-4">
-                        <v-row justify="center">
-                            <h2>{{ $t('SHIPPING_ADDRESS') }}</h2>
-                            <br />
-                            <h5 style="width: 100%; text-align: center;">
-                                {{ $t('SELECT_SHIPPING_ADDRESS') }}
-                            </h5>
-                        </v-row>
-                        <v-row>
-                            <v-row justify="center" v-if="GET_ADDRESSES.length">
-                                <v-col
-                                    cols="3"
-                                    style="cursor: pointer;"
-                                    class="fill-height"
-                                    v-for="address in GET_ADDRESSES"
-                                    :key="address.id"
-                                    @click="setDefaultAddress(address.id)"
-                                >
-                                    <v-card
-                                        class="mx-auto"
-                                        max-width="344"
-                                        height="310"
-                                        fill-height
-                                        :style="`border: ${
-                                            address.setDefault ? '2px solid #907F46' : 'none'
-                                        }`"
-                                    >
-                                        <v-card-text class="font-weight-bold">
-                                            <i
-                                                class="fas fa-map-marker-alt mb-4 d-flex justify-center"
-                                                :style="`font-size: 40px; color: ${
-                                                    address.setDefault ? '#907F46' : '#111'
-                                                }`"
-                                            ></i>
-                                            <p class="ma-0 text-center subtitle text--primary">
-                                                {{ address.firstStreet }}
-                                            </p>
-                                            <p
-                                                v-if="address.secondStreet !== ''"
-                                                class="text-center subtitle text--primary"
-                                            >
-                                                {{ address.secondStreet }}
-                                            </p>
-                                            <p class="text-center ma-0 subtitle text--primary">
-                                                {{ address.city }}
-                                            </p>
-                                            <p class="text-center ma-0 subtitle text--primary">
-                                                {{ address.state }}
-                                            </p>
-                                            <p class="text-center ma-0 subtitle text--primary">
-                                                {{ address.zipcode }}
-                                            </p>
-                                        </v-card-text>
-                                    </v-card>
-                                </v-col>
-                                <v-col cols="3" class="fill-height">
-                                    <v-card
-                                        class="dashed-card fill-width d-flex align-center"
-                                        max-height="310px"
-                                        height="310"
-                                        fill-width
-                                        max-width="344"
-                                        @click="createAddress()"
-                                    >
-                                        <v-card-text class="container">
-                                            <v-row class="d-flex justify-center">
-                                                <v-icon x-large>
-                                                    mdi-plus
-                                                </v-icon>
-                                            </v-row>
-                                            <v-row class="d-flex justify-center">
-                                                <p class="overline text--primary">
-                                                    {{ $t('ADD_ADDRESS') }}
-                                                </p>
-                                            </v-row>
-                                        </v-card-text>
-                                    </v-card>
-                                </v-col>
-                            </v-row>
-                            <v-row justify="center" v-else>
-                                <v-col cols="3" class="mx-auto">
-                                    <v-card
-                                        class="dashed-card fill-width d-flex align-center"
-                                        max-height="310px"
-                                        height="310"
-                                        fill-width
-                                        max-width="344"
-                                        @click="createAddress()"
-                                    >
-                                        <v-card-text class="container">
-                                            <v-row class="d-flex justify-center">
-                                                <v-icon x-large>
-                                                    mdi-plus
-                                                </v-icon>
-                                            </v-row>
-                                            <v-row class="d-flex justify-center">
-                                                <p class="overline text--primary">
-                                                    {{ $t('ADD_ADDRESS') }}
-                                                </p>
-                                            </v-row>
-                                        </v-card-text>
-                                    </v-card>
-                                </v-col>
-                            </v-row>
-                        </v-row>
-                    </v-container>
-                    <div class="d-flex justify-center">
-                        <v-alert type="error" v-if="firstStepError">
-                            {{ $t('SELECT_SHIPPING_ADDRESS') }}
-                        </v-alert>
-                    </div>
-                    <div class="d-flex justify-center">
-                        <v-btn color="primary" @click="validateFirstStep()">Continue</v-btn>
-                        <v-btn text>Cancel</v-btn>
-                    </div>
-                </v-stepper-content>
-
-                <v-stepper-content step="2">
-                    <v-card color="grey lighten-1" class="mb-12" height="200px"></v-card>
-                    <div class="d-flex justify-center">
-                        <v-btn color="primary" @click="step = 3">Continue</v-btn>
-                        <v-btn text>Cancel</v-btn>
-                    </div>
-                </v-stepper-content>
-            </v-stepper>
-        </v-container>
-    </v-main>
+    </v-container>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
-import { addresses, authModule } from '@/store/namespaces';
+import { addresses, authModule, carts } from '@/store/namespaces';
 import AddressTypes from '@/store/addresses/methods/address.methods';
 import { Address } from '@/modules/client/addresses/interfaces/address.interface';
 import AuthTypes from '@/store/auth/methods/auth.methods';
-import rules from '@/utils/rules';
 import { CustomerInterface } from '@/modules/client/auth/interfaces/customer.interface';
-import { STATUS } from '@/config/constants';
-
-@Component
+import AddressStepCheckout from '@/modules/client/checkout/components/AddressStepCheckout.vue';
+import PackageInsuranceStep from '@/modules/client/checkout/components/PackageInsuranceStep.vue';
+import CartTypes from '@/store/carts/methods/cart.methods';
+import { ProductCarts } from '@/modules/client/cart/interfaces/carts.interface';
+import CartMethods from '@/store/carts/methods/cart.methods';
+import { PacketBasicInformationInterface } from '@/modules/client/checkout/interfaces/packetBasicInformation.interface';
+import { CustomerLoyaltyUpdateProductPointsInterfaces } from '@/modules/client/checkout/interfaces/customerLoyaltyUpdateProductPoints.interfaces';
+import PaymentDetail from '@/modules/client/checkout/components/PaymentDetail.vue';
+import { payObjectCheckoutInterfaces } from '@/modules/client/checkout/interfaces/payObjectCheckout.interfaces';
+import { NewPayment } from '@/modules/client/checkout/interfaces/newPayment.interface';
+@Component({
+    components: { PaymentDetail, PackageInsuranceStep, AddressStepCheckout },
+})
 export default class Checkout extends Vue {
     public step?: number = 1;
-    public timeout?: number = 2000;
     public firstStepError?: boolean = false;
-    public fetchingAddressesError?: boolean = false;
-    public defaultAddressError?: boolean = false;
-    public dialog?: boolean = false;
-    public isFormValid?: boolean = true;
-    public addressCreated?: boolean = false;
-    public addressCreatedError?: boolean = false;
-    public rules = rules;
-    public firstStreet?: string = '';
-    public secondStreet?: string = '';
-    public cityName?: string = '';
-    public state?: string = '';
-    public zipCode?: string = '';
-    $refs!: {
-        form;
-    };
+    public secondStepError?: boolean = false;
+    public thirdStepError?: boolean = false;
+    public fetchFirstStep?: boolean = false;
+    public fetchSecondStep?: boolean = false;
+    public fetchThirdStep?: boolean = false;
 
-    createAddress(): void {
-        this.dialog = true;
-    }
+    async validateFirstStep(): Promise<void> {
+        if (this.GET_ADDRESSES.length > 0 && this.GET_CLIENT_DATA.cellphone !== '') {
+            const address = this.GET_ADDRESSES.find((address) => address.setDefault);
+            if (address) {
+                const user_base = this.GET_CLIENT_DATA;
 
-    createDefaultAddressObject(addressId: number): Address {
-        const defaultAddress: Address = {
-            id: addressId,
-            user: {
-                id: this.GET_CLIENT_DATA.id!,
-            },
-        };
-
-        return defaultAddress;
-    }
-
-    async setDefaultAddress(addressId: number): Promise<void> {
-        const updated: boolean = await this.SET_DEFAULT_ADDRESS(this.createDefaultAddressObject(addressId));
-
-        if (!updated) {
-            this.fetchingAddressesError = true;
-        } else {
-            await this.fetchAddresses();
-            this.$router.go(0);
-        }
-    }
-
-    async fetchAddresses(): Promise<void> {
-        const fetched: boolean = await this.FETCH_ADDRESSES(this.GET_CLIENT_DATA.id!);
-
-        if (!fetched) {
-            this.defaultAddressError = true;
-        }
-    }
-
-    modifyFirstStreet(value: string): void {
-        this.firstStreet = value;
-    }
-    modifySecondStreet(value: string): void {
-        this.secondStreet = value;
-    }
-    modifyCityName(value: string): void {
-        this.cityName = value;
-    }
-    modifyState(value: string): void {
-        this.state = value;
-    }
-    modifyZipCode(value: string): void {
-        this.zipCode = value;
-    }
-
-    createAddressObject(): Address {
-        const address: Address = {
-            firstStreet: this.firstStreet,
-            secondStreet: this.secondStreet,
-            cityName: this.cityName,
-            state: this.state,
-            zipcode: this.zipCode,
-            user: {
-                id: this.GET_CLIENT_DATA.id!,
-            },
-            status: {
-                id: STATUS.ACTIVE,
-            },
-        };
-        return address;
-    }
-
-    async saveChanges(): Promise<void> {
-        if (this.$refs.form.validate()) {
-            const created: boolean = await this.CREATE_ADDRESS(this.createAddressObject());
-            if (!created) {
-                this.dialog = false;
-                this.addressCreatedError = true;
-            } else {
-                this.addressCreated = true;
-                await this.fetchAddresses();
-                setTimeout(() => {
-                    this.dialog = false;
-                }, 1000);
+                const carts_base = this.GET_PRODUCTS_CHECKOUT;
+                const productCarts: {
+                    description: string | undefined;
+                    productDimension: {
+                        weight: number | string | undefined;
+                        long: number | string | undefined;
+                        width: number | string | undefined;
+                        height: number | string | undefined;
+                    };
+                    fragile: boolean | undefined;
+                    hasInsurance: boolean | undefined;
+                    quantity: number | undefined;
+                }[] = [];
+                carts_base.map((cart) => {
+                    productCarts.push({
+                        description: cart.product?.name,
+                        fragile: cart.product?.fragile,
+                        hasInsurance: cart.hasInsurance,
+                        quantity: cart.quantity,
+                        productDimension: {
+                            weight: cart.product?.productDimension?.weight,
+                            height: cart.product?.productDimension?.height,
+                            width: cart.product?.productDimension?.width,
+                            long: cart.product?.productDimension?.long,
+                        },
+                    });
+                });
+                const currentlyAmount = this.GET_TOTAL_PRICE_CHECKOUT;
+                const user = {
+                    name: user_base.name,
+                    lastName: user_base.lastName,
+                    email: user_base.email,
+                    cellphone: user_base.cellphone,
+                    address,
+                };
+                this.fetchFirstStep = true;
+                const response = await this.GET_SHIPTHIS_INFO_PRODUCTS_CHECKOUT({
+                    user,
+                    productCarts,
+                    currentlyAmount,
+                });
+                this.fetchFirstStep = false;
+                if (response) {
+                    this.step = 2;
+                    this.firstStepError = false;
+                } else {
+                    this.firstStepError = true;
+                }
             }
-        }
-    }
-
-    validateFirstStep(): void {
-        if (this.GET_ADDRESSES.length > 0) {
-            this.step = 2;
-            this.firstStepError = false;
         } else {
             this.firstStepError = true;
         }
     }
 
+    async validateSecondStep(): Promise<void> {
+        const user = this.GET_CLIENT_DATA;
+        const carts = this.GET_PRODUCTS_CHECKOUT;
+        let products: { id: number; price: number; canAccumulatePoints: boolean | undefined }[] = [];
+        carts.map((cart_product) => {
+            let price: number = 0;
+            const { product } = cart_product;
+            const { quantity } = cart_product;
+            if (product) {
+                const id = product.id;
+                const canAccumulatePoints = product.canAccumulatePoints;
+                if (product!.offer && product!.offer.discountPrice) {
+                    price += parseFloat(product!.offer.discountPrice) * quantity!;
+                } else {
+                    price += product!.price! * quantity!;
+                }
+                if (id) {
+                    products.push({
+                        id,
+                        price,
+                        canAccumulatePoints,
+                    });
+                }
+            }
+        });
+        this.fetchSecondStep = true;
+        const response = await this.GET_PETROMILES_POINTS_ITEMS_CHECKOUT({
+            user: {
+                id: user.id,
+            },
+            products,
+        });
+        if (response) {
+            this.step = 3;
+            this.secondStepError = false;
+        } else {
+            this.secondStepError = true;
+        }
+        this.fetchSecondStep = false;
+    }
+
+    async goPay(): Promise<void> {
+        const address = this.GET_ADDRESSES.find((address) => address.setDefault);
+        const foreignExchange: { id: number } = { id: 1 };
+        const carts = this.GET_PRODUCTS_CHECKOUT;
+        let cartsForPayment: {
+            id: number | undefined;
+            quantity: number;
+            productPrice: number;
+            offerPrice: number;
+            productPoints: number | undefined;
+            product: {
+                id: number;
+                hasInsurance: boolean | undefined;
+                fragile: boolean | undefined;
+                description: string | undefined;
+                productDimensions: {
+                    width: string | undefined;
+                    height: string | undefined;
+                    long: string | undefined;
+                    weight: string | undefined;
+                };
+            };
+        }[] = [];
+        carts.map((product_cart) => {
+            const { product, quantity, id } = product_cart;
+            if (product && product.id && product.price && quantity) {
+                cartsForPayment.push({
+                    id,
+                    quantity: quantity,
+                    productPrice: product?.price,
+                    offerPrice:
+                        product?.offer && product?.offer.discountPrice
+                            ? product?.offer.discountPric
+                            : product?.price,
+                    productPoints: product?.canAccumulatePoints ? product.tentativePoints : 0,
+                    product: {
+                        id: product?.id,
+                        hasInsurance: product?.hasInsurance,
+                        fragile: product?.fragile,
+                        description: product?.name,
+                        productDimensions: {
+                            weight: product?.productDimension?.weight,
+                            height: product?.productDimension?.height,
+                            width: product?.productDimension?.width,
+                            long: product?.productDimension?.long,
+                        },
+                    },
+                });
+            }
+        });
+        if (address) {
+            this.fetchThirdStep = true;
+            //@ts-ignore
+            const response: {
+                success: boolean;
+                payment: NewPayment | null;
+            } = await this.FETCH_PAYMENT_CHECKOUT({
+                cellphone: this.GET_CLIENT_DATA.cellphone,
+                address: {
+                    id: address.id,
+                    firstStreet: address.firstStreet,
+                    secondStreet: address.secondStreet,
+                    city: address.city,
+                    state: address.state,
+                    zipcode: address.zipcode,
+                },
+                foreignExchange,
+                cartsForPayment,
+            });
+            this.fetchThirdStep = false;
+            if (response.success) {
+                //@ts-ignore
+                window.location.replace(response?.payment?.order?.payment_url);
+            } else {
+                this.thirdStepError = true;
+            }
+        }
+    }
+
+    @carts.Getter(CartTypes.getters.GET_PRODUCTS_CHECKOUT)
+    private GET_PRODUCTS_CHECKOUT!: ProductCarts[];
+    @carts.Getter(CartMethods.getters.GET_TOTAL_PRICE_CHECKOUT)
+    GET_TOTAL_PRICE_CHECKOUT!: number;
+    @carts.Action(CartTypes.actions.GET_PETROMILES_POINTS_ITEMS_CHECKOUT)
+    private GET_PETROMILES_POINTS_ITEMS_CHECKOUT!: (
+        products: CustomerLoyaltyUpdateProductPointsInterfaces,
+    ) => boolean;
+    @carts.Action(CartTypes.actions.GET_SHIPTHIS_INFO_PRODUCTS_CHECKOUT)
+    private GET_SHIPTHIS_INFO_PRODUCTS_CHECKOUT!: (packageInfo: PacketBasicInformationInterface) => boolean;
+    @carts.Action(CartTypes.actions.FETCH_PAYMENT_CHECKOUT)
+    private FETCH_PAYMENT_CHECKOUT!: (packageInfo: payObjectCheckoutInterfaces) => boolean;
+
     @authModule.Getter(AuthTypes.getters.GET_CLIENT_DATA)
     private GET_CLIENT_DATA!: CustomerInterface;
-
     @addresses.Action(AddressTypes.actions.CREATE_ADDRESS)
     private CREATE_ADDRESS!: (address: Address) => boolean;
-
     @addresses.Action(AddressTypes.actions.SET_DEFAULT_ADDRESS)
     private SET_DEFAULT_ADDRESS!: (defaultAddress: Address) => boolean;
-
     @addresses.Getter(AddressTypes.getters.GET_ADDRESSES)
     private GET_ADDRESSES!: Address[];
-
     @addresses.Action(AddressTypes.actions.FETCH_ADDRESSES)
     private FETCH_ADDRESSES!: (customerId: number) => boolean;
 }

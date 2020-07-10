@@ -26,9 +26,8 @@ class ProductsHttpRepository extends HttpRepository {
     }
 
     public updateProductData(product: ProductCreate) {
-        return this.put(this.createUri([`${ProductsHttpRepository.RESOURCE}`]), product, this.createHeader(),);
+        return this.put(this.createUri([`${ProductsHttpRepository.RESOURCE}`]), product, this.createHeader());
     }
-
 
     getAllProducts(): Promise<Products> {
         return this.get(this.createUri([`${ProductsHttpRepository.RESOURCE}`, `all`]));
@@ -47,7 +46,11 @@ class ProductsHttpRepository extends HttpRepository {
     }
 
     public createProduct(product: ProductCreate) {
-        return this.post(this.createUri([`${ProductsHttpRepository.RESOURCE}`]), product, this.createHeader(),);
+        return this.post(
+            this.createUri([`${ProductsHttpRepository.RESOURCE}`]),
+            product,
+            this.createHeader(),
+        );
     }
 
     public uploadImage(data: ProductPhotoDto) {

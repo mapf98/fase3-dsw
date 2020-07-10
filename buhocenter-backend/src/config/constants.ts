@@ -100,8 +100,6 @@ export const PREFIX = Object.freeze({
 
 export const URL = Object.freeze({
     CALLBACK: `${PREFIX.ORDERS}/callback`,
-    CANCEL: `${PREFIX.ORDERS}/cancel`,
-    SUCCESS: `${PREFIX.ORDERS}/success`,
 });
 
 export const TITLE = Object.freeze({
@@ -121,4 +119,12 @@ export const PAGINATE = Object.freeze({
 export const SYNCHRONIZATION_STATUS = Object.freeze({
     WITHOUT_NOTIFICATION: 'NOT NOTIFIED',
     NOTIFIED: 'NOTIFIED',
+});
+
+export const PACKAGE_SYSTEM = Object.freeze({
+    WAREHOUSE: 1,
+    CHARACTERISTICS: {
+        FRAGILE: 4,
+        HAS_INSURANCE: 5,
+    },
 });

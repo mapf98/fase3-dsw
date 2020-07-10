@@ -3,10 +3,16 @@
         <v-row class="align-center">
             <v-col class="d-flex align-center">
                 <p class="ma-0">{{ $t('ORDER_TITLE') }} {{ order.transaction }}</p>
-                <v-divider vertical class="mx-3"></v-divider>
-                <v-chip color="primary">{{
+                <v-chip color="primary" class="mx-3">{{
                     order.statusHistories[order.statusHistories.length - 1].status.name
                 }}</v-chip>
+                <v-divider vertical class="mx-3"></v-divider>
+                <div class="d-flex justify-center align-center mx-3">
+                    <div class="ma-0">
+                        <v-img src="../../../../assets/logoRoute.png" height="50" width="50" contain></v-img>
+                    </div>
+                    <a :href="order.trackingUrl" class="ma-0 mx-3">Track package in ShipThis</a>
+                </div>
             </v-col>
         </v-row>
         <v-divider></v-divider>

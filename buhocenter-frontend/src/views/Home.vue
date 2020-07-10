@@ -12,6 +12,14 @@
         <DailyRecomendation></DailyRecomendation>
         <AboutUs></AboutUs>
         <Allies></Allies>
+        <v-snackbar v-model="paymentSuccess" top color="success" class="mt-12">
+            {{ $t('PAYMENT_SUCCESS') }}
+            <v-btn color="white" text @click="paymentSuccess = false">{{ $t('CLOSE') }}</v-btn>
+        </v-snackbar>
+        <v-snackbar v-model="paymentError" top color="error" class="mt-12">
+            {{ $t('PAYMENT_CANCELED') }}
+            <v-btn color="white" text @click="paymentError = false">{{ $t('CLOSE') }}</v-btn>
+        </v-snackbar>
     </div>
 </template>
 <script lang="ts">
@@ -35,6 +43,19 @@ export default class Home extends Vue {
             src: require('../assets/images/slider-4.jpg'),
         },
     ];
+    paymentSuccess: boolean = false;
+    paymentError: boolean = false;
+
+    mounted() {
+        const query = this.$route.query;
+        if (query.hasOwnProperty('success')) {
+            if (query.success === 'true') {
+                this.paymentSuccess = true;
+            } else {
+                this.paymentError = true;
+            }
+        }
+    }
 }
 </script>
 <style>

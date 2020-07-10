@@ -39,7 +39,6 @@ export interface ProductCreate {
     productCatalogues: productCatalogues[];
     productPhotos: ProductPhotos[];
     photosFiles: photosFilesInterface[];
-    
 }
 
 export interface ProductRatingCreate {
@@ -121,6 +120,7 @@ export interface Product {
     //quitar
     type?: number;
     fragile?: boolean;
+    hasInsurance?: boolean | undefined;
 }
 
 export interface ProductPhotos {

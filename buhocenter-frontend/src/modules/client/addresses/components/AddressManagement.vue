@@ -260,7 +260,6 @@ export default class AddressManagement extends Vue {
             this.fetchingAddressesError = true;
         } else {
             await this.fetchAddresses();
-            this.$router.go(0);
         }
     }
 
@@ -320,9 +319,9 @@ export default class AddressManagement extends Vue {
             } else {
                 this.addressCreated = true;
                 await this.fetchAddresses();
-                this.loadingAdd = false;
                 this.dialog = false;
             }
+            this.loadingAdd = false;
         }
     }
 

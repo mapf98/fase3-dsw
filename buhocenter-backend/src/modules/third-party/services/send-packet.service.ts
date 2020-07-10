@@ -1,15 +1,14 @@
 import { Injectable, Inject } from '@nestjs/common';
 import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
 import { Logger } from 'winston';
-import { Product } from '../../products/entities/product.entity';
-import { CURRENCY } from '../../../config/constants';
-import { SendPacketActions } from '../enums/send-packet-actions.enum';
-
-import { SendPacketDimensionsDescriptions } from '../interfaces/send-packet-dimension-description';
-import { SendPacketBasicInformation } from '../interfaces/send-packet-basic-information';
-import { SendProductSO } from '../interfaces/send-product-SO';
-
 import { SendPacketRepository } from '../repositories/send-packet.repository';
+import { ShippingOrderRequest } from '../interfaces/shipping-order-request';
+import { User } from '../../users/entities/user.entity';
+import { ShippingOrderItems } from '../interfaces/shipping-order-items.interface';
+import { Product } from '../../products/entities/product.entity';
+import { Cart } from '../../carts/entities/cart.entity';
+import { PACKAGE_SYSTEM } from '../../../config/constants';
+import { ConfigKeys } from '../../../config/config.keys';
 
 @Injectable()
 export class SendPacketService {
@@ -18,107 +17,90 @@ export class SendPacketService {
         private readonly sendPacketRepository: SendPacketRepository,
     ) {}
 
-    public async calculatePackets(shippingData: SendPacketBasicInformation): Promise<any> {
-        let shipThisTraductor: SendPacketDimensionsDescriptions = {
-            commercial_ally_api_key: process.env.SHIPTHIS_API_KEY,
-            Warehouse_id: 1,
-            rec_first_name: shippingData.user.name,
-            rec_last_name: shippingData.user.lastName,
-            rec_email: shippingData.user.email,
-            rec_phone_number: '+1 (505) 444-4444',
-            destination_address:
-                shippingData.address.firstStreet +
-                shippingData.address.secondStreet +
-                shippingData.address.city +
-                shippingData.address.state +
-                'US' +
-                shippingData.address.zipcode,
+    private getItemCharacteristics(
+        product: Product & { hasInsurance: boolean },
+    ): { characteristic_id: number }[] {
+        const characteristics: { characteristic_id: number }[] = [];
 
-            items: [
-                {
-                    description: '',
-                    item_weight: 0,
-                    item_length: 0,
-                    item_width: 0,
-                    item_height: 0,
-                    characteristics: [],
-                },
-            ],
-        };
+        if (product.fragile) {
+            characteristics.push({ characteristic_id: PACKAGE_SYSTEM.CHARACTERISTICS.FRAGILE });
+        } else if (product.hasInsurance) {
+            characteristics.push({ characteristic_id: PACKAGE_SYSTEM.CHARACTERISTICS.HAS_INSURANCE });
+        }
 
-        let itemTrackerNumber = 0;
-
-        shippingData.carts.forEach(
-            (cart, index) =>
-                (shipThisTraductor.items[index] = {
-                    description: cart.product.name,
-                    item_weight: parseInt(cart.product.productDimension.weight),
-                    item_length: parseInt(cart.product.productDimension.long),
-                    item_width: parseInt(cart.product.productDimension.width),
-                    item_height: parseInt(cart.product.productDimension.height),
-                    characteristics: [],
-                }),
-        );
-        //const token= process.env.SHIPTHIS_AUTH_TOKEN;
-
-        const request: SendProductSO = {
-            apiKey: process.env.SHIPTHIS_API_KEY,
-            type: SendPacketActions.SEND,
-            packet: shipThisTraductor,
-        };
-
-        return await this.sendPacketRepository.GetPacketShippingPrice(shipThisTraductor);
+        return characteristics;
     }
 
-    public async savePackets(shippingData: SendPacketBasicInformation): Promise<any> {
-        let shipThisTraductor: SendPacketDimensionsDescriptions = {
+    private getItems(productCarts: Product[] | Cart[]): ShippingOrderItems[] {
+        const items = [];
+
+        productCarts.forEach(i => {
+            const characteristics = this.getItemCharacteristics(i);
+
+            for (let j = 0; j < i.quantity; j++) {
+                items.push({
+                    description: i.description,
+                    item_weight: parseFloat(i.productDimension.weight),
+                    item_length: parseFloat(i.productDimension.long),
+                    item_width: parseFloat(i.productDimension.width),
+                    item_height: parseFloat(i.productDimension.height),
+                    characteristics,
+                });
+            }
+        });
+
+        return items;
+    }
+
+    /**
+     *
+     * @param shippingPackage
+     */
+    public async sendPacket(shippingPackage) {
+        const address: string = `${shippingPackage.user.address.firstStreet} ${shippingPackage.user.address.secondStreet} ${shippingPackage.user.address.city} ${shippingPackage.user.address.state} US ${shippingPackage.user.address.zipcode}`;
+
+        const request: ShippingOrderRequest = {
             commercial_ally_api_key: process.env.SHIPTHIS_API_KEY,
-            Warehouse_id: 1,
-            rec_first_name: shippingData.user.name,
-            rec_last_name: shippingData.user.lastName,
-            rec_email: shippingData.user.email,
-            rec_phone_number: '+1 (505) 444-4444',
-            destination_address:
-                shippingData.address.firstStreet +
-                shippingData.address.secondStreet +
-                shippingData.address.city +
-                shippingData.address.state +
-                'US' +
-                shippingData.address.zipcode,
-
-            items: [
-                {
-                    description: '',
-                    item_weight: 0,
-                    item_length: 0,
-                    item_width: 0,
-                    item_height: 0,
-                    characteristics: [],
-                },
-            ],
+            Warehouse_id: PACKAGE_SYSTEM.WAREHOUSE,
+            rec_first_name: shippingPackage.user.name,
+            rec_last_name: shippingPackage.user.lastName,
+            rec_email: shippingPackage.user.email,
+            rec_phone_number: shippingPackage.user.cellphone,
+            destination_address: address,
+            items: this.getItems(shippingPackage.productCarts),
         };
 
-        let itemTrackerNumber = 0;
+        return await this.sendPacketRepository.GetPacketShippingPrice(request);
+    }
 
-        shippingData.carts.forEach(
-            (cart, index) =>
-                (shipThisTraductor.items[index] = {
-                    description: cart.product.name,
-                    item_weight: parseInt(cart.product.productDimension.weight),
-                    item_length: parseInt(cart.product.productDimension.long),
-                    item_width: parseInt(cart.product.productDimension.width),
-                    item_height: parseInt(cart.product.productDimension.height),
-                    characteristics: [],
-                }),
-        );
-        //const token= process.env.SHIPTHIS_AUTH_TOKEN;
-
-        const request: SendProductSO = {
-            apiKey: process.env.SHIPTHIS_API_KEY,
-            type: SendPacketActions.SEND,
-            packet: shipThisTraductor,
+    public async createShippingOrder(user: User, checkout) {
+        const address: string = `${checkout.address.firstStreet} ${checkout.address.secondStreet} ${checkout.address.city} ${checkout.address.state} US ${checkout.address.zipcode}`;
+        const request: ShippingOrderRequest = {
+            commercial_ally_api_key: process.env.SHIPTHIS_API_KEY,
+            Warehouse_id: PACKAGE_SYSTEM.WAREHOUSE,
+            rec_first_name: user.name,
+            rec_last_name: user.lastName,
+            rec_email: user.email,
+            rec_phone_number: checkout.cellphone,
+            destination_address: address,
+            items: this.getItems(this.transformProductsForShipping(checkout.cartsForPayment)),
         };
 
-        return await this.sendPacketRepository.saveShippingPrice(shipThisTraductor);
+        return await this.sendPacketRepository.createShippingPackage(request);
+    }
+
+    /**
+     * Transform cart items to create shipping order with ShipThis
+     * @param cartsForPayment list of cart items to be transformed to create the
+     * shipping order
+     */
+    private transformProductsForShipping(cartsForPayment): Product[] | Cart[] {
+        return cartsForPayment.map(i => ({
+            hasInsurance: i.product.hasInsurance,
+            fragile: i.product.fragile,
+            quantity: parseInt(i.quantity),
+            description: i.product.description,
+            productDimension: i.product.productDimensions,
+        }));
     }
 }

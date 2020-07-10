@@ -19,8 +19,9 @@ import { OffersTransactionsRepository } from './transaction/offers.transaction.s
 import { ProductInventoriesService } from './services/product-inventories.service';
 import { ProductRatingsController } from './controllers/product-rating.controller';
 import { ProductRatingsService } from './services/product-ratings.service';
-import { UsersModule } from '../users/users.module';
 import { ThirdPartyModule } from '../third-party/third-party.module';
+import { UsersModule } from '../users/users.module';
+
 import { AuthModule } from '../auth/auth.module';
 
 @Module({

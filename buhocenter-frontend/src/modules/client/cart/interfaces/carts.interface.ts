@@ -40,6 +40,7 @@ export class ProductCarts {
     user?: {
         id: number;
     };
+    hasInsurance?: boolean;
 }
 
 export interface CartInterface {

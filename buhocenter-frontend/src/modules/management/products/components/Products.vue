@@ -108,7 +108,7 @@ export default class DashboardProducts extends Vue {
 
     errorEvent(): void {
         this.errorCreate = true;
-        this.showAllProducts();   
+        this.showAllProducts();
     }
 
     async showAllProducts(): Promise<void> {

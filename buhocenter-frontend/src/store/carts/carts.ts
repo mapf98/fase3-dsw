@@ -1,11 +1,17 @@
 import { Module } from 'vuex';
 import CartTypes from '@/store/carts/methods/cart.methods';
 import cartsHttpRepository from '@/modules/client/cart/repositories/carts.repository';
+import CheckoutRepository from '@/modules/client/checkout/repositories/checkout.repository';
 import ProductsFirebaseRepository from '@/modules/client/products/repositories/products.firebase';
 import * as CART_INTERFACE from '@/modules/client/cart/interfaces/carts.interface';
 import { CARTS_EMPTY_STATE } from './carts.state';
 import { CartsStateInterface } from './interfaces/carts.state.interface';
 import { ProductCarts, CartInterface } from '@/modules/client/cart/interfaces/carts.interface';
+import { PacketBasicInformationInterface } from '@/modules/client/checkout/interfaces/packetBasicInformation.interface';
+
+import { CustomerLoyaltyUpdateProductPointsInterfaces } from '@/modules/client/checkout/interfaces/customerLoyaltyUpdateProductPoints.interfaces';
+import { payObjectCheckoutInterfaces } from '@/modules/client/checkout/interfaces/payObjectCheckout.interfaces';
+import { NewPayment } from '@/modules/client/checkout/interfaces/newPayment.interface';
 
 const carts: Module<CartsStateInterface, any> = {
     namespaced: true,
@@ -21,7 +27,7 @@ const carts: Module<CartsStateInterface, any> = {
         },
         [CartTypes.mutations.ADD_PRODUCT_CHECKOUT](state, productCart: ProductCarts) {
             const newCheckout = state.checkout;
-            newCheckout.push(productCart);
+            newCheckout.push({ ...productCart, hasInsurance: false });
             state.checkout = newCheckout;
         },
         [CartTypes.mutations.REMOVE_PRODUCT_CHECKOUT](state, index: number) {
@@ -59,6 +65,13 @@ const carts: Module<CartsStateInterface, any> = {
         [CartTypes.mutations.FALSE_PHOTO_CART](state) {
             state.load_photo_cart = false;
         },
+        [CartTypes.mutations.SET_TENTATIVE_POINTS_PRODUCTS_CHECKOUT](state, products: ProductCarts[]) {
+            state.checkout = products;
+        },
+        [CartTypes.mutations.SET_INFO_SHIP_THIS_CHECKOUT](state, { newCheckout, destination }) {
+            state.checkout = newCheckout;
+            state.destination = destination;
+        },
     },
     getters: {
         [CartTypes.getters.GET_CART_OBJECT](state): ProductCarts[] {
@@ -69,6 +82,9 @@ const carts: Module<CartsStateInterface, any> = {
         },
         [CartTypes.getters.GET_PRODUCTS_CHECKOUT](state): ProductCarts[] {
             return state.checkout;
+        },
+        [CartTypes.getters.GET_DESTINATION](state): string {
+            return state.destination;
         },
         [CartTypes.getters.GET_TOTAL_PRICE_CHECKOUT](state): number {
             const { checkout } = state;
@@ -123,6 +139,85 @@ const carts: Module<CartsStateInterface, any> = {
                 return false;
             }
         },
+        async [CartTypes.actions.GET_PETROMILES_POINTS_ITEMS_CHECKOUT](
+            { commit, state },
+            products: CustomerLoyaltyUpdateProductPointsInterfaces,
+        ): Promise<boolean> {
+            const response = await CheckoutRepository.updateProductPoints(products);
+            if (response) {
+                const newCheckout = state.checkout;
+                newCheckout.map(({ product }) => {
+                    response.map((product_points) => {
+                        if (
+                            product &&
+                            product.id === product_points.id &&
+                            product_points.canAccumulatePoints
+                        ) {
+                            product.tentativePoints = product_points.tentativePoints;
+                        }
+                    });
+                });
+                commit(CartTypes.mutations.SET_TENTATIVE_POINTS_PRODUCTS_CHECKOUT, newCheckout);
+            }
+            return true;
+        },
+        async [CartTypes.actions.GET_SHIPTHIS_INFO_PRODUCTS_CHECKOUT](
+            { commit, state },
+            packageInfo: PacketBasicInformationInterface,
+        ): Promise<boolean> {
+            try {
+                const response = await CheckoutRepository.sendPacketInfo(packageInfo);
+
+                if (response) {
+                    const oldCheckout = state.checkout;
+                    const newCheckout = [];
+                    const destination = response.destination;
+                    oldCheckout.map((productCheckout) => {
+                        let { product } = productCheckout;
+                        response.packages.map((pack) => {
+                            if (product?.name === pack?.description) {
+                                // @ts-ignore
+                                product.priceInsurance = pack.cost;
+                            }
+                        });
+                        productCheckout.product = product;
+                        // @ts-ignore
+                        newCheckout.push(productCheckout);
+                    });
+                    commit(CartTypes.mutations.SET_INFO_SHIP_THIS_CHECKOUT, {
+                        newCheckout,
+                        destination,
+                    });
+                    return true;
+                }
+                return false;
+            } catch (e) {
+                return false;
+            }
+        },
+        async [CartTypes.actions.FETCH_PAYMENT_CHECKOUT](
+            { commit },
+            payObjectCheckout: payObjectCheckoutInterfaces,
+        ): Promise<{ success: boolean; payment: NewPayment | null }> {
+            try {
+                const response: NewPayment = await CheckoutRepository.paymentOrders(payObjectCheckout);
+                if (response) {
+                    return {
+                        success: true,
+                        payment: response,
+                    };
+                }
+                return {
+                    success: false,
+                    payment: null,
+                };
+            } catch (e) {
+                return {
+                    success: false,
+                    payment: null,
+                };
+            }
+        },
         async [CartTypes.actions.FETCH_PRODUCT_CART_PHOTO_BY_NAME](
             { commit },
             products: ProductCarts[],
@@ -163,7 +258,6 @@ const carts: Module<CartsStateInterface, any> = {
                 err_cart: false,
                 err_cart_message: false,
             };
-
             commit(CartTypes.mutations.SET_CART, emptyCart);
         },
     },

@@ -6,4 +6,5 @@ export interface CartsStateInterface {
     cart: ProductCarts[];
     checkout: ProductCarts[];
     load_photo_cart: boolean;
+    destination: string;
 }

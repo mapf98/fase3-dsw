@@ -25,6 +25,9 @@ import { CustomerLoyaltyTickets } from 'src/modules/third-party/interfaces/custo
 import { CustomerLoyaltyAccumulatePointsResponse } from 'src/modules/third-party/interfaces/customer-loyalty-accumulate-points';
 import { PaymentParameters } from '../interfaces/payment-parameters';
 import { PaginatedPayments } from '../interfaces/paginated-payments';
+import { Cart } from 'src/modules/carts/entities/cart.entity';
+import { User } from 'src/modules/users/entities/user.entity';
+import { SendPacketService } from '../../third-party/services/send-packet.service';
 
 @Injectable()
 export class PaymentsService {
@@ -41,6 +44,7 @@ export class PaymentsService {
         private readonly productRatingService: ProductRatingsService,
         private readonly usersService: UsersService,
         private readonly customerLoyaltyService: CustomerLoyaltyService,
+        private readonly packageShippingService: SendPacketService,
         private readonly configService: ConfigService,
     ) {
         this.paymentClient = new CoingatePaymentStrategy(this.configService);
@@ -60,16 +64,18 @@ export class PaymentsService {
         const activeCommission = await this.commissionService.getActiveCommission();
         const newOrderStatus = await this.statusService.getStatusById(STATUS.NEW.id);
 
-        const user = await this.usersService.getUserByAddress(checkout.address.id);
+        const user: User = await this.usersService.getUserByAddress(checkout.address.id);
 
         let payment: Payment = new Payment();
 
-        if (user.loyaltySystemToken) {
+        let cartsWithPoints: Cart[] = checkout.cartsForPayment.filter(cart => cart.productPoints > 0);
+
+        if (user.loyaltySystemToken && cartsWithPoints.length > 0) {
             let response: CustomerLoyaltyAccumulatePointsResponse;
 
             try {
                 response = await this.customerLoyaltyService.accumulatePoints(
-                    checkout.cartsForPayment,
+                    cartsWithPoints,
                     user.loyaltySystemToken,
                 );
             } catch (error) {
@@ -110,6 +116,7 @@ export class PaymentsService {
         payment.statusHistories = [statusHistory];
 
         let order: NewOrder;
+        let packageShippingOrder;
 
         await getManager().transaction(async transactionEntityManager => {
             try {
@@ -120,6 +127,8 @@ export class PaymentsService {
                 await paymentTransactionRepository.save(payment);
                 order = await this.paymentClient.createOrder(payment.id, payment.total);
                 payment.transaction = order.id;
+                packageShippingOrder = await this.packageShippingService.createShippingOrder(user, checkout);
+                payment.trackingUrl = packageShippingOrder.tracking_URL;
                 await paymentTransactionRepository.save(payment);
             } catch (error) {
                 throw error;
@@ -129,6 +138,7 @@ export class PaymentsService {
         return {
             payment: payment,
             order: order,
+            packageOrder: packageShippingOrder,
         };
     }
 

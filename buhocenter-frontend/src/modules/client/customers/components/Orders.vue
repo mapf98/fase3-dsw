@@ -63,7 +63,7 @@
                             </v-row>
                         </v-expansion-panel-header>
                         <v-expansion-panel-content>
-                            <div class="d-flex justify-end">
+                            <div class="d-flex justify-end" v-if="order.cryptocurrency">
                                 <h1 class="overline">{{ $t('CRYPTOCURRENCY_AMOUNT') }}:</h1>
                                 <h1 class="overline font-weight-bold ml-6">
                                     {{ order.totalCryptocurrency }} {{ order.cryptocurrency.iso }} ({{
@@ -71,7 +71,21 @@
                                     }})
                                 </h1>
                             </div>
-                            <div class="d-flex justify-end">
+                            <div class="d-flex justify-end" v-else>
+                                <h1 class="overline">{{ $t('PAYMENT_NOT_COMPLETED_CRYTO_NOT_SELECTED') }}</h1>
+                            </div>
+                            <div class="d-flex justify-space-between align-center">
+                                <div class="d-flex justify-center align-center">
+                                    <div>
+                                        <v-img
+                                            src="../../../../assets/logoRoute.png"
+                                            height="50"
+                                            width="50"
+                                            contain
+                                        ></v-img>
+                                    </div>
+                                    <a :href="order.trackingUrl" class="mx-3">Track package in ShipThis</a>
+                                </div>
                                 <v-btn
                                     small
                                     outlined
@@ -183,6 +197,7 @@ export default class ClientOrders extends Vue {
 
     async mounted(): Promise<void> {
         await this.fetchOrders();
+        console.log(this.GET_ORDERS);
     }
 
     async fetchProductsOrder(orderId: number): Promise<void> {

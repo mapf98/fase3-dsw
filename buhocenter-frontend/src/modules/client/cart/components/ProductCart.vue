@@ -116,6 +116,7 @@ export default class ProductCart extends Vue {
             const checkout: ProductCarts = {
                 quantity: this.item.quantity!,
                 product: this.item.product!,
+                id: this.item.id,
             };
             this.ADD_PRODUCT_CHECKOUT(checkout);
         } else {

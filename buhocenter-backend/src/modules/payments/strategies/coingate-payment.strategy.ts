@@ -15,8 +15,8 @@ export class CoingatePaymentStrategy implements IPaymentClient {
             this._client = testClient(configService.get(ConfigKeys.COINGATE_API_KEY));
         }
         this._callbackURL = `${configService.get(ConfigKeys.PRODUCTION_URL)}${URL.CALLBACK}`;
-        this._cancelURL = `${configService.get(ConfigKeys.PRODUCTION_URL)}${URL.CANCEL}`;
-        this._successURL = `${configService.get(ConfigKeys.PRODUCTION_URL)}${URL.SUCCESS}`;
+        this._cancelURL = `${configService.get(ConfigKeys.COINGATE_URL_CANCEL)}`;
+        this._successURL = `${configService.get(ConfigKeys.COINGATE_URL_SUCCESS)}`;
     }
 
     async createOrder(orderId: number, price: number) {

@@ -1,23 +1,9 @@
-import {
-    Controller,
-    Get,
-    Param,
-    Post,
-    Body,
-    ParseIntPipe,
-    Query,
-    Inject,
-    Res,
-    HttpStatus,
-    Patch,
-} from '@nestjs/common';
-import { Response } from 'express';
+import { Controller, Post, Body, Inject } from '@nestjs/common';
 import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
 import { Logger } from 'winston';
 import { SendPacketService } from '../services/send-packet.service';
-import { SendPacketBasicInformation } from '../interfaces/send-packet-basic-information';
 
-@Controller('sendpacket')
+@Controller('send-packet')
 export class SendPacketController {
     constructor(
         @Inject(WINSTON_MODULE_PROVIDER) private readonly logger: Logger,
@@ -25,34 +11,11 @@ export class SendPacketController {
     ) {}
 
     @Post()
-    async sendPacket(
-        @Res() res: Response,
-        @Body() shippingData: SendPacketBasicInformation,
-    ): Promise<Response> {
-        this.logger.info(
-            `sendPacket: sending packet data to ship this [shippingData=${JSON.stringify(shippingData)}]`,
-            {
-                context: SendPacketController.name,
-            },
-        );
+    async sendPacket(@Body() shippingData: any): Promise<any> {
+        this.logger.info(`sendPacket: sending package... [shippingData=${JSON.stringify(shippingData)}]`, {
+            context: SendPacketController.name,
+        });
 
-        let response = await this.sendPacketService.calculatePackets(shippingData);
-        return res.status(HttpStatus.OK).send(response);
-    }
-
-    @Post('/save')
-    async savePacket(
-        @Res() res: Response,
-        @Body() shippingData: SendPacketBasicInformation,
-    ): Promise<Response> {
-        this.logger.info(
-            `sendPacket: sending packet data to ship this [shippingData=${JSON.stringify(shippingData)}]`,
-            {
-                context: SendPacketController.name,
-            },
-        );
-
-        let response = await this.sendPacketService.savePackets(shippingData);
-        return res.status(HttpStatus.OK).send(response);
+        return await this.sendPacketService.sendPacket(shippingData);
     }
 }

@@ -6,4 +6,5 @@ export const CARTS_EMPTY_STATE: CartsStateInterface = {
     cart: [],
     checkout: [],
     load_photo_cart: false,
+    destination: '',
 };

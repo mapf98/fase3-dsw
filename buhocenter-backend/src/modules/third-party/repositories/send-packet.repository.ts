@@ -1,40 +1,21 @@
 import { HttpService, Injectable } from '@nestjs/common';
 import { map } from 'rxjs/operators';
-import { SendPacketDimensionsDescriptions } from '../interfaces/send-packet-dimension-description';
-import { SendPacketRO } from '../interfaces/send-packet-RO';
+import { ShippingOrderRequest } from '../interfaces/shipping-order-request';
 
 @Injectable()
 export class SendPacketRepository {
     constructor(private readonly httpService: HttpService) {}
 
-    async GetPacketShippingPrice(shippingData: SendPacketDimensionsDescriptions): Promise<any> {
+    public async GetPacketShippingPrice(shippingData: ShippingOrderRequest): Promise<any> {
         return await this.httpService
-            .post(
-                `${process.env.SHIPTHIS_BASE_URL}` + '/calculate-pickup',
-                shippingData,
-                /*{
-                    headers: {
-                        authorization:
-                            'Bearer ' + token,
-                    },
-                },*/
-            )
+            .post(`${process.env.SHIPTHIS_BASE_URL}/calculate-pickup`, shippingData)
             .pipe(map(response => response.data))
             .toPromise();
     }
 
-    async saveShippingPrice(shippingData: SendPacketDimensionsDescriptions): Promise<SendPacketRO> {
+    public async createShippingPackage(shippingData: ShippingOrderRequest): Promise<any> {
         return await this.httpService
-            .post(
-                `${process.env.SHIPTHIS_BASE_URL}` + '/create-pickup',
-                shippingData,
-                /*{
-                    headers: {
-                        authorization:
-                            'Bearer ' + token,
-                    },
-                },*/
-            )
+            .post(`${process.env.SHIPTHIS_BASE_URL}/create-pickup`, shippingData)
             .pipe(map(response => response.data))
             .toPromise();
     }

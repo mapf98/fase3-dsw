@@ -21,7 +21,9 @@
                         getName(product.product.name)
                     }}</v-list-item-title>
                     <div class="overline mb-4">{{ product.product.provider.name }}</div>
-                    <v-list-item-subtitle class="mb-7">{{ product.productPrice | getCurrentExchangeWithSymbolFor }}</v-list-item-subtitle>
+                    <v-list-item-subtitle class="mb-7">{{
+                        product.productPrice | getCurrentExchangeWithSymbolFor
+                    }}</v-list-item-subtitle>
                     <v-list-item-subtitle>{{ $t('QUANTITY') }}: {{ product.quantity }}</v-list-item-subtitle>
                 </v-col>
                 <v-col class="d-flex justify-end align-center">

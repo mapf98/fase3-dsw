@@ -483,7 +483,6 @@ export default class ProductManagement extends Vue {
 
         if (!photosLoaded) delete this.product.productPhotos;
         else this.product.productPhotos = photos;
-
     }
 
     previewImage(index: number, event: any): void {

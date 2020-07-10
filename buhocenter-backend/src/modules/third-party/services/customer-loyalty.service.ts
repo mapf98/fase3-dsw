@@ -164,10 +164,12 @@ export class CustomerLoyaltyService {
             context: CustomerLoyaltyService.name,
         });
 
-        const items: CustomerLoyaltyItems[] = carts.map(cart => {
+        let items: CustomerLoyaltyItems[] = carts.map(cart => {
+            let price = cart.productPrice * cart.quantity;
+
             return {
                 id: `${cart.id}`,
-                priceTag: parseFloat((cart.productPrice * 100).toFixed(0)),
+                priceTag: parseFloat((price * 100).toFixed(0)),
                 currency: CURRENCY.PRICE.toLowerCase(),
             };
         });
@@ -194,7 +196,11 @@ export class CustomerLoyaltyService {
             throw new NotFoundException('The userId provided is invalid');
         }
 
-        return await this.getProductsAccumulatedPoints(userProducts.products, user.loyaltySystemToken);
+        if (user.loyaltySystemToken) {
+            return await this.getProductsAccumulatedPoints(userProducts.products, user.loyaltySystemToken);
+        }
+
+        return userProducts.products;
     }
 
     /*

@@ -22,7 +22,7 @@ import { CsvGenerator } from '../documents/repositories/csv.generator';
             useClass: PetromilesClientsCsv,
         },
     ],
-    exports: [CustomerLoyaltyService],
+    exports: [CustomerLoyaltyService, SendPacketService],
     controllers: [ThirdPartyController, SendPacketController],
 })
 export class ThirdPartyModule {}

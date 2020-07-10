@@ -20,9 +20,8 @@ export class AddressService {
         @Inject(WINSTON_MODULE_PROVIDER) private readonly _logger: Logger,
         private readonly usersService: UsersService,
         private readonly statusService: StatusService,
-        private readonly addressHttpRepository: AddressValidationRepository,
-        @InjectRepository(Address)
-        private addressesRepository: Repository<Address>,
+        private readonly addressValidationRepository: AddressValidationRepository,
+        @InjectRepository(Address) private addressRepository: Repository<Address>,
     ) {}
 
     /**
@@ -35,8 +34,8 @@ export class AddressService {
             context: AddressService.name,
         });
 
-        const defaultAddress: Address = await this.addressesRepository.findOne({
-            where: [{ user: userId, status: { id: STATUS.ACTIVE.id } }],
+        const defaultAddress: Address = await this.addressRepository.findOne({
+            where: { user: userId, status: STATUS.ACTIVE.id },
         });
 
         if (defaultAddress) {
@@ -95,7 +94,7 @@ export class AddressService {
         this._logger.debug(`verificateAddress: verifying address [address=${JSON.stringify(body)}]`, {
             context: AddressService.name,
         });
-        return await this.addressHttpRepository.postAddressUri(body);
+        return await this.addressValidationRepository.postAddressUri(body);
     }
 
     async checkAddress(
@@ -202,19 +201,19 @@ export class AddressService {
             context: AddressService.name,
         });
 
-        return await this.addressesRepository.update({ id }, { status: { id: STATUS.INACTIVE.id } });
+        return await this.addressRepository.update({ id }, { status: { id: STATUS.INACTIVE.id } });
     }
 
     /**
      * Returns the addresses of a user
      * @param userId logged in user id
      */
-    async getAddresses(userId: number) {
+    async getAddresses(userId: number): Promise<Address[]> {
         this._logger.info(`getAddress: getting addresses [userId=${userId}]`, {
             context: AddressService.name,
         });
 
-        return await this.addressesRepository.find({
+        return await this.addressRepository.find({
             where: { user: { id: userId }, status: { id: STATUS.ACTIVE.id } },
         });
     }
