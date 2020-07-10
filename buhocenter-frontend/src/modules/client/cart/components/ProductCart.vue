@@ -8,10 +8,12 @@
                 }}</v-list-item-title>
                 <v-list-item-subtitle>{{ item.product.description }}</v-list-item-subtitle>
                 <v-list-item-title class="headline mb-1 subtitle-1">
-                    <span :class="{ title: true, 'item-offer__title': hasOffer() }"
-                        >${{ item.product.price }}</span
-                    >
-                    <span v-if="hasOffer()" class="title"> ${{ getDiscountPrice() }} </span>
+                    <span :class="{ title: true, 'item-offer__title': hasOffer() }">{{
+                        item.product.price | getCurrentExchangeWithSymbolFor
+                    }}</span>
+                    <span v-if="hasOffer()" class="title">
+                        {{ getDiscountPrice() | getCurrentExchangeWithSymbolFor }}
+                    </span>
                 </v-list-item-title>
             </v-list-item-content>
 

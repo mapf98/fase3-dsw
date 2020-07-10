@@ -28,8 +28,8 @@
                 </v-card-actions>
             </v-card-actions>
             <v-card-actions>
-                Subtotal ({{ GET_PRODUCTS_CHECKOUT.length }} items):{{ ' ' }}
-                <b>{{ GET_TOTAL_PRICE_CHECKOUT.toFixed(2) }}$</b>
+                Subtotal ({{ GET_PRODUCTS_CHECKOUT.length }} items): {{ ' ' }}
+                <b>{{ GET_TOTAL_PRICE_CHECKOUT.toFixed(2) | getCurrentExchangeWithSymbolFor }}</b>
             </v-card-actions>
             <v-card-actions>
                 <v-btn @click="checkout" color="primary" outlined class="btn-remove" :disabled="onCheckout">

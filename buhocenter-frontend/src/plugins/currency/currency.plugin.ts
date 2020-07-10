@@ -18,10 +18,15 @@ export function CurrencyPlugin(Vue: typeof Vue_, options?: any): void {
             getCurrentExchangeFor(amount: number): number {
                 return currencyRepository.getCurrentExchangeFor(amount);
             },
-            getCurrentExchangeWithSymbolFor(amount: number): string {
-                return (
-                    currencyRepository.getCurrentSymbol() + currencyRepository.getCurrentExchangeFor(amount)
-                );
+            getCurrentExchangeWithSymbolFor(amount: number): string | undefined {
+                if (amount) {
+                    return (
+                        currencyRepository.getCurrentSymbol() +
+                        currencyRepository.getCurrentExchangeFor(amount)
+                    );
+                }
+
+                return undefined;
             },
         },
     });

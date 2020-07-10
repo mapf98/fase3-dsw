@@ -40,3 +40,7 @@ lerna-debug.log*
 src/database/migrations
 ormconfig.json
 .env
+
+# Files
+*.pdf
+*.csv

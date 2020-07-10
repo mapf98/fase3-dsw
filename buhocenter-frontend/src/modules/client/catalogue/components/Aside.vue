@@ -75,9 +75,8 @@
                             >
                                 <v-list-item-content>
                                     <v-list-item-title class="fs-sp ml-10"
-                                        >{{ child.type }} {{ child.price }}
-                                        {{ child.currency }}</v-list-item-title
-                                    >
+                                        >{{ child.type }} {{ child.price | getCurrentExchangeWithSymbolFor }}
+                                    </v-list-item-title>
                                 </v-list-item-content>
                             </v-list-item>
                         </v-list-item-group>
@@ -359,7 +358,7 @@ export default class Aside extends Vue {
                 title: this.$t('PRICES'),
                 types: [
                     {
-                        type: this.$t('ALL') + '...',
+                        type: this.$t('ALL') + '',
                     },
                     {
                         type: this.$t('UP_TO'),

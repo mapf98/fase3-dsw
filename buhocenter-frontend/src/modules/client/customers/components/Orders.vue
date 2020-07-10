@@ -49,7 +49,7 @@
                                 <v-col :cols="responsiveDetail()">
                                     <p>TOTAL</p>
                                     <p class="black--text mt-n2">
-                                        {{ order.total }} {{ order.foreignExchange.symbol }}
+                                        {{ order.total | getCurrentExchangeWithSymbolFor }}
                                     </p>
                                 </v-col>
                                 <v-col :cols="responsiveStatus()" class="">

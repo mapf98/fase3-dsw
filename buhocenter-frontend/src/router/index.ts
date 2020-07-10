@@ -234,13 +234,13 @@ const routes: RouteConfig[] = [
     {
         path: '/petromiles',
         beforeEnter() {
-            location.href = 'https://petromiles-frontend.herokuapp.com/';
+            window.open('https://petromiles-frontend.herokuapp.com/','_blank')
         },
     },
     {
         path: '/shipthis',
         beforeEnter() {
-            location.href = 'https://ship-this.herokuapp.com/';
+            window.open('https://ship-this.herokuapp.com/','_blank')
         },
     },
     {

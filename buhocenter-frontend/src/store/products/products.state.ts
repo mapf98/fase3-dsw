@@ -21,5 +21,6 @@ export const PRODUCT_EMPTY_STATE: ProductStateInterface = {
             long: '',
         },
         rating: '',
+       
     },
 };

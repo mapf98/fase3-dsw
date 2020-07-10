@@ -73,244 +73,244 @@ insert into brands (name) values ('BUHOCENTER');
 
 
 
-insert into products (name, description, can_accumulate_points, price, fragile, status_id, brand_id, provider_id) VALUES
+insert into products (name, description, can_accumulate_points, price, fragile, status_id, brand_id, provider_id,rating) VALUES
     ('2018 Newest HP Touchscreen 15.6 inch HD Laptop, Latest Intel Quad-Core i5-8250U Processor up to 3.40 GHz, 8GB DDR4, 1TB Hard Drive, DVD-RW, HDMI, Webcam, Bluetooth, Windows 10 Home',
      'Intel 8th Generation Quad-Core i5-8250U Processor Dual-Core, up to 3.4 GHz, Intel UHD Graphics 620',
-     true, 599.99, true, 1, 2, 2);
-insert into products (name, description, can_accumulate_points, price, fragile, status_id, brand_id, provider_id) VALUES
+     true, 599.99, true, 1, 2, 2,5);
+insert into products (name, description, can_accumulate_points, price, fragile, status_id, brand_id, provider_id,rating) VALUES
     ('ASUS ZenBook 13 Ultra-Slim Laptop-Panoramic screen Full HD 13,3", 8.ªgeneration Intel Core I5-8265U',
      'panoramic screen, size: 13,3", bisel NanoEdge Full-HD/ Intel Core i5-8265u (Up to 3,9 GHz)/Fast storage and memory with SSD PCIe M.2 512 GB , 8GB RAM LPDDR3',
-     false, 699.99, true, 1, 3, 5);
-insert into products (name, description, can_accumulate_points, price, fragile, status_id, brand_id, provider_id) VALUES
+     false, 699.99, true, 1, 3, 5,5);
+insert into products (name, description, can_accumulate_points, price, fragile, status_id, brand_id, provider_id,rating) VALUES
     ('Xiaomi Redmi Note 8 128 GB 4GB RAM 48 MP Version Global Dual SIM Smartphone (Space Black)',
      'Touch screem IPS LCD, size 6,3", FHD+ 1080×2340 píxels, relation 19,5:9, Dual SIM (Nano-SIM, Dual Stand-by)/ Android 9.0 (Pie)/ MIUI 10 / 4 GB RAM + 128 GB ROM, Qualcomm SDM665 Snapdragon 665 (11 nm), Octa-Core.',
-     false, 189.99, true, 1, 4, 4);
-insert into products (name, description, can_accumulate_points, price, fragile, status_id, brand_id, provider_id) VALUES
+     false, 189.99, true, 1, 4, 4,5);
+insert into products (name, description, can_accumulate_points, price, fragile, status_id, brand_id, provider_id,rating) VALUES
     ('Columbia Bonehead short-sleeved shirt for men',
-     '100 % Poliéster / Imported / Button closure', false, 13.99, false, 1, 5, 3);
-insert into products (name, description, can_accumulate_points, price, fragile, status_id, brand_id, provider_id) VALUES
-    ('Van Heusen - Straight cut trouser', '72% poliester/ Imported / Zipper closure', true, 29.99, false, 1, 6, 4);
-insert into products (name, description, can_accumulate_points, price, fragile, status_id, brand_id, provider_id) VALUES
-    ('Walnut wood 3/4" x 2"', 'Two sides sanded 3/4 inch thick.', false, 40.22, false, 1, 7, 3);
-insert into products (name, description, can_accumulate_points, price, fragile, status_id, brand_id, provider_id) VALUES
-    ('PANDORA Silver Bracelet', 'PANDORA Reflexions bracelet in 18K gold plated PANDORA Shine silver.', true, 199.99, false, 1, 8, 4);
-insert into products (name, description, can_accumulate_points, price, fragile, status_id, brand_id, provider_id) VALUES
+     '100 % Poliéster / Imported / Button closure', false, 13.99, false, 1, 5, 3,4);
+insert into products (name, description, can_accumulate_points, price, fragile, status_id, brand_id, provider_id,rating) VALUES
+    ('Van Heusen - Straight cut trouser', '72% poliester/ Imported / Zipper closure', true, 29.99, false, 1, 6, 4,3);
+insert into products (name, description, can_accumulate_points, price, fragile, status_id, brand_id, provider_id,rating) VALUES
+    ('Walnut wood 3/4" x 2"', 'Two sides sanded 3/4 inch thick.', false, 40.22, false, 1, 7, 3,4);
+insert into products (name, description, can_accumulate_points, price, fragile, status_id, brand_id, provider_id,rating) VALUES
+    ('PANDORA Silver Bracelet', 'PANDORA Reflexions bracelet in 18K gold plated PANDORA Shine silver.', true, 199.99, false, 1, 8, 4,5);
+insert into products (name, description, can_accumulate_points, price, fragile, status_id, brand_id, provider_id,rating) VALUES
     ('Power Rangers Ninja Steel Megazord Figura de acción, Megazord Ninja', 'The mighty Power Rangers Ninja Steel Megazords combine the power of the 5 zords to create one epic megazord, just like the TV show',
-     false, 29.99, true, 1, 9, 3);
-insert into products (name, description, can_accumulate_points, price, fragile, status_id, brand_id, provider_id) VALUES
-    ('BRIGHT CRYSTAL GIANNI VERSACE', 'A classic designer fragrance for men', true, 66.99, false, 1, 10, 4);
-insert into products (name, description, can_accumulate_points, price, fragile, status_id, brand_id, provider_id) VALUES
+     false, 29.99, true, 1, 9, 3,2);
+insert into products (name, description, can_accumulate_points, price, fragile, status_id, brand_id, provider_id,rating) VALUES
+    ('BRIGHT CRYSTAL GIANNI VERSACE', 'A classic designer fragrance for men', true, 66.99, false, 1, 10, 4,3);
+insert into products (name, description, can_accumulate_points, price, fragile, status_id, brand_id, provider_id,rating) VALUES
     ('ISTIKBAL - Multifunctional living room sofa, Troya collection, brown color', 'Extremely easy conversion and space saving design without compromising comfort.', true,
-     309.99, false, 1, 11, 3);
-insert into products (name, description, can_accumulate_points, price, fragile, status_id, brand_id, provider_id) VALUES
-    ('MOOG 513288 Wheel bearing', 'Innovative roll shape design that ensures optimal and uniform preload.', false, 59.99, false, 1, 12, 4);
-insert into products (name, description, can_accumulate_points, price, fragile, status_id, brand_id, provider_id) VALUES
-    ('World Cup official ball , adidas ', 'Synthetic. Imported. Authentic Adidas football team guaranteed.', false, 51.22, false, 1, 13, 1);
-insert into products (name, description, can_accumulate_points, price, fragile, status_id, brand_id, provider_id) VALUES
+     309.99, false, 1, 11, 3,4);
+insert into products (name, description, can_accumulate_points, price, fragile, status_id, brand_id, provider_id,rating) VALUES
+    ('MOOG 513288 Wheel bearing', 'Innovative roll shape design that ensures optimal and uniform preload.', false, 59.99, false, 1, 12, 4,5);
+insert into products (name, description, can_accumulate_points, price, fragile, status_id, brand_id, provider_id,rating) VALUES
+    ('World Cup official ball , adidas ', 'Synthetic. Imported. Authentic Adidas football team guaranteed.', false, 51.22, false, 1, 13, 1,4);
+insert into products (name, description, can_accumulate_points, price, fragile, status_id, brand_id, provider_id,rating) VALUES
     ('Portable washing machine, Kuppet 16.5 pounds compact double tub washing', 'Great capacity. Features the tub s dual-function design that can save your priceus time by washing and spinning dry loads at the same time',
-     true, 450.99, true, 1, 14, 1);
-insert into products (name, description, can_accumulate_points, price, fragile, status_id, brand_id, provider_id) VALUES
+     true, 450.99, true, 1, 14, 1,3);
+insert into products (name, description, can_accumulate_points, price, fragile, status_id, brand_id, provider_id,rating) VALUES
     ('Fender Guitar, Jetty Black', 'Unique Fender Round Body Shape / Painted Solid Spruce Top; back and sides in painted mahogany.', false,
-     150.99, true, 1, 15, 2);
-insert into products (name, description, can_accumulate_points, price, fragile, status_id, brand_id, provider_id) VALUES
+     150.99, true, 1, 15, 2,4);
+insert into products (name, description, can_accumulate_points, price, fragile, status_id, brand_id, provider_id,rating) VALUES
     ('PlayStation 4 1TB',
      'New PS4, lighter and thinner All the best in games, TV music and more. This console can be operated in Spanish. 1TB hard drive',
-     true, 349.99, true, 1, 16, 2);
+     true, 349.99, true, 1, 16, 2,5);
 
 
 
-insert into products (name, description, can_accumulate_points, price, fragile, status_id, brand_id, provider_id) VALUES
+insert into products (name, description, can_accumulate_points, price, fragile, status_id, brand_id, provider_id,rating) VALUES
     ('Mens Short Sleeve Polo Shirt in Classic Fit',
      '100% Cotton. Imported. Button closure. Machine Wash. A classic in every sense of the word. This Tommy Hilfiger polo shirt is a casual wardrobe must-have',
-     false, 18.62, false, 1, 17, 6);
+     false, 18.62, false, 1, 17, 6,4);
      
-insert into products (name, description, can_accumulate_points, price, fragile, status_id, brand_id, provider_id) VALUES
+insert into products (name, description, can_accumulate_points, price, fragile, status_id, brand_id, provider_id,rating) VALUES
     ('COOFANDY Mens Casual Dress Shirt Button Down Shirts Long-Sleeve Denim Work Shirt',
      'Cotton Blend.Button closure.Hand Wash.【High Quality】Cotton Blend, Long sleeve denim shirt for men, perfect for casual, business, make you look great and handsome',
-     false, 18.99, false, 1, 17, 6);
-insert into products (name, description, can_accumulate_points, price, fragile, status_id, brand_id, provider_id) VALUES
+     false, 18.99, false, 1, 17, 6,3);
+insert into products (name, description, can_accumulate_points, price, fragile, status_id, brand_id, provider_id,rating) VALUES
     ('Buhocenter Essentials Mens Slim-Fit Long-Sleeve Pattern Pocket Oxford Shirt',
      '100% Cotton. Imported. Button closure. Machine Wash. A windowpane plaid highlights this clean and classic long-sleeve Oxford shirt',
-     false, 6.99, false, 1, 17, 6);
+     false, 6.99, false, 1, 17, 6,4);
      
-insert into products (name, description, can_accumulate_points, price, fragile, status_id, brand_id, provider_id) VALUES
+insert into products (name, description, can_accumulate_points, price, fragile, status_id, brand_id, provider_id,rating) VALUES
     ('Southpole Mens NASA Collection Fleece Jogger Pants',
      'Elastic waistband. Nasa apollo design. Drawstring on waist',
-     false,20.00, false, 1, 18, 7);
-insert into products (name, description, can_accumulate_points, price, fragile, status_id, brand_id, provider_id) VALUES
+     false,20.00, false, 1, 18, 7,5);
+insert into products (name, description, can_accumulate_points, price, fragile, status_id, brand_id, provider_id,rating) VALUES
     ('GRACE KARIN Womens Cropped Paper Bag Waist Pants with Pockets',
      '95%Polyester+5%Spandex. Tie closure. Womens High waisted Slim Fit Office Casual Pants Trousers with Pockets',
-     false, 21.24, false, 1, 18, 7);
- insert into products (name, description, can_accumulate_points, price, fragile, status_id, brand_id, provider_id) VALUES
+     false, 21.24, false, 1, 18, 7,4);
+ insert into products (name, description, can_accumulate_points, price, fragile, status_id, brand_id, provider_id,rating) VALUES
     ('Quality Durables Co. Mens Straight',
      'Relaxed-fit chino featuring flat-front leg, zipper fly with button closure. Jetted rear pockets Welted coin pocket at hip. Model is 6, 178lbs and wearing a size 32W x 32L',
-     false, 39.24, false, 1, 18, 7);    
+     false, 39.24, false, 1, 18, 7,3);    
 
-insert into products (name, description, can_accumulate_points, price, fragile, status_id, brand_id, provider_id) VALUES
+insert into products (name, description, can_accumulate_points, price, fragile, status_id, brand_id, provider_id,rating) VALUES
     ('Apple MacBook Pro 16-Inch 16GB RAM, 512GB store gray',
      'Ninth-generation 6-Core Intel Core i7 Processor. Stunning 16-inch Retina Display with True Tone technology. Touch Bar and Touch ID',
-     true, 2149.00, true, 1, 1, 1);
-insert into products (name, description, can_accumulate_points, price, fragile, status_id, brand_id, provider_id) VALUES
+     true, 2149.00, true, 1, 1, 1,4);
+insert into products (name, description, can_accumulate_points, price, fragile, status_id, brand_id, provider_id,rating) VALUES
     ('HP 21.5-Inch All-in-One Computer, AMD A4-9125, 4GB RAM, 1TB Hard Drive, Windows 10 (22-c0010, White)',
      'The essential home computer: With an AMD processor and 4 GB of RAM, your family can seamlessly go from sending work emails to uploading vacation photos with ease',
-     true, 427.24, true, 1, 2, 2);
- insert into products (name, description, can_accumulate_points, price, fragile, status_id, brand_id, provider_id) VALUES
+     true, 427.24, true, 1, 2, 2,5);
+ insert into products (name, description, can_accumulate_points, price, fragile, status_id, brand_id, provider_id,rating) VALUES
     ('Jumper EZbook X3 Windows 10 Laptop, Laptop computer 13.3'' HD PC Laptops Intel N3350 6GB DDR3L 64GB eMMC 2.4G/5G WiFi supports up to 128GB TF card expansion',
      'Windows 10 Home OS—Offers more powerful performance, brings you more smooth and wonderful user experience.Powered by N3350 Dual Core processor, offers you smooth operation and stable multitasking experience.',
-     true, 249.24, true, 1, 19, 8); 
+     true, 249.24, true, 1, 19, 8,5); 
 
-insert into products (name, description, can_accumulate_points, price, fragile, status_id, brand_id, provider_id) VALUES
+insert into products (name, description, can_accumulate_points, price, fragile, status_id, brand_id, provider_id,rating) VALUES
     ('Samsung Galaxy A20s, A207M, 32GB, GSM, Unlocked Phone, Dual-SIM, Blue',
      'International Variant/US Compatible LTE. Memory: 32GB 3GB RAM - microSD, up to 512GB - Dual-SIM',
-     true, 160.00, true, 1, 20, 9);
-insert into products (name, description, can_accumulate_points, price, fragile, status_id, brand_id, provider_id) VALUES
+     true, 160.00, true, 1, 20, 9,4);
+insert into products (name, description, can_accumulate_points, price, fragile, status_id, brand_id, provider_id,rating) VALUES
     ('Telefield 2142 Shark Cordless Phone ITAD 3-Way Calling w/USB Charge',
      'Cordless Phone, USB charge, Hands free, Voicemail, Easy to charge, NO BATTERIES Required .',
-     true, 10.24, true, 1, 2, 9);
- insert into products (name, description, can_accumulate_points, price, fragile, status_id, brand_id, provider_id) VALUES
+     true, 10.24, true, 1, 2, 9,5);
+ insert into products (name, description, can_accumulate_points, price, fragile, status_id, brand_id, provider_id,rating) VALUES
     ('Apple iPhone 11 Pro (64GB, Midnight Green) [Carrier Locked] + Carrier Subscription [Cricket Wireless]',
      'This phone is locked and must be purchased with a monthly carrier subscription from Cricket Wireless available below.',
-     true, 998.24, true, 1, 1, 1); 
+     true, 998.24, true, 1, 1, 1,5); 
 
-insert into products (name, description, can_accumulate_points, price, fragile, status_id, brand_id, provider_id) VALUES
+insert into products (name, description, can_accumulate_points, price, fragile, status_id, brand_id, provider_id,rating) VALUES
     ('Exotic Wood Pen Blanks 12-Pack: Bloodwood, Mexican Ebony, Jatoba, Hard Maple, 3 of Each Wood Type, 5 x 3/4 x 3/4 inches',
      'QUALITY: End and side finishes are tablesaw, planer or jointer surfaces. Guaranteed crack free.',
-     true, 22.49, true, 1, 15, 8);
-insert into products (name, description, can_accumulate_points, price, fragile, status_id, brand_id, provider_id) VALUES
+     true, 22.49, true, 1, 15, 8,4);
+insert into products (name, description, can_accumulate_points, price, fragile, status_id, brand_id, provider_id,rating) VALUES
     ('Unfinished Natural Wood Slices 20 Pcs 3.5-4 inch Craft Wood kit Circles Crafts Christmas Ornaments Rustic Wedding Decoration DIY Crafts with Bark for Crafts',
-     'Diameter: approx 3.5-4inch(9-10cm);Thickness: approx 0.4inch(1cm). Package contains 20 pcs pine tree discs',
-     true, 14.99, true, 1, 15, 8);
- insert into products (name, description, can_accumulate_points, price, fragile, status_id, brand_id, provider_id) VALUES
+     'Diameter: approx 3.5-4inch(9-10cm,5);Thickness: approx 0.4inch(1cm). Package contains 20 pcs pine tree discs',
+     true, 14.99, true, 1, 15, 8,3);
+ insert into products (name, description, can_accumulate_points, price, fragile, status_id, brand_id, provider_id,rating) VALUES
     ('Buhocenter Brand – Ravenna Home Traditional Solid Pine End Table, 28'' H, Oak Finish',
      '47'' W x 25.75'' D x 28'' H. Solid pine. Classic wood makes this piece work with either modern or transitional decor.',
-     true, 74.75, true, 1, 21, 10); 
+     true, 74.75, true, 1, 21, 10,4); 
 
-insert into products (name, description, can_accumulate_points, price, fragile, status_id, brand_id, provider_id) VALUES
+insert into products (name, description, can_accumulate_points, price, fragile, status_id, brand_id, provider_id,rating) VALUES
     ('Fengshui Wealth Prosperity Jade 10mm Bead Bracelet with Pi Xiu/Pi Yao Attract Wealth and Good Luck',
      'The figure of Pi Xiu is as strong as Chi lin. In present time, the major banks, successful entrepreneurs’ offices and shops all have Pi Xiu’s. It is not only a guardian god, but also can bring in abundant source of monetary revenue and land-office business. ',
-     false, 19.99, false, 1, 15, 8);
-insert into products (name, description, can_accumulate_points, price, fragile, status_id, brand_id, provider_id) VALUES
+     false, 19.99, false, 1, 15, 8,4);
+insert into products (name, description, can_accumulate_points, price, fragile, status_id, brand_id, provider_id,rating) VALUES
     ('RiptGear Mosquito Bracelet (15 Pack) for Children and Adults - Better Than Lotion or Spray Wipes - Travel Bracelets for Mosquitoes - Natural and Without deet',
      '100% NATURAL and NON-TOXIC - Made from 100% all-natural Citronella oil. Completely DEET free',
-     false, 19.99, false, 1, 15, 8);
- insert into products (name, description, can_accumulate_points, price, fragile, status_id, brand_id, provider_id) VALUES
+     false, 19.99, false, 1, 15, 8,4);
+ insert into products (name, description, can_accumulate_points, price, fragile, status_id, brand_id, provider_id,rating) VALUES
     ('SWAROVSKI Womens Ginger Crystal Jewelry Collection',
      'This chic, feminine piece features a rigid metal bangle attached to a delicate chain with a disc of sparkling crystal pave, creating a trendy stacked look',
-     true, 76.75, true, 1, 21, 10); 
+     true, 76.75, true, 1, 21, 10,5); 
 
 
-insert into products (name, description, can_accumulate_points, price, fragile, status_id, brand_id, provider_id) VALUES
+insert into products (name, description, can_accumulate_points, price, fragile, status_id, brand_id, provider_id,rating) VALUES
     ('ArtCreativity Bendable Robot Figures, Set of 12 Flexible Men, Birthday Party Favors for Boys and Girls, Stress Relief Fidget Toys for Kids and Adults, Goody Bag Stuffers, Piñata Fillers',
      'TENDLESS FUN: Bendable Robots your munchkin will love! These 3.75” tall plastic toy figures will twist, contort and curl whichever way you like and will still come up smiling. ',
-     false, 13.99, false, 1, 15, 8);
-insert into products (name, description, can_accumulate_points, price, fragile, status_id, brand_id, provider_id) VALUES
+     false, 13.99, false, 1, 15, 8,3);
+insert into products (name, description, can_accumulate_points, price, fragile, status_id, brand_id, provider_id,rating) VALUES
     ('Auney Robot Toys for Kids, Smart Programmable Remote Control Robots, Infrared Sensing RC Robot Intelligent Toy for Boys (Green)',
      'TENDLESS FUN: Bendable Robots your munchkin will love! These 3.75” tall plastic toy figures will twist, contort and curl whichever way you like and will still come up smiling. ',
-     false, 29.99, false, 1, 15, 8);
- insert into products (name, description, can_accumulate_points, price, fragile, status_id, brand_id, provider_id) VALUES
+     false, 29.99, false, 1, 15, 8,4);
+ insert into products (name, description, can_accumulate_points, price, fragile, status_id, brand_id, provider_id,rating) VALUES
     ('Suck UK ROBOT LUNCH BOX | TIN | TOY STORAGE | BEDROOM DECOR & ORGANIZATION |, 9.6 x 3.3 x 6.4 in, Multicolored',
      'Classic tin lunchbox designed like a retro robot',
-     true,16.47, true, 1, 21, 10); 
+     true,16.47, true, 1, 21, 10,5); 
 
 
-insert into products (name, description, can_accumulate_points, price, fragile, status_id, brand_id, provider_id) VALUES
+insert into products (name, description, can_accumulate_points, price, fragile, status_id, brand_id, provider_id,rating) VALUES
     ('The Dreamer by Versace for Men 3.4 oz Eau de Toilette Spray',
      'Dreamer by Versace for Men 3.4 oz Eau de Toilette Spray: Buy Versace Colognes - Versace, the Dreamer, is an innovative clear and smooth blend between wild and aromatic plants including juniper, mugwort, and tarragon. ',
-     false, 38.99, true, 1, 15, 8);
-insert into products (name, description, can_accumulate_points, price, fragile, status_id, brand_id, provider_id) VALUES
+     false, 38.99, true, 1, 15, 8,3);
+insert into products (name, description, can_accumulate_points, price, fragile, status_id, brand_id, provider_id,rating) VALUES
     ('212 Vip by Carolina Herrera Eau De Toilette Spray for Men, 3.4 Ounce',
      'Herrera was launched by the design house of Carolina Herrera',
-     false, 51.89, true, 1, 15, 8);
- insert into products (name, description, can_accumulate_points, price, fragile, status_id, brand_id, provider_id) VALUES
+     false, 51.89, true, 1, 15, 8,4);
+ insert into products (name, description, can_accumulate_points, price, fragile, status_id, brand_id, provider_id,rating) VALUES
     ('Lady Million by Paco Rabanne 2.7 oz Eau de Parfum Spray',
      'Item Condition: 100% authentic, new and unused. Lady Million by Paco Rabanne 2.7 oz Eau de Parfum Spray.',
-     true,57.47, true, 1, 21, 10); 
+     true,57.47, true, 1, 21, 10,5); 
 
-insert into products (name, description, can_accumulate_points, price, fragile, status_id, brand_id, provider_id) VALUES
+insert into products (name, description, can_accumulate_points, price, fragile, status_id, brand_id, provider_id,rating) VALUES
     ('Best Choice Products Modern Faux Leather Convertible Futon Sofa Bed Recliner Couch w/Metal Legs, 2 Cup Holders - Black',
      'COMFORTABLE FAUX LEATHER: Crafted with sleek faux leather and 4 chrome-metal legs, fuses comfort and style ',
-     true, 214.99, false, 1, 15, 8);
-insert into products (name, description, can_accumulate_points, price, fragile, status_id, brand_id, provider_id) VALUES
+     true, 214.99, false, 1, 15, 8,4);
+insert into products (name, description, can_accumulate_points, price, fragile, status_id, brand_id, provider_id,rating) VALUES
     ('Buhocenter Brand – Stone & Beam Lauren Down-Filled Oversized Sofa Couch with Hardwood Frame, 89"W, Pearl',
      'Soft down-filled cushions on a frame of solid hardwood mean this sofa offers plush support and security. Neutral pearl-colored upholstery allows this piece to blend into your existing color scheme with ease.',
-     true, 900.89, true, 1, 15, 8);
- insert into products (name, description, can_accumulate_points, price, fragile, status_id, brand_id, provider_id) VALUES
+     true, 900.89, true, 1, 15, 8,5);
+ insert into products (name, description, can_accumulate_points, price, fragile, status_id, brand_id, provider_id,rating) VALUES
     ('Best Choice Products 3-Seat L-Shape Tufted Faux Leather Sectional Sofa Couch Set w/Chaise Lounge, Ottoman Bench - Black',
      'MODERN STYLE: Stylish L-shaped sectional sofa is made with a modern-contemporary, faux leather design that will complement any living space',
-     true,519.47, true, 1, 21, 10); 
+     true,519.47, true, 1, 21, 10,4); 
 
 
-insert into products (name, description, can_accumulate_points, price, fragile, status_id, brand_id, provider_id) VALUES
+insert into products (name, description, can_accumulate_points, price, fragile, status_id, brand_id, provider_id,rating) VALUES
     ('hansgrohe Hot Widespread Faucet Cartridge 1-inch Spare Part in 94009000',
      'REPLACEMENT CARTRIDGE: For use with hansgrohe branded widespread faucets on hot or left side',
-     true, 34.99, false, 1, 15, 8);
-insert into products (name, description, can_accumulate_points, price, fragile, status_id, brand_id, provider_id) VALUES
+     true, 34.99, false, 1, 15, 8,5);
+insert into products (name, description, can_accumulate_points, price, fragile, status_id, brand_id, provider_id,rating) VALUES
     ('Best Choice Products Heavy Duty Steel Garage Wall Mount Folding Tire Wheel Storage Rack',
      'Wall-mounted tire holder is easy to install and holds up to 4 tires for convenient space saving',
-     true, 89.89, false, 1, 15, 8);
- insert into products (name, description, can_accumulate_points, price, fragile, status_id, brand_id, provider_id) VALUES
+     true, 89.89, false, 1, 15, 8,3);
+ insert into products (name, description, can_accumulate_points, price, fragile, status_id, brand_id, provider_id,rating) VALUES
     ('Spare Hardware Parts Wheel Lock for IKEA MALM (IKEA Part #114670) (Pack of 4)',
      'These are 35mm (about 1 1/2") diameter. If the hole in your frame is larger, then these will not work.',
-     true,8.00, false, 1, 21, 10); 
+     true,8.00, false, 1, 21, 10,2); 
 
 
 
-insert into products (name, description, can_accumulate_points, price, fragile, status_id, brand_id, provider_id) VALUES
+insert into products (name, description, can_accumulate_points, price, fragile, status_id, brand_id, provider_id,rating) VALUES
     ('Edushape See-Me Sensory Ball, 7 Inch, Colors May Vary',
      'SENSORY ENGAGEMENT: Nubbly surface engages the senses and enhances tactile development',
-     false, 13.29, false, 1, 15, 8);
-insert into products (name, description, can_accumulate_points, price, fragile, status_id, brand_id, provider_id) VALUES
+     false, 13.29, false, 1, 15, 8,5);
+insert into products (name, description, can_accumulate_points, price, fragile, status_id, brand_id, provider_id,rating) VALUES
     ('Penn Championship Tennis Balls - Regular Felt Pressurized Tennis Balls - 1 Can, 3 Balls',
      'AMERICAS number 1 SELLING BALL, The product of 100 years worth of testing and perfecting; Penn Championship is the best selling tennis ball in America.',
-     false, 4.89, false, 1, 15, 8);
- insert into products (name, description, can_accumulate_points, price, fragile, status_id, brand_id, provider_id) VALUES
+     false, 4.89, false, 1, 15, 8,3);
+ insert into products (name, description, can_accumulate_points, price, fragile, status_id, brand_id, provider_id,rating) VALUES
     ('Rubber Bouncy Ball Baseball Training Balls (Pack of 4) by JA-RU 2.5" Hi Bounce Same Like Pinky Balls for Play or Massage Therapy. Plus 1 Small Ball. #987-4p',
      'Pack of 4 Real Rubber High Bounce Ball Baseball Style, Same Like Pink Pinky Pennsy Ball. With 1 small Exclusive collectible bouncy ball. Best Game Ball!',
-     false,11.88, false, 1, 21, 10); 
+     false,11.88, false, 1, 21, 10,4); 
 
 
-insert into products (name, description, can_accumulate_points, price, fragile, status_id, brand_id, provider_id) VALUES
+insert into products (name, description, can_accumulate_points, price, fragile, status_id, brand_id, provider_id,rating) VALUES
     ('SUPER DEAL Portable Compact Washing Machine, Mini Twin Tub Washing Machine w/Washer&Spinner, Gravity Drain Pump and Drain Hose',
      'The smallest and lightest twin tub portable washing machine available, our highly popular Super Compact washing machine simply hooks up to your kitchen faucet, and it’s ready to go.',
-     false, 125.29, true, 1, 15, 8);
-insert into products (name, description, can_accumulate_points, price, fragile, status_id, brand_id, provider_id) VALUES
+     false, 125.29, true, 1, 15, 8,4);
+insert into products (name, description, can_accumulate_points, price, fragile, status_id, brand_id, provider_id,rating) VALUES
     ('GE APPLIANCES GFW450SSMWW, White',
      'GE 4. 5CF FL Steam Washer ADA Wht',
-     true, 893.89, false, 1, 15, 8);
- insert into products (name, description, can_accumulate_points, price, fragile, status_id, brand_id, provider_id) VALUES
+     true, 893.89, false, 1, 15, 8,5);
+ insert into products (name, description, can_accumulate_points, price, fragile, status_id, brand_id, provider_id,rating) VALUES
     ('WANAI Portable Washing Machine, Compact Mini Twin Tub Washer (13lbs) + Spinner (8lbs), Top-loading Washing Machine with Timer, Ideal for Dorms, Apartments',
      '[Compact twin-cylinder washing design]: You can operate the washing machine or spinner separately, or run both sides at the same time. The two bathtubs are designed to meet your different needs, making cleaning easier.',
-     true,149.88, false, 1, 21, 10); 
+     true,149.88, false, 1, 21, 10,5); 
 
 
-insert into products (name, description, can_accumulate_points, price, fragile, status_id, brand_id, provider_id) VALUES
+insert into products (name, description, can_accumulate_points, price, fragile, status_id, brand_id, provider_id,rating) VALUES
     ('Mylifestyle Piano Music Box with Bench and Black Case Musical Boxes Gift for Christmas/Birthday/Valentines Day, Melody Castle in The Sky',
     'Perfect Romantic Anniversary Birthday Christmas Wedding Valentines Day Gifts for Your lover .',
-     true,50.29, true, 1, 15, 8);
-insert into products (name, description, can_accumulate_points, price, fragile, status_id, brand_id, provider_id) VALUES
+     true,50.29, true, 1, 15, 8,4);
+insert into products (name, description, can_accumulate_points, price, fragile, status_id, brand_id, provider_id,rating) VALUES
     ('ZealMax Broche de flauta Mini pin de Forma de instrumento Musical Chapado en Plata Dorada con estuche',
      'GE 4. 5CF FL Wht',
-     false, 7.89, false, 1, 15, 8);
- insert into products (name, description, can_accumulate_points, price, fragile, status_id, brand_id, provider_id) VALUES
+     false, 7.89, false, 1, 15, 8,3);
+ insert into products (name, description, can_accumulate_points, price, fragile, status_id, brand_id, provider_id,rating) VALUES
     ('9.5" Wooden Harp Musical Instrument Replica. For Decorative Purposes Only, does not play music',
      'Miniature harp replica',
-     false,45.88, true, 1, 21, 10); 
+     false,45.88, true, 1, 21, 10,2); 
 
 
-insert into products (name, description, can_accumulate_points, price, fragile, status_id, brand_id, provider_id) VALUES
+insert into products (name, description, can_accumulate_points, price, fragile, status_id, brand_id, provider_id,rating) VALUES
     ('Nintendo Switch - Gray Joy-Con - HAC 001 (Discontinued by Manufacturer)',
     'Play your way with the Nintendo Switch gaming system. Whether you’re at home or on the go, solo or with friends, the Nintendo Switch system is designed to fit your life. Dock your Nintendo Switch to enjoy HD gaming on your TV. Heading out. Just undock your console and keep playing in handheld mode',
-     true,450.29, true, 1, 15, 8);
+     true,450.29, true, 1, 15, 8,3);
 
- insert into products (name, description, can_accumulate_points, price, fragile, status_id, brand_id, provider_id) VALUES
+ insert into products (name, description, can_accumulate_points, price, fragile, status_id, brand_id, provider_id,rating) VALUES
     ('Xbox One S 1Tb Console - Starter Bundle (Discontinued)',
      'Bundle includes: Xbox One S 1TB Console, wireless Controller, 3 months of Xbox game Pass, 3 months of Xbox live Gold, HDMI cable (4K Capable), and AC power Cable',
-     true,375.88, true, 1, 21, 10); 
+     true,375.88, true, 1, 21, 10,4); 
 	 
-	 insert into products (name, description, can_accumulate_points, price, fragile, status_id, brand_id, provider_id) VALUES
+	 insert into products (name, description, can_accumulate_points, price, fragile, status_id, brand_id, provider_id,rating) VALUES
     ('AutumnFall Clearance Sale 🌻🌻Handheld Game Player for Children-Portable Retro Mini Handheld Video Game Console Gameboy Built-in 500 Classic Games USB Charge Birthday for Children (Black)',
      'Screen size : 3.0 inch HD screen',
-     false, 19.89, false, 1, 15, 8);
+     false, 19.89, false, 1, 15, 8,5);
 
 
 insert into product_photos (content, product_id) VALUES ('macbook.jpg', 1);

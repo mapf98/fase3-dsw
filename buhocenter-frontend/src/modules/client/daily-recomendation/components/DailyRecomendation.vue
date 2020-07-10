@@ -42,7 +42,9 @@
 
                                     <v-col cols="9" class="pl-0 pb-0 pt-0">
                                         <v-row class="ma-0 fill-height title in-line space">
-                                            <div class="mr-4 ml-0">${{ product.price }}</div>
+                                            <div class="mr-4 ml-0">
+                                                {{ product.price | getCurrentExchangeWithSymbolFor }}
+                                            </div>
                                             <div
                                                 v-if="product.tentativePoints"
                                                 style="font-size: 10px;"

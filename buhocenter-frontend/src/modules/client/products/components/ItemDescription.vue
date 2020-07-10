@@ -19,9 +19,9 @@
         </v-row>
         <h3 class="body-2">
             {{ $t('PRICE') }}:
-            <span :class="{ title: true, 'item-offer__title': hasOffer() }"
-                >${{ GET_ITEM_DETAIL.price }}</span
-            >
+            <span :class="{ title: true, 'item-offer__title': hasOffer() }">{{
+                GET_ITEM_DETAIL.price | getCurrentExchangeWithSymbolFor
+            }}</span>
             <span v-if="hasOffer()" class="title"> ${{ getDiscountPrice() }} </span>
         </h3>
         <v-row class="mx-auto d-flex align-center">
