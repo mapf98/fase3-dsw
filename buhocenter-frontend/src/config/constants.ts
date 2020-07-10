@@ -5,6 +5,7 @@ export const ITEM_TYPE = Object.freeze({
 
 export const STATUS = Object.freeze({
     ACTIVE: 1,
+    INACTIVE: 2,
 });
 
 export const CURRENCY = Object.freeze({

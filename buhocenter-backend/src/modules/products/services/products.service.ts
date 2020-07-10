@@ -167,11 +167,12 @@ export class ProductsService {
             .innerJoinAndSelect('product.productPhotos', 'productPhotos')
             .innerJoinAndSelect('product.brand', 'brand')
             .innerJoinAndSelect('product.provider', 'provider')
-            .innerJoin('product.productInventory', 'productInventory')
-            .innerJoin('product.productCatalogues', 'productCatalogues')
-            .innerJoin('productCatalogues.catalogue', 'catalogue')
-            .innerJoin('catalogue.category', 'category')
-            .leftJoin('product.offer', 'offer');
+            .innerJoinAndSelect('product.productInventory', 'productInventory')
+            .innerJoinAndSelect('product.productCatalogues', 'productCatalogues')
+            .innerJoinAndSelect('productCatalogues.catalogue', 'catalogue')
+            .innerJoinAndSelect('product.productDimension', 'dimesion')
+            .innerJoinAndSelect('catalogue.category', 'category')
+            .leftJoinAndSelect('product.offer', 'offer');
 
         !parameters.name ||
             query.andWhere('UPPER(product.name) LIKE :name', { name: `%${parameters.name.toUpperCase()}%` });
@@ -330,30 +331,61 @@ export class ProductsService {
         return 'product updated succesfully';
     }
 
-    async deleteProduct(productId: number) {
-        let active = STATUS.ACTIVE.id;
-        let findProduct = await this.productsRepository.findOne({
-            where: { id: productId, status: active },
+    async updateProduct(product: Partial<Product>): Promise<Product> {
+        this.logger.info(`updateProduct: Updating the product [productId=${product.id}]`, {
+            context: ProductsService.name,
         });
 
-        if (!findProduct) {
-            throw new BadRequestException('product not found or not accesable');
-        } else {
-            let unaccesable = await this.statusService.getStatusById(STATUS.INACTIVE.id);
-            findProduct.status = unaccesable;
+        return await this.productsRepository.save(product);
+    }
 
-            await this.productsRepository.save(findProduct);
-            this.logger.info(`deleteProduct: product deleted succesfully [verifyProduct=${productId}]`, {
-                context: ProductsService.name,
-            });
-            return 'product deleted sucesfully';
+    /**
+     * deleteProduct
+     * @param productId: number
+     * @returns
+     */
+    async deleteProduct(productId: number): Promise<Boolean> {
+        this.logger.info(`deleteProduct: Deleting the product with id [productId=${productId}]`, {
+            context: ProductsService.name,
+        });
+
+        let product = await this.productsRepository.findOne({
+            where: { id: productId, status: STATUS.ACTIVE.id },
+        });
+
+        if (!product) {
+            throw new BadRequestException('Product not found or not accesable');
+        } else {
+            const inactive = await this.statusService.getStatusById(STATUS.INACTIVE.id);
+            product.status = inactive;
+
+            await this.productsRepository.save(product);
+            return true;
         }
     }
 
+    /**
+     * getAllProducts
+     * @returns Promise<Product[]>
+     */
     public async getAllProducts(): Promise<Product[]> {
-        let active = STATUS.ACTIVE.id;
+        this.logger.info(`getAllProducts: Getting all products`, {
+            context: ProductsService.name,
+        });
+
         return await this.productsRepository.find({
-            where: { status: active },
+            relations: [
+                'productPhotos',
+                'productInventory',
+                'productDimension',
+                'productRatings',
+                'brand',
+                'provider',
+                'offer',
+                'productCatalogues',
+                'productCatalogues.catalogue',
+                'productCatalogues.catalogue.category',
+            ],
         });
     }
 
@@ -483,6 +515,7 @@ export class ProductsService {
 
         await productTransactionRepository.update({ id: product.id }, { rating: avgRating });
     }
+
     public async addQuestionToProduct(productAndQuestion: ProductQuestions): Promise<boolean> {
         try {
             let newProductQuestion = new ProductQuestion();

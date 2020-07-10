@@ -23,6 +23,9 @@ export default {
     required() {
         return (v: string | boolean) => !!v || 'This field is required';
     },
+    requiredPhoto(index: number, file: any) {
+        return index == 0 && file == '' ? 'This field is required' : true;
+    },
     minPsswdLength() {
         return (v: [] | string) => !v || v.length > 5 || 'La contraseña debe tener mínimo 6 caracteres';
     },
@@ -36,5 +39,14 @@ export default {
     fieldMaxLength(maxLength: number) {
         return (v: [] | string) =>
             v.length <= maxLength || 'El campo no debe exceder el límite de caracteres';
+    },
+    notEmpty() {
+        return (v) => v.length > 0 || 'This field is required';
+    },
+    notNegative(number: number) {
+        return number > 0 ? true : 'The number must be greater than 0';
+    },
+    requiredDropdown(item: any) {
+        return item != '' ? true : 'This field is required';
     },
 };

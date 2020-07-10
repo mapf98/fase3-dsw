@@ -5,8 +5,8 @@ import { Offers } from '../interfaces/offers.interface';
 class OffersRepository extends HttpRepository {
     private static readonly RESOURCE = 'offers';
 
-    getOffers(start: number, limit: number): Promise<Offers> {
-        return this.get(
+    async getOffers(start: number, limit: number): Promise<Offers> {
+        return await this.get(
             this.createUri([`${OffersRepository.RESOURCE}`, `${start}`, `${limit}`]),
             this.createHeader(),
         );

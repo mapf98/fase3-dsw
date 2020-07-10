@@ -99,7 +99,7 @@ const products: Module<ProductStateInterface, any> = {
                 const products: Products = await productsHttpRepository.getProducts(filter);
                 commit(ProductsTypes.mutations.SET_PRODUCTS, products.products);
 
-                if ((data = {})) commit(ProductsTypes.mutations.SET_ALL_PRODUCTS, products.products);
+                //if ((data = {})) commit(ProductsTypes.mutations.SET_ALL_PRODUCTS, products.products);
                 commit(ProductsTypes.mutations.SET_TOTAL_PRODUCTS, products.productsNumber);
 
                 return true;
@@ -165,17 +165,17 @@ const products: Module<ProductStateInterface, any> = {
         },
         async [ProductsTypes.actions.UPDATE_PRODUCT]({ commit }, product: ProductCreate): Promise<boolean> {
             try {
-                await productsHttpRepository.updateProductData(product);
-                return true;
+                delete product.photosFiles;
+                const productUpdated = await productsHttpRepository.updateProductData(product);
+                return productUpdated;
             } catch (e) {
                 return false;
             }
         },
         async [ProductsTypes.actions.FETCH_ALL_PRODUCTS]({ commit }): Promise<boolean> {
             try {
-                const filter: Filter = new Filter({});
-                const products: Products = await productsHttpRepository.getProducts(filter);
-                commit(ProductsTypes.mutations.SET_ALL_PRODUCTS, products.products);
+                const products: Products = await productsHttpRepository.getAllProducts();
+                commit(ProductsTypes.mutations.SET_ALL_PRODUCTS, products);
 
                 return true;
             } catch (e) {
@@ -223,8 +223,32 @@ const products: Module<ProductStateInterface, any> = {
             product: ProductCreate,
         ): Promise<Product | boolean> {
             try {
-                const response: Product = await await productsHttpRepository.createProduct(product);
+                delete product.photosFiles;
+                const response: Product = await productsHttpRepository.createProduct(product);
                 return response;
+            } catch (e) {
+                return false;
+            }
+        },
+        async [ProductsTypes.actions.FETCH_PRODUCT_IMAGE]({ commit }, imageAndProduct): Promise<boolean> {
+            try {
+                const photo = await productsFirebaseRepository.getProductPhotoByName(
+                    imageAndProduct.id,
+                    imageAndProduct.image,
+                );
+                return photo;
+            } catch (e) {
+                return false;
+            }
+        },
+        async [ProductsTypes.actions.UPDATE_IMAGE]({ commit }, imageAndProduct): Promise<boolean> {
+            try {
+                await productsFirebaseRepository.updateImage(
+                    imageAndProduct.oldFile,
+                    imageAndProduct.newFile,
+                    imageAndProduct.id,
+                );
+                return true;
             } catch (e) {
                 return false;
             }

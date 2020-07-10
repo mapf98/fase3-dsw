@@ -8,6 +8,7 @@ import {
     Products,
 } from '../interfaces/products.interface';
 import { Filter } from '@/utils/filter';
+import products from '@/store/products/products';
 
 class ProductsHttpRepository extends HttpRepository {
     private static readonly RESOURCE = 'products';
@@ -23,14 +24,14 @@ class ProductsHttpRepository extends HttpRepository {
     public getProductById(id: number): Promise<Product> {
         return this.get(this.createUri([`${ProductsHttpRepository.RESOURCE}`, `${id}`]), this.createHeader());
     }
-    //tipar
-    updateProductData(product: ProductCreate) {
-        return this.patch(this.createUri([`${ProductsHttpRepository.RESOURCE}`], false), product, false);
-    }
-    private static readonly RESOURCE_ALL = 'products/all/1';
 
-    getAllProducts(): Promise<Product[]> {
-        return this.get(this.createUri([`${ProductsHttpRepository.RESOURCE_ALL}`]));
+    public updateProductData(product: ProductCreate) {
+        return this.put(this.createUri([`${ProductsHttpRepository.RESOURCE}`]), product, this.createHeader(),);
+    }
+
+
+    getAllProducts(): Promise<Products> {
+        return this.get(this.createUri([`${ProductsHttpRepository.RESOURCE}`, `all`]));
     }
     //tipar
 
@@ -46,7 +47,7 @@ class ProductsHttpRepository extends HttpRepository {
     }
 
     public createProduct(product: ProductCreate) {
-        return this.post(this.createUri([`${ProductsHttpRepository.RESOURCE}`]), product);
+        return this.post(this.createUri([`${ProductsHttpRepository.RESOURCE}`]), product, this.createHeader(),);
     }
 
     public uploadImage(data: ProductPhotoDto) {

@@ -5,20 +5,41 @@ import { Status } from '@/modules/common/interfaces/status.interface';
 
 export interface ProductCreate {
     id?: number;
-    productName: string;
+    name: string;
     description: string;
+    canAccumulatePoints: boolean;
+    fragile: boolean;
     price: number;
     shippingPrice: number;
-    minimumQuantityAvailable: number;
     brand: {
         id: number;
     };
     provider: {
-        id: number[];
+        id: number;
     };
     category: {
         id: number;
     };
+    offer: {
+        id: number;
+    };
+    status: {
+        id: number;
+    };
+    productDimension: {
+        width: number;
+        height: number;
+        long: number;
+        weight: number;
+    };
+    productInventory: {
+        availableQuantity: number;
+        minimunAvailableQuantity: number;
+    };
+    productCatalogues: productCatalogues[];
+    productPhotos: ProductPhotos[];
+    photosFiles: photosFilesInterface[];
+    
 }
 
 export interface ProductRatingCreate {
@@ -47,7 +68,7 @@ export interface Products {
 }
 
 export interface Product {
-    productPhotos?: ProductPhotos[];
+    productPhotos: ProductPhotos[];
     description?: string;
     id?: number;
     brand?: BrandInterface;
@@ -64,17 +85,18 @@ export interface Product {
     shippingPrice?: string;
     productDimensions?: ProductDimentions;
     status?: Status;
-    provider?: {
+    provider: {
         createdAt: string;
         id: number;
         name: string;
         updatedAt: string;
     };
-    productDimension?: {
+    productDimension: {
         //
         width: string;
         height: string;
         long: string;
+        weight: string;
     };
     rating?: string;
     questions?: Comment[];
@@ -102,8 +124,8 @@ export interface Product {
 }
 
 export interface ProductPhotos {
-    imageUrl: string | string;
-    id?: 17;
+    imageUrl?: string | string;
+    id?: number;
     createdAt?: string;
     updatedAt?: string;
     content?: string;
@@ -167,4 +189,15 @@ export class ProductFilters {
     limit?: number;
     start?: number;
     price?: number;
+}
+
+export interface productCatalogues {
+    catalogue?: {
+        id: number;
+    };
+}
+
+export interface photosFilesInterface {
+    url?: string;
+    file?: any;
 }

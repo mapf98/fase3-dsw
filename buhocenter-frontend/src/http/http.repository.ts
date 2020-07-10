@@ -59,6 +59,14 @@ export class HttpRepository {
         return httpcustomer.patch(uri, data, header);
     }
 
+    protected put(
+        uri: string,
+        data: AxiosRequestConfig['data'],
+        header?: AxiosRequestConfig['headers'],
+    ): Promise<any> {
+        return httpcustomer.put(uri, data, header);
+    }
+
     protected delete(uri: string, header?: AxiosRequestConfig['headers']): Promise<any> {
         return httpcustomer.delete(uri, header);
     }

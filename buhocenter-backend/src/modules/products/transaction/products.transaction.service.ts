@@ -40,16 +40,6 @@ export class ProductTransactionsRepository {
         });
     }
 
-    public async deleteProduct(productID: number): Promise<string> {
-        this.logger.info(`deleteProduct: starting delete of producto id: [product=${productID}]`, {
-            context: ProductTransactionsRepository.name,
-        });
-
-        return await this.connection.transaction(async transactionalEntityManage => {
-            return await this.productsService.deleteProduct(productID);
-        });
-    }
-
     public async getAllBrands(): Promise<Brand[]> {
         this.logger.info(`getAllBrands: getting all brands accessibles`, {
             context: ProductTransactionsRepository.name,

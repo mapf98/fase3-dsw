@@ -19,6 +19,7 @@ export const PRODUCT_EMPTY_STATE: ProductStateInterface = {
             width: '',
             height: '',
             long: '',
+            weight: '',
         },
         rating: '',
        

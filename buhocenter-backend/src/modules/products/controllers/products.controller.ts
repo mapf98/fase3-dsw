@@ -12,6 +12,7 @@ import {
     Patch,
     Delete,
     UseInterceptors,
+    Put,
 } from '@nestjs/common';
 import { ProductsService } from '../services/products.service';
 import { Product } from '../entities/product.entity';
@@ -30,6 +31,7 @@ import { ProductTransactionsRepository } from '../transaction/products.transacti
 import { ProductParameters } from '../interfaces/product-parameters';
 import { PaginatedProducts } from '../interfaces/paginated-products';
 import { CustomerLoyaltyInterceptor } from '../../../common/customer-loyalty-product-points.interceptor';
+import { DeleteResult } from 'typeorm';
 
 @Controller('products')
 export class ProductsController {
@@ -45,7 +47,6 @@ export class ProductsController {
         this.logger.info(`createProduct: Creating a product`, {
             context: ProductsController.name,
         });
-
         return await this.productsService.createProduct(product);
     }
 
@@ -57,6 +58,15 @@ export class ProductsController {
         });
 
         return this.productsService.getDailyProductsRecommendation();
+    }
+
+    @Get('all')
+    async getAllProducts(): Promise<Product[]> {
+        this.logger.info(`getAllProducts: getting all accessibles products`, {
+            context: ProductsController.name,
+        });
+
+        return await this.productsService.getAllProducts();
     }
 
     @Get(':id')
@@ -102,45 +112,22 @@ export class ProductsController {
         }
     }
 
-    @Delete(':id')
-    async deleteProduct(@Res() res: Response, @Param('id') deleteProductId: number): Promise<Response> {
-        try {
-            this.logger.info(
-                `deleteProduct: deleting the product with id [deleteProductId=${deleteProductId}]`,
-                { context: ProductsController.name },
-            );
-
-            let response = await this.productTransactionsRepository.deleteProduct(deleteProductId);
-            return res.status(HttpStatus.OK).send(response);
-        } catch (e) {
-            this.logger.error(
-                `deleteProduct: error when trying to delete the product with id[deleteProductId=${deleteProductId}]`,
-                { context: ProductsController.name },
-            );
-
-            return res.status(HttpStatus.BAD_REQUEST).send();
-        }
+    @Put()
+    async updateProduct(@Body() product: Partial<Product>): Promise<Product> {
+        console.log('controlador', product);
+        this.logger.info(`updateProduct: Updating the product [productId=${product.id}]`, {
+            context: ProductsController.name,
+        });
+        return await this.productsService.updateProduct(product);
     }
 
-    @Get('all/:id')
-    async getAllProducts(@Res() res: Response): Promise<Response> {
-        try {
-            this.logger.info(`getAllProducts: getting all accessibles products`, {
-                context: ProductsController.name,
-            });
+    @Delete(':id')
+    async deleteProduct(@Param('id') productId: number): Promise<Boolean> {
+        this.logger.info(`deleteProduct: Deleting the product with id [productId=${productId}]`, {
+            context: ProductsController.name,
+        });
 
-            let response = await this.productTransactionsRepository.getAllProducts();
-            return res.status(HttpStatus.OK).send(response);
-        } catch (e) {
-            this.logger.error(
-                `getAllProducts: error when trying to get all accessible products=${JSON.stringify(
-                    e.message,
-                )}`,
-                { context: ProductsController.name },
-            );
-
-            return res.status(HttpStatus.BAD_REQUEST).send();
-        }
+        return await this.productsService.deleteProduct(productId);
     }
 
     @Post('image')

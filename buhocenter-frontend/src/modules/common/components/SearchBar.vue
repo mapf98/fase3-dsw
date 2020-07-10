@@ -67,17 +67,19 @@ export default class SearchBar extends Vue {
     }
 
     async searchProducts(data: ProductFilters): Promise<void> {
-        if (this.$router.currentRoute.fullPath !== `/products?name=${this.query}`)
-            this.$router.push(`/products?name=${this.query}`);
-        this.SET_PRODUCT_PHOTOS_NOT_LOADED(false);
+        if (this.$router.currentRoute.path !== '/dashboard/products') {
+            if (this.$router.currentRoute.fullPath !== `/products?name=${this.query}`)
+                this.$router.push(`/products?name=${this.query}`);
+            this.SET_PRODUCT_PHOTOS_NOT_LOADED(false);
 
-        const fetched: boolean = await this.FETCH_PRODUCTS(data);
-        if (!fetched) {
-            this.errorLoadingContent = true;
-        } else {
-            await this.FETCH_PRODUCT_PHOTO_BY_NAME(this.GET_PRODUCTS);
+            const fetched: boolean = await this.FETCH_PRODUCTS(data);
+            if (!fetched) {
+                this.errorLoadingContent = true;
+            } else {
+                await this.FETCH_PRODUCT_PHOTO_BY_NAME(this.GET_PRODUCTS);
+            }
+            this.query = '';
         }
-        this.query = '';
     }
 
     get filteredProducts(): any {
@@ -99,7 +101,11 @@ export default class SearchBar extends Vue {
 
     @Watch('$route', { immediate: true, deep: true })
     async onUrlChange(newVal: any) {
-        if (this.$router.currentRoute.path !== '/products') await this.FETCH_PRODUCTS({});
+        if (
+            this.$router.currentRoute.path !== '/products' &&
+            this.$router.currentRoute.path !== '/dashboard/products'
+        )
+            await this.FETCH_PRODUCTS({});
     }
 
     @products.Action(ProductsTypes.actions.FETCH_PRODUCTS) private FETCH_PRODUCTS;

@@ -66,9 +66,11 @@ export default class Dashboard extends Vue {
             term: 'CATEGORIES',
             url: '/dashboard/categories',
         },
-
-        { icon: 'fas fa-box', term: 'PRODUCTS', url: '/dashboard/products' },
-
+        {
+            icon: 'fas fa-box',
+            term: 'PRODUCTS',
+            url: '/dashboard/products',
+        },
         {
             icon: 'fas fa-percent',
             term: 'OFFERS',

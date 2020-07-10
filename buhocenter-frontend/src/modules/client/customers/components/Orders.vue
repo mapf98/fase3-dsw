@@ -101,17 +101,22 @@ import { CustomerInterface } from '@/modules/client/auth/interfaces/customer.int
 import { Orders, StatusHistory } from '@/modules/client/customers/interfaces/orders.interface';
 import Product from './OrderProducts.vue';
 import EmptyState from '@/modules/common/components/EmptyState.vue';
+import { TranslateResult } from 'vue-i18n';
 import CustomersRepository from '@/modules/client/customers/repositories/customers.repository';
 
 @Component({
     components: { Product, EmptyState },
 })
 export default class ClientOrders extends Vue {
-    years = ['All', '2020', '2019', '2018', '2017'];
+    years = [this.translateWordAll(), '2020', '2019', '2018', '2017'];
     statusIcon = '';
     year = '';
     ordersFilter: Orders[] = [];
     emptyMessage = 'NO_ORDERS';
+
+    translateWordAll(): TranslateResult {
+        return this.$t('ALL');
+    }
 
     responsiveDetail(): number {
         const { xs, sm } = this.$vuetify.breakpoint;
@@ -139,7 +144,7 @@ export default class ClientOrders extends Vue {
     }
 
     selectOrder(): Orders[] {
-        if (this.year == '' || this.year == 'All') return this.GET_ORDERS;
+        if (this.year == '' || this.year == this.translateWordAll()) return this.GET_ORDERS;
         else return this.ordersFilter;
     }
 
@@ -150,7 +155,7 @@ export default class ClientOrders extends Vue {
                 ordersArray.push(el);
             }
         });
-        if (this.year == 'All') ordersArray = [];
+        if (this.year == this.translateWordAll()) ordersArray = [];
         this.ordersFilter = ordersArray;
     }
 
