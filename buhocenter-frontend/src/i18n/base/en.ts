@@ -260,5 +260,6 @@ export const terms = {
     ORDER_PROVIDER: 'Provider:',
     ORDER_PRODUCT_PRICE: 'Product price:',
     ORDER_PRODUCT_QUANTITY: 'Product quantity:',
+    THIRD_PARTY: 'Third party',
     MEET_ALLIES: 'Meet our allies',
 };

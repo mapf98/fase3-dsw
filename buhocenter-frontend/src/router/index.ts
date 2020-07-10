@@ -20,6 +20,7 @@ import DashboardSettings from '@/modules/management/settings/components/Dashboar
 import DashboardProducts from '@/modules/management/products/components/Products.vue';
 import DashboardOffers from '@/modules/management/promotions/components/DashboardOffers.vue';
 import DashboardServices from '@/modules/management/services/components/Services.vue';
+import DashboardThirdParty from '@/modules/third-party/components/DashboardThirdParty.vue';
 import PersonalInformation from '@/modules/client/customers/components/PersonalInformation.vue';
 import Checkout from '../views/Checkout.vue';
 import DashboardCreateOffer from '@/modules/management/promotions/components/CreateOffer.vue';
@@ -189,6 +190,15 @@ const routes: RouteConfig[] = [
                         path: '/dashboard/services',
                         name: 'dashboard-servies',
                         component: DashboardServices,
+                        meta: {
+                            admin: true,
+                            requiresAuth: true,
+                        },
+                    },
+                    {
+                        path: '/dashboard/third-party',
+                        name: 'dashboard-third-party',
+                        component: DashboardThirdParty,
                         meta: {
                             admin: true,
                             requiresAuth: true,

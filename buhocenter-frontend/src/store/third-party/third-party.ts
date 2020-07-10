@@ -59,6 +59,13 @@ const offers: Module<ThirdPartyStateInterface, any> = {
                 return false;
             }
         },
+        async [ThirdPartyTypes.actions.GENERATE_CSV]({ commit }): Promise<boolean> {
+            try {
+                return await ThirdPartyRepository.generateCsv();
+            } catch (e) {
+                return false;
+            }
+        },
     },
 };
 

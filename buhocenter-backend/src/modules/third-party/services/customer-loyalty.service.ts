@@ -272,17 +272,21 @@ export class CustomerLoyaltyService {
      * Generate csv with CSV generator
      * @returns Promise<ReadStream>
      */
-    public async generateClientCsv(): Promise<ReadStream> {
+    public async generateClientCsv(fileName: string): Promise<ReadStream> {
         this.logger.debug(`generateClientCsv: clients csv`, {
             context: CustomerLoyaltyService.name,
         });
 
         const data = await this.retrieveDataToCsv();
 
+        if (data.length === 0) {
+            throw new NotFoundException('There are not transactions without notification');
+        }
+
         this.logger.debug(`generateClientCsv: generating the csv`, {
             context: CustomerLoyaltyService.name,
         });
-        const fileName = `reports/csv/${new Date().toISOString()}.csv`;
+
         const file = this.csvGenerator.generate(data, fileName);
         const fileSent = await this.customerLoyaltyRepository.sendClientsCsv(file);
 

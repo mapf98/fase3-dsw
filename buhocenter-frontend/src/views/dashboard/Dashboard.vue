@@ -80,6 +80,11 @@ export default class Dashboard extends Vue {
             term: 'PLATFORM_SETTINGS',
             url: '/dashboard/platform',
         },
+        {
+            icon: 'mdi-account-group',
+            term: 'THIRD_PARTY',
+            url: '/dashboard/third-party',
+        },
     ];
 
     mounted() {

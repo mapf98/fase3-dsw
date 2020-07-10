@@ -42,11 +42,12 @@ export class ThirdPartyController {
     @Post('clients-csv')
     @Header('Content-Type', 'text/csv')
     @Header('Content-Disposition', 'attachment; filename=clients.csv')
-    async generateClientCsv(@Res() response): Promise<ReadStream> {
-        this.logger.info(`generateClientCsv: generating client csv]`, {
+    async generateClientCsv(@Res() response, @Body() data: { name: string }): Promise<ReadStream> {
+        this.logger.info(`generateClientCsv: generating client csv ${data.name}`, {
             context: ThirdPartyController.name,
         });
-        const stream = await this.customerLoyaltyService.generateClientCsv();
+        const fileName = `reports/csv/${data.name}.csv`;
+        const stream = await this.customerLoyaltyService.generateClientCsv(fileName);
         return stream.pipe(response);
     }
 

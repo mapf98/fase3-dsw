@@ -30,17 +30,21 @@ class PetromilesAuthRepository extends HttpRepository {
     }
 
     async generateCsv(): Promise<boolean> {
+        const fileName: string = new Date().toISOString();
         const response = await this.post(
-            this.createUri([`${PetromilesAuthRepository.RESOURCE}/download/clients-csv`]),
-            {},
+            this.createUri([`${PetromilesAuthRepository.RESOURCE}/clients-csv`]),
+            {
+                name: fileName,
+            },
             this.createHeader(),
         );
-        const url = window.URL.createObjectURL(new Blob([response.data]));
+        const url = window.URL.createObjectURL(new Blob([response]));
         const link = document.createElement('a');
         link.href = url;
-        link.setAttribute('download', 'clients-synchronization.csv');
+        link.download = fileName;
         document.body.appendChild(link);
         link.click();
+        document.body.removeChild(link);
         return true;
     }
 }
