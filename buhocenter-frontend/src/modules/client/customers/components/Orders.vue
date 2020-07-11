@@ -197,7 +197,6 @@ export default class ClientOrders extends Vue {
 
     async mounted(): Promise<void> {
         await this.fetchOrders();
-        console.log(this.GET_ORDERS);
     }
 
     async fetchProductsOrder(orderId: number): Promise<void> {

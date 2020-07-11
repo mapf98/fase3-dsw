@@ -100,7 +100,6 @@ export default class ProductCart extends Vue {
         //this.stock= this.getProductStock();
         const index = this.GET_PRODUCTS_CHECKOUT.findIndex((productCart) => productCart.id == this.item.id);
         this.checkbox = index !== -1;
-        console.log(this.item);
     }
 
     changeQuantity() {
