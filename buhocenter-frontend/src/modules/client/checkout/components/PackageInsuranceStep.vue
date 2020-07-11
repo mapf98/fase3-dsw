@@ -58,7 +58,9 @@
                         <tr>
                             <td colspan="7"></td>
                             <td>
-                                <b>${{ truncPrice(GET_TOTAL_PRICE_CHECKOUT) }}</b>
+                                <b>
+                                    {{ truncPrice(GET_TOTAL_PRICE_CHECKOUT) | getCurrentExchangeWithSymbolFor }}
+                                </b>
                             </td>
                             <td colspan="2">
                                 <b>{{
