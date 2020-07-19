@@ -114,7 +114,6 @@ export class ProductsController {
 
     @Put()
     async updateProduct(@Body() product: Partial<Product>): Promise<Product> {
-        console.log('controlador', product);
         this.logger.info(`updateProduct: Updating the product [productId=${product.id}]`, {
             context: ProductsController.name,
         });

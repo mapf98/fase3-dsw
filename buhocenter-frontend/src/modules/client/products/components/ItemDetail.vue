@@ -52,18 +52,6 @@
                                         <p class="ma-0">{{ $t('ADD_TO_CART') }}</p>
                                     </v-btn>
                                 </v-row>
-                                <v-row fill-width class="pa-1 mx-auto">
-                                    <v-btn
-                                        @click="buyItem(quantity)"
-                                        block
-                                        outlined
-                                        color="primary"
-                                        style="height: 50px;"
-                                    >
-                                        <v-icon left class="d-flex align-center">mdi-play-box-outline</v-icon>
-                                        <p class="ma-0">{{ $t('BUY_NOW') }}</p>
-                                    </v-btn>
-                                </v-row>
                             </v-row>
                         </v-col>
                         <v-col col="12" lg="5" md="4" sm="12" class="d-none d-lg-block">

@@ -58,7 +58,9 @@
                         <tr>
                             <td colspan="7"></td>
                             <td>
-                                <b>{{ GET_TOTAL_PRICE_CHECKOUT }}$</b>
+                                <b>
+                                    {{ truncPrice(GET_TOTAL_PRICE_CHECKOUT) | getCurrentExchangeWithSymbolFor }}
+                                </b>
                             </td>
                             <td colspan="2">
                                 <b>{{
@@ -98,6 +100,7 @@ import { carts } from '@/store/namespaces';
 import CartTypes from '@/store/carts/methods/cart.methods';
 import { ProductCarts } from '@/modules/client/cart/interfaces/carts.interface';
 import CartMethods from '@/store/carts/methods/cart.methods';
+import { trunc } from '@/utils/global-functions';
 
 @Component
 export default class PackageInsuranceStep extends Vue {
@@ -130,6 +133,10 @@ export default class PackageInsuranceStep extends Vue {
         });
 
         return price;
+    }
+
+    truncPrice(num: number): number {
+        return trunc(num, 2);
     }
 
     setInsurance(id: number): void {
