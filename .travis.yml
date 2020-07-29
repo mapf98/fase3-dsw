@@ -10,7 +10,7 @@ jobs:
     - stage: api-develop-deploy
       script: skip
       before_deploy:
-      - cd buhocenter-backend
+        - cd buhocenter-backend
       deploy:
         provider: heroku
         api_key: $HK_API_KEY_1
@@ -22,7 +22,7 @@ jobs:
     - stage: develop-deploy
       script: skip
       before_deploy:
-      - cd buhocenter-frontend
+        - cd buhocenter-frontend
       deploy:
         provider: heroku
         api_key: $HK_API_KEY_1
@@ -31,3 +31,52 @@ jobs:
         on:
           repo: mapf98/fase3-dsw
           branch: master
+    - stage: api-blue-deploy
+      script: skip
+      before_deploy:
+        - cd buhocenter-backend
+      deploy:
+        provider: heroku
+        api_key: $HK_API_KEY_1
+        app: api-blue-buhocenter
+        skip_cleanup: true
+        on:
+          repo: mapf98/fase3-dsw
+          branch: master
+    - stage: blue-deploy
+      script: skip
+      before_deploy:
+        - cd buhocenter-frontend
+      deploy:
+        provider: heroku
+        api_key: $HK_API_KEY_1
+        app: blue-buhocenter
+        skip_cleanup: true
+        on:
+          repo: mapf98/fase3-dsw
+          branch: master
+    - stage: api-green-deploy
+      script: skip
+      before_deploy:
+        - cd buhocenter-backend
+      deploy:
+        provider: heroku
+        api_key: $HK_API_KEY_2
+        app: api-green-buhocenter
+        skip_cleanup: true
+        on:
+          repo: mapf98/fase3-dsw
+          branch: master
+    - stage: green-deploy
+      script: skip
+      before_deploy:
+        - cd buhocenter-frontend
+      deploy:
+        provider: heroku
+        api_key: $HK_API_KEY_2
+        app: green-buhocenter
+        skip_cleanup: true
+        on:
+          repo: mapf98/fase3-dsw
+          branch: master
+      
