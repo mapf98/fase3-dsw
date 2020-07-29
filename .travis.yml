@@ -1,0 +1,23 @@
+language: node_js
+node_js:
+  - 12
+
+branches:
+  only:
+    - master
+    - develop
+
+jobs:
+  include:
+    - stage: api-develop-deploy
+      script: skip
+      before_deploy:
+      - cd buhocenter-backend
+      deploy:
+        provider: heroku
+        api_key: $HK_API_KEY_1
+        app: api-develop-buhocenter
+        skip_cleanup: true
+        on:
+          repo: mapf98/travis-config
+          branch: master
