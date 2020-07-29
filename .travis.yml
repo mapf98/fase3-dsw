@@ -19,3 +19,15 @@ jobs:
         on:
           repo: mapf98/fase3-dsw
           branch: master
+    - stage: develop-deploy
+      script: skip
+      before_deploy:
+      - cd buhocenter-frontend
+      deploy:
+        provider: heroku
+        api_key: $HK_API_KEY_1
+        app: develop-buhocenter
+        skip_cleanup: true
+        on:
+          repo: mapf98/fase3-dsw
+          branch: master
