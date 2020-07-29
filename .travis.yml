@@ -19,5 +19,5 @@ jobs:
         app: api-develop-buhocenter
         skip_cleanup: true
         on:
-          repo: mapf98/travis-config
+          repo: mapf98/fase3-dsw
           branch: master
