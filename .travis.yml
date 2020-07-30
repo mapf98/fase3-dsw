@@ -7,7 +7,7 @@ branches:
     - develop
 jobs:
   include:
-    - stage: api-develop-deploy
+    - stage: api-develop
       script: skip
       before_deploy:
         - cd buhocenter-backend
@@ -19,7 +19,7 @@ jobs:
         on:
           repo: mapf98/fase3-dsw
           branch: master
-    - stage: develop-deploy
+    - stage: develop
       script: skip
       before_deploy:
         - cd buhocenter-frontend
@@ -31,7 +31,7 @@ jobs:
         on:
           repo: mapf98/fase3-dsw
           branch: master
-    - stage: api-blue-deploy
+    - stage: api-blue
       script: skip
       before_deploy:
         - cd buhocenter-backend
@@ -43,7 +43,7 @@ jobs:
         on:
           repo: mapf98/fase3-dsw
           branch: master
-    - stage: blue-deploy
+    - stage: blue
       script: skip
       before_deploy:
         - cd buhocenter-frontend
@@ -55,7 +55,7 @@ jobs:
         on:
           repo: mapf98/fase3-dsw
           branch: master
-    - stage: api-green-deploy
+    - stage: api-green
       script: skip
       before_deploy:
         - cd buhocenter-backend
@@ -67,7 +67,7 @@ jobs:
         on:
           repo: mapf98/fase3-dsw
           branch: master
-    - stage: green-deploy
+    - stage: green
       script: skip
       before_deploy:
         - cd buhocenter-frontend
