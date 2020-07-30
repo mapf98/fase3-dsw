@@ -8,6 +8,7 @@ branches:
 jobs:
   include:
     - stage: api-develop
+      if: branch = develop
       script: skip
       before_deploy:
         - cd buhocenter-backend
@@ -20,6 +21,7 @@ jobs:
           repo: mapf98/fase3-dsw
           branch: master
     - stage: develop
+      if: branch = develop
       script: skip
       before_deploy:
         - cd buhocenter-frontend
@@ -32,6 +34,7 @@ jobs:
           repo: mapf98/fase3-dsw
           branch: master
     - stage: api-blue
+      if: branch = master
       script: skip
       before_deploy:
         - cd buhocenter-backend
@@ -44,6 +47,7 @@ jobs:
           repo: mapf98/fase3-dsw
           branch: master
     - stage: blue
+      if: branch = master
       script: skip
       before_deploy:
         - cd buhocenter-frontend
@@ -56,6 +60,7 @@ jobs:
           repo: mapf98/fase3-dsw
           branch: master
     - stage: api-green
+      if: branch = master
       script: skip
       before_deploy:
         - cd buhocenter-backend
@@ -68,6 +73,7 @@ jobs:
           repo: mapf98/fase3-dsw
           branch: master
     - stage: green
+      if: branch = master
       script: skip
       before_deploy:
         - cd buhocenter-frontend
