@@ -9,9 +9,12 @@ jobs:
   include:
     - stage: api-develop
       if: branch = develop
-      script: npm run test
-      before_deploy:
+      before_install:
         - cd buhocenter-backend
+      install:
+        - npm install
+      script:
+        - "npm test"
       deploy:
         provider: heroku
         api_key: $HK_API_KEY_1
@@ -22,9 +25,10 @@ jobs:
           branch: develop
     - stage: develop
       if: branch = develop
-      script: skip
-      before_deploy:
+      before_install:
         - cd buhocenter-frontend
+      install:
+        - npm install
       deploy:
         provider: heroku
         api_key: $HK_API_KEY_1
@@ -34,10 +38,13 @@ jobs:
           repo: ingswucab/consorcio2-buhocenter
           branch: develop
     - stage: api-blue
-      if: branch = master AND $DEPLOY_VAR = blue
-      script: npm run test
-      before_deploy:
+      if: branch = master AND env(DEPLOY_VAR) = blue
+      before_install:
         - cd buhocenter-backend
+      install:
+        - npm install
+      script:
+        - "npm test"
       deploy:
         provider: heroku
         api_key: $HK_API_KEY_1
@@ -47,10 +54,11 @@ jobs:
           repo: ingswucab/consorcio2-buhocenter
           branch: master
     - stage: blue
-      if: branch = master AND $DEPLOY_VAR = blue
-      script: skip
-      before_deploy:
+      if: branch = master AND env(DEPLOY_VAR) = blue
+      before_install:
         - cd buhocenter-frontend
+      install:
+        - npm install
       deploy:
         provider: heroku
         api_key: $HK_API_KEY_1
@@ -60,10 +68,13 @@ jobs:
           repo: ingswucab/consorcio2-buhocenter
           branch: master
     - stage: api-green
-      if: branch = master AND $DEPLOY_VAR = green
-      script: npm run test
-      before_deploy:
+      if: branch = master AND env(DEPLOY_VAR) = green
+      before_install:
         - cd buhocenter-backend
+      install:
+        - npm install
+      script:
+        - "npm test"
       deploy:
         provider: heroku
         api_key: $HK_API_KEY_2
@@ -73,10 +84,11 @@ jobs:
           repo: ingswucab/consorcio2-buhocenter
           branch: master
     - stage: green
-      if: branch = master AND $DEPLOY_VAR = green
-      script: skip
-      before_deploy:
+      if: branch = master AND env(DEPLOY_VAR) = green
+      before_install:
         - cd buhocenter-frontend
+      install:
+        - npm install
       deploy:
         provider: heroku
         api_key: $HK_API_KEY_2
