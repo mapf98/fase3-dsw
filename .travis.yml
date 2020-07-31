@@ -8,6 +8,7 @@ branches:
 jobs:
   include:
     - stage: api-develop
+      if: branch = master AND $DEPLOY_VAR = blue
       before_install:
         - cd buhocenter-backend
       install:
@@ -22,6 +23,7 @@ jobs:
           repo: mapf98/fase3-dsw          
           branch: master
     - stage: client-develop
+      if: branch = master AND $DEPLOY_VAR = blue
       before_install:
         - cd buhocenter-frontend
       install:
