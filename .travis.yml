@@ -8,7 +8,6 @@ branches:
 jobs:
   include:
     - stage: api-develop
-      if: branch = develop
       script: skip
       before_deploy:
         - cd buhocenter-backend
@@ -21,7 +20,6 @@ jobs:
           repo: mapf98/fase3-dsw          
           branch: master
     - stage: develop
-      if: branch = develop
       script: skip
       before_deploy:
         - cd buhocenter-frontend
