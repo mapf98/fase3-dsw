@@ -21,7 +21,7 @@ jobs:
         on:
           repo: mapf98/fase3-dsw          
           branch: master
-    - stage: develop
+    - stage: client-develop
       before_install:
         - cd buhocenter-frontend
       install:
@@ -33,56 +33,3 @@ jobs:
         on:
           repo: mapf98/fase3-dsw
           branch: master
-    # - stage: api-blue
-    #   if: branch = master AND $DEPLOY_VAR = blue
-    #   script: npm run test
-    #   before_deploy:
-    #     - cd buhocenter-backend
-    #   deploy:
-    #     provider: heroku
-    #     api_key: $HK_API_KEY_1
-    #     app: api-blue-buhocenter
-    #     skip_cleanup: true
-    #     on:
-    #       repo: mapf98/fase3-dsw
-    #       branch: master
-    # - stage: blue
-    #   if: branch = master AND $DEPLOY_VAR = blue
-    #   script: skip
-    #   before_deploy:
-    #     - cd buhocenter-frontend
-    #   deploy:
-    #     provider: heroku
-    #     api_key: $HK_API_KEY_1
-    #     app: blue-buhocenter
-    #     skip_cleanup: true
-    #     on:
-    #       repo: mapf98/fase3-dsw
-    #       branch: master
-    # - stage: api-green
-    #   if: branch = master AND $DEPLOY_VAR = green
-    #   script: npm run test
-    #   before_deploy:
-    #     - cd buhocenter-backend
-    #   deploy:
-    #     provider: heroku
-    #     api_key: $HK_API_KEY_2
-    #     app: api-green-buhocenter
-    #     skip_cleanup: true
-    #     on:
-    #       repo: mapf98/fase3-dsw
-    #       branch: master
-    # - stage: green
-      if: branch = master AND $DEPLOY_VAR = green
-      script: skip
-      before_deploy:
-        - cd buhocenter-frontend
-      deploy:
-        provider: heroku
-        api_key: $HK_API_KEY_2
-        app: green-buhocenter
-        skip_cleanup: true
-        on:
-          repo: mapf98/fase3-dsw
-          branch: master
-      
