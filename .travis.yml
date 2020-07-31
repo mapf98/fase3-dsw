@@ -8,8 +8,10 @@ branches:
 jobs:
   include:
     - stage: api-develop
-      before_script:
+      before_install:
         - cd buhocenter-backend
+      install:
+        - npm install
       script:
         - "npm test"
       deploy:
