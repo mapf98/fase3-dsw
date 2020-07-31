@@ -12,9 +12,6 @@ jobs:
         - cd buhocenter-backend
       script:
         - "npm test"
-        - "npm run build"
-      before_deploy:
-        - cd buhocenter-backend
       deploy:
         provider: heroku
         api_key: $HK_API_KEY_1
