@@ -9,7 +9,7 @@ jobs:
   include:
     - stage: api-develop
       if: branch = develop
-      script: skip
+      script: npm run test
       before_deploy:
         - cd buhocenter-backend
       deploy:
@@ -20,7 +20,6 @@ jobs:
         on:
           repo: mapf98/fase3-dsw          
           branch: develop
-
     - stage: develop
       if: branch = develop
       script: skip
@@ -36,7 +35,7 @@ jobs:
           branch: develop
     - stage: api-blue
       if: branch = master AND $DEPLOY_VAR = blue
-      script: skip
+      script: npm run test
       before_deploy:
         - cd buhocenter-backend
       deploy:
@@ -62,7 +61,7 @@ jobs:
           branch: master
     - stage: api-green
       if: branch = master AND $DEPLOY_VAR = green
-      script: skip
+      script: npm run test
       before_deploy:
         - cd buhocenter-backend
       deploy:
