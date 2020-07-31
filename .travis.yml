@@ -18,8 +18,9 @@ jobs:
         app: api-develop-buhocenter
         skip_cleanup: true
         on:
-          repo: fase3-dsw          
+          repo: mapf98/fase3-dsw          
           branch: develop
+
     - stage: develop
       if: branch = develop
       script: skip
@@ -31,7 +32,7 @@ jobs:
         app: develop-buhocenter
         skip_cleanup: true
         on:
-          repo: fase3-dsw
+          repo: mapf98/fase3-dsw
           branch: develop
     - stage: api-blue
       if: branch = master AND $DEPLOY_VAR = blue
@@ -44,7 +45,7 @@ jobs:
         app: api-blue-buhocenter
         skip_cleanup: true
         on:
-          repo: fase3-dsw
+          repo: mapf98/fase3-dsw
           branch: master
     - stage: blue
       if: branch = master AND $DEPLOY_VAR = blue
@@ -57,7 +58,7 @@ jobs:
         app: blue-buhocenter
         skip_cleanup: true
         on:
-          repo: fase3-dsw
+          repo: mapf98/fase3-dsw
           branch: master
     - stage: api-green
       if: branch = master AND $DEPLOY_VAR = green
@@ -70,7 +71,7 @@ jobs:
         app: api-green-buhocenter
         skip_cleanup: true
         on:
-          repo: fase3-dsw
+          repo: mapf98/fase3-dsw
           branch: master
     - stage: green
       if: branch = master AND $DEPLOY_VAR = green
@@ -83,6 +84,6 @@ jobs:
         app: green-buhocenter
         skip_cleanup: true
         on:
-          repo: fase3-dsw
+          repo: mapf98/fase3-dsw
           branch: master
       
