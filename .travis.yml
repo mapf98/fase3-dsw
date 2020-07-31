@@ -8,9 +8,13 @@ branches:
 jobs:
   include:
     - stage: api-develop
+      before_script:
+        - cd buhocenter-backend
+      script:
+        - "npm test"
+        - "npm run build"
       before_deploy:
         - cd buhocenter-backend
-      script: npm test
       deploy:
         provider: heroku
         api_key: $HK_API_KEY_1
