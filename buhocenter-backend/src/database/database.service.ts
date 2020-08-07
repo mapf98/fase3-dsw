@@ -9,13 +9,14 @@ export const databaseProviders = [
         imports: [ConfigModule],
         inject: [ConfigService],
         async useFactory(configService: ConfigService) {
+            const mode:boolean = process.env.MODE_APP === 'production';
             return {
-                ssl: true,
-                extra: {
+                ssl: mode,
+                extra: mode == true ? {
                     ssl: {
                         rejectUnauthorized: false,
                     },
-                },
+                }:false,
                 type: 'postgres' as 'postgres',
                 host: configService.get(ConfigKeys.HOST),
                 database: configService.get(ConfigKeys.DATABASE),
