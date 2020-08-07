@@ -36,7 +36,7 @@
     "@nestjsx/crud": "^4.4.5",
     "@nestjsx/crud-typeorm": "^4.4.5",
     "body-parser": "^1.19.0",
-    "class-transformer": "^0.2.3",
+    "class-transformer": "^0.3.1",
     "cls-hooked": "^4.2.2",
     "cls-rtracer": "^1.4.1",
     "coingate-v2": "^1.0.1",
