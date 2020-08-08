@@ -14,6 +14,8 @@ import { CommissionsService } from './services/commissions.service';
 import { CommissionsTransactionsRepository } from './transactions/commissions.transactions.service';
 import { UsersModule } from '../users/users.module';
 import { ThirdPartyModule } from '../third-party/third-party.module';
+import { PaymentSubscriber } from './services/payment-subscriber.service'
+import { EncriptionsModule } from '../encriptions/encriptions.module'
 
 @Module({
     imports: [
@@ -28,6 +30,7 @@ import { ThirdPartyModule } from '../third-party/third-party.module';
             timeout: 20000,
             maxRedirects: 5,
         }),
+        EncriptionsModule
     ],
     providers: [
         PaymentsTransactionsRepository,
@@ -35,6 +38,7 @@ import { ThirdPartyModule } from '../third-party/third-party.module';
         CommissionsService,
         CryptocurrenciesService,
         CommissionsTransactionsRepository,
+        PaymentSubscriber,
     ],
     controllers: [PaymentsController, CommissionsController],
 })

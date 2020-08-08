@@ -18,6 +18,7 @@ import { ConfigModule } from 'src/config/config.module';
 import { AllExceptionsFilter } from './all-exceptions.filter';
 import { NotificationsModule } from '../modules/notifications/notifications.module';
 import { ThirdPartyModule } from '../modules/third-party/third-party.module';
+import { EncriptionsModule } from '../modules/encriptions/encriptions.module';
 
 dotenv.config();
 
@@ -40,6 +41,7 @@ dotenv.config();
         }),
         NotificationsModule,
         ThirdPartyModule,
+        EncriptionsModule
     ],
     controllers: [AppController],
     providers: [AppService, AllExceptionsFilter],
