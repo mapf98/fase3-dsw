@@ -41,7 +41,7 @@ class PetromilesAuthRepository extends HttpRepository {
         const url = window.URL.createObjectURL(new Blob([response]));
         const link = document.createElement('a');
         link.href = url;
-        link.download = fileName+'.csv';
+        link.download = fileName + '.csv';
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
