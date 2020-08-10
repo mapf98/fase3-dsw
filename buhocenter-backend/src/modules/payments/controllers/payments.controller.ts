@@ -2,16 +2,13 @@ import {
     Controller,
     Inject,
     Get,
-    Res,
     Param,
     ParseIntPipe,
-    HttpStatus,
     Post,
     Body,
     HttpCode,
     Query,
 } from '@nestjs/common';
-import { Response } from 'express';
 import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
 import { Logger } from 'winston';
 import { PaymentsService } from '../services/payments.service';

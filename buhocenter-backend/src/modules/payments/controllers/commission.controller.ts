@@ -4,7 +4,6 @@ import {
     Get,
     Res,
     Param,
-    ParseIntPipe,
     HttpStatus,
     Post,
     Body,
@@ -17,7 +16,6 @@ import { Logger } from 'winston';
 import { CommissionsService } from '../services/commissions.service';
 import { CommissionsTransactionsRepository } from '../transactions/commissions.transactions.service';
 import { CommissionDto, CommissionUpdateDto } from '../dto/commissions.dto';
-import { join } from 'path';
 
 @Controller('commissions')
 export class CommissionsController {
