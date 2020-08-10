@@ -117,12 +117,50 @@
                             </v-col>
                         </v-row>
                     </v-form>
-                    <v-row class="d-flex justify-center my-2 mb-4" @click="saveChanges()">
-                        <v-btn :loading="loading" outlined color="primary">{{ $t('SAVE') }}</v-btn>
-                    </v-row>
+                    <v-col>
+                        <v-row class="btn-container mb-4 ml-4 mr-4">
+                            <v-btn class="remove-btn mt-4" color="primary" @click="openDeleteDialog()">{{
+                                $t('REMOVE_ACCOUNT')
+                            }}</v-btn>
+
+                            <v-btn
+                                class="save-btn mt-4"
+                                :loading="loading"
+                                outlined
+                                color="primary"
+                                @click="saveChanges()"
+                                >{{ $t('SAVE') }}</v-btn
+                            >
+                        </v-row>
+                    </v-col>
                 </v-card>
             </v-col>
         </v-container>
+        <v-row justify="center">
+            <v-dialog v-model="deleteDialog" persistent max-width="600">
+                <v-card>
+                    <v-card-title class="headline">{{ $t('WARNING') }}</v-card-title>
+                    <v-card-text class="justify-text text-center"
+                        ><p>{{ $t('WARNING_REMOVE_ACCOUNT_MESSAGE') }}</p></v-card-text
+                    >
+                    <v-card-actions>
+                        <v-spacer></v-spacer>
+                        <v-row class="remove-container">
+                            <v-btn class="no-btn" color="success" @click="deleteDialog = false">{{
+                                $t('NO_REMOVE_ACCOUNT')
+                            }}</v-btn>
+                            <v-btn
+                                class="yes-btn"
+                                color="error"
+                                :loading="deleteLoading"
+                                @click="removeAccount()"
+                                >{{ $t('YES_REMOVE_ACCOUNT') }}</v-btn
+                            >
+                        </v-row>
+                    </v-card-actions>
+                </v-card>
+            </v-dialog>
+        </v-row>
         <v-snackbar v-model="userProfileModified" top :timeout="timeout" color="success">
             Su perfil de usuario fue modificado exitosamente
             <v-btn color="white" text @click="userProfileModified = false">Cerrar</v-btn>
@@ -147,6 +185,7 @@ import LanguageTypes from '../../../../store/languages/methods/language.methods'
 import LanguageMethods from '../../../../store/languages/methods/language.methods';
 import rules from '../../../../utils/rules';
 import { CustomerInterface } from '@/modules/client/auth/interfaces/customer.interface';
+import AuthMethods from '@/store/auth/methods/auth.methods';
 
 @Component
 export default class PersonalInformation extends Vue {
@@ -156,7 +195,8 @@ export default class PersonalInformation extends Vue {
     userProfileError = false;
     loadingProfileError = false;
     loading = false;
-
+    deleteLoading = false;
+    deleteDialog = false;
     modifiedName = '';
     modifiedLastName = '';
     modifiedEmail = '';
@@ -173,6 +213,10 @@ export default class PersonalInformation extends Vue {
     $refs!: {
         form: any;
     };
+
+    openDeleteDialog(): void {
+        this.deleteDialog = true;
+    }
 
     modifyName(value: string): void {
         this.modifiedName = value;
@@ -253,6 +297,28 @@ export default class PersonalInformation extends Vue {
         }
     }
 
+    async removeAccount(): Promise<void> {
+        this.deleteLoading = true;
+        let client: CustomerInterface = {
+            id: this.GET_CLIENT_DATA.id,
+            status: {
+                id: 11,
+            },
+        };
+        const updated: boolean = await this.UPDATE_CUSTOMER(client);
+        if (updated) {
+            this.deleteLoading = false;
+            await this.logout();
+            localStorage.clear();
+            sessionStorage.clear();
+            this.goToHome();
+        }
+    }
+
+    goToHome(): void {
+        this.$router.currentRoute.path != '/home' ? this.$router.push('/home') : false;
+    }
+
     async mounted() {
         this.modifiedName = this.GET_CLIENT_DATA.name!;
         this.modifiedLastName = this.GET_CLIENT_DATA.lastName!;
@@ -261,6 +327,7 @@ export default class PersonalInformation extends Vue {
         this.modifiedCellphone = this.GET_CLIENT_DATA.cellphone!;
     }
 
+    @authModule.Action(AuthMethods.actions.LOGOUT) logout!: () => boolean;
     @languageModule.Getter(LanguageMethods.getters.GET_PLATFORM_LANGUAGE)
     private PLATFORM_LANGUAGE!: string;
     @languageModule.Getter(LanguageMethods.getters.GET_LANGUAGES)
@@ -279,8 +346,42 @@ export default class PersonalInformation extends Vue {
     private GET_CLIENT_DATA!: CustomerInterface;
 }
 </script>
-<style scoped>
+<style scoped lang="scss">
 .pointer {
     cursor: pointer;
+}
+.btn-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.remove-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin: 10px 0px;
+}
+.remove-container > .yes-btn {
+    margin-left: 10px;
+}
+.justify-text {
+    text-align: justify;
+}
+@media only screen and (max-width: 388px) {
+    .remove-btn {
+        order: 1;
+    }
+    .btn-container > .save-btn,
+    .remove-btn {
+        margin: 0 auto;
+    }
+}
+@media only screen and (max-width: 568px) {
+    .remove-container > .yes-btn {
+        margin-left: 0px;
+        margin-top: 10px;
+    }
 }
 </style>

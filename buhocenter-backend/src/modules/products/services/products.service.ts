@@ -189,7 +189,9 @@ export class ProductsService {
             query.andWhere('category.id = :categoryId', { categoryId: parameters.categoryId });
         
         if (!parameters.admin) {
-            query.andWhere('productInventory.availableQuantity - productInventory.minimumAvailableQuantity > 0');
+            query.andWhere(
+                'productInventory.availableQuantity - productInventory.minimumAvailableQuantity > 0',
+            );
             query.andWhere('status.id = :statusId', { statusId: STATUS.ACTIVE.id });
         }
 
@@ -938,56 +940,63 @@ export class ProductsService {
 
             if (pdfCartData[0]){                
                 this.logger.debug(
-                `sendPdf: success getting cart data of order id[orderId =${paymentId}]|${JSON.stringify(
-                   pdfCartData,
-                )}`,
-                {
-                    context: ProductsService.name,
-                },
-            );
-            }else{                  
+                    `sendPdf: success getting cart data of order id[orderId =${paymentId}]|${JSON.stringify(
+                        pdfCartData,
+                    )}`,
+                    {
+                        context: ProductsService.name,
+                    },
+                );
+            } else {
                 this.logger.error(
-                `sendPdf: error when getting cart data of order id[orderId =${paymentId}]`,
-                {
-                    context: ProductsService.name,
-                },              );
-                pdfCartData=[{
-                    "id" : 1,
-                    "name" : 'undefined, please try again',
-                    "price" : 2000,
-                    "quantity" : 1,
-                    "product_price" : 2500,
-                    "offer_price" : 0,
-                }];              
+                    `sendPdf: error when getting cart data of order id[orderId =${paymentId}]`,
+                    {
+                        context: ProductsService.name,
+                    },
+                );
+                pdfCartData = [
+                    {
+                        id: 1,
+                        name: 'undefined, please try again',
+                        price: 2000,
+                        quantity: 1,
+                        product_price: 2500,
+                        offer_price: 0,
+                    },
+                ];
             }
 
-            if(pdfClienteData[0]){
-               this.logger.debug(
-                `sendPdf: success getting client data of order id[orderId =${paymentId}]|${JSON.stringify(
-                   pdfClienteData,
-                )}`,
-                {
-                    context: ProductsService.name,
-                },);
-            }else{
+            if (pdfClienteData[0]) {
+                this.logger.debug(
+                    `sendPdf: success getting client data of order id[orderId =${paymentId}]|${JSON.stringify(
+                        pdfClienteData,
+                    )}`,
+                    {
+                        context: ProductsService.name,
+                    },
+                );
+            } else {
                 this.logger.error(
-                `sendPdf: error when getting cart data of order id[orderId =${paymentId}]`,
-                {
-                    context: ProductsService.name,
-                }, );  
-                pdfClienteData=[{
-                    id:1,
-                    "last_name": 'undefined',
-                    "first_street": 'undefined',
-                    "second_street": 'undefined',
-                    "city": 'undefined',
-                    "zip_code": 'undefined',
-                    "transaction_id": 'undefined',
-                    "total": 0,
-                    "total_cryptocurrency": 0,
-                    "service_fee": 0,
-                    "processor_fee": 0,
-                }];               
+                    `sendPdf: error when getting cart data of order id[orderId =${paymentId}]`,
+                    {
+                        context: ProductsService.name,
+                    },
+                );
+                pdfClienteData = [
+                    {
+                        id: 1,
+                        last_name: 'undefined',
+                        first_street: 'undefined',
+                        second_street: 'undefined',
+                        city: 'undefined',
+                        zip_code: 'undefined',
+                        transaction_id: 'undefined',
+                        total: 0,
+                        total_cryptocurrency: 0,
+                        service_fee: 0,
+                        processor_fee: 0,
+                    },
+                ];
             }
 
             let today = new Date();
@@ -1171,13 +1180,10 @@ export class ProductsService {
                     fisrtTable: {
                         margin: [0, 30, 0, 15]
                     },
-                    sideTable:{
-                        margin: [0, 0, 0, 15]
+                    tableClose: {
+                        margin: [0, -14, 0, 15],
                     },
-                    tableClose:{
-                         margin: [0, -14, 0, 15]
-                    }
-                }
+                },
             };
 
             pdfCartData.forEach(product =>
@@ -1189,7 +1195,6 @@ export class ProductsService {
                     {
                         text: `${(product.price * product.quantity).toFixed(2)}`,
                         style: 'tableHeader',
-
                         alignment: 'center',
                     },
                 ]),

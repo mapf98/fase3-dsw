@@ -8,6 +8,7 @@ insert into statuses (name, description) VALUES ('Invalid','Indicates that the o
 insert into statuses (name, description) VALUES ('Expired','Indicates that the order expired its time to pay');
 insert into statuses (name, description) VALUES ('Canceled','Indicates that the order was canceled');
 insert into statuses (name, description) VALUES ('Reserved', 'Indicates that the quantity of the product is reserved');
+insert into statuses (name, description) VALUES ('Blocked', 'Indicates that the user deleted the account and cannot access to system');
 
 insert into roles (name, priority) values ('Customer', 1), ('Admin', 1);
 

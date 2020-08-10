@@ -67,14 +67,16 @@ export class OffersService {
     public async deleteOffer(offerId: number, transactionalEntityManager: EntityManager): Promise<boolean> {
         try {
             let OfferRepository: Repository<Offer> = await transactionalEntityManager.getRepository(Offer);
-            await OfferRepository.update({ id: offerId }, { status: { id: STATUS.INACTIVE.id } });
-
-            return true;
+            let offerFound = await OfferRepository.findOne(offerId);
+            if (offerFound) {
+                await OfferRepository.update({ id: offerId }, { status: { id: STATUS.INACTIVE.id } });
+                return true;
+            }
+            return false;
         } catch (e) {
             this.logger.error(
                 `deleteOffer: error when trying to delete the offer [id=${offerId}| error =${e.message}]`,
             );
-
             return false;
         }
     }

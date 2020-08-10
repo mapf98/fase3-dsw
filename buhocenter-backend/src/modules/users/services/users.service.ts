@@ -90,8 +90,10 @@ export class UsersService {
         let customerSave: User;
         let response: ResponseAuth;
         if (customer) {
-            if (customer.status.id === STATUS.INACTIVE.id) {
-                throw new UnauthorizedException('The user cannot enter to the system because are inactive');
+            if (customer.status.id !== STATUS.ACTIVE.id) {
+                throw new UnauthorizedException(
+                    'The user cannot enter to the system because is inactive or the account is blocked',
+                );
             }
             const newcustomer: User = this.usersRepository.merge(customer, {
                 token: data.token,
@@ -151,6 +153,7 @@ export class UsersService {
         this.logger.debug(`getUsers: returning users`);
 
         return await this.usersRepository.find({
+            where: `status_id != ${STATUS.BLOCKED.id}`,
             relations: ['role', 'status'],
             order: {
                 id: 'ASC',
@@ -169,9 +172,9 @@ export class UsersService {
             let customerSave: User;
             let response: ResponseAuth;
             if (customer) {
-                if (customer.status.id === STATUS.INACTIVE.id) {
+                if (customer.status.id !== STATUS.ACTIVE.id) {
                     throw new UnauthorizedException(
-                        'The user cannot enter to the system because are inactive',
+                        'The user cannot enter to the system because is inactive or the account is blocked',
                     );
                 }
                 const newcustomer: User = this.usersRepository.merge(customer, {
@@ -235,7 +238,7 @@ export class UsersService {
             };
             return response;
         } catch (e) {
-            this.logger.error(`validateRegisterSocial: error message [e=${e.message}]`, {
+            this.logger.error(`validateRegisterSocial: error message [e=${JSON.stringify(e.message)}]`, {
                 context: UsersService.name,
             });
         }

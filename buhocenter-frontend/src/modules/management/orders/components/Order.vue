@@ -90,11 +90,9 @@
 import { Prop, Component, Vue } from 'vue-property-decorator';
 import { Order } from '@/modules/management/orders/interfaces/orders.interface';
 import { formatDate } from '@/utils/date-functions';
-
 @Component
 export default class OrderComponent extends Vue {
     @Prop() order!: Order;
-
     setDate(date: string): string {
         return formatDate(date);
     }

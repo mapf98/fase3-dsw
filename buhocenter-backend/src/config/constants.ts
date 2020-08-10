@@ -39,6 +39,10 @@ export const STATUS = Object.freeze({
         id: 10,
         name: 'reserved',
     },
+    BLOCKED: {
+        id: 11,
+        name: 'Blocked',
+    },
 });
 
 export const ROLE = Object.freeze({

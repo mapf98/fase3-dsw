@@ -141,7 +141,6 @@ import { CustomerInterface } from '@/modules/client/auth/interfaces/customer.int
 import { Product } from '@/modules/client/products/interfaces/products.interface';
 import { Comment } from '../interfaces/comment.interface';
 import { CartInterface, ProductCarts, ServiceCart } from '@/modules/client/cart/interfaces/carts.interface';
-
 @Component({
     components: {
         DailyRecomendation,
@@ -156,7 +155,6 @@ import { CartInterface, ProductCarts, ServiceCart } from '@/modules/client/cart/
 export default class ItemDetail extends Vue {
     principalImage = '';
     rating = 3;
-
     get getProductStock(): string[] {
         var productStock: string[] = [];
         for (var i = 0; i < this.GET_ITEM_DETAIL.productInventory!.availableQuantity!; i++) {
@@ -164,47 +162,37 @@ export default class ItemDetail extends Vue {
         }
         return productStock;
     }
-
     quantity = 0;
-
     itemDetailLoaded = false;
     errorLoadingContent = false;
     errorAddingItemToCart = false;
     itemAddedToCart = false;
     itemCartUpdate: boolean = false;
     timeout = 5000;
-
     comments: Comment[] = [];
-
     splitDate(comments: Comment[]): Comment[] {
         let dateSplit;
         let newDate = '';
-
         comments.forEach((comment: Comment) => {
             comment.createdAt = comment.createdAt?.slice(0, 10);
         });
-
         comments.forEach((comment: Comment) => {
             dateSplit = comment.createdAt?.split('-');
             newDate = dateSplit[1] + '/' + dateSplit[2] + '/' + dateSplit[0];
             comment.createdAt = newDate;
             dateSplit = [];
         });
-
         return comments;
     }
-
     createOrder(quantity: number) {
         // FIX: Acomodar al implementar el dropdown multimoneda
         const currencyISO = 'USD';
         const currencyId: number = CURRENCY.USD.id;
-
         const total = `${
             this.getDiscountPrice() !== 0
                 ? this.getDiscountPrice() * quantity
                 : this.GET_ITEM_DETAIL.price! * quantity
         }`;
-
         return {
             customer: {
                 id: this.GET_CLIENT_DATA.id,
@@ -241,36 +229,27 @@ export default class ItemDetail extends Vue {
             },
         };
     }
-
     async buyItem(quantity: number): Promise<void> {
         if (quantity) {
             const order = this.createOrder(quantity);
-
             this.SHOW_LOADER(true);
-
             const paymentUrl: string | boolean = await this.CREATE_ORDER(order);
-
             if (paymentUrl) {
                 this.SHOW_LOADER(false);
                 window.open(paymentUrl as string, '_blank');
             }
-
             this.SHOW_LOADER(false);
         }
     }
-
     getDiscountPrice(): number {
         let discountPrice = 0;
-
         this.GET_ITEM_DETAIL.offers.forEach((element) => {
             if (element.offer.status.id === STATUS.ACTIVE) {
                 discountPrice = parseFloat(element.discountPrice);
             }
         });
-
         return discountPrice;
     }
-
     private async addProductToCart(): Promise<boolean> {
         const productCart: CART_INTERFACE.ProductCarts = {
             quantity: this.quantity,
@@ -285,10 +264,8 @@ export default class ItemDetail extends Vue {
                 rating: this.GET_ITEM_DETAIL.rating!,
             },
         };
-
         return await this.ADD_PRODUCT_TO_CART(productCart);
     }
-
     async addItemToCart(quantity: number): Promise<void> {
         this.quantity = quantity;
         if (!this.productExistInCart()) {
@@ -306,7 +283,6 @@ export default class ItemDetail extends Vue {
             this.itemCartUpdate = true;
         }
     }
-
     async changeQuantity(quantity): Promise<void> {
         const index_checkout = await this.GET_PRODUCTS_CHECKOUT.findIndex(
             (productCart) => productCart.product!.id == this.GET_ITEM_DETAIL.id,
@@ -322,7 +298,6 @@ export default class ItemDetail extends Vue {
             index,
         });
     }
-
     productExistInCart(): boolean {
         const new_product_id: number | undefined = this.GET_ITEM_DETAIL.id;
         let exist: boolean = false;
@@ -333,23 +308,18 @@ export default class ItemDetail extends Vue {
         });
         return exist;
     }
-
     isProduct(): boolean {
         return this.$route.query.item === 'product';
     }
-
     get imageSelected(): string {
         return this.principalImage;
     }
-
     changePhotoSelected(imageUrl: string): void {
         this.principalImage = imageUrl;
     }
-
     closeSnackbar(): void {
         this.errorLoadingContent = false;
     }
-
     async mounted(): Promise<void> {
         let fetched = false;
         let photosLoaded = false;
@@ -358,7 +328,6 @@ export default class ItemDetail extends Vue {
         } else {
             fetched = await this.FETCH_SERVICE_DETAIL(Number(this.$route.query.id));
         }
-
         if (fetched) {
             if (this.isProduct()) {
                 photosLoaded = await this.FETCH_PRODUCT_ITEM_PHOTOS({
@@ -374,7 +343,6 @@ export default class ItemDetail extends Vue {
                     item: this.GET_ITEM_DETAIL,
                 });
             }
-
             this.principalImage =
                 this.GET_ITEM_DETAIL &&
                 this.GET_ITEM_DETAIL.productPhotos?.length &&
@@ -385,12 +353,10 @@ export default class ItemDetail extends Vue {
         } else {
             this.errorLoadingContent = true;
         }
-
         if (fetched && photosLoaded) {
             this.itemDetailLoaded = true;
         }
     }
-
     @loader.Getter(LoaderTypes.getters.IS_LOADING) IS_LOADING!: boolean;
     @carts.Getter(CartMethods.getters.GET_PRODUCTS_CART)
     GET_PRODUCTS_CART!: ProductCarts[];
@@ -409,10 +375,8 @@ export default class ItemDetail extends Vue {
     FETCH_PRODUCT_CART_PHOTO_BY_NAME!: (products: ProductCarts[]) => boolean;
     @carts.Mutation(CartMethods.mutations.SET_QUANTITY_PRODUCT)
     SET_QUANTITY_PRODUCT;
-
     @products.Getter(ProductsTypes.getters.GET_ITEM_DETAIL)
     GET_ITEM_DETAIL!: Product;
-
     @products.Action(ProductsTypes.actions.FETCH_PRODUCT_ITEM_PHOTOS)
     FETCH_PRODUCT_ITEM_PHOTOS;
     @products.Action(ProductsTypes.actions.FETCH_SERVICE_ITEM_PHOTOS)
@@ -421,17 +385,14 @@ export default class ItemDetail extends Vue {
     FETCH_SERVICE_DETAIL!: (productId: number) => boolean;
     @products.Action(ProductsTypes.actions.FETCH_PRODUCT_DETAIL)
     FETCH_PRODUCT_DETAIL!: (productId: number) => boolean;
-
     @layout.Getter(LayoutTypes.getters.GET_CATEGORY) GET_CATEGORY!: string;
     @layout.Getter(LayoutTypes.getters.GET_CATEGORY_ID) GET_CATEGORY_ID!: number;
     @layout.Getter(LayoutTypes.getters.GET_CATALOGUE) GET_CATALOGUE!: string;
     @layout.Getter(LayoutTypes.getters.GET_CATALOGUE_ID)
     GET_CATALOGUE_ID!: number;
     @carts.Mutation(CartMethods.mutations.FALSE_PHOTO_CART) FALSE_PHOTO_CART;
-
     @authModule.Getter(AuthTypes.getters.GET_CLIENT_DATA)
     GET_CLIENT_DATA!: CustomerInterface;
-
     @comments.Action(commentsTypes.actions.GET_ALL_PRODUCT_COMMENTS) GET_ALL_PRODUCT_COMMENTS!: (
         productId: number,
     ) => boolean;
@@ -448,7 +409,6 @@ export default class ItemDetail extends Vue {
     height: 450px;
     width: 420px;
 }
-
 .v-navigation-drawer--clipped:not(.v-navigation-drawer--temporary):not(.v-navigation-drawer--is-mobile) {
     width: auto !important;
 }

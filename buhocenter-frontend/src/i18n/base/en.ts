@@ -297,4 +297,10 @@ export const terms = {
     ERROR_THIRD_STEP_CHECKOUT: 'Error processing payment, please try again.',
     PAYMENT_SUCCESS: 'Payment made successfully',
     PAYMENT_CANCELED: 'Payment canceled',
+    WARNING: 'Warning',
+    REMOVE_ACCOUNT: 'Remove Account',
+    YES_REMOVE_ACCOUNT: 'Yes, delete my account',
+    NO_REMOVE_ACCOUNT: `No, i'll give it another try`,
+    WARNING_REMOVE_ACCOUNT_MESSAGE:
+        'Please only delete this account if you no longer want to use Buhocenter. If you delete your account, it may not be possible to sign up again.',
 };

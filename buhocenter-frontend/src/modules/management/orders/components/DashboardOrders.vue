@@ -72,16 +72,16 @@
                                                     <b>{{ $t('ORDER_CREATE') }}</b>
                                                     {{ createdAt }}
                                                 </p>
-                                                <p class="my-0 mx-1">
+                                                <p class="my-0 mx-1" v-if="getUserStatus()">
                                                     <b>{{ $t('ORDER_NAME') }}</b>
                                                     {{ userName }}
                                                     {{ userLastName }}
                                                 </p>
-                                                <p class="my-0 mx-1">
+                                                <p class="my-0 mx-1" v-if="getUserStatus()">
                                                     <b>{{ $t('ORDER_EMAIL') }}</b>
                                                     {{ userEmail }}
                                                 </p>
-                                                <p class="my-0 mx-1">
+                                                <p class="my-0 mx-1" v-if="getUserStatus()">
                                                     <b>{{ $t('ORDER_ADDRESS') }}</b>
                                                     {{ firstStreet }}
                                                     {{ secondStreet }} {{ city }}
@@ -166,6 +166,7 @@ import { orders } from '@/store/namespaces';
 import { Order } from '@/modules/management/orders/interfaces/orders.interface';
 import OrdersTypes from '@/store/orders/methods/orders.methods';
 import { formatDate } from '@/utils/date-functions';
+import { STATUS } from '@/config/constants';
 
 @Component
 export default class DashboardOrders extends Vue {
@@ -184,7 +185,7 @@ export default class DashboardOrders extends Vue {
         },
         { text: 'Coingate', value: 'coingate', sortable: false },
         { text: 'Created at', value: 'date' },
-        { text: 'User e-mail', value: 'email', sortable: false },
+        { text: 'User email', value: 'email', sortable: false },
         { text: 'Cryptocurrency', value: 'crypto' },
         { text: 'Total ($)', value: 'total' },
         { text: 'Total products', value: 'products', sortable: false },
@@ -204,6 +205,7 @@ export default class DashboardOrders extends Vue {
     state: string = '';
     zipcode: number = 0;
     total: number = 0;
+    status: number = 0;
     totalCryptocurrency: string = '';
     serviceFee: number = 0;
     processorFee: number = 0;
@@ -217,7 +219,7 @@ export default class DashboardOrders extends Vue {
             dataTable.push({
                 id: order.id,
                 date: this.setDate(order.createdAt),
-                email: order.address.user.email,
+                email: order.address.user.status !== STATUS.BLOCKED ? order.address.user.email : 'N/D',
                 coingate: order.transaction,
                 crypto: `${order.totalCryptocurrency}`,
                 total: `$${order.total}`,
@@ -239,6 +241,7 @@ export default class DashboardOrders extends Vue {
         this.userEmail = item.address.user.email;
         this.firstStreet = item.address.firstStreet;
         this.secondStreet = item.address.secondStreet;
+        this.status = item.address.user.status;
         this.city = item.address.city;
         this.state = item.address.state;
         this.zipcode = item.address.zipcode;
@@ -274,6 +277,11 @@ export default class DashboardOrders extends Vue {
         } else {
             return Math.round(this.QUANTITY / this.limit);
         }
+    }
+
+    getUserStatus(): boolean {
+        if (this.status !== STATUS.BLOCKED) return true;
+        else return false;
     }
 
     @orders.Action(OrdersTypes.actions.FETCH_ORDERS)
