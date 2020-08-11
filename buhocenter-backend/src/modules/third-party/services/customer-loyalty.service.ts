@@ -248,6 +248,14 @@ export class CustomerLoyaltyService {
             context: CustomerLoyaltyService.name,
         });
 
+        paymentData = paymentData.filter((i) => {
+            try {
+                return !!i.carts[0].user.fidelityUserEmail;
+            } catch (e) {
+                return false;
+            }
+        });
+
         return paymentData.map(i => {
             return {
                 userEmail: i.carts[0].user.fidelityUserEmail,
@@ -277,7 +285,7 @@ export class CustomerLoyaltyService {
         }
     }
 
-    /*
+    /**
      * Generate csv with CSV generator
      * @returns Promise<ReadStream>
      */
