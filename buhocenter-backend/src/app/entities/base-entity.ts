@@ -4,9 +4,9 @@ export class PrimalEntity extends BaseEntity {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @CreateDateColumn({ name: 'date_creacion', nullable: true })
+    @CreateDateColumn({ name: 'created_at', nullable: true })
     createdAt: Date;
 
-    @CreateDateColumn({ name: 'date_modificacion', nullable: true })
+    @CreateDateColumn({ name: 'updated_at', nullable: true })
     updatedAt: Date;
 }

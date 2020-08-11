@@ -13,8 +13,6 @@ Vue.use(CurrencyPlugin);
 Vue.use(VueTheMask);
 LogRocket.init(process.env.VUE_APP_BUHOCENTER_API_ID_LOGROCKET);
 
-
-
 new Vue({
     router,
     store,

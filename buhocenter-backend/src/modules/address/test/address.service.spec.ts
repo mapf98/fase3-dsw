@@ -1,17 +1,15 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { WinstonModule } from 'nest-winston';
 import { LoggerSettingsService } from '../../settings/services/logger.service';
-import { forwardRef, HttpModule, HttpService } from '@nestjs/common';
+import { HttpModule } from '@nestjs/common';
 import { AddressService } from '../services/address.service';
 import { Address } from '../entities/address.entity';
 import { AddressValidationRepository } from '../repositories/address.repository';
-import { AddressTransactionsRepository } from '../transaction/address.transactions.service';
 import { MockFunctionInterface, repositoryMockFactory } from '../../../../test/mock.functions';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { addressMockDB, addressMockDelete } from './mocks/address.mock'
 import { UsersService } from '../../users/services/users.service'
 import { StatusService } from '../../status/services/status.service'
-import { Repository, UpdateResult } from 'typeorm';
 import { User } from '../../users/entities/user.entity';
 import { Status } from '../../status/entities/status.entity';
 import { StatusHistory } from '../../status/entities/status-history.entity';
@@ -20,8 +18,9 @@ import { AuthService } from '../../auth/services/auth.service';
 import { JwtStrategy } from '../../auth/strategies/jwt.strategy';
 import { LanguagesService } from '../../users/services/languages.service';
 import { LanguageRepository } from '../../users/repositories/language.repository';
-import { JwtModule, JwtService } from '@nestjs/jwt';
-import { SendGridModule, SendGridService } from '@anchan828/nest-sendgrid';
+import { JwtModule } from '@nestjs/jwt';
+import { SendGridModule } from '@anchan828/nest-sendgrid';
+import { EncryptionsService } from '../../encryptions/services/encryptions.service';
 
 describe('address service', () => {
 	let service: AddressService;    
@@ -58,7 +57,8 @@ describe('address service', () => {
                 },
                 StatusService,
                 EmailsService,
-                AuthService,
+				AuthService,
+				EncryptionsService,
                 LanguagesService,
                 LanguageRepository,
                 UsersService,

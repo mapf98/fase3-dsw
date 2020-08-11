@@ -46,8 +46,8 @@ export class ThirdPartyController {
         this.logger.info(`generateClientCsv: generating client csv ${data.name}`, {
             context: ThirdPartyController.name,
         });
-        const fileName = `reports/csv/${data.name}.csv`;
-        const stream = await this.customerLoyaltyService.generateClientCsv(fileName);
+        const fileName: string = `reports/csv/${data.name}.csv`;
+        const stream: ReadStream = await this.customerLoyaltyService.generateClientCsv(fileName);
         return stream.pipe(response);
     }
 

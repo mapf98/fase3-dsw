@@ -132,3 +132,5 @@ export const PACKAGE_SYSTEM = Object.freeze({
         HAS_INSURANCE: 5,
     },
 });
+
+export const EXCLUDED_ENTITY_PROPERTIES = ['birthdate', 'createdAt', 'updatedAt', 'total', 'loyaltySyncStatus'];

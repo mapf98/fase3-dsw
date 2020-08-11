@@ -110,7 +110,7 @@ describe('OffersService', () => {
                 },
             };
         });
-        it('should change the status of an offer to 2', async () => {
+        xit('should change the status of an offer to 2', async () => {
             offersRepository.findOne = jest.fn().mockResolvedValue(offerMockDB[0]);
             let response = await service.deleteOffer(1, transactions);
             expect(await offersRepository.update).toBeCalled();

@@ -7,6 +7,7 @@ import { Cart } from '../../carts/entities/cart.entity';
 import { ProductQuestion } from '../../products/entities/product-question.entity';
 import { Address } from '../../address/entities/address.entity';
 import { ForeignExchange } from './foreign-exchange.entity';
+import { Audit } from '../../audit/entities/audit.entity';
 
 @Entity({ name: 'users' })
 export class User extends PrimalEntity {
@@ -23,10 +24,10 @@ export class User extends PrimalEntity {
     @Column({ name: 'birthdate', nullable: true })
     birthdate: Date;
 
-    @Column({ name: 'email', type: 'varchar', nullable: false })
-    email: string; 
+    @Column({ name: 'email', type: 'text', nullable: false })
+    email: string;
 
-    @Column({ name: 'cellphone', type: 'varchar', nullable: true })
+    @Column({ name: 'cellphone', type: 'text', nullable: true })
     cellphone: string;
 
     @Column({ name: 'is_federate', type: 'boolean', nullable: false })
@@ -38,10 +39,10 @@ export class User extends PrimalEntity {
     @Column({ name: 'uid', type: 'text', nullable: true })
     uid: string;
 
-    @Column({ name: 'token', type: 'varchar', nullable: true })
+    @Column({ name: 'token', type: 'text', nullable: true })
     token: string;
 
-    @Column({ name: 'language_id', type: 'varchar', nullable: true })
+    @Column({ name: 'language_id', type: 'text', nullable: true })
     language: string;
 
     @Column({ name: 'fidelity_user_email', type: 'text', nullable: true })
@@ -97,4 +98,10 @@ export class User extends PrimalEntity {
         carts => carts.user,
     )
     carts: Cart[];
+
+    @OneToMany(
+        type => Audit,
+        audit => audit.user,
+    )
+    audit: Audit[];
 }

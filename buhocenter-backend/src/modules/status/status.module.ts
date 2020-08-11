@@ -9,4 +9,4 @@ import { StatusHistory } from './entities/status-history.entity';
     providers: [StatusService],
     exports: [StatusService],
 })
-export class StatussModule {}
+export class StatusModule {}

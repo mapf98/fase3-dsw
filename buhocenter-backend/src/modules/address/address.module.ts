@@ -4,26 +4,21 @@ import { AddressController } from './controllers/address.controller';
 import { AddressService } from './services/address.service';
 import { Address } from './entities/address.entity';
 import { UsersModule } from '../users/users.module';
-import { StatussModule } from '../status/status.module';
+import { StatusModule } from '../status/status.module';
 import { AddressValidationRepository } from './repositories/address.repository';
-import { AddressTransactionsRepository } from './transaction/address.transactions.service'
-import { AddressSubscriber } from './services/address-subscriber.service'
-import { EncriptionsModule } from '../encriptions/encriptions.module'
+import { AddressTransactionsRepository } from './transaction/address.transactions.service';
+import { AddressSubscriber } from './services/address-subscriber.service';
+import { EncryptionsModule } from '../encryptions/encryptions.module';
+import { AuditModule } from '../audit/audit.module';
 
 @Module({
-    imports: [
-    	TypeOrmModule.forFeature([Address]), 
-    	HttpModule, 
-    	UsersModule, 
-    	StatussModule, 
-    	EncriptionsModule,        
-    ],
+    imports: [TypeOrmModule.forFeature([Address]), AuditModule, HttpModule, UsersModule, StatusModule, EncryptionsModule],
     controllers: [AddressController],
     providers: [
-    	AddressService, 
-    	AddressValidationRepository,     	
-    	AddressSubscriber,
-        AddressTransactionsRepository
+        AddressService,
+        AddressValidationRepository,
+        AddressTransactionsRepository,
+        AddressSubscriber,
     ],
     exports: [AddressService],
 })

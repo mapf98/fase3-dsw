@@ -59,7 +59,7 @@ xdescribe('user service', () => {
         userRepository = module.get(getRepositoryToken(User));
     });
 
-    describe('get user by user id', () => {
+    describe('get user by user uid', () => {
         it('must return the user', async () => {
             userRepository.findOne.mockResolvedValue(userMockDB[0]);
             const r = await service.getUserByUuid('1');

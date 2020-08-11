@@ -76,8 +76,8 @@ export default class DashboardClients extends Vue {
             sortable: false,
             value: 'name',
         },
-        { text: 'LastName', value: 'lastName', sortable: false },
-        { text: 'BirthDate', value: 'birthdate', sortable: false },
+        { text: 'Last Name', value: 'lastName', sortable: false },
+        { text: 'Birthdate', value: 'birthdate', sortable: false },
         { text: 'Email', value: 'email', sortable: false },
         { text: 'Role', value: 'role.name', sortable: false },
         { text: 'Status', value: 'status.name', sortable: false },
@@ -91,7 +91,8 @@ export default class DashboardClients extends Vue {
     setMessage(client: ClientInterface, message: string, type: number) {
         this.message = message;
         this.dialog = true;
-        this.user = client;
+        const { role, status, ...user } = client;
+        this.user = user;
         this.type = type;
     }
 
@@ -101,28 +102,24 @@ export default class DashboardClients extends Vue {
         else if (confirm && this.type === 2) this.unblockUser(this.user!);
     }
 
-    blockUser(client: ClientInterface): void {
+    async blockUser(client: ClientInterface): Promise<void> {
         const status = {
-            createdAt: client.status?.createdAt,
-            description: client.status?.description,
             id: 2,
             name: 'Inactive',
-            updatedAt: Number(new Date()),
         };
         client.status = status;
-        this.blockAndUblockClients(client);
+        await this.blockAndUblockClients(client);
+        await this.fetchAllClients();
     }
 
-    unblockUser(client: ClientInterface): void {
+    async unblockUser(client: ClientInterface): Promise<void> {
         const status = {
-            createdAt: client.status?.createdAt,
-            description: client.status?.description,
             id: 1,
             name: 'Active',
-            updatedAt: Number(new Date()),
         };
         client.status = status;
-        this.blockAndUblockClients(client);
+        await this.blockAndUblockClients(client);
+        await this.fetchAllClients();
     }
 
     async fetchAllClients(): Promise<void> {

@@ -6,29 +6,23 @@ import { LanguagesService } from './services/languages.service';
 import { LanguagesController } from './controllers/languages.controller';
 import { LanguageRepository } from './repositories/language.repository';
 import { AuthModule } from '../auth/auth.module';
-import { entities } from './entities/index';
 import { NotificationsModule } from '../notifications/notifications.module';
-import { UserSubscriber } from './services/user-subscriber.service' 
-import { EncriptionsModule } from '../encriptions/encriptions.module'
+import { UserSubscriber } from './services/user-subscriber.service';
+import { EncryptionsModule } from '../encryptions/encryptions.module';
+import { AuditModule } from '../audit/audit.module';
+import { entities } from './entities/index';
 
 @Module({
     imports: [
-    	TypeOrmModule.forFeature(entities), 
-    	HttpModule, 
-    	AuthModule, 
-    	NotificationsModule, 
-        EncriptionsModule    	
+        TypeOrmModule.forFeature(entities),
+        AuditModule,
+        AuthModule,
+        HttpModule,
+        NotificationsModule,
+        EncryptionsModule,
     ],
-    controllers: [
-    	UsersController, 
-    	LanguagesController
-    ],
-    providers: [
-        UsersService, 
-        LanguagesService, 
-        LanguageRepository,
-        UserSubscriber
-    ],
+    controllers: [UsersController, LanguagesController],
+    providers: [UsersService, LanguagesService, LanguageRepository, UserSubscriber],
     exports: [UsersService],
 })
 export class UsersModule {}

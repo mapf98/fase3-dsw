@@ -128,7 +128,7 @@
                             <p class="text-center ma-0 subtitle text--primary">
                                 {{ address.zipcode }}
                             </p>
-                            <p v-if="address.setDefault" class="text-center ma-0 caption text--primary">
+                            <p v-if="address.setDefault" class="text-center caption text--primary">
                                 <b>{{ $t('DEFAULT_ADDRESS') }}</b>
                             </p>
                         </v-card-text>
@@ -245,11 +245,12 @@ export default class AddressManagement extends Vue {
         this.loadingRemove = true;
         const deleted: boolean = await this.DELETE_ADDRESS(addressId);
 
+        this.loadingRemove = false;
+
         if (!deleted) {
             this.deletingAddressError = true;
         } else {
             await this.fetchAddresses();
-            this.loadingRemove = false;
         }
     }
 

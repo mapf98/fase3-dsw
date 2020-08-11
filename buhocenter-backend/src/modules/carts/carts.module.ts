@@ -5,10 +5,10 @@ import { CartsService } from './services/carts.service';
 import { CartsController } from './controllers/carts.controller';
 import { UsersModule } from '../users/users.module';
 import { ProductsModule } from '../products/products.module';
-import { StatussModule } from '../status/status.module';
+import { StatusModule } from '../status/status.module';
 
 @Module({
-    imports: [TypeOrmModule.forFeature([Cart]), UsersModule, ProductsModule, StatussModule],
+    imports: [TypeOrmModule.forFeature([Cart]), UsersModule, ProductsModule, StatusModule],
     controllers: [CartsController],
     providers: [CartsService],
     exports: [CartsService],

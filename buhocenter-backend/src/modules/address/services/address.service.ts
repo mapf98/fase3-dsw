@@ -191,16 +191,27 @@ export class AddressService {
         return 'Address modified succesfully';
     }
 
+    private async getAddressById(addressId: number): Promise<Address> {
+        this._logger.debug(`getAddressById: [addressId=${addressId}]`, {
+            context: AddressService.name,
+        });
+
+        return await this.addressRepository.findOne(addressId);
+    }
+
     /**
      * Deletes the given address
      * @param id address id to delete
      */
-    async deleteAddress(id: number): Promise<UpdateResult> {
-        this._logger.info(`deleteAddress: deleting address [id=${id}]`, {
+    async deleteAddress(addressId: number): Promise<Address> {
+        this._logger.debug(`deleteAddress: deleting address [addressId=${addressId}]`, {
             context: AddressService.name,
         });
 
-        return await this.addressRepository.update({ id }, { status: { id: STATUS.INACTIVE.id } });
+        const addressFound: Address = await this.getAddressById(addressId);
+        addressFound.status = await this.statusService.getStatusById(STATUS.INACTIVE.id);
+
+        return await this.addressRepository.save(addressFound);
     }
 
     /**

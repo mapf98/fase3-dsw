@@ -19,6 +19,8 @@ import { Logger } from 'winston';
 import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
 import { AddressTransactionsRepository } from '../transaction/address.transactions.service';
 import { AuthGuard } from '@nestjs/passport';
+import { UpdateResult } from 'typeorm';
+import { Address } from '../entities/address.entity';
 
 //@UseGuards(AuthGuard('jwt'))
 @Controller('address')
@@ -57,24 +59,12 @@ export class AddressController {
     }
 
     @Delete(':id')
-    async deleteAddress(@Res() res: Response, @Param('id') id: number): Promise<Response> {
+    async deleteAddress(@Param('id') id: number): Promise<Address> {
         this.logger.info(`deleteAddress: [addressId=${id}]`, {
             context: AddressController.name,
         });
 
-        try {
-            let response = await this.addressService.deleteAddress(id);
-            return res.status(HttpStatus.OK).send(response);
-        } catch (e) {
-            this.logger.error(
-                `deleteAddress: error when trying to delete an address [error=${JSON.stringify(
-                    e.message,
-                )}]})`,
-                { context: AddressController.name },
-            );
-
-            return res.status(HttpStatus.BAD_REQUEST).send(e.message);
-        }
+        return await this.addressService.deleteAddress(id);
     }
 
     @Get()

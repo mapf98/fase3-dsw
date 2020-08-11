@@ -68,14 +68,16 @@ export class OffersService {
         try {
             let OfferRepository: Repository<Offer> = await transactionalEntityManager.getRepository(Offer);
             let offerFound = await OfferRepository.findOne(offerId);
+            offerFound.status = await this.statusService.getStatusById(STATUS.INACTIVE.id);
+            
             if (offerFound) {
-                await OfferRepository.update({ id: offerId }, { status: { id: STATUS.INACTIVE.id } });
+                await OfferRepository.save(offerFound);
                 return true;
             }
             return false;
         } catch (e) {
             this.logger.error(
-                `deleteOffer: error when trying to delete the offer [id=${offerId}| error =${e.message}]`,
+                `deleteOffer: error when trying to delete the offer [id=${offerId}|ex=${e.message}]`,
             );
             return false;
         }

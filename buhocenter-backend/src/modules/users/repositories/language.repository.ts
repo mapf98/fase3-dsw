@@ -53,7 +53,7 @@ export class LanguageRepository {
                 .pipe(map(response => response.data))
                 .toPromise();
             // tslint:disable-next-line:max-line-length
-            this.logger.debug(`getTermsLanguage: Optenidos terminos [response=${JSON.stringify(response)}]`, {
+            this.logger.debug(`getTermsLanguage: obtenidos terminos...`, {
                 context: LanguageRepository.name,
             });
 

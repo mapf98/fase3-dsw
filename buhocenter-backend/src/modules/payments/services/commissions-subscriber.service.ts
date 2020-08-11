@@ -2,27 +2,22 @@ import { Injectable } from '@nestjs/common';
 import { InjectConnection } from '@nestjs/typeorm';
 import { Connection, EntitySubscriberInterface, InsertEvent, UpdateEvent } from 'typeorm';
 import { Payment } from '../entities/payment.entity';
-import { EncryptionsService } from '../../encryptions/services/encryptions.service';
 import { AuditService } from '../../audit/services/audit.service';
 import { Actions } from '../../audit/enums/actions.enum';
 import { EXCLUDED_ENTITY_PROPERTIES } from '../../../config/constants';
+import { Commission } from '../entities/commission.entity';
 
 @Injectable()
-export class PaymentSubscriber implements EntitySubscriberInterface<Payment> {
+export class CommissionsSubscriber implements EntitySubscriberInterface<Commission> {
     constructor(
         @InjectConnection() readonly connection: Connection,
-        private encryptionsService: EncryptionsService,
         private readonly auditService: AuditService,
     ) {
         connection.subscribers.push(this);
     }
 
     listenTo() {
-        return Payment;
-    }
-
-    beforeInsert(event: InsertEvent<Payment>): void {
-        this.encryptionsService.encryptObject(event.entity);
+        return Commission;
     }
 
     /**
@@ -36,19 +31,11 @@ export class PaymentSubscriber implements EntitySubscriberInterface<Payment> {
         });
     }
 
-    public afterLoad(entity: Payment) {
-        this.encryptionsService.decryptObject(entity);
-    }
-
-    beforeUpdate(event: UpdateEvent<Payment>): void {
-        this.encryptionsService.encryptObject(event.entity);
-    }
-
     /**
      * Called after entity update.
      */
     async afterUpdate(event: UpdateEvent<any>) {
-        const modifiedEntity: Object = this.encryptionsService.decryptObject(event.entity);
+        const modifiedEntity: Commission = event.entity;
 
         for await (let key of Object.keys(modifiedEntity)) {
             const oldValue: any = typeof event.databaseEntity[key] === 'object' && event.databaseEntity[key] ? event.databaseEntity[key].id : event.databaseEntity[key];

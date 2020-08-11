@@ -5,7 +5,7 @@ import CustomersRepository from '@/modules/client/customers/repositories/custome
 import { CustomerInterface, ResponseAuth } from '@/modules/client/auth/interfaces/customer.interface';
 import { CustomerStateInterface } from './interfaces/auth.state.interface';
 import { CUSTOMER_EMPTY_STATE } from './auth.state';
-import LogRocket from "logrocket";
+import LogRocket from 'logrocket';
 
 const authModule: Module<CustomerStateInterface, any> = {
     namespaced: true,
@@ -38,15 +38,14 @@ const authModule: Module<CustomerStateInterface, any> = {
             state.data = data.data;
             state.err_auth = false;
             state.err_message = '';
-            if(data.data && data.data.uid != null && data.data.email) {
-                LogRocket.startNewSession()
+            if (data.data && data.data.uid != null && data.data.email) {
+                LogRocket.startNewSession();
                 LogRocket.identify(data.data.uid, {
-                    name: data.data.name + " " + data.data.lastName,
+                    name: data.data.name + ' ' + data.data.lastName,
                     email: data.data.email,
                     subscriptionType: 'pro',
-                })
+                });
             }
-
         },
         [AuthTypes.mutations.AUTH_ERR](state, data: { status: number; error: string }) {
             state.err_auth = true;

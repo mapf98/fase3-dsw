@@ -1,9 +1,10 @@
 import { NestFactory } from '@nestjs/core';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 import { AppModule } from './app/app.module';
+import { AllExceptionsFilter } from './app/all-exceptions.filter';
 import * as rTracer from 'cls-rtracer';
 import * as helmet from 'helmet';
-import { AllExceptionsFilter } from './app/all-exceptions.filter';
+import * as contextService from 'request-context';
 
 declare const module: any;
 
@@ -21,6 +22,7 @@ async function bootstrap() {
 
     app.use(rTracer.expressMiddleware());
     app.use(helmet());
+    app.use(contextService.middleware('request'));
 
     app.setGlobalPrefix('/api/v1');
 

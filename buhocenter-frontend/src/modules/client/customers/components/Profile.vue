@@ -163,6 +163,7 @@ import { authModule, thirdParty } from '@/store/namespaces';
 import AuthMethods from '@/store/auth/methods/auth.methods';
 import ThirdPartyMethods from '@/store/third-party/methods/third-party.methods';
 import { ROL } from '@/config/constants';
+import AuthTypes from '../../../../store/auth/methods/auth.methods';
 import { CustomerInterface } from '@/modules/client/auth/interfaces/customer.interface';
 import { PetromilesAuth } from '@/modules/third-party/interfaces/petromilesAuth.interface';
 
@@ -275,6 +276,10 @@ export default class Profile extends Vue {
         this.loadingUnlink = true;
         const unlink = {
             id: this.getClient.id!,
+            cellphone: this.GET_CLIENT_DATA.cellphone,
+            language: this.GET_CLIENT_DATA.language,
+            uid: this.GET_CLIENT_DATA.uid,
+            token: this.GET_AUTH_TOKEN,
             fidelityUserEmail: null,
             loyaltySystemToken: null,
         };
@@ -314,6 +319,12 @@ export default class Profile extends Vue {
 
     @thirdParty.Action(ThirdPartyMethods.actions.VERFIFY_USER)
     private VERIFY_USER!: (petromiles: PetromilesAuth) => boolean;
+
+    @authModule.Getter(AuthTypes.getters.GET_AUTH_TOKEN)
+    private GET_AUTH_TOKEN!: string;
+
+    @authModule.Getter(AuthTypes.getters.GET_CLIENT_DATA)
+    private GET_CLIENT_DATA!: CustomerInterface;
 
     @thirdParty.Action(ThirdPartyMethods.actions.UNLINK_USER)
     private UNLINK_USER!: (petromiles: {

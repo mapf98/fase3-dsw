@@ -136,6 +136,8 @@ export class CustomerLoyaltyService {
             context: CustomerLoyaltyService.name,
         });
 
+        const userFound: User = await this.usersService.getUserById(user.id);
+
         const request: CustomerLoyaltyAssociateUser = {
             apiKey: this.configService.get(ConfigKeys.PETROMILES_API_KEY),
             userEmail: user.fidelityUserEmail,
@@ -147,8 +149,8 @@ export class CustomerLoyaltyService {
         );
 
         if (authorizeResponse.userToken) {
-            user.loyaltySystemToken = authorizeResponse.userToken;
-            await this.usersService.updateUser(user);
+            userFound.loyaltySystemToken = authorizeResponse.userToken;
+            await this.usersService.updateUser(userFound);
             return user;
         }
     }

@@ -186,6 +186,7 @@ import LanguageMethods from '../../../../store/languages/methods/language.method
 import rules from '../../../../utils/rules';
 import { CustomerInterface } from '@/modules/client/auth/interfaces/customer.interface';
 import AuthMethods from '@/store/auth/methods/auth.methods';
+import { STATUS } from '../../../../config/constants';
 
 @Component
 export default class PersonalInformation extends Vue {
@@ -261,6 +262,7 @@ export default class PersonalInformation extends Vue {
             name: this.modifiedName,
             lastName: this.modifiedLastName,
             uid: this.GET_CLIENT_DATA.uid,
+            token: this.GET_AUTH_TOKEN,
             role: this.GET_CLIENT_DATA.role,
         };
     }
@@ -301,13 +303,16 @@ export default class PersonalInformation extends Vue {
         this.deleteLoading = true;
         let client: CustomerInterface = {
             id: this.GET_CLIENT_DATA.id,
+            language: this.modifiedLanguage,
+            cellphone: this.modifiedCellphone,
+            uid: this.GET_CLIENT_DATA.uid,
             status: {
-                id: 11,
+                id: STATUS.BLOCKED,
             },
         };
         const updated: boolean = await this.UPDATE_CUSTOMER(client);
+        this.deleteLoading = false;
         if (updated) {
-            this.deleteLoading = false;
             await this.logout();
             localStorage.clear();
             sessionStorage.clear();
@@ -342,6 +347,8 @@ export default class PersonalInformation extends Vue {
     private UPDATE_CUSTOMER!: (data: CustomerInterface) => boolean;
     @authModule.Action(AuthTypes.actions.MODIFY_CLIENT_DATA)
     private MODIFY_CLIENT_DATA!: (data: CustomerInterface) => void;
+    @authModule.Getter(AuthTypes.getters.GET_AUTH_TOKEN)
+    private GET_AUTH_TOKEN!: string;
     @authModule.Getter(AuthTypes.getters.GET_CLIENT_DATA)
     private GET_CLIENT_DATA!: CustomerInterface;
 }

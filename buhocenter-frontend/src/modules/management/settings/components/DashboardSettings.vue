@@ -101,8 +101,8 @@ export default class DashboardSettings extends Vue {
     addSuccess: boolean = false;
     addError: boolean = false;
     updatedLoading: boolean = false;
-    serviceFee: any = 0;
-    processorFee: any = 0;
+    serviceFee: any = '';
+    processorFee: any = '';
 
     mounted(): void {
         this.FETCH_COMMISSIONS();
@@ -120,8 +120,8 @@ export default class DashboardSettings extends Vue {
         if (await this.CREATE_COMMISSION(commission)) {
             this.updatedLoading = false;
             this.addSuccess = true;
-            this.serviceFee = 0;
-            this.processorFee = 0;
+            this.serviceFee = '';
+            this.processorFee = '';
             this.FETCH_COMMISSIONS();
         } else {
             this.addError = false;

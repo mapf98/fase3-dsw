@@ -13,6 +13,7 @@ export interface CustomerInterface {
     uid?: string;
     id?: number;
     role?: Role;
+    token?: string;
     is_federate?: boolean;
     addresses?: Address[];
     status?: any;

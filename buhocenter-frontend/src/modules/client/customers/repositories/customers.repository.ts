@@ -4,7 +4,11 @@ class CustomersRepository extends HttpRepository {
     private static readonly RESOURCE = 'users';
 
     public async updateCustomer(user) {
-        return await this.patch(this.createUri([`${CustomersRepository.RESOURCE}`]), user);
+        return await this.patch(
+            this.createUri([`${CustomersRepository.RESOURCE}`]),
+            user,
+            this.createHeader(),
+        );
     }
 
     public async downloadFile(id: number): Promise<boolean> {

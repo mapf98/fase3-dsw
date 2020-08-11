@@ -18,7 +18,7 @@ export default class FirebaseRepository {
                 await firebase.storage().ref(`products/${id}/${newFile.name}`).put(newFile);
             })
             .catch((er) => {
-                console.log(er);
+                // console.log(er);
             });
     }
 }
