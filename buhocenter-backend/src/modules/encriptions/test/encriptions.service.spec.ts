@@ -29,14 +29,14 @@ describe('user encription-decription service', () => {
 				"encript":"Hola buhocenter!",
 			}
 			service.encriptObject(testObject);            
-			expect(testObject.encript).toEqual("629a38f88e7a165915c5263827aea3568db03d5bb7c4830d8ce768944bfaae26");
+			expect(testObject.encript).toEqual("Ypo4+I56FlkVxSY4J66jVo2wPVu3xIMNjOdolEv6riY=");
 		});
 	});
 
 	describe('decript a string', () => {
 		it('must return a decripted string', async () => {            
 			let testObject = {
-				"decript":"629a38f88e7a165915c5263827aea3568db03d5bb7c4830d8ce768944bfaae26",
+				"decript":"Ypo4+I56FlkVxSY4J66jVo2wPVu3xIMNjOdolEv6riY=",
 			}
 			service.decriptObject(testObject);            
 			expect(testObject.decript).toEqual("Hola buhocenter!");

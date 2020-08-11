@@ -30,7 +30,7 @@ export class AddressController {
     ) {}
 
     @Post('verification')
-    async validateAddress(@Body() address: AddressVerificationDto): Promise<Response> {
+    async validateAddress(@Body() address: AddressVerificationDto){
         this.logger.info(`validateAddress: validating address [address=${JSON.stringify(address)}]`, {
             context: AddressController.name,
         });

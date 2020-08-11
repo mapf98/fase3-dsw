@@ -6,7 +6,7 @@ import { Address } from './entities/address.entity';
 import { UsersModule } from '../users/users.module';
 import { StatussModule } from '../status/status.module';
 import { AddressValidationRepository } from './repositories/address.repository';
-import { AddressTransactionsRepository } from './transaction/address.transactions.service';
+import { AddressTransactionsRepository } from './transaction/address.transactions.service'
 import { AddressSubscriber } from './services/address-subscriber.service'
 import { EncriptionsModule } from '../encriptions/encriptions.module'
 
@@ -16,14 +16,14 @@ import { EncriptionsModule } from '../encriptions/encriptions.module'
     	HttpModule, 
     	UsersModule, 
     	StatussModule, 
-    	EncriptionsModule
+    	EncriptionsModule,        
     ],
     controllers: [AddressController],
     providers: [
     	AddressService, 
-    	AddressValidationRepository, 
-    	AddressTransactionsRepository, 
-    	AddressSubscriber
+    	AddressValidationRepository,     	
+    	AddressSubscriber,
+        AddressTransactionsRepository
     ],
     exports: [AddressService],
 })

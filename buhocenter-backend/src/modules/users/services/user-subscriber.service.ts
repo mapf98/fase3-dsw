@@ -18,15 +18,15 @@ export class UserSubscriber implements EntitySubscriberInterface<User> {
     return User;
   }
 
-  beforeInsert(event: InsertEvent<User>): void {           
-    this.encriptionsService.encriptObject(event.entity);
+  async beforeInsert(event: InsertEvent<User>): Promise<void> {      
+    await this.encriptionsService.encriptObject(event.entity);
   } 
 
-  public afterLoad(entity: User){
-    this.encriptionsService.decriptObject(entity);
+  public async afterLoad(entity: User){    
+    await this.encriptionsService.decriptObject(entity);
   }
 
-  beforeUpdate(event: UpdateEvent<User>): void{
-    this.encriptionsService.encriptObject(event.entity);
+  async beforeUpdate(event: UpdateEvent<User>): Promise<void>{    
+    await this.encriptionsService.encriptObject(event.entity);
   }
 }

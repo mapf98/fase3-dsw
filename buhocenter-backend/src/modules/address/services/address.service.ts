@@ -159,8 +159,7 @@ export class AddressService {
      */
     async updateAddressDefault(
         addressId: number,
-        customerId: number,
-        addressEntityManager: Repository<Address>,
+        customerId: number,        
     ) {
         this._logger.info(
             `updateAddressDefault: modifying default address [addressId=${addressId}|customerId=${customerId}]`,
@@ -169,7 +168,7 @@ export class AddressService {
 
         const active = STATUS.ACTIVE.id;
 
-        const verifyDefault = await addressEntityManager.findOne({
+        const verifyDefault = await this.addressRepository.findOne({
             where: [{ user: customerId, status: active, setDefault: true }],
         });
 
@@ -182,12 +181,12 @@ export class AddressService {
             );
 
             verifyDefault.setDefault = false;
-            await addressEntityManager.save(verifyDefault);
+            await this.addressRepository.save(verifyDefault);
         }
 
-        const addressCurrentDefault = await addressEntityManager.findOne(addressId);
+        const addressCurrentDefault = await this.addressRepository.findOne(addressId);
         addressCurrentDefault.setDefault = true;
-        await addressEntityManager.save(addressCurrentDefault);
+        await this.addressRepository.save(addressCurrentDefault);
 
         return 'Address modified succesfully';
     }

@@ -168,7 +168,7 @@ export class UsersService {
         try {
             const customer: User = await this.getUserByUuid(data.clientData.uid);
             let customerSave: User;
-            let response: ResponseAuth;
+            let response: ResponseAuth;            
             if (customer) {
                 if (customer.status.id !== STATUS.ACTIVE.id) {
                     throw new UnauthorizedException(
@@ -178,16 +178,16 @@ export class UsersService {
                 const newcustomer: User = this.usersRepository.merge(customer, {
                     token: data.token,
                     is_federate: true,
-                });
-                customerSave = await this.usersRepository.save(newcustomer);
+                });                
+                customerSave = await this.usersRepository.save(newcustomer);                
                 customerSave = await this.usersRepository.findOne({
                     where: { id: customerSave.id },
                     relations: ['role', 'addresses'],
-                });
+                });                
                 this.logger.debug(`validateRegisterSocial: customer exist [id=${newcustomer.id}]`, {
                     context: UsersService.name,
                 });
-            } else {
+            } else {                
                 // @ts-ignore
                 customerSave = await this.usersRepository.save({
                     name: data.clientData.first_name,
@@ -204,15 +204,15 @@ export class UsersService {
                         id: ROLE.CUSTOMER.id,
                     },
                     language: LANGUAGE.ENGLISH.id,
-                });
+                });                
                 customerSave = await this.usersRepository.findOne({
                     where: { id: customerSave.id },
                     relations: ['role', 'addresses'],
                 });
                 this.logger.debug(`validateRegisterSocial: New customer registered [id=${customerSave.id}]`, {
                     context: UsersService.name,
-                });
-                await this.emailsService.sendEmailWelcome(data.clientData.email, data.clientData.first_name);
+                }); 
+                //await this.emailsService.sendEmailWelcome(data.clientData.email, data.clientData.first_name);                
             }
             response = {
                 apiAccessToken: await this.authService.login(customerSave),

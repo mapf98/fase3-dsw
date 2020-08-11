@@ -27,7 +27,7 @@ export class AddressSubscriber implements EntitySubscriberInterface<Address> {
     this.encriptionsService.decriptObject(entity);
   }
 
-  BeforeUpdate(event: UpdateEvent<Address>): void{
+  beforeUpdate(event: UpdateEvent<Address>): void{
     this.encriptionsService.encriptObject(event.entity);
   }
 }

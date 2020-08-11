@@ -10,24 +10,23 @@ import { ForeignExchange } from './foreign-exchange.entity';
 
 @Entity({ name: 'users' })
 export class User extends PrimalEntity {
-    @Column({ name: 'name', type: 'varchar', length: 100, nullable: false })
+    @Column({ name: 'name', type: 'varchar', nullable: false })
     name: string;
 
     @Column({
         name: 'last_name',
-        type: 'varchar',
-        length: 100,
-        nullable: false,
+        type: 'varchar',        
+        nullable: false, 
     })
     lastName: string;
 
     @Column({ name: 'birthdate', nullable: true })
     birthdate: Date;
 
-    @Column({ name: 'email', type: 'varchar', length: 100, nullable: false })
-    email: string;
+    @Column({ name: 'email', type: 'varchar', nullable: false })
+    email: string; 
 
-    @Column({ name: 'cellphone', type: 'varchar', length: 20, nullable: true })
+    @Column({ name: 'cellphone', type: 'varchar', nullable: true })
     cellphone: string;
 
     @Column({ name: 'is_federate', type: 'boolean', nullable: false })
@@ -39,10 +38,10 @@ export class User extends PrimalEntity {
     @Column({ name: 'uid', type: 'text', nullable: true })
     uid: string;
 
-    @Column({ name: 'token', type: 'varchar', length: 200, nullable: true })
+    @Column({ name: 'token', type: 'varchar', nullable: true })
     token: string;
 
-    @Column({ name: 'language_id', type: 'varchar', length: 4, nullable: true })
+    @Column({ name: 'language_id', type: 'varchar', nullable: true })
     language: string;
 
     @Column({ name: 'fidelity_user_email', type: 'text', nullable: true })

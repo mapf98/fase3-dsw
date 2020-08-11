@@ -27,7 +27,7 @@ export class PaymentSubscriber implements EntitySubscriberInterface<Payment> {
     this.encriptionsService.decriptObject(entity);
   }
 
-  BeforeUpdate(event: UpdateEvent<Payment>): void{
+  beforeUpdate(event: UpdateEvent<Payment>): void{
     this.encriptionsService.encriptObject(event.entity);
   }
 }

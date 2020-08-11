@@ -32,8 +32,7 @@ export class AddressTransactionsRepository {
                 );
                 return await this.addressService.updateAddressDefault(
                     address.id,
-                    address.user.id,
-                    addressTransactionRepository,
+                    address.user.id,                   
                 );
             } catch (e) {
                 this.logger.error(`Error setting default address [e=${e}]`, {
