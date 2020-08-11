@@ -182,14 +182,6 @@ const products: Module<ProductStateInterface, any> = {
                 return false;
             }
         },
-        async [ProductsTypes.actions.DELETE_PRODUCT]({ commit }, id): Promise<boolean> {
-            try {
-                await productsHttpRepository.deleteProducts(id);
-                return true;
-            } catch (e) {
-                return false;
-            }
-        },
         async [ProductsTypes.actions.FETCH_PRODUCTS_DAILY]({ commit }): Promise<boolean> {
             try {
                 // tslint:disable-next-line:no-shadowed-variable
@@ -248,53 +240,6 @@ const products: Module<ProductStateInterface, any> = {
                     imageAndProduct.newFile,
                     imageAndProduct.id,
                 );
-                return true;
-            } catch (e) {
-                return false;
-            }
-        },
-        async [ProductsTypes.actions.UPLOAD_IMAGE]({ commit }, imageAndProduct): Promise<boolean> {
-            try {
-                await productsFirebaseRepository.uploadImage(imageAndProduct.image, imageAndProduct.id);
-                return true;
-            } catch (e) {
-                return false;
-            }
-        },
-        async [ProductsTypes.actions.SAVE_PRODUCT_PHOTOS](
-            { commit },
-            imageAndProduct: ProductPhotoDto,
-        ): Promise<boolean> {
-            try {
-                imageAndProduct;
-                await productsHttpRepository.uploadImage(imageAndProduct);
-                return true;
-            } catch (e) {
-                return false;
-            }
-        },
-        async [ProductsTypes.actions.SAVE_PRODUCT_DIMENSION](
-            { commit },
-            imageAndProduct: dimensionDto,
-        ): Promise<boolean> {
-            try {
-                await productsHttpRepository.createDimension(imageAndProduct);
-                return true;
-            } catch (e) {
-                return false;
-            }
-        },
-        async [ProductsTypes.actions.SAVE_INVENTORY_QUANTITY]({ commit }, inventoryData): Promise<boolean> {
-            try {
-                await productsHttpRepository.saveInventary(inventoryData);
-                return true;
-            } catch (e) {
-                return false;
-            }
-        },
-        async [ProductsTypes.actions.UPDATE_INVENTORY_QUANTITY]({ commit }, inventoryData): Promise<boolean> {
-            try {
-                await productsHttpRepository.updateInventory(inventoryData);
                 return true;
             } catch (e) {
                 return false;

@@ -9,11 +9,8 @@ import { StatusService } from '../../status/services/status.service';
 @Injectable()
 export class BrandsService {
     constructor(
-        @Inject(WINSTON_MODULE_PROVIDER) private readonly logger: Logger,
         @InjectRepository(Brand)
         private readonly brandRepository: Repository<Brand>,
-        @Inject(StatusService)
-        private readonly statusService: StatusService,
     ) {}
 
     public async getAllBrands(): Promise<Brand[]> {

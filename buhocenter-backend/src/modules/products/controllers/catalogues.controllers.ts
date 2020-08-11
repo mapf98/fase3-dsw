@@ -5,20 +5,11 @@ import {
     Post,
     Body,
     ParseIntPipe,
-    Query,
     Inject,
-    Res,
-    HttpStatus,
-    Patch,
     Delete,
 } from '@nestjs/common';
-import { ProductsService } from '../services/products.service';
-import { Response } from 'express';
 import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
 import { Logger } from 'winston';
-import { ProductTransactionsRepository } from '../transaction/products.transaction.service';
-import { Brand } from '../entities/brand.entity';
-import { categoryDto } from '../dto/products.dto';
 import { Catalogue } from '../entities/catalogue.entity';
 import { CataloguesService } from '../services/catalogues.service';
 
@@ -26,26 +17,16 @@ import { CataloguesService } from '../services/catalogues.service';
 export class CataloguesController {
     constructor(
         @Inject(WINSTON_MODULE_PROVIDER) private readonly logger: Logger,
-        @Inject(ProductTransactionsRepository)
-        private readonly productTransactionsRepository: ProductTransactionsRepository,
         private readonly cataloguesService: CataloguesService,
     ) {}
 
     @Get()
-    async getCatalogues(@Res() res: Response): Promise<Response> {
+    async getCatalogues(): Promise<Catalogue[]> {
         this.logger.info(`getCatalogues: getting all Catalogues available`, {
             context: CataloguesController.name,
         });
-        try {
-            let catalogues = await this.productTransactionsRepository.getCatalogues();
-            return res.status(HttpStatus.OK).send({ catalogues });
-        } catch (e) {
-            this.logger.info(
-                `getCatalogues: error when trying to get all available Catalogues[error=${e.message}]`,
-                { context: CataloguesController.name },
-            );
-            return res.status(HttpStatus.BAD_REQUEST).send();
-        }
+        
+        return await this.cataloguesService.getCatalogues();
     }
 
     @Post()

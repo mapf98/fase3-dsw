@@ -4,7 +4,6 @@ import { Response } from 'express';
 import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
 import { Logger } from 'winston';
 import { CategoriesService } from '../services/categories.service';
-import { Catalogue } from '../entities/catalogue.entity';
 import { Category } from '../entities/category.entity';
 
 @Controller('categories')

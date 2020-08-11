@@ -4,8 +4,6 @@ import {
     Param,
     Post,
     Body,
-    ParseIntPipe,
-    Query,
     Inject,
     Res,
     HttpStatus,
@@ -16,9 +14,8 @@ import { Response } from 'express';
 import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
 import { Logger } from 'winston';
 import { OffersTransactionsRepository } from '../transaction/offers.transaction.service';
-import { OfferDto, OfferAssignProductDto } from '../dto/offers.dto';
+import { OfferDto } from '../dto/offers.dto';
 import { Offer } from '../entities/offer.entity';
-import { ProductTransactionsRepository } from '../transaction/products.transaction.service';
 import { OffersRO } from '../interfaces/offers';
 
 @Controller('offers')
@@ -27,8 +24,6 @@ export class OffersController {
         @Inject(WINSTON_MODULE_PROVIDER) private readonly logger: Logger,
         @Inject(OffersTransactionsRepository)
         private readonly offersTransactionsRepository: OffersTransactionsRepository,
-        @Inject(ProductTransactionsRepository)
-        private readonly productTransactionsRepository: ProductTransactionsRepository,
         @Inject(OffersService)
         private readonly offersService: OffersService,
     ) {}
@@ -62,37 +57,6 @@ export class OffersController {
             context: OffersController.name,
         });
         let response: OffersRO = await this.offersService.getOffers(start, limit);
-        return res.status(HttpStatus.OK).send(response);
-    }
-
-    @Post('product')
-    async assingOfferToProduct(
-        @Res() res: Response,
-        @Body() OfferForProduct: OfferAssignProductDto,
-    ): Promise<Response> {
-        this.logger.info(
-            ` assingOfferToProduct: starting process assign a offer to product with id [prorductId=${OfferForProduct.product.id}|offerId=${OfferForProduct.offer.id}]`,
-            {
-                context: OffersController.name,
-            },
-        );
-
-        let response: boolean = await this.productTransactionsRepository.assingOfferToProduct(
-            OfferForProduct,
-        );
-        return res.status(HttpStatus.OK).send(response);
-    }
-
-    @Delete('product/:id')
-    async deleteOfferFromProduct(@Res() res: Response, @Param('id') productId: number): Promise<Response> {
-        this.logger.info(
-            ` deleteOfferFromProduct: starting process assign a offer to product with id [prorductId=${productId}]`,
-            {
-                context: OffersController.name,
-            },
-        );
-
-        let response: boolean = await this.productTransactionsRepository.deleteOfferToProduct(productId);
         return res.status(HttpStatus.OK).send(response);
     }
 }

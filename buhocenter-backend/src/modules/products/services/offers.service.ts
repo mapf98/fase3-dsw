@@ -14,7 +14,7 @@ export class OffersService {
     constructor(
         @Inject(WINSTON_MODULE_PROVIDER) private readonly logger: Logger,
         @InjectRepository(Offer)
-        private readonly OfferRepository: Repository<Offer>,
+        private readonly offerRepository: Repository<Offer>,
         @Inject(StatusService)
         private readonly statusService: StatusService,
     ) {}
@@ -22,7 +22,7 @@ export class OffersService {
     public async getOffers(start: number, limit: number): Promise<OffersRO> {
         try {
             let offersGot: Offer[], quantity;
-            [offersGot, quantity] = await this.OfferRepository.findAndCount({
+            [offersGot, quantity] = await this.offerRepository.findAndCount({
                 where: { status: STATUS.ACTIVE.id },
                 skip: start,
                 take: limit,
@@ -62,6 +62,10 @@ export class OffersService {
                 `createOffer: error when trying to create the offer [error=${JSON.stringify(e.message)}]`,
             );
         }
+    }
+
+    public async findOffer(offer: Offer): Promise<Offer> {
+        return await this.offerRepository.findOne(offer);
     }
 
     public async deleteOffer(offerId: number, transactionalEntityManager: EntityManager): Promise<boolean> {

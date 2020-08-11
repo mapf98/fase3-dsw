@@ -5,7 +5,6 @@ import {
     Post,
     Body,
     ParseIntPipe,
-    Query,
     Inject,
     Res,
     HttpStatus,
@@ -17,7 +16,6 @@ import { CartProductDTO } from '../dto/cartProduct.dto';
 import { Response } from 'express';
 import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
 import { Logger } from 'winston';
-import { AuthGuard } from '@nestjs/passport';
 import { Cart } from '../entities/cart.entity';
 
 //@UseGuards(AuthGuard('jwt'))

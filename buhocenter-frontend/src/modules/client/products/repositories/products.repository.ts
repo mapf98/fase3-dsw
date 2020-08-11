@@ -12,9 +12,6 @@ import products from '@/store/products/products';
 
 class ProductsHttpRepository extends HttpRepository {
     private static readonly RESOURCE = 'products';
-    private static readonly RESOURCEDIMENSION = 'products/dimension';
-    private static readonly RESOURCEIMAGE = 'products/image';
-    private static readonly RESOURCEINVENTORY = 'products/inventory';
     private static readonly RESOURCERATING = 'product-ratings';
 
     public getProducts(filter: Filter): Promise<Products> {
@@ -30,7 +27,7 @@ class ProductsHttpRepository extends HttpRepository {
     }
 
     getAllProducts(): Promise<Products> {
-        return this.get(this.createUri([`${ProductsHttpRepository.RESOURCE}`, `all`]));
+        return this.get(this.createUri([`${ProductsHttpRepository.RESOURCE}`, 'all']));
     }
     //tipar
 
@@ -50,25 +47,6 @@ class ProductsHttpRepository extends HttpRepository {
             this.createUri([`${ProductsHttpRepository.RESOURCE}`]),
             product,
             this.createHeader(),
-        );
-    }
-
-    public uploadImage(data: ProductPhotoDto) {
-        return this.post(this.createUri([`${ProductsHttpRepository.RESOURCEIMAGE}`]), data);
-    }
-
-    public createDimension(data: dimensionDto) {
-        return this.post(this.createUri([`${ProductsHttpRepository.RESOURCEDIMENSION}`]), data);
-    }
-    public saveInventary(data) {
-        return this.post(this.createUri([`${ProductsHttpRepository.RESOURCEINVENTORY}`]), data);
-    }
-
-    public updateInventory(data) {
-        return this.patch(
-            this.createUri([`${ProductsHttpRepository.RESOURCEINVENTORY}`], false),
-            data,
-            false,
         );
     }
 

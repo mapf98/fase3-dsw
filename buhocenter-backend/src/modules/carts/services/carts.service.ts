@@ -13,7 +13,8 @@ import { UsersService } from '../../users/services/users.service';
 import { StatusService } from '../../status/services/status.service';
 import { Offer } from '../../products/entities/offer.entity';
 import { Status } from '../../status/entities/status.entity';
-import { ProductInventoriesService } from 'src/modules/products/services/product-inventories.service';
+import { ProductInventoriesService } from '../../products/services/product-inventories.service';
+import { OffersService } from '../../products/services/offers.service';
 
 @Injectable()
 export class CartsService {
@@ -21,7 +22,8 @@ export class CartsService {
         @Inject(WINSTON_MODULE_PROVIDER) private readonly _logger: Logger,
         @InjectRepository(Cart)
         private readonly _cartRepository: Repository<Cart>,
-        private readonly ProductsService: ProductsService,
+        private readonly offersService: OffersService,
+        private readonly productsService: ProductsService,
         private readonly UsersService: UsersService,
         private readonly _productInventoryService: ProductInventoriesService,
         private readonly _statusService: StatusService,
@@ -71,7 +73,7 @@ export class CartsService {
         );
         try {
             const user: User = await this.UsersService.getUserById(ProductRes.user.id);
-            const findProduct: Product = await this.ProductsService.findProduct(ProductRes.product.id);
+            const findProduct: Product = await this.productsService.getProductById(ProductRes.product.id);
 
             const newProductCart: Cart = new Cart();
             const active = await this._statusService.getStatusById(STATUS.ACTIVE.id);
@@ -81,7 +83,7 @@ export class CartsService {
             newProductCart.user = user;
             newProductCart.status = active;
             newProductCart.product = findProduct;
-            const productOffer: Offer = await this.ProductsService.findOffer(findProduct.offer);
+            const productOffer: Offer = await this.offersService.findOffer(findProduct.offer);
             if (Offer) {
                 newProductCart.productPrice =
                     newProductCart.productPrice -

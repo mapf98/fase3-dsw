@@ -1,6 +1,5 @@
 import { Module, forwardRef } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { ProductTransactionsRepository } from './transaction/products.transaction.service';
 import { ProductsController } from './controllers/products.controller';
 import { ProductsService } from './services/products.service';
 import { StatusModule } from '../status/status.module';
@@ -47,7 +46,6 @@ import { AuditModule } from '../audit/audit.module';
         ProductsService,
         BrandsService,
         ProvidersService,
-        ProductTransactionsRepository,
         CataloguesService,
         CategoriesService,
         OffersService,
@@ -56,6 +54,6 @@ import { AuditModule } from '../audit/audit.module';
         ProductInventoriesService,
         ProductRatingsService,
     ],
-    exports: [ProductsService, ProductInventoriesService, ProductRatingsService],
+    exports: [ProductsService, OffersService, ProductInventoriesService, ProductRatingsService],
 })
 export class ProductsModule {}

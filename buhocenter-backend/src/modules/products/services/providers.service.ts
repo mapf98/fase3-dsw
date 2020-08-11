@@ -1,7 +1,6 @@
-import { createQueryBuilder, Repository } from 'typeorm';
-import { Injectable, Inject, BadRequestException } from '@nestjs/common';
+import { Repository } from 'typeorm';
+import { Injectable, Inject } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Product } from '../entities/product.entity';
 import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
 import { Logger } from 'winston';
 import { Provider } from '../entities/provider.entity';
@@ -10,8 +9,6 @@ import { Provider } from '../entities/provider.entity';
 export class ProvidersService {
     constructor(
         @Inject(WINSTON_MODULE_PROVIDER) private readonly logger: Logger,
-        @InjectRepository(Product)
-        private readonly productsRepository: Repository<Product>,
         @InjectRepository(Provider)
         private readonly providerRepository: Repository<Provider>,
     ) {}
